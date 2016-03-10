@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Core", "ZimmerBot.Core\ZimmerBot.Core.csproj", "{8EC30AE6-170E-4621-AE14-4A3985E3D062}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Console", "ZimmerBot.Console\ZimmerBot.Console.csproj", "{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EC30AE6-170E-4621-AE14-4A3985E3D062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EC30AE6-170E-4621-AE14-4A3985E3D062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EC30AE6-170E-4621-AE14-4A3985E3D062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EC30AE6-170E-4621-AE14-4A3985E3D062}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
