@@ -34,9 +34,18 @@ namespace ZimmerBot.Core.Knowledge
 
   public class MovieResponseGenerator : ResponseGenerator
   {
+    string Lookup;
+
+
+    public MovieResponseGenerator(string lookup)
+    {
+      Lookup = lookup;
+    }
+
+
     public override Func<string> Bind(Dictionary<string, string> input)
     {
-      return () => "Lookup movie by : " + input["name"];
+      return () => "Lookup movie by : " + input["name"] + " (find " + Lookup + ")";
     }
   }
 }
