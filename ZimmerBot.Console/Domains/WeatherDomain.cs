@@ -16,7 +16,7 @@ namespace ZimmerBot.Console.Domains
       dd.AddRule("question", "weather", "location")
         .Describe("Hvad er vejret?")
         .Parameter("location")
-        .SetResponse(i => WeatherSource.GetWeatherDescription(i["location"], DateTime.Now, "I <location> vejret GODT er"));
+        .SetResponse(i => WeatherSource.GetWeatherDescription(i["location"], DateTime.Now, "Vejret omkring <location> er <answer>"));
     }
   }
 }

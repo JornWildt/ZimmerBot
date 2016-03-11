@@ -18,6 +18,8 @@ namespace ZimmerBot.Console
     {
       Bot b = new Bot(kb);
 
+      Invoke(b, "skrevet Snehvide hvornår");
+
       Invoke(b, "Er det oktober");
       Invoke(b, "Er det marts");
       Invoke(b, "Hvad er vejret i Boston");
@@ -37,8 +39,9 @@ namespace ZimmerBot.Console
     static void Invoke(Bot b, string input)
     {
       System.Console.WriteLine("Input> " + input);
-      string output = b.Invoke(new Request { Input = input }).Output;
-      System.Console.WriteLine("ZimmerBot> " + output);
+      string[] output = b.Invoke(new Request { Input = input }).Output;
+      foreach (string s in output)
+        System.Console.WriteLine("ZimmerBot> " + s);
     }
 
     static void Interactive(KnowledgeBase kb)
@@ -52,9 +55,10 @@ namespace ZimmerBot.Console
         input = System.Console.ReadLine();
         if (!string.IsNullOrEmpty(input))
         {
-          string output = b.Invoke(new Request { Input = input }).Output;
+          string[] output = b.Invoke(new Request { Input = input }).Output;
 
-          System.Console.WriteLine("ZimmerBot> " + output);
+          foreach (string s in output)
+            System.Console.WriteLine("ZimmerBot> " + s);
         }
       }
       while (!string.IsNullOrEmpty(input));

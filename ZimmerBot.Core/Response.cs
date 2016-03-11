@@ -2,6 +2,6 @@
 {
   public class Response
   {
-    public string Output { get; set; }
+    public string[] Output { get; set; }
   }
 }

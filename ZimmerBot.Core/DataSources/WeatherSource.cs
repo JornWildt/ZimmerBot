@@ -1,6 +1,6 @@
 ﻿using System;
-using Antlr4.StringTemplate;
 using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Utilities;
 
 
 namespace ZimmerBot.Core.DataSources
@@ -9,11 +9,9 @@ namespace ZimmerBot.Core.DataSources
   {
     public static Func<string> GetWeatherDescription(Token location, DateTime time, string template)
     {
-      Template t = new Template(template);
-      t.Add("location", location.OriginalText);
-      t.Add("time", time);
+      string answer = "SOLSKIN";
 
-      return () => t.Render();
+      return () => TextMerge.MergeTemplate(template, new { location = location.OriginalText, time = time, answer = answer });
     }
   }
 }

@@ -58,6 +58,7 @@ namespace ZimmerBot.Core.Knowledge
         t.ExtractParameter(ParameterMap, generatorParameters);
 
       // Some parameter values are missing => ignore
+      // FIXME: need only counting!
       if (ParameterMap.Count > generatorParameters.Count)
         return null;
 

@@ -25,12 +25,12 @@ namespace ZimmerBot.Core
       KnowledgeBase.ExpandTokens(input);
       ReactionSet reactions = KnowledgeBase.FindMatchingReactions(input);
 
-      string output = "Duh!";
+      string[] output;
 
       if (reactions.Count > 0)
-        output = reactions.Select(r => r.GenerateResponse(input)).Aggregate((a, b) => a + "\n" + b);
+        output = reactions.Select(r => r.GenerateResponse(input)).ToArray();
       else
-        output = input.Select(t => t.OriginalText).Aggregate((a, b) => a + "." + b);
+        output = new string[] { "???" };
 
       return new Response
       {
