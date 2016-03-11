@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading;
+using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Responses;
@@ -63,52 +64,10 @@ namespace ZimmerBot.Console
     {
       KnowledgeBase kb = new KnowledgeBase();
 
-      // General
-      Domain d = kb.NewDomain("Diverse");
-      d.DefineWord("Hvornår").Is("question").Is("question-when");
-      d.DefineWord("Hvem").Is("question").Is("question-who");
-      d.DefineWord("Er").Is("question").Is("question-is");
-      d.DefineWord("Hvad").Is("question").Is("question-what");
-
-      d.AddRule("question")
-       .Describe("Hvornår?")
-       .SetResponse(new TemplateResponseGenerator("Hvad tror du selv?"));
-
-      // Movies
-      Domain md = kb.NewDomain("Film");
-      md.DefineWord("Snehvide").Is("movie-role").Is("movie-title");
-      md.DefineWord("Blinkende lygter").Is("movie-title");
-      md.DefineWord("Rødhætte").Is("movie-role");
-      md.DefineWord("lavet").Is("movie-recorded");
-      md.DefineWord("optaget").Is("movie-recorded");
-      md.DefineWord("skudt").Is("movie-recorded");
-      md.DefineWord("skrevet").Is("movie-written");
-      md.DefineWord("spillede").And("spiller").Is("movie-played");
-
-      md.AddRule("question-when", "movie-title", "movie-recorded")
-        .Describe("Hvornår blev en film optaget.")
-        .Parameter("name", "movie-title")
-        .SetResponse(new MovieResponseGenerator("Recorded-date"));
-
-      md.AddRule("question-who", "movie-title", "movie-played")
-        .Describe("Hvem spillede med i.")
-        .Parameter("name", "movie-title")
-        .SetResponse(new MovieResponseGenerator("actors"));
-
-      // Date handling
-      Domain dd = kb.NewDomain("Datoer");
-      dd.DefineWord("Mandag").And("Tirsdag").And("Onsday").And("Torsdag").And("Fredag").And("Lørdag").And("Søndag").Is("day").Is("week-day");
-
-      md.AddRule("question-is", "det", "week-day")
-        .Describe("Hvilken ugedag er det?")
-        .Parameter("name", "week-day")
-        .SetResponse(new WeekDayResponseGenerator("what-day-is-it"));
-
-      // Self
-      Domain sd = kb.NewDomain("Mig selv");
-
-      sd.AddRule("question-what", "do", "you", "know")
-        .SetResponse(new DomainKnowledgeResponseGenerator(kb));
+      GeneralDomain.Initialize(kb);
+      MovieDomain.Initialize(kb);
+      DateTimeDomain.Initialize(kb);
+      SelfDomain.Initialize(kb);
 
       return kb;
     }
