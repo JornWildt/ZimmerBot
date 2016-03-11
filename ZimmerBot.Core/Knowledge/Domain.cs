@@ -35,9 +35,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void ExpandTokens(TokenString tokens)
+    public void ExpandTokens(TokenString input)
     {
-      foreach (Token t in tokens)
+      foreach (Token t in input)
       {
         foreach (WordDefinition w in WordDefinitions)
         {
@@ -47,11 +47,11 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void FindMatchingReactions(TokenString tokens, IList<Reaction> reactions)
+    public void FindMatchingReactions(TokenString input, IList<Reaction> reactions)
     {
       foreach (Rule r in Rules)
       {
-        Reaction reaction = r.CalculateReaction(tokens);
+        Reaction reaction = r.CalculateReaction(input);
         if (reaction != null)
           reactions.Add(reaction);
       }

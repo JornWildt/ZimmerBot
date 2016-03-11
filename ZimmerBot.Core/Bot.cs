@@ -20,17 +20,17 @@ namespace ZimmerBot.Core
     public Response Invoke(Request req)
     {
       Tokenizer tokenizer = new Tokenizer();
-      TokenString tokens = tokenizer.Tokenize(req.Input);
+      TokenString input = tokenizer.Tokenize(req.Input);
 
-      KnowledgeBase.ExpandTokens(tokens);
-      IList<Reaction> reactions = KnowledgeBase.FindMatchingReactions(tokens);
+      KnowledgeBase.ExpandTokens(input);
+      IList<Reaction> reactions = KnowledgeBase.FindMatchingReactions(input);
 
       string output = "Duh!";
 
       if (reactions.Count > 0)
-        output = reactions[0].GenerateResponse(tokens);
+        output = reactions.Select(r => r.GenerateResponse(input)).Aggregate((a, b) => a + "\n" + b);
       else
-        output = tokens.Select(t => t.OriginalText).Aggregate((a, b) => a + "." + b);
+        output = input.Select(t => t.OriginalText).Aggregate((a, b) => a + "." + b);
 
       return new Response
       {

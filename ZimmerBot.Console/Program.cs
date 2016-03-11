@@ -39,7 +39,7 @@ namespace ZimmerBot.Console
       md.DefineWord("optaget").Is("movie-recorded");
       md.DefineWord("skudt").Is("movie-recorded");
       md.DefineWord("skrevet").Is("movie-written");
-      md.DefineWord("spillede").Is("movie-played");
+      md.DefineWord("spillede").And("spiller").Is("movie-played");
 
       md.AddRule("question-when", "movie-title", "movie-recorded")
         .Describe("Hvornår blev en film optaget.")

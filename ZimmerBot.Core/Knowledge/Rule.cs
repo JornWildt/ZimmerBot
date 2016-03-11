@@ -43,28 +43,28 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Reaction CalculateReaction(TokenString tokens)
+    public Reaction CalculateReaction(TokenString input)
     {
       Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
       double score = 0;
 
-      for (int i = 0; i < tokens.Count; ++i)
+      for (int i = 0; i < input.Count; ++i)
       {
         for (int j = 0; j < Matches.Length; ++j)
         {
-          if (tokens[i].Matches(Matches[j]))
+          if (input[i].Matches(Matches[j]))
           {
             int distance = Math.Abs(j - i);
             if (distance < 3)
               score += 3 - distance;
 
             if (ParameterMap.ContainsKey(Matches[j]))
-              generatorParameters[ParameterMap[Matches[j]]] = tokens[i].OriginalText;
+              generatorParameters[ParameterMap[Matches[j]]] = input[i].OriginalText;
           }
         }
       }
 
-      score = score / tokens.Count;
+      score = score / input.Count;
 
       if (score < 2)
         return null;

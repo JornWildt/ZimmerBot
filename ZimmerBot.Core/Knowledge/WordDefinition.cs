@@ -20,6 +20,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public WordDefinition And(string word)
+    {
+      //Equivalents.Add(key);
+      return this;
+    }
+
+
     public WordDefinition Is(string key)
     {
       Equivalents.Add(key);

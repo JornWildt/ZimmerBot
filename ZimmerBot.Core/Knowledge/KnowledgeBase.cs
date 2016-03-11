@@ -23,21 +23,21 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void ExpandTokens(TokenString tokens)
+    public void ExpandTokens(TokenString input)
     {
       foreach (Domain d in Domains)
       {
-        d.ExpandTokens(tokens);
+        d.ExpandTokens(input);
       }
     }
 
 
-    public IList<Reaction> FindMatchingReactions(TokenString tokens)
+    public IList<Reaction> FindMatchingReactions(TokenString input)
     {
       IList<Reaction> reactions = new List<Reaction>();
 
       foreach (Domain d in Domains)
-        d.FindMatchingReactions(tokens, reactions);
+        d.FindMatchingReactions(input, reactions);
 
       return reactions;
     }

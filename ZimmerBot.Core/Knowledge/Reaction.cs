@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public string GenerateResponse(TokenString tokens)
+    public string GenerateResponse(TokenString input)
     {
       return Generator();
     }

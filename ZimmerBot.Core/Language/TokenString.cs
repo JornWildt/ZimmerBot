@@ -10,8 +10,8 @@ namespace ZimmerBot.Core.Language
     }
 
 
-    public TokenString(IEnumerable<Token> tokens)
-      : base(tokens)
+    public TokenString(IEnumerable<Token> input)
+      : base(input)
     {
     }
   }
