@@ -7,7 +7,7 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class WordDefinition
   {
-    public string Word { get; protected set; }
+    public List<string> Words { get; protected set; }
 
     protected List<string> Equivalents { get; set; }
 
@@ -15,14 +15,15 @@ namespace ZimmerBot.Core.Knowledge
 
     internal WordDefinition(string word)
     {
-      Word = word;
+      Words = new List<string>();
       Equivalents = new List<string>();
+      Words.Add(word);
     }
 
 
     public WordDefinition And(string word)
     {
-      //Equivalents.Add(key);
+      Words.Add(word);
       return this;
     }
 
@@ -36,8 +37,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public void ExpandToken(Token t)
     {
-      if (t.OriginalText.Equals(Word, StringComparison.InvariantCultureIgnoreCase))
-        t.AddEquivalent(Equivalents);
+      foreach (string word in Words)
+        if (t.OriginalText.Equals(word, StringComparison.InvariantCultureIgnoreCase))
+          t.AddEquivalent(Equivalents);
     }
   }
 }

@@ -32,9 +32,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public IList<Reaction> FindMatchingReactions(TokenString input)
+    public ReactionSet FindMatchingReactions(TokenString input)
     {
-      IList<Reaction> reactions = new List<Reaction>();
+      ReactionSet reactions = new ReactionSet();
 
       foreach (Domain d in Domains)
         d.FindMatchingReactions(input, reactions);

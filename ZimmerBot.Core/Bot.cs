@@ -23,7 +23,7 @@ namespace ZimmerBot.Core
       TokenString input = tokenizer.Tokenize(req.Input);
 
       KnowledgeBase.ExpandTokens(input);
-      IList<Reaction> reactions = KnowledgeBase.FindMatchingReactions(input);
+      ReactionSet reactions = KnowledgeBase.FindMatchingReactions(input);
 
       string output = "Duh!";
 

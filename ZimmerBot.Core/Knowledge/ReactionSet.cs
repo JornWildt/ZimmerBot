@@ -27,6 +27,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public int Count
+    {
+      get { return Reactions.Count; }
+    }
+
+
     public IEnumerator<Reaction> GetEnumerator()
     {
       return Reactions.GetEnumerator();

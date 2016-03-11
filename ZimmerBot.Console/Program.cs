@@ -1,4 +1,6 @@
-﻿using ZimmerBot.Core;
+﻿using System.Globalization;
+using System.Threading;
+using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Responses;
 
@@ -23,6 +25,9 @@ namespace ZimmerBot.Console
       Invoke(b, "skrevet Snehvide hvornår");
       Invoke(b, "Hvornår");
       Invoke(b, "Hvem spillede med i Snehvide");
+      Invoke(b, "Himmel og helvede");
+      Invoke(b, "Er det tirsdag");
+      Invoke(b, "Er det fredag");
     }
 
 
@@ -61,6 +66,7 @@ namespace ZimmerBot.Console
       Domain d = kb.NewDomain("General");
       d.DefineWord("Hvornår").Is("question").Is("question-when");
       d.DefineWord("Hvem").Is("question").Is("question-who");
+      d.DefineWord("Er").Is("question").Is("question-is");
 
       d.AddRule("question")
        .Describe("Hvornår?")
@@ -86,6 +92,15 @@ namespace ZimmerBot.Console
         .Describe("Hvem spillede med i.")
         .Parameter("name", "movie-title")
         .SetResponse(new MovieResponseGenerator("actors"));
+
+      // Date handling
+      Domain dd = kb.NewDomain("Dates");
+      dd.DefineWord("Mandag").And("Tirsdag").And("Onsday").And("Torsdag").And("Fredag").And("Lørdag").And("Søndag").Is("day").Is("week-day");
+
+      md.AddRule("question-is", "det", "week-day")
+        .Describe("Hvilken ugedag er det?")
+        .Parameter("name", "week-day")
+        .SetResponse(new WeekDayResponseGenerator("what-day-is-it"));
 
       return kb;
     }

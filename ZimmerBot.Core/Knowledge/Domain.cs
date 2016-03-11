@@ -47,7 +47,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void FindMatchingReactions(TokenString input, IList<Reaction> reactions)
+    public void FindMatchingReactions(TokenString input, ReactionSet reactions)
     {
       foreach (Rule r in Rules)
       {

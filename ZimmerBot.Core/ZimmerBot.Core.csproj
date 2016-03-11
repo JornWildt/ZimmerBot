@@ -57,6 +57,7 @@
     <Compile Include="Response.cs" />
     <Compile Include="Language\Tokenizer.cs" />
     <Compile Include="Responses\TemplateResponseGenerator.cs" />
+    <Compile Include="Responses\WeekDayResponseGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
