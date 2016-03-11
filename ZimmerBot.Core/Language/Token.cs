@@ -15,6 +15,7 @@ namespace ZimmerBot.Core.Language
     {
       OriginalText = t;
       Equivalents = new List<string>();
+      Equivalents.Add(t);
     }
 
 
@@ -37,6 +38,12 @@ namespace ZimmerBot.Core.Language
         return true;
 
       return Equivalents.Any(m => m == v);
+    }
+
+
+    public override string ToString()
+    {
+      return "(" + Equivalents.Aggregate((a,b) => a+"|"+b) +")";
     }
   }
 }
