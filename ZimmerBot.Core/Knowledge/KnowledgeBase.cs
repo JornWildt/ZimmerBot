@@ -23,6 +23,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public IEnumerable<Domain> GetDomains()
+    {
+      return Domains;
+    }
+
+
     public void ExpandTokens(TokenString input)
     {
       foreach (Domain d in Domains)

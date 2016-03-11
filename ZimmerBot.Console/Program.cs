@@ -28,6 +28,7 @@ namespace ZimmerBot.Console
       Invoke(b, "Himmel og helvede");
       Invoke(b, "Er det tirsdag");
       Invoke(b, "Er det fredag");
+      Invoke(b, "Hvad ved du");
     }
 
 
@@ -63,17 +64,18 @@ namespace ZimmerBot.Console
       KnowledgeBase kb = new KnowledgeBase();
 
       // General
-      Domain d = kb.NewDomain("General");
+      Domain d = kb.NewDomain("Diverse");
       d.DefineWord("Hvornår").Is("question").Is("question-when");
       d.DefineWord("Hvem").Is("question").Is("question-who");
       d.DefineWord("Er").Is("question").Is("question-is");
+      d.DefineWord("Hvad").Is("question").Is("question-what");
 
       d.AddRule("question")
        .Describe("Hvornår?")
        .SetResponse(new TemplateResponseGenerator("Hvad tror du selv?"));
 
       // Movies
-      Domain md = kb.NewDomain("Movies");
+      Domain md = kb.NewDomain("Film");
       md.DefineWord("Snehvide").Is("movie-role").Is("movie-title");
       md.DefineWord("Blinkende lygter").Is("movie-title");
       md.DefineWord("Rødhætte").Is("movie-role");
@@ -94,13 +96,19 @@ namespace ZimmerBot.Console
         .SetResponse(new MovieResponseGenerator("actors"));
 
       // Date handling
-      Domain dd = kb.NewDomain("Dates");
+      Domain dd = kb.NewDomain("Datoer");
       dd.DefineWord("Mandag").And("Tirsdag").And("Onsday").And("Torsdag").And("Fredag").And("Lørdag").And("Søndag").Is("day").Is("week-day");
 
       md.AddRule("question-is", "det", "week-day")
         .Describe("Hvilken ugedag er det?")
         .Parameter("name", "week-day")
         .SetResponse(new WeekDayResponseGenerator("what-day-is-it"));
+
+      // Self
+      Domain sd = kb.NewDomain("Mig selv");
+
+      sd.AddRule("question-what", "do", "you", "know")
+        .SetResponse(new DomainKnowledgeResponseGenerator(kb));
 
       return kb;
     }
