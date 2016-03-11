@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -44,6 +45,19 @@ namespace ZimmerBot.Core.Language
     public override string ToString()
     {
       return "(" + Equivalents.Aggregate((a,b) => a+"|"+b) +")";
+    }
+
+
+    public void ExtractParameter(Dictionary<string, string> parameterMap, Dictionary<string, string> generatorParameters)
+    {
+      foreach (string s in Equivalents)
+      {
+        if (parameterMap.ContainsKey(s))
+        {
+          generatorParameters.Add(parameterMap[s], OriginalText);
+          break;
+        }
+      }
     }
   }
 }

@@ -27,9 +27,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule AddRule(params string[] matches)
+    public Rule AddRule(params string[] topics)
     {
-      Rule r = new Rule(matches);
+      Rule r = new Rule(topics);
       Rules.Add(r);
       return r;
     }

@@ -1,5 +1,6 @@
 ﻿using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Responses;
 
 
 namespace ZimmerBot.Console

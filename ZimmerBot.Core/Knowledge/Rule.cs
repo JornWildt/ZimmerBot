@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Responses;
+
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -46,40 +47,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public Reaction CalculateReaction(TokenString input)
     {
-      Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
-      int matches = 0;
-      double score = 0;
-
-      for (int i = 0; i < input.Count; ++i)
-      {
-        bool gotMatch = false;
-
-        for (int j = 0; j < Matches.Length; ++j)
-        {
-          if (input[i].Matches(Matches[j]))
-          {
-            gotMatch = true;
-            int distance = Math.Abs(j - i);
-            if (distance < 3)
-              score += 3 - distance;
-
-            if (ParameterMap.ContainsKey(Matches[j]))
-              generatorParameters[ParameterMap[Matches[j]]] = input[i].OriginalText;
-          }
-        }
-
-        if (gotMatch)
-          ++matches;
-      }
-
-      // Normalize score relative to word count
-      score = score / input.Count;
-
-      // Prefer longer matches over short ones
-      score += matches;
+      double score = Trigger.CalculateTriggerScore(input);
 
       if (score < 2)
         return null;
+
+      Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
+
+      foreach (Token t in input)
+        t.ExtractParameter(ParameterMap, generatorParameters);
 
       // Some parameter values are missing => ignore
       if (ParameterMap.Count > generatorParameters.Count)
