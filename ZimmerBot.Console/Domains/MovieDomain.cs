@@ -1,5 +1,5 @@
-﻿using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Responses;
+﻿using ZimmerBot.Core.DataSources;
+using ZimmerBot.Core.Knowledge;
 
 
 namespace ZimmerBot.Console.Domains
@@ -20,13 +20,13 @@ namespace ZimmerBot.Console.Domains
 
       md.AddRule("question-when", "movie-title", "movie-recorded")
         .Describe("Hvornår blev en film optaget.")
-        .Parameter("name", "movie-title")
-        .SetResponse(new MovieResponseGenerator("Recorded-date"));
+        .Parameter("movie-title")
+        .SetResponse(i => MovieSource.FindRecordedDate(i["movie-title"], "<movie_title> blev optaget <answer>."));
 
       md.AddRule("question-who", "movie-title", "movie-played")
         .Describe("Hvem spillede med i.")
-        .Parameter("name", "movie-title")
-        .SetResponse(new MovieResponseGenerator("actors"));
+        .Parameter("movie-title")
+        .SetResponse(i => MovieSource.FindActorsInMovie(i["movie-title"], "Det gjorde <answer:{x | <x>}; separator=\",\">."));
     }
   }
 }

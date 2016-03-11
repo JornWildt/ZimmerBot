@@ -13,6 +13,8 @@ namespace ZimmerBot.Console.Domains
     {
       Domain dd = kb.NewDomain("Geografi");
       dd.DefineWord("Boston").Is("location").Is("city");
+      dd.DefineWord("Nærum").Is("location").Is("city");
+      dd.DefineWord("Allerød").Is("location").Is("city");
     }
   }
 }

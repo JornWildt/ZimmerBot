@@ -1,4 +1,5 @@
 ﻿using System;
+using Antlr4.StringTemplate;
 using ZimmerBot.Core.Language;
 
 
@@ -8,8 +9,7 @@ namespace ZimmerBot.Core.DataSources
   {
     public static Func<string> GetWeatherDescription(Token location, DateTime time, string template)
     {
-      Antlr4.StringTemplate.Template t = new Antlr4.StringTemplate.Template(template);
-
+      Template t = new Template(template);
       t.Add("location", location.OriginalText);
       t.Add("time", time);
 

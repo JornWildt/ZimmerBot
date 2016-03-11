@@ -1,5 +1,5 @@
 ﻿using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Responses;
+
 
 namespace ZimmerBot.Console.Domains
 {
@@ -15,7 +15,7 @@ namespace ZimmerBot.Console.Domains
 
       d.AddRule("question")
        .Describe("Hvornår?")
-       .SetResponse(new TemplateResponseGenerator("Hvad tror du selv?"));
+       .SetResponse(i => () => "Hvad tror du selv?");
     }
   }
 }

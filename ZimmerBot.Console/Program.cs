@@ -1,9 +1,6 @@
-﻿using System.Globalization;
-using System.Threading;
-using ZimmerBot.Console.Domains;
+﻿using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Responses;
 
 
 namespace ZimmerBot.Console
@@ -21,6 +18,8 @@ namespace ZimmerBot.Console
     {
       Bot b = new Bot(kb);
 
+      Invoke(b, "Er det oktober");
+      Invoke(b, "Er det marts");
       Invoke(b, "Hvad er vejret i Boston");
       Invoke(b, "Hvornår blev Snehvide skrevet");
       Invoke(b, "skrevet Hvornår blev Snehvide");
@@ -31,6 +30,7 @@ namespace ZimmerBot.Console
       Invoke(b, "Er det tirsdag");
       Invoke(b, "Er det fredag");
       Invoke(b, "Hvad ved du");
+      Invoke(b, "Er det forår");
     }
 
 

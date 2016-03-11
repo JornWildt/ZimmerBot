@@ -1,5 +1,5 @@
-﻿using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Responses;
+﻿using ZimmerBot.Core.DataSources;
+using ZimmerBot.Core.Knowledge;
 
 
 namespace ZimmerBot.Console.Domains
@@ -9,12 +9,23 @@ namespace ZimmerBot.Console.Domains
     public static void Initialize(KnowledgeBase kb)
     {
       Domain dd = kb.NewDomain("Datoer");
-      dd.DefineWord("Mandag").And("Tirsdag").And("Onsday").And("Torsdag").And("Fredag").And("Lørdag").And("Søndag").Is("day").Is("week-day");
+
+      dd.DefineWord("Mandag").And("Tirsdag").And("Onsday").And("Torsdag").And("Fredag").And("Lørdag").And("Søndag")
+        .Is("day").Is("week-day");
+
+      dd.DefineWord("Januar").And("Februar").And("Marts").And("April").And("Maj").And("Juni")
+        .And("Juli").And("August").And("September").And("Oktober").And("November").And("December")
+        .Is("month");
 
       dd.AddRule("question-is", "det", "week-day")
-        .Describe("Hvilken ugedag er det?")
-        .Parameter("name", "week-day")
-        .SetResponse(new WeekDayResponseGenerator("what-day-is-it"));
+        .Describe("Er det <ugedag>")
+        .Parameter("week-day")
+        .SetResponse(i => DateTimeSource.IsItDay(i["week-day"], "<answer>."));
+
+      dd.AddRule("question-is", "det", "month")
+        .Describe("Er det <måned>")
+        .Parameter("month")
+        .SetResponse(i => DateTimeSource.IsItMonth(i["month"], "Om det er <month>? <answer>."));
     }
   }
 }

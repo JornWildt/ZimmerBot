@@ -48,13 +48,13 @@ namespace ZimmerBot.Core.Language
     }
 
 
-    public void ExtractParameter(Dictionary<string, string> parameterMap, Dictionary<string, string> generatorParameters)
+    public void ExtractParameter(HashSet<string> parameterMap, Dictionary<string, string> generatorParameters)
     {
       foreach (string s in Equivalents)
       {
-        if (parameterMap.ContainsKey(s))
+        if (parameterMap.Contains(s))
         {
-          generatorParameters.Add(parameterMap[s], OriginalText);
+          generatorParameters.Add(s, OriginalText);
           break;
         }
       }

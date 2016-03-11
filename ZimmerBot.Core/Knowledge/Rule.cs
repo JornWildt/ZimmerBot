@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ZimmerBot.Core.Language;
-using ZimmerBot.Core.Responses;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -13,10 +12,8 @@ namespace ZimmerBot.Core.Knowledge
     protected Trigger Trigger { get; set; }
 
 
-    protected Dictionary<string, string> ParameterMap = new Dictionary<string, string>();
+    protected HashSet<string> ParameterMap = new HashSet<string>();
 
-
-    public ResponseGenerator Generator { get; protected set; }
 
     protected Func<TokenString, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
@@ -34,16 +31,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Parameter(string name, string match)
+    public Rule Parameter(string name)
     {
-      ParameterMap[match] = name;
-      return this;
-    }
-
-
-    public Rule SetResponse(ResponseGenerator g)
-    {
-      Generator = g;
+      ParameterMap.Add(name);
       return this;
     }
 
@@ -71,10 +61,7 @@ namespace ZimmerBot.Core.Knowledge
       if (ParameterMap.Count > generatorParameters.Count)
         return null;
 
-      if (Generator != null)
-        return new Reaction(score, Generator.Bind(generatorParameters));
-      else
-        return new Reaction(score, OutputGenerator(input));
+      return new Reaction(score, OutputGenerator(input));
     }
   }
 }
