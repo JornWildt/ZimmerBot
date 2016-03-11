@@ -8,7 +8,8 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Description { get; protected set; }
 
-    protected string[] Matches { get; set; } // => refactor to Trigger class
+    protected Trigger Trigger { get; set; }
+
 
     protected Dictionary<string, string> ParameterMap = new Dictionary<string, string>();
 
@@ -16,9 +17,9 @@ namespace ZimmerBot.Core.Knowledge
     public ResponseGenerator Generator { get; protected set; }
 
 
-    public Rule(params string[] matches)
+    public Rule(params string[] topics)
     {
-      Matches = matches;
+      Trigger = new Trigger(topics);
     }
 
 
