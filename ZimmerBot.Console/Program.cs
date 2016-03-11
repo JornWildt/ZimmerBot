@@ -21,6 +21,7 @@ namespace ZimmerBot.Console
     {
       Bot b = new Bot(kb);
 
+      Invoke(b, "Hvad er vejret i Boston");
       Invoke(b, "Hvornår blev Snehvide skrevet");
       Invoke(b, "skrevet Hvornår blev Snehvide");
       Invoke(b, "skrevet Snehvide hvornår");
@@ -64,6 +65,8 @@ namespace ZimmerBot.Console
     {
       KnowledgeBase kb = new KnowledgeBase();
 
+      GeographyDomain.Initialize(kb);
+      WeatherDomain.Initialize(kb);
       GeneralDomain.Initialize(kb);
       MovieDomain.Initialize(kb);
       DateTimeDomain.Initialize(kb);

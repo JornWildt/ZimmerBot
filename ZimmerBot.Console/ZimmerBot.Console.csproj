@@ -45,8 +45,10 @@
   <ItemGroup>
     <Compile Include="Domains\DateTimeDomain.cs" />
     <Compile Include="Domains\GeneralDomain.cs" />
+    <Compile Include="Domains\GeographyDomain.cs" />
     <Compile Include="Domains\MovieDomain.cs" />
     <Compile Include="Domains\SelfDomain.cs" />
+    <Compile Include="Domains\WeatherDomain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

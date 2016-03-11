@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ZimmerBot.Core.Language;
 using ZimmerBot.Core.Responses;
 
@@ -16,6 +17,8 @@ namespace ZimmerBot.Core.Knowledge
 
 
     public ResponseGenerator Generator { get; protected set; }
+
+    protected Func<TokenString, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
     public Rule(params string[] topics)
@@ -45,6 +48,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public Rule SetResponse(Func<TokenString, Func<string>> g)
+    {
+      OutputGenerator = g;
+      return this;
+    }
+
+
     public Reaction CalculateReaction(TokenString input)
     {
       double score = Trigger.CalculateTriggerScore(input);
@@ -61,7 +71,10 @@ namespace ZimmerBot.Core.Knowledge
       if (ParameterMap.Count > generatorParameters.Count)
         return null;
 
-      return new Reaction(score, Generator.Bind(generatorParameters));
+      if (Generator != null)
+        return new Reaction(score, Generator.Bind(generatorParameters));
+      else
+        return new Reaction(score, OutputGenerator(input));
     }
   }
 }

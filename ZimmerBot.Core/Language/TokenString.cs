@@ -21,5 +21,14 @@ namespace ZimmerBot.Core.Language
     {
       return this.Select(t => t.ToString()).Aggregate((a, b) => a + "," + b);
     }
+
+
+    public Token this[string s]
+    {
+      get
+      {
+        return this.FirstOrDefault(t => t.Matches(s));
+      }
+    }
   }
 }
