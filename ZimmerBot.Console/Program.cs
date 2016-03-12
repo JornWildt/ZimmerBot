@@ -1,4 +1,5 @@
-﻿using ZimmerBot.Console.Domains;
+﻿using ZimmerBot.cBrain.F2.Domain;
+using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
 
@@ -33,6 +34,7 @@ namespace ZimmerBot.Console
       Invoke(b, "Er det fredag");
       Invoke(b, "Hvad ved du");
       Invoke(b, "Er det forår");
+      Invoke(b, "Hvor gammel er du");
     }
 
 
@@ -75,6 +77,8 @@ namespace ZimmerBot.Console
       MovieDomain.Initialize(kb);
       DateTimeDomain.Initialize(kb);
       SelfDomain.Initialize(kb);
+
+      F2Domain.Initialize(kb);
 
       return kb;
     }

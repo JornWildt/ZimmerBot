@@ -56,6 +56,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ZimmerBot.cBrain.F2.Domain\ZimmerBot.cBrain.F2.Domain.csproj">
+      <Project>{01a5bb46-8256-4a46-afc3-6f8a94ccbb4b}</Project>
+      <Name>ZimmerBot.cBrain.F2.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ZimmerBot.Core\ZimmerBot.Core.csproj">
       <Project>{8ec30ae6-170e-4621-ae14-4a3985e3d062}</Project>
       <Name>ZimmerBot.Core</Name>

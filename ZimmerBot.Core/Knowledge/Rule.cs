@@ -45,6 +45,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public Rule SetResponse(string s)
+    {
+      OutputGenerator = i => () => s;
+      return this;
+    }
+
+
     public Reaction CalculateReaction(TokenString input)
     {
       double score = Trigger.CalculateTriggerScore(input);
