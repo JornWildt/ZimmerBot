@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Knowledge
     protected HashSet<string> ParameterMap = new HashSet<string>();
 
 
-    protected Func<TokenString, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
+    protected Func<ZTokenString, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
     public Rule(params string[] topics)
@@ -38,7 +38,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule SetResponse(Func<TokenString, Func<string>> g)
+    public Rule SetResponse(Func<ZTokenString, Func<string>> g)
     {
       OutputGenerator = g;
       return this;
@@ -52,7 +52,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Reaction CalculateReaction(TokenString input)
+    public Reaction CalculateReaction(ZTokenString input)
     {
       double score = Trigger.CalculateTriggerScore(input);
 
@@ -61,7 +61,7 @@ namespace ZimmerBot.Core.Knowledge
 
       Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
 
-      foreach (Token t in input)
+      foreach (ZToken t in input)
         t.ExtractParameter(ParameterMap, generatorParameters);
 
       // Some parameter values are missing => ignore

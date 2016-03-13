@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public double CalculateTriggerScore(TokenString input)
+    public double CalculateTriggerScore(ZTokenString input)
     {
       int matches = 0;
       double score = 0;

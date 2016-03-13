@@ -1,6 +1,6 @@
 ﻿using System;
-using ZimmerBot.Core.DataSources;
 using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Processors;
 
 
 namespace ZimmerBot.Console.Domains
@@ -16,7 +16,7 @@ namespace ZimmerBot.Console.Domains
       dd.AddRule("question", "weather", "location")
         .Describe("Hvad er vejret?")
         .Parameter("location")
-        .SetResponse(i => WeatherSource.GetWeatherDescription(i["location"], DateTime.Now, "Vejret omkring <location> er <answer>"));
+        .SetResponse(i => WeatherProcessors.GetWeatherDescription(i["location"], DateTime.Now, "Vejret omkring <location> er <answer>"));
     }
   }
 }

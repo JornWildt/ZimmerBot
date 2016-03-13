@@ -5,14 +5,14 @@ using System.Linq;
 
 namespace ZimmerBot.Core.Language
 {
-  public class Token
+  public class ZToken
   {
     public string OriginalText { get; set; }
 
     protected List<string> Equivalents { get; set; }
 
 
-    public Token(string t)
+    public ZToken(string t)
     {
       OriginalText = t;
       Equivalents = new List<string>();

@@ -1,4 +1,4 @@
-﻿using ZimmerBot.Core.DataSources;
+﻿using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -20,12 +20,12 @@ namespace ZimmerBot.Console.Domains
       dd.AddRule("question-is", "det", "week-day")
         .Describe("Er det <ugedag>")
         .Parameter("week-day")
-        .SetResponse(i => DateTimeSource.IsItDay(i["week-day"], "<answer>."));
+        .SetResponse(i => DateTimeProcessors.IsItDay(i["week-day"], "<answer>."));
 
       dd.AddRule("question-is", "det", "month")
         .Describe("Er det <måned>")
         .Parameter("month")
-        .SetResponse(i => DateTimeSource.IsItMonth(i["month"], "Om det er <month>? <answer>."));
+        .SetResponse(i => DateTimeProcessors.IsItMonth(i["month"], "Om det er <month>? <answer>."));
     }
   }
 }

@@ -29,7 +29,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void ExpandTokens(TokenString input)
+    public void ExpandTokens(ZTokenString input)
     {
       foreach (Domain d in Domains)
       {
@@ -38,7 +38,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public ReactionSet FindMatchingReactions(TokenString input)
+    public ReactionSet FindMatchingReactions(ZTokenString input)
     {
       ReactionSet reactions = new ReactionSet();
 

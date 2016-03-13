@@ -3,11 +3,11 @@ using ZimmerBot.Core.Language;
 using ZimmerBot.Core.Utilities;
 
 
-namespace ZimmerBot.Core.DataSources
+namespace ZimmerBot.Core.Processors
 {
-  public static class WeatherSource
+  public static class WeatherProcessors
   {
-    public static Func<string> GetWeatherDescription(Token location, DateTime time, string template)
+    public static Func<string> GetWeatherDescription(ZToken location, DateTime time, string template)
     {
       string answer = "SOLSKIN";
 

@@ -3,11 +3,11 @@ using ZimmerBot.Core.Language;
 using ZimmerBot.Core.Utilities;
 
 
-namespace ZimmerBot.Core.DataSources
+namespace ZimmerBot.Core.DataProcessors
 {
-  public static class MovieSource
+  public static class MovieProcessors
   {
-    public static Func<string> FindActorsInMovie(Token movie, string template)
+    public static Func<string> FindActorsInMovie(ZToken movie, string template)
     {
       string[] answer = new string[] { "Jennifer Einstein", "Steen Gråbøl" };
 
@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.DataSources
     }
 
 
-    public static Func<string> FindRecordedDate(Token movie, string template)
+    public static Func<string> FindRecordedDate(ZToken movie, string template)
     {
       string answer = "January 2011";
 

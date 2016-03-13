@@ -35,7 +35,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void ExpandToken(Token t)
+    public void ExpandToken(ZToken t)
     {
       foreach (string word in Words)
         if (t.OriginalText.Equals(word, StringComparison.InvariantCultureIgnoreCase))

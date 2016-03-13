@@ -19,8 +19,8 @@ namespace ZimmerBot.Core
 
     public Response Invoke(Request req)
     {
-      Tokenizer tokenizer = new Tokenizer();
-      TokenString input = tokenizer.Tokenize(req.Input);
+      ZTokenizer tokenizer = new ZTokenizer();
+      ZTokenString input = tokenizer.Tokenize(req.Input);
 
       KnowledgeBase.ExpandTokens(input);
       ReactionSet reactions = KnowledgeBase.FindMatchingReactions(input);

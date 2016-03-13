@@ -45,10 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="DataSources\DateTimeSource.cs" />
-    <Compile Include="DataSources\MovieSource.cs" />
-    <Compile Include="DataSources\SelfSource.cs" />
-    <Compile Include="DataSources\WeatherSource.cs" />
+    <Compile Include="Processors\DateTimeProcessor.cs" />
+    <Compile Include="Processors\MovieProcessors.cs" />
+    <Compile Include="Processors\SelfProcessors.cs" />
+    <Compile Include="Processors\WeatherSource.cs" />
     <Compile Include="Knowledge\Domain.cs" />
     <Compile Include="Knowledge\KnowledgeBase.cs" />
     <Compile Include="Knowledge\ReactionSet.cs" />
@@ -57,12 +57,12 @@
     <Compile Include="Knowledge\Reaction.cs" />
     <Compile Include="Knowledge\Trigger.cs" />
     <Compile Include="Knowledge\WordDefinition.cs" />
-    <Compile Include="Language\Token.cs" />
-    <Compile Include="Language\TokenString.cs" />
+    <Compile Include="Language\ZToken.cs" />
+    <Compile Include="Language\ZTokenString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Response.cs" />
-    <Compile Include="Language\Tokenizer.cs" />
+    <Compile Include="Language\ZTokenizer.cs" />
     <Compile Include="Utilities\TextMerge.cs" />
   </ItemGroup>
   <ItemGroup>

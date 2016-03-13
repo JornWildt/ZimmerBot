@@ -1,5 +1,5 @@
-﻿using ZimmerBot.Core.DataSources;
-using ZimmerBot.Core.Knowledge;
+﻿using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Processors;
 
 
 namespace ZimmerBot.Console.Domains
@@ -11,7 +11,7 @@ namespace ZimmerBot.Console.Domains
       Domain sd = kb.NewDomain("Mig selv");
 
       sd.AddRule("question-what", "ved", "du")
-        .SetResponse(i => SelfSource.KnownDomains(kb, "Jeg ved lidt om <answer: {a | <a>}; separator=\", \">."));
+        .SetResponse(i => SelfProcessors.KnownDomains(kb, "Jeg ved lidt om <answer: {a | <a>}; separator=\", \">."));
     }
   }
 }

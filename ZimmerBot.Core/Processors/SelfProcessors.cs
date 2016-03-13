@@ -4,9 +4,9 @@ using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Utilities;
 
 
-namespace ZimmerBot.Core.DataSources
+namespace ZimmerBot.Core.Processors
 {
-  public static class SelfSource
+  public static class SelfProcessors
   {
     public static Func<string> KnownDomains(KnowledgeBase kb, string template)
     {
