@@ -83,9 +83,9 @@ namespace ZimmerBot.Core
         {
           shutdown = true;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-          // TODO: log this
+          Environment.Log(LogLevel.Error, "Error in bot background thread", ex);
         }
       }
     }

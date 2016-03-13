@@ -30,5 +30,17 @@ namespace ZimmerBot.Core
       // Prompt ready for user
       Console.Write("> ");
     }
+
+
+    public void Log(LogLevel level, string msg, Exception ex)
+    {
+      Console.WriteLine("LOG: {0} - {1}", level, msg);
+    }
+
+
+    public void Log(LogLevel level, string msg, params object[] args)
+    {
+      Console.WriteLine("LOG: {0} - {1}", level, string.Format(msg, args));
+    }
   }
 }
