@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Utilities;
 
@@ -22,9 +23,22 @@ namespace ZimmerBot.Core
     }
 
 
+    /// <summary>
+    /// Invoke bot asynchronously. It will callback with a response through the registered environment.
+    /// </summary>
+    /// <param name="req"></param>
     public void Invoke(Request req)
     {
       WorkQueue.Enqueue(req);
+    }
+
+
+    /// <summary>
+    /// Stop background handling - abort bot thread.
+    /// </summary>
+    public void Abort()
+    {
+      BotThread.Abort();
     }
   }
 }
