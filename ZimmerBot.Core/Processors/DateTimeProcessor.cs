@@ -27,6 +27,14 @@ namespace ZimmerBot.Core.Processors
     }
 
 
+    public static Func<string> Time(string template)
+    {
+      var answer = DateTime.Now;//.ToShortTimeString();
+
+      return () => TextMerge.MergeTemplate(template, new { answer = answer });
+    }
+
+
     public static Func<string> IsItMonth(ZToken month, string template)
     {
       var thisMonth = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);

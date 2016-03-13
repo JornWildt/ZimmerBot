@@ -60,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="ConsoleBotEnvironment.cs" />
+    <Compile Include="BotHandle.cs" />
+    <Compile Include="IBotEnvironment.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Knowledge\StatePredicate.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="Response.cs" />
     <Compile Include="Language\ZTokenizer.cs" />
     <Compile Include="Utilities\TextMerge.cs" />
+    <Compile Include="Utilities\WorkQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

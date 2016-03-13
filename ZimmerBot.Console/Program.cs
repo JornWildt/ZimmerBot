@@ -52,18 +52,17 @@ namespace ZimmerBot.Console
     static void Interactive(KnowledgeBase kb)
     {
       Bot b = new Bot(kb);
+      BotHandle bh = b.Run(new ConsoleBotEnvironment("ZimmerBot> "));
+
       string input;
+      System.Console.Write("> ");
 
       do
       {
-        System.Console.Write("> ");
         input = System.Console.ReadLine();
         if (!string.IsNullOrEmpty(input))
         {
-          string[] output = b.Invoke(new Request { Input = input }).Output;
-
-          foreach (string s in output)
-            System.Console.WriteLine("ZimmerBot> " + s);
+          bh.Invoke(new Request { Input = input });
         }
       }
       while (!string.IsNullOrEmpty(input));

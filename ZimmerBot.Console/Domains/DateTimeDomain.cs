@@ -32,6 +32,14 @@ namespace ZimmerBot.Console.Domains
 
       dd.AddRule("question-which", "måned")
         .Response(i => DateTimeProcessors.ThisMonth("I dag er det <answer>"));
+
+      dd.AddRule("hvad", "er", "klokken")
+        //.AddRule("question", "klokken|tiden")
+        .Response(i => DateTimeProcessors.Time("Klokken er <answer>"));
+
+      dd.AddRule("hvilken", "dato", "er")
+        //.AddRule("question", "klokken|tiden")
+        .Response(i => DateTimeProcessors.Time("Det er <answer>"));
     }
   }
 }
