@@ -11,7 +11,7 @@ namespace ZimmerBot.Console.Domains
       Domain sd = kb.NewDomain("Mig selv");
 
       sd.AddRule("question-what", "ved", "du")
-        .SetResponse(i => SelfProcessors.KnownDomains(kb, "Jeg ved lidt om <answer: {a | <a>}; separator=\", \">."));
+        .Response(i => SelfProcessors.KnownDomains(kb, "Jeg ved lidt om <answer: {a | <a>}; separator=\", \">."));
     }
   }
 }

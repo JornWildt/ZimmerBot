@@ -45,6 +45,10 @@
       <HintPath>..\packages\Antlr4.StringTemplate.4.0.6.9004\lib\net35\Antlr4.StringTemplate.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CuttingEdge.Conditions, Version=1.2.0.11174, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\CuttingEdge.Conditions.1.2.0.0\lib\NET35\CuttingEdge.Conditions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="Knowledge\EvaluationContext.cs" />
+    <Compile Include="Knowledge\BotState.cs" />
+    <Compile Include="Knowledge\StatePredicate.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="Processors\DateTimeProcessor.cs" />

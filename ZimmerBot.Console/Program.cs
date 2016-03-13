@@ -19,6 +19,9 @@ namespace ZimmerBot.Console
     {
       Bot b = new Bot(kb);
 
+      Invoke(b, "");
+      Invoke(b, "");
+
       Invoke(b, "Er det oktober");
       Invoke(b, "Er det marts");
       Invoke(b, "Hvad er vejret i Boston");

@@ -24,6 +24,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public Rule(StatePredicate p)
+    {
+      Trigger = new Trigger(p);
+    }
+
+
     public Rule Describe(string description)
     {
       Description = description;
@@ -38,30 +44,30 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule SetResponse(Func<ZTokenString, Func<string>> g)
+    public Rule Response(Func<ZTokenString, Func<string>> g)
     {
       OutputGenerator = g;
       return this;
     }
 
 
-    public Rule SetResponse(string s)
+    public Rule Response(string s)
     {
       OutputGenerator = i => () => s;
       return this;
     }
 
 
-    public Reaction CalculateReaction(ZTokenString input)
+    public Reaction CalculateReaction(EvaluationContext context)
     {
-      double score = Trigger.CalculateTriggerScore(input);
+      double score = Trigger.CalculateTriggerScore(context);
 
       if (score < 2)
         return null;
 
       Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
 
-      foreach (ZToken t in input)
+      foreach (ZToken t in context.Input)
         t.ExtractParameter(ParameterMap, generatorParameters);
 
       // Some parameter values are missing => ignore
@@ -69,7 +75,7 @@ namespace ZimmerBot.Core.Knowledge
       if (ParameterMap.Count > generatorParameters.Count)
         return null;
 
-      return new Reaction(score, OutputGenerator(input));
+      return new Reaction(score, OutputGenerator(context.Input));
     }
   }
 }

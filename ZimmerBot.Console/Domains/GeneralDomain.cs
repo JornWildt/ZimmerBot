@@ -16,7 +16,7 @@ namespace ZimmerBot.Console.Domains
 
       d.AddRule("question")
        .Describe("Hvornår?")
-       .SetResponse(i => () => "Hvad tror du selv?");
+       .Response(i => () => "Hvad tror du selv?");
     }
   }
 }

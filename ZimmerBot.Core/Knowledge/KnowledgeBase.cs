@@ -38,12 +38,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public ReactionSet FindMatchingReactions(ZTokenString input)
+    public ReactionSet FindMatchingReactions(EvaluationContext context)
     {
       ReactionSet reactions = new ReactionSet();
 
       foreach (Domain d in Domains)
-        d.FindMatchingReactions(input, reactions);
+        d.FindMatchingReactions(context, reactions);
 
       return reactions;
     }

@@ -35,6 +35,14 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public Rule AddRule(StatePredicate p)
+    {
+      Rule r = new Rule(p);
+      Rules.Add(r);
+      return r;
+    }
+
+
     public void ExpandTokens(ZTokenString input)
     {
       foreach (ZToken t in input)
@@ -47,11 +55,11 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void FindMatchingReactions(ZTokenString input, ReactionSet reactions)
+    public void FindMatchingReactions(EvaluationContext context, ReactionSet reactions)
     {
       foreach (Rule r in Rules)
       {
-        Reaction reaction = r.CalculateReaction(input);
+        Reaction reaction = r.CalculateReaction(context);
         if (reaction != null)
           reactions.Add(reaction);
       }
