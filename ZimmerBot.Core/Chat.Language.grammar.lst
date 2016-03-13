@@ -1,0 +1,45 @@
+
+// ==========================================================================
+//  GPPG error listing for yacc source file <Parser\Chat.Language.grammar.y - 13-03-2016 08:21:45>
+// ==========================================================================
+//  Version:  1.5.2
+//  Machine:  JORN-PC
+//  DateTime: 13-03-2016 08:21:46
+//  UserName: Jorn
+// ==========================================================================
+
+
+%namespace ZimmerBot.Core.Parser
+%partial
+%parsertype ChatParser
+%visibility internal
+%tokentype Token
+
+%union { 
+			public int n; 
+			public string s; 
+	   }
+
+%start main
+
+%token T_NUMBER, T_WORD
+
+%%
+// Warning: Terminating itemSeq fixes the following size-3 NonTerminal set
+   // {main, $accept, itemSeq}
+// Error: There are 3 non-terminating NonTerminal Symbols
+   //  {main, $accept, itemSeq}
+// -----------------------------------------------------------------------
+
+main : itemSeq
+  ;
+
+itemSeq : item itemSeq
+  ;
+
+item   : T_NUMBER { $$.n = $1.n; Console.WriteLine("Rule -> main.n: {0}", $1.n);}
+       | T_WORD   { $$.s = $1.s; Console.WriteLine("Rule -> main.w: {0}", $1.n);}
+       ;
+
+%%// ==========================================================================
+

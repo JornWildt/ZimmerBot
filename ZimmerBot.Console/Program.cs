@@ -19,8 +19,6 @@ namespace ZimmerBot.Console
     {
       Bot b = new Bot(kb);
 
-      Invoke(b, "skrevet Snehvide hvornår");
-
       Invoke(b, "Er det oktober");
       Invoke(b, "Er det marts");
       Invoke(b, "Hvad er vejret i Boston");
@@ -35,6 +33,8 @@ namespace ZimmerBot.Console
       Invoke(b, "Hvad ved du");
       Invoke(b, "Er det forår");
       Invoke(b, "Hvor gammel er du");
+      Invoke(b, "Hvilken dag er det");
+      Invoke(b, "Hvilken måned er det");
     }
 
 

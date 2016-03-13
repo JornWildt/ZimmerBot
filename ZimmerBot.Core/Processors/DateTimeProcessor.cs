@@ -19,6 +19,14 @@ namespace ZimmerBot.Core.Processors
     }
 
 
+    public static Func<string> ThisDay(string template)
+    {
+      var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
+
+      return () => TextMerge.MergeTemplate(template, new { answer = answer });
+    }
+
+
     public static Func<string> IsItMonth(ZToken month, string template)
     {
       var thisMonth = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
@@ -27,6 +35,14 @@ namespace ZimmerBot.Core.Processors
         ? "Ja" : "Nej";
 
       return () => TextMerge.MergeTemplate(template, new { month = month.OriginalText, answer = answer });
+    }
+
+
+    public static Func<string> ThisMonth(string template)
+    {
+      var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
+
+      return () => TextMerge.MergeTemplate(template, new { answer = answer });
     }
   }
 }

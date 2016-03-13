@@ -12,6 +12,7 @@ namespace ZimmerBot.Console.Domains
       d.DefineWord("Hvem").Is("question").Is("question-who");
       d.DefineWord("Er").Is("question").Is("question-is");
       d.DefineWord("Hvad").Is("question").Is("question-what");
+      d.DefineWord("Hvilken").Is("question").Is("question-which");
 
       d.AddRule("question")
        .Describe("Hvornår?")

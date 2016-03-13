@@ -2,7 +2,7 @@
 using System.Linq;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Language;
-
+using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core
 {

@@ -1,0 +1,54 @@
+
+// ==========================================================================
+//  GPLEX error listing for lex source file <Chat.Language.analyzer.lex>
+// ==========================================================================
+//  Version:  1.2.2
+//  Machine:  JORN-PC
+//  DateTime: 13-03-2016 11:42:43
+//  UserName: Jorn
+// ==========================================================================
+
+
+%namespace ZimmerBot.Core.Parser
+%scannertype ChatScanner
+%visibility internal
+%tokentype Token
+
+%option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
+
+%using ZimmerBot.Core.Language
+
+Eol             (\r\n?|\n)
+// Error: Unexpected symbol, skipping to  <%%> 
+// Error: Parser error <Syntax error, unexpected name, expecting ;, or .> 
+// -----------------------------------------------------------------------
+NotWh           [^ \t\r\n]
+Space           [ \t]
+Number          [0-9]+
+Word            [a-z]+
+
+%{
+%}
+
+%%
+
+/* Scanner body */
+
+{Number}		{ return new ZToken(yytext); }
+//^^^^^
+// Error: Unknown lexical category <Number> 
+// -----------------------------------------
+
+{Word}		  { return new ZToken(yytext); }
+//^^^
+// Error: Unknown lexical category <Word> 
+// ---------------------------------------
+
+{Space}+		/* skip */
+//^^^^
+// Error: Unknown lexical category <Space> 
+// ----------------------------------------
+
+
+%%// ==========================================================================
+

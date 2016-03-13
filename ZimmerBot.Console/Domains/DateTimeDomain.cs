@@ -22,10 +22,16 @@ namespace ZimmerBot.Console.Domains
         .Parameter("week-day")
         .SetResponse(i => DateTimeProcessors.IsItDay(i["week-day"], "<answer>."));
 
+      dd.AddRule("question-which", "dag")
+        .SetResponse(i => DateTimeProcessors.ThisDay("I dag er det <answer>"));
+
       dd.AddRule("question-is", "det", "month")
         .Describe("Er det <måned>")
         .Parameter("month")
         .SetResponse(i => DateTimeProcessors.IsItMonth(i["month"], "Om det er <month>? <answer>."));
+
+      dd.AddRule("question-which", "måned")
+        .SetResponse(i => DateTimeProcessors.ThisMonth("I dag er det <answer>"));
     }
   }
 }
