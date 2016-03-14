@@ -29,7 +29,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void ExpandTokens(ZTokenString input)
+    public void ExpandTokens(ZTokenSequence input)
     {
       foreach (Domain d in Domains)
       {

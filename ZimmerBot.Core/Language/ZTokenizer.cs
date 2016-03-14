@@ -11,7 +11,7 @@ namespace ZimmerBot.Core.Language
     }
 
 
-    public ZTokenString Tokenize(string text)
+    public ZStatementSequence Tokenize(string text)
     {
       ChatParser parser = new ChatParser();
       parser.Parse(text);

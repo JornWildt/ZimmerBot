@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using CuttingEdge.Conditions;
@@ -101,24 +102,27 @@ namespace ZimmerBot.Core
       lock (StateLock)
       {
         ZTokenizer tokenizer = new ZTokenizer();
-        ZTokenString input = tokenizer.Tokenize(req.Input);
+        ZStatementSequence statements = tokenizer.Tokenize(req.Input);
+        List<string> output = new List<string>();
 
-        KnowledgeBase.ExpandTokens(input);
-        EvaluationContext context = new EvaluationContext(State, input);
-        ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
+        foreach (ZTokenSequence input in statements.Statements)
+        {
+          KnowledgeBase.ExpandTokens(input);
+          EvaluationContext context = new EvaluationContext(State, input);
+          ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
 
-        string[] output;
+          if (reactions.Count > 0)
+            foreach (Reaction r in reactions)
+              output.Add(r.GenerateResponse(input));
+          else
+            output.Add("???");
 
-        if (reactions.Count > 0)
-          output = reactions.Select(r => r.GenerateResponse(input)).ToArray();
-        else
-          output = new string[] { "???" };
-
-        State["dialogue.responseCount"] = (int)State["dialogue.responseCount"] + 1;
+          State["dialogue.responseCount"] = (int)State["dialogue.responseCount"] + 1;
+        }
 
         return new Response
         {
-          Output = output
+          Output = output.ToArray()
         };
       }
     }

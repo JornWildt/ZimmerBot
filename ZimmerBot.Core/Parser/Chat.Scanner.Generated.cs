@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 13-03-2016 12:19:25
+//  DateTime: 14-03-2016 19:39:20
 //  UserName: Jorn
-//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 13-03-2016 12:19:24>
+//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 14-03-2016 16:19:41>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: verbose, parser, stack, minimize
@@ -20,6 +20,7 @@
 // Version 1.2.1 of 24-June-2013
 //
 //
+#define BACKUP
 #define STACK
 #define PERSIST
 #define BYTEMODE
@@ -126,8 +127,8 @@ namespace ZimmerBot.Core.Parser
         
         enum Result {accept, noMatch, contextFound};
 
-        const int maxAccept = 3;
-        const int initial = 4;
+        const int maxAccept = 6;
+        const int initial = 7;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
@@ -164,43 +165,52 @@ namespace ZimmerBot.Core.Parser
         }
     };
 
-    static int[] startState = new int[] {4, 0};
+    static int[] startState = new int[] {7, 0};
 
-    static Table[] NxS = new Table[5] {
+    static Table[] NxS = new Table[9] {
 /* NxS[   0] */ new Table(0, 0, 0, null), // Shortest string ""
 /* NxS[   1] */ // Shortest string "\t"
       new Table(9, 24, -1, new sbyte[] {1, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
           -1, 1}),
-/* NxS[   2] */ // Shortest string "0"
-      new Table(48, 10, -1, new sbyte[] {2, 2, 2, 2, 2, 2, 
-          2, 2, 2, 2}),
-/* NxS[   3] */ // Shortest string "A"
-      new Table(197, 182, -1, new sbyte[] {3, 3, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3, 3, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 
+/* NxS[   2] */ new Table(0, 0, -1, null), // Shortest string "\n"
+/* NxS[   3] */ // Shortest string "\r"
+      new Table(10, 1, -1, new sbyte[] {2}),
+/* NxS[   4] */ // Shortest string "0"
+      new Table(46, 12, -1, new sbyte[] {8, -1, 4, 4, 4, 4, 
+          4, 4, 4, 4, 4, 4}),
+/* NxS[   5] */ // Shortest string "A"
+      new Table(197, 182, -1, new sbyte[] {5, 5, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, 5, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-          3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-          -1, -1, -1, -1, -1, -1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-          3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}),
-/* NxS[   4] */ // Shortest string ""
-      new Table(197, 182, -1, new sbyte[] {3, 3, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3, 3, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+          -1, -1, -1, -1, -1, -1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5}),
+/* NxS[   6] */ // Shortest string "0.0"
+      new Table(48, 10, -1, new sbyte[] {6, 6, 6, 6, 6, 6, 
+          6, 6, 6, 6}),
+/* NxS[   7] */ // Shortest string ""
+      new Table(197, 182, -1, new sbyte[] {5, 5, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, 5, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 2, 
+          -1, -1, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, -1, 
-          -1, -1, -1, -1, -1, -1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-          3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-          -1, -1, -1, -1, -1, -1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-          3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}),
+          -1, -1, -1, 2, -1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -1, 
+          -1, -1, -1, -1, 2, -1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+          -1, -1, -1, -1, -1, -1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5}),
+/* NxS[   8] */ // Shortest string "0."
+      new Table(48, 10, -1, new sbyte[] {6, 6, 6, 6, 6, 6, 
+          6, 6, 6, 6}),
     };
 
 int NextState() {
@@ -631,10 +641,15 @@ int NextState() {
         case 1: // Recognized '{Space}+',	Shortest string "\t"
 /* skip */
             break;
-        case 2: // Recognized '{Number}',	Shortest string "0"
+        case 2: // Recognized '{Delimiter}',	Shortest string "\n"
+        case 3: // Recognized '{Delimiter}',	Shortest string "\r"
+yylval.t = new ZToken(yytext); return (int)Token.T_DELIMITER;
+            break;
+        case 4: // Recognized '{Number}',	Shortest string "0"
+        case 6: // Recognized '{Number}',	Shortest string "0.0"
 yylval.t = new ZToken(yytext); return (int)Token.T_NUMBER;
             break;
-        case 3: // Recognized '{Word}',	Shortest string "A"
+        case 5: // Recognized '{Word}',	Shortest string "A"
 yylval.t = new ZToken(yytext); return (int)Token.T_WORD;
             break;
         default:

@@ -19,6 +19,6 @@ namespace ZimmerBot.Core.Parser
         }
 
 
-        public ZTokenString Result { get; internal set; }
+        public ZStatementSequence Result { get; internal set; }
   }
 }

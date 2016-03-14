@@ -4,6 +4,9 @@ using CuttingEdge.Conditions;
 
 namespace ZimmerBot.Core
 {
+  /// <summary>
+  /// A bot environment for interaction through the console.
+  /// </summary>
   public class ConsoleBotEnvironment : IBotEnvironment
   {
     public string Prompt { get; set; }
@@ -35,6 +38,7 @@ namespace ZimmerBot.Core
     public void Log(LogLevel level, string msg, Exception ex)
     {
       Console.WriteLine("LOG: {0} - {1}", level, msg);
+      Console.WriteLine(ex.Message);
     }
 
 

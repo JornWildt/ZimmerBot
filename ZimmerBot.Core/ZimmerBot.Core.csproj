@@ -67,6 +67,7 @@
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Knowledge\StatePredicate.cs" />
+    <Compile Include="Language\ZStatementSequence.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="Processors\DateTimeProcessor.cs" />
@@ -82,7 +83,7 @@
     <Compile Include="Knowledge\Trigger.cs" />
     <Compile Include="Knowledge\WordDefinition.cs" />
     <Compile Include="Language\ZToken.cs" />
-    <Compile Include="Language\ZTokenString.cs" />
+    <Compile Include="Language\ZTokenSequence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Response.cs" />

@@ -1,45 +1,64 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <Parser\Chat.Language.grammar.y - 13-03-2016 08:21:45>
+//  GPPG error listing for yacc source file <Parser\Chat.Language.grammar.y - 14-03-2016 19:36:23>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 13-03-2016 08:21:46
+//  DateTime: 14-03-2016 19:36:25
 //  UserName: Jorn
 // ==========================================================================
 
 
 %namespace ZimmerBot.Core.Parser
+%using ZimmerBot.Core.Language
 %partial
 %parsertype ChatParser
 %visibility internal
 %tokentype Token
 
 %union { 
-			public int n; 
-			public string s; 
-	   }
+  public ZStatementSequence stm;
+  public ZTokenSequence ts;
+  public ZToken t;
+}
 
 %start main
 
-%token T_NUMBER, T_WORD
+%token T_NUMBER
+%token T_WORD
+%token T_DELIMITER
+%token T_EMAIL
+
 
 %%
-// Warning: Terminating itemSeq fixes the following size-3 NonTerminal set
-   // {main, $accept, itemSeq}
-// Error: There are 3 non-terminating NonTerminal Symbols
-   //  {main, $accept, itemSeq}
-// -----------------------------------------------------------------------
 
-main : itemSeq
+main 
+  : statementSeq { Result = $1.stm; $$ = $1; }
+  | /* empty */  { Result = new ZStatementSequence(); }
   ;
 
-itemSeq : item itemSeq
+statementSeq
+  : statementSeq statement { $1.stm.Statements.Add($3.ts); $$ = $1; }
+//-----------------------------------------------^^^
+// Error: Semantic action index is out of bounds
+// ---------------------------------------------
+  | /* empty */            { $$.stm = new ZStatementSequence(); }  
   ;
 
-item   : T_NUMBER { $$.n = $1.n; Console.WriteLine("Rule -> main.n: {0}", $1.n);}
-       | T_WORD   { $$.s = $1.s; Console.WriteLine("Rule -> main.w: {0}", $1.n);}
+statement
+  : itemSeq
+  | itemSeq T_DELIMITER { $$ = $1; }
+  ;
+
+itemSeq 
+  : itemSeq item  { $1.ts.Add($2.t); $$ = $1; }
+  | /* empty */   { $$.ts = new ZTokenSequence(); }
+  ;
+
+item   : T_NUMBER    { $$.t = $1.t; Console.WriteLine("NUMBER"); }
+       | T_WORD      { $$.t = $1.t; Console.WriteLine("WORD"); }
        ;
 
-%%// ==========================================================================
+%%
+// ==========================================================================
 

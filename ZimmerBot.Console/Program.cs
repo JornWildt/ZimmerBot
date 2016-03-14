@@ -13,7 +13,7 @@ namespace ZimmerBot.Console
       KnowledgeBase kb = InitializeKnowledgeBase();
       Bot b = new Bot(kb);
 
-      //RunTestOutput(b);
+      RunTestOutput(b);
       RunInteractive(b);
     }
 
@@ -81,6 +81,7 @@ namespace ZimmerBot.Console
       Invoke(b, "Hvilken måned er det");
       Invoke(b, "Hvad er klokken");
       Invoke(b, "Hvilken dato er det");
+      Invoke(b, "Hvilken dato er det? Hvad er klokken?");
     }
 
 

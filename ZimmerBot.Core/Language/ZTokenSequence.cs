@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace ZimmerBot.Core.Language
 {
-  public class ZTokenString : List<ZToken>
+  public class ZTokenSequence : List<ZToken>
   {
-    public ZTokenString()
+    public ZTokenSequence()
     {
     }
 
 
-    public ZTokenString(IEnumerable<ZToken> input)
+    public ZTokenSequence(IEnumerable<ZToken> input)
       : base(input)
     {
     }

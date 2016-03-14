@@ -6,12 +6,11 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-
-Eol             (\r\n?|\n)
-NotWh           [^ \t\r\n]
-Space           [ \t]
-Number          [0-9]+
-Word            [a-zA-ZÊ¯Â∆ÿ≈]+
+Word       [a-zA-ZÊ¯Â∆ÿ≈]+
+Number     [0-9]+(\.[0-9]+)?
+Delimiter  (\r\n?|\n|\.|\?)
+NotWh      [^ \t\r\n]
+Space      [ \t]
 
 %{
 %}
@@ -20,9 +19,11 @@ Word            [a-zA-ZÊ¯Â∆ÿ≈]+
 
 /* Scanner body */
 
+{Word}		  { yylval.t = new ZToken(yytext); return (int)Token.T_WORD; }
+
 {Number}		{ yylval.t = new ZToken(yytext); return (int)Token.T_NUMBER; }
 
-{Word}		  { yylval.t = new ZToken(yytext); return (int)Token.T_WORD; }
+{Delimiter}	{ yylval.t = new ZToken(yytext); return (int)Token.T_DELIMITER; }
 
 {Space}+		/* skip */
 

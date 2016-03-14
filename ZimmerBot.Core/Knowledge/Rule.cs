@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Knowledge
     protected HashSet<string> ParameterMap = new HashSet<string>();
 
 
-    protected Func<ZTokenString, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
+    protected Func<ZTokenSequence, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
     public Rule(params string[] topics)
@@ -44,7 +44,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Response(Func<ZTokenString, Func<string>> g)
+    public Rule Response(Func<ZTokenSequence, Func<string>> g)
     {
       OutputGenerator = g;
       return this;
