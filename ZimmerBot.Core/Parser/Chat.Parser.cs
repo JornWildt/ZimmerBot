@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Parser;
+
 
 namespace ZimmerBot.Core.Parser
 {

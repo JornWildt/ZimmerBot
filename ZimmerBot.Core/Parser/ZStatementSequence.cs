@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace ZimmerBot.Core.Language
+namespace ZimmerBot.Core.Parser
 {
   public class ZStatementSequence
   {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
 
 

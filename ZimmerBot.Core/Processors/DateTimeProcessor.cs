@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
 
 

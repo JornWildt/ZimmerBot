@@ -2,7 +2,7 @@
 %scannertype ChatScanner
 %visibility internal
 %tokentype Token
-%using ZimmerBot.Core.Language;
+%using ZimmerBot.Core.Parser;
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 

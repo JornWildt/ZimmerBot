@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 14-03-2016 20:05:03
+//  DateTime: 14-03-2016 20:12:36
 //  UserName: Jorn
-//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 14-03-2016 20:05:03>
+//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 14-03-2016 20:12:35>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: verbose, parser, stack, minimize
@@ -34,7 +34,7 @@ using System.Runtime.Serialization;
 using System.Diagnostics.CodeAnalysis;
 
 using QUT.GplexBuffers;
-using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Parser
 {   

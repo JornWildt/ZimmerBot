@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace ZimmerBot.Core.Language
+namespace ZimmerBot.Core.Parser
 {
   public class ZToken
   {

@@ -67,7 +67,7 @@
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Knowledge\StatePredicate.cs" />
-    <Compile Include="Language\ZStatementSequence.cs" />
+    <Compile Include="Parser\ZStatementSequence.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="Processors\DateTimeProcessor.cs" />
@@ -82,12 +82,12 @@
     <Compile Include="Knowledge\Reaction.cs" />
     <Compile Include="Knowledge\Trigger.cs" />
     <Compile Include="Knowledge\WordDefinition.cs" />
-    <Compile Include="Language\ZToken.cs" />
-    <Compile Include="Language\ZTokenSequence.cs" />
+    <Compile Include="Parser\ZToken.cs" />
+    <Compile Include="Parser\ZTokenSequence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Response.cs" />
-    <Compile Include="Language\ZTokenizer.cs" />
+    <Compile Include="Parser\ZTokenizer.cs" />
     <Compile Include="Utilities\TextMerge.cs" />
     <Compile Include="Utilities\WorkQueue.cs" />
   </ItemGroup>
@@ -119,6 +119,7 @@
     </None>
     <None Include="Parser\Chat.parser" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild" DependsOnTargets="YltBuildGen" />
   <Target Name="YltBuildGen" DependsOnTargets="GenerateChat-ZimmerBot-Core-Parser" />

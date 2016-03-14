@@ -1,5 +1,5 @@
 %namespace ZimmerBot.Core.Parser
-%using ZimmerBot.Core.Language
+%using ZimmerBot.Core.Parser
 %partial
 %parsertype ChatParser
 %visibility internal

@@ -2,7 +2,7 @@
 using System.Linq;
 using ZimmerBot.Core.Parser;
 
-namespace ZimmerBot.Core.Language
+namespace ZimmerBot.Core.Parser
 {
   public class ZTokenizer
   {

@@ -1,5 +1,5 @@
 ﻿using System;
-using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Parser;
 
 
 namespace ZimmerBot.Core.Knowledge

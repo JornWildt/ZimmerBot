@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 14-03-2016 20:05:04
+// DateTime: 14-03-2016 20:12:36
 // UserName: Jorn
-// Input file <Parser\Chat.Language.grammar.y - 14-03-2016 20:00:37>
+// Input file <Parser\Chat.Language.grammar.y - 14-03-2016 20:12:35>
 
 // options: no-lines gplex
 
@@ -16,7 +16,7 @@ using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Text;
 using QUT.Gppg;
-using ZimmerBot.Core.Language;
+using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Parser
 {

@@ -2,7 +2,7 @@
 using System.Linq;
 
 
-namespace ZimmerBot.Core.Language
+namespace ZimmerBot.Core.Parser
 {
   public class ZTokenSequence : List<ZToken>
   {
