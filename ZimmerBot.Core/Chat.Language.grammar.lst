@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <Parser\Chat.Language.grammar.y - 14-03-2016 19:36:23>
+//  GPPG error listing for yacc source file <Parser\Chat.Language.grammar.y - 14-03-2016 19:58:43>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 14-03-2016 19:36:25
+//  DateTime: 14-03-2016 19:58:53
 //  UserName: Jorn
 // ==========================================================================
 
@@ -38,15 +38,12 @@ main
   ;
 
 statementSeq
-  : statementSeq statement { $1.stm.Statements.Add($3.ts); $$ = $1; }
-//-----------------------------------------------^^^
-// Error: Semantic action index is out of bounds
-// ---------------------------------------------
+  : statementSeq statement { $1.stm.Statements.Add($2.ts); $$ = $1; }
   | /* empty */            { $$.stm = new ZStatementSequence(); }  
   ;
 
 statement
-  : itemSeq
+  : itemSeq             { $$ = $1; }
   | itemSeq T_DELIMITER { $$ = $1; }
   ;
 
@@ -55,8 +52,12 @@ itemSeq
   | /* empty */   { $$.ts = new ZTokenSequence(); }
   ;
 
-item   : T_NUMBER    { $$.t = $1.t; Console.WriteLine("NUMBER"); }
-       | T_WORD      { $$.t = $1.t; Console.WriteLine("WORD"); }
+item   : T_NUMBER    { $$.t = $1.t; }
+       | T_WORD      { $$.t = $1.t; }
+       | T_EMAIL     { $$.t = $1.t; Console.Writeline("EMAIL: " + @@.t); }
+//--------------------------------------------------------------^^^
+// Error: Unknown special marker in semantic action
+// ------------------------------------------------
        ;
 
 %%

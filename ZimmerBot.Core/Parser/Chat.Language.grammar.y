@@ -43,6 +43,7 @@ itemSeq
 
 item   : T_NUMBER    { $$.t = $1.t; }
        | T_WORD      { $$.t = $1.t; }
+       | T_EMAIL     { $$.t = $1.t; }
        ;
 
 %%

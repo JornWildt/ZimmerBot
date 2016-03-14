@@ -7,14 +7,25 @@ namespace ZimmerBot.Core.Language
 {
   public class ZToken
   {
-    public string OriginalText { get; set; }
+    public enum TokenType { Word, Number, EMail }
+
+    public string OriginalText { get; protected set; }
+
+    public TokenType Type { get; protected set; }
 
     protected List<string> Equivalents { get; set; }
 
 
     public ZToken(string t)
+      : this(t, TokenType.Word)
+    {
+    }
+
+
+    public ZToken(string t, TokenType type)
     {
       OriginalText = t;
+      Type = type;
       Equivalents = new List<string>();
       Equivalents.Add(t);
     }

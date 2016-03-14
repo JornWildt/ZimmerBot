@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 13-03-2016 11:42:43
+//  DateTime: 14-03-2016 20:04:56
 //  UserName: Jorn
 // ==========================================================================
 
@@ -13,19 +13,21 @@
 %scannertype ChatScanner
 %visibility internal
 %tokentype Token
+%using ZimmerBot.Core.Language;
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-%using ZimmerBot.Core.Language
-
-Eol             (\r\n?|\n)
-// Error: Unexpected symbol, skipping to  <%%> 
-// Error: Parser error <Syntax error, unexpected name, expecting ;, or .> 
-// -----------------------------------------------------------------------
-NotWh           [^ \t\r\n]
-Space           [ \t]
-Number          [0-9]+
-Word            [a-z]+
+Word       [a-zA-ZæøåÆØÅ]+
+Number     [0-9]+(\.[0-9]+)?
+EMail      [a-zA-Z0-9+-_]+(\.[a-zA-Z0-9+-_])*@([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9]([a-z0-9\-]*[a-z0-9])?
+Date       []
+//---------^
+// Error: Illegal character in this context
+// ----------------------------------------
+Delimiter  (\r\n?|\n|\.|\?|;|:)
+NotWh      [^ \t\r\n]
+Space      [ \t]
+Other      .
 
 %{
 %}
@@ -34,20 +36,17 @@ Word            [a-z]+
 
 /* Scanner body */
 
-{Number}		{ return new ZToken(yytext); }
-//^^^^^
-// Error: Unknown lexical category <Number> 
-// -----------------------------------------
+{Word}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.Word); return (int)Token.T_WORD; }
 
-{Word}		  { return new ZToken(yytext); }
-//^^^
-// Error: Unknown lexical category <Word> 
-// ---------------------------------------
+{Number}		{ yylval.t = new ZToken(yytext, ZToken.TokenType.Number); return (int)Token.T_NUMBER; }
+
+{EMail}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_EMAIL; }
+
+{Delimiter}	{ yylval.t = new ZToken(yytext); return (int)Token.T_DELIMITER; }
 
 {Space}+		/* skip */
-//^^^^
-// Error: Unknown lexical category <Space> 
-// ----------------------------------------
+
+{Other}     /* skip */
 
 
 %%// ==========================================================================
