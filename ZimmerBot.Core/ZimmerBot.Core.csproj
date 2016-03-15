@@ -66,6 +66,7 @@
     <Compile Include="IBotEnvironment.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
+    <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
     <Compile Include="WordRegex\StateWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />

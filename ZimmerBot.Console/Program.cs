@@ -12,7 +12,7 @@ namespace ZimmerBot.Console
     static void Main(string[] args)
     {
       RunElizaTest();
-      //RunStandardTests();
+      RunStandardTests();
     }
 
     private static void RunElizaTest()
