@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}</ProjectGuid>
+    <ProjectGuid>{7696547A-B1FC-4237-9F74-FFE3641A2F46}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZimmerBot.Console</RootNamespace>
-    <AssemblyName>ZimmerBot.Console</AssemblyName>
+    <RootNamespace>ZimmerBotEliza</RootNamespace>
+    <AssemblyName>ZimmerBotEliza</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -44,12 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domains\DateTimeDomain.cs" />
-    <Compile Include="Domains\GeneralDomain.cs" />
-    <Compile Include="Domains\GeographyDomain.cs" />
-    <Compile Include="Domains\MovieDomain.cs" />
-    <Compile Include="Domains\SelfDomain.cs" />
-    <Compile Include="Domains\WeatherDomain.cs" />
+    <Compile Include="ElizaDomain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,10 +51,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZimmerBot.cBrain.F2.Domain\ZimmerBot.cBrain.F2.Domain.csproj">
-      <Project>{01a5bb46-8256-4a46-afc3-6f8a94ccbb4b}</Project>
-      <Name>ZimmerBot.cBrain.F2.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ZimmerBot.Core\ZimmerBot.Core.csproj">
       <Project>{8ec30ae6-170e-4621-ae14-4a3985e3d062}</Project>
       <Name>ZimmerBot.Core</Name>

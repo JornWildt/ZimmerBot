@@ -2,7 +2,7 @@
 using ZimmerBot.Core.WordRegex;
 
 
-namespace ZimmerBot.Console.Domains
+namespace ZimmerBotEliza
 {
   public class ElizaDomain
   {

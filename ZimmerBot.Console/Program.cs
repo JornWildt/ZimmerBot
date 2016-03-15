@@ -11,38 +11,15 @@ namespace ZimmerBot.Console
   {
     static void Main(string[] args)
     {
-      RunElizaTest();
-      RunStandardTests();
-    }
-
-
-    private static void RunElizaTest()
-    {
-      KnowledgeBase kb = InitializeElizaKnowledgeBase();
-      Bot b = new Bot(kb);
-
-      Invoke(b, "hej mor");
-      Invoke(b, "jeg har brug for mere sukker");
-    }
-
-
-    static KnowledgeBase InitializeElizaKnowledgeBase()
-    {
-      KnowledgeBase kb = new KnowledgeBase();
-
-      ElizaDomain.Initialize(kb);
-
-      return kb;
-    }
-
-
-    private static void RunStandardTests()
-    {
+      // Initialize bot
       KnowledgeBase kb = InitializeKnowledgeBase();
       Bot b = new Bot(kb);
 
+      // Remove this line if you do not want to see a bunch of test interactions
       RunTestOutput(b);
-      RunInteractive(b);
+
+      // Run bot
+      ConsoleBotEnvironment.RunInteractiveConsoleBot("ZimmerBot> ", b);
     }
 
 
@@ -56,7 +33,6 @@ namespace ZimmerBot.Console
       MovieDomain.Initialize(kb);
       DateTimeDomain.Initialize(kb);
       SelfDomain.Initialize(kb);
-      ElizaDomain.Initialize(kb);
       F2Domain.Initialize(kb);
 
       return kb;

@@ -46,5 +46,26 @@ namespace ZimmerBot.Core
     {
       Console.WriteLine("LOG: {0} - {1}", level, string.Format(msg, args));
     }
+
+
+    public static void RunInteractiveConsoleBot(string prompt, Bot b)
+    {
+      BotHandle bh = b.Run(new ConsoleBotEnvironment(prompt));
+
+      string input;
+      Console.Write("> ");
+
+      do
+      {
+        input = Console.ReadLine();
+        if (!string.IsNullOrEmpty(input))
+        {
+          bh.Invoke(new Request { Input = input });
+        }
+      }
+      while (!string.IsNullOrEmpty(input));
+
+      bh.Abort();
+    }
   }
 }

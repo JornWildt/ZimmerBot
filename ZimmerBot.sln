@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.cBrain.F2.Domain"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Core.Tests", "ZimmerBot.Core.Tests\ZimmerBot.Core.Tests.csproj", "{98006B05-07ED-4664-84EC-D1B3E3F99274}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBotEliza", "ZimmerBotEliza\ZimmerBotEliza.csproj", "{7696547A-B1FC-4237-9F74-FFE3641A2F46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{98006B05-07ED-4664-84EC-D1B3E3F99274}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98006B05-07ED-4664-84EC-D1B3E3F99274}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98006B05-07ED-4664-84EC-D1B3E3F99274}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7696547A-B1FC-4237-9F74-FFE3641A2F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7696547A-B1FC-4237-9F74-FFE3641A2F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7696547A-B1FC-4237-9F74-FFE3641A2F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7696547A-B1FC-4237-9F74-FFE3641A2F46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
