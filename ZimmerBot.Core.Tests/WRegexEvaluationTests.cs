@@ -81,6 +81,15 @@ namespace ZimmerBot.Core.Tests
       Assert.AreEqual(3.0, CalculateScore(t, "Run very very very fast"));
     }
 
+    [Test]
+    public void CanEvaluateDoubleWildcardRepetition()
+    {
+      Trigger t = new Trigger(new RepitionWRegex(new WildcardWRegex()), "mother", new RepitionWRegex(new WildcardWRegex()));
+      Assert.AreEqual(3, CalculateScore(t, "I miss my mother"));
+      Assert.AreEqual(3, CalculateScore(t, "I miss my mother so much"));
+      Assert.AreEqual(3, CalculateScore(t, "mother is the best"));
+      Assert.AreEqual(0.3, CalculateScore(t, "father is the best"));
+    }
 
     [Test]
     public void CanEvaluateChoiceWRegex()

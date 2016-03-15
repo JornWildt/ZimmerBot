@@ -16,12 +16,18 @@ namespace ZimmerBot.Core.WordRegex
 
 
     public ChoiceWRegex(WRegex left, WRegex right)
+      : this(left, right, null)
+    {
+    }
+
+    public ChoiceWRegex(WRegex left, WRegex right, string matchName)
     {
       Condition.Requires(left, "left").IsNotNull();
       Condition.Requires(right, "right").IsNotNull();
 
       Left = left;
       Right = right;
+      MatchName = matchName;
     }
 
 

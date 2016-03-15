@@ -12,7 +12,7 @@ namespace ZimmerBot.Console
     static void Main(string[] args)
     {
       RunElizaTest();
-      //RunStandardTests();
+      RunStandardTests();
     }
 
 
@@ -56,7 +56,7 @@ namespace ZimmerBot.Console
       MovieDomain.Initialize(kb);
       DateTimeDomain.Initialize(kb);
       SelfDomain.Initialize(kb);
-
+      ElizaDomain.Initialize(kb);
       F2Domain.Initialize(kb);
 
       return kb;
