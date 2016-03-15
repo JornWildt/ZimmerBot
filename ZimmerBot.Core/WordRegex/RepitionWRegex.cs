@@ -43,8 +43,9 @@ namespace ZimmerBot.Core.WordRegex
     {
       // Empty sequnce is a match
       if (context.CurrentTokenIndex >= context.Input.Count)
-        return new MatchResult(1).RegisterMatch(MatchName, "");
+        return new MatchResult(1, "").RegisterMatch(MatchName, "");
 
+      string matchedText = "";
       int startIndex = context.CurrentTokenIndex;
       MatchResult lastResult = null;
 
@@ -68,6 +69,7 @@ namespace ZimmerBot.Core.WordRegex
         {
           // No lookahead match but match sub-regex => keep token position (as we matched input), store sub-result in lastResult and continue
           lastResult = result;
+          matchedText += (matchedText.Length == 0 ? "" : " ") + result.MatchedText;
         }
         else
         {
@@ -77,18 +79,18 @@ namespace ZimmerBot.Core.WordRegex
         }
       }
 
-      string matchText = "";
+      //string matchText = "";
 
-      if (!string.IsNullOrEmpty(MatchName) && context.CurrentTokenIndex > startIndex)
-      {
-        for (int i = startIndex; i < context.CurrentTokenIndex; ++i)
-          matchText += (i == startIndex ? "" : " ") + context.Input[i].OriginalText;
-      }
+      //if (!string.IsNullOrEmpty(MatchName) && context.CurrentTokenIndex > startIndex)
+      //{
+      //  for (int i = startIndex; i < context.CurrentTokenIndex; ++i)
+      //    matchText += (i == startIndex ? "" : " ") + context.Input[i].OriginalText;
+      //}
 
       if (lastResult == null)
-        return new MatchResult(1).RegisterMatch(MatchName, matchText);
+        return new MatchResult(1, matchedText).RegisterMatch(MatchName, matchedText);
       else
-        return lastResult.RegisterMatch(MatchName, matchText);
+        return lastResult.RegisterMatch(MatchName, matchedText);
     }
   }
 }

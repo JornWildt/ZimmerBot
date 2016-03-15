@@ -21,8 +21,8 @@ namespace ZimmerBot.Core.WordRegex
     public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
       return context.CurrentTokenIndex >= context.Input.Count
-        ? new MatchResult(1) 
-        : new MatchResult(0);
+        ? new MatchResult(1, "") 
+        : new MatchResult(0, "");
     }
   }
 }

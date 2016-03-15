@@ -13,17 +13,22 @@ namespace ZimmerBot.Core.WordRegex
 
       public Dictionary<string, object> Matches { get; protected set; }
 
-      public MatchResult(double score)
+      public string MatchedText { get; protected set; }
+
+
+      public MatchResult(double score, string matchedText)
       {
         Score = score;
         Matches = new Dictionary<string, object>();
+        MatchedText = matchedText;
       }
 
 
-      public MatchResult(MatchResult src, double score)
+      public MatchResult(MatchResult src, double score, string matchedText)
       {
         Score = score;
         Matches = new Dictionary<string, object>(src.Matches);
+        MatchedText = matchedText;
       }
 
 
@@ -43,7 +48,7 @@ namespace ZimmerBot.Core.WordRegex
         else if (b == null)
           return a;
 
-        MatchResult v = new MatchResult(a.Score * b.Score);
+        MatchResult v = new MatchResult(a.Score * b.Score, (a.MatchedText + " " + b.MatchedText).Trim());
 
         foreach (var item in a.Matches)
           v.Matches[item.Key] = item.Value;

@@ -35,10 +35,11 @@ namespace ZimmerBot.Core.WordRegex
       if (context.CurrentTokenIndex < context.Input.Count)
       {
         ++context.CurrentTokenIndex;
-        return new MatchResult(1).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
+        return new MatchResult(1, context.Input[context.CurrentTokenIndex - 1].OriginalText)
+          .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
       }
 
-      return new MatchResult(0);
+      return new MatchResult(0, "");
     }
   }
 }

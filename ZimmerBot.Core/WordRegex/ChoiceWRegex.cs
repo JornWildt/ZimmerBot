@@ -56,10 +56,10 @@ namespace ZimmerBot.Core.WordRegex
       {
         // Restore token index to what it was after score 1 calculation
         context.CurrentTokenIndex = index1;
-        return result1;
+        return result1.RegisterMatch(MatchName, result1.MatchedText);
       }
 
-      return result2;
+      return result2.RegisterMatch(MatchName, result2.MatchedText);
     }
   }
 }

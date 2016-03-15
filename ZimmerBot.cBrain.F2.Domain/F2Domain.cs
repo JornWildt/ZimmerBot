@@ -20,7 +20,7 @@ namespace ZimmerBot.cBrain.F2.Domain
 
       f2d.AddRule("hvor", "gammel", "er", "du")
         //.AddTrigger("Hvornår er du fra")
-         .Response(i => ResponseHelper.OneOf("Jeg er ny-i-jobbet.", "Det ved jeg snart ikke.", "Det føles som evigheder.", "Jeg blev skabt i marts 2016."));
+         .Response(i => ResponseHelper.OneOf(i, "Jeg er ny-i-jobbet.", "Det ved jeg snart ikke.", "Det føles som evigheder.", "Jeg blev skabt i marts 2016."));
 
       f2d.AddRule("Hvem", "skabte", "dig")
          .Response("Jørn");

@@ -21,7 +21,7 @@ namespace ZimmerBot.Console
       KnowledgeBase kb = InitializeElizaKnowledgeBase();
       Bot b = new Bot(kb);
 
-      Invoke(b, "behøver mere sukker");
+      Invoke(b, "hej mor");
       Invoke(b, "jeg har brug for mere sukker");
     }
 

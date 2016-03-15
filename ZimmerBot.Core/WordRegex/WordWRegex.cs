@@ -45,7 +45,8 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(1).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
+          return new MatchResult(1, context.Input[context.CurrentTokenIndex - 1].OriginalText)
+            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
         }
       }
 
@@ -54,7 +55,8 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex + 1].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.5).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex].OriginalText); ;
+          return new MatchResult(0.5, context.Input[context.CurrentTokenIndex].OriginalText)
+            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex].OriginalText); ;
         }
       }
 
@@ -63,7 +65,8 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex - 1].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.5).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 2].OriginalText); ;
+          return new MatchResult(0.5, context.Input[context.CurrentTokenIndex - 2].OriginalText)
+            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 2].OriginalText); ;
         }
       }
 
@@ -72,7 +75,8 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex + 2].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.25).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex + 1].OriginalText); ;
+          return new MatchResult(0.25, context.Input[context.CurrentTokenIndex + 1].OriginalText)
+            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex + 1].OriginalText); ;
         }
       }
 
@@ -81,12 +85,13 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex - 2].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.25).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 3].OriginalText); ;
+          return new MatchResult(0.25, context.Input[context.CurrentTokenIndex - 3].OriginalText)
+            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 3].OriginalText); ;
         }
       }
 
       ++context.CurrentTokenIndex;
-      return new MatchResult(0.1);
+      return new MatchResult(0.1, "");
     }
   }
 }

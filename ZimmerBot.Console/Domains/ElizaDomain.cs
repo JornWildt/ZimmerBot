@@ -14,7 +14,7 @@ namespace ZimmerBot.Console.Domains
         .Response("Hvorfor? Gør <x> dig glad?");
 
       dd.AddRule(new RepitionWRegex(new WildcardWRegex()), new ChoiceWRegex(new WordWRegex("far"), new WordWRegex("mor"), "m"), new RepitionWRegex(new WildcardWRegex()))
-        .Response(i => ResponseHelper.OneOf("Fortæl mig mere om din <m> ...", "Hvad var dit forhold til din <m>?"));
+        .Response(i => ResponseHelper.OneOf(i, "Fortæl mig mere om din <m> ...", "Hvad var dit forhold til din <m>?"));
     }
   }
 }
