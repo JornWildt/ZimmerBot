@@ -48,7 +48,7 @@ namespace ZimmerBot.Core
     }
 
 
-    public static void RunInteractiveConsoleBot(string prompt, Bot b)
+    public static void RunInteractiveConsoleBot(string prompt, Bot b, Func<string, string> inputModifier = null)
     {
       BotHandle bh = b.Run(new ConsoleBotEnvironment(prompt));
 
@@ -58,6 +58,10 @@ namespace ZimmerBot.Core
       do
       {
         input = Console.ReadLine();
+
+        if (inputModifier != null)
+          input = inputModifier(input);
+
         if (!string.IsNullOrEmpty(input))
         {
           bh.Invoke(new Request { Input = input });
