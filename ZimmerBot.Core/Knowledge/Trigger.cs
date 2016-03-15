@@ -44,7 +44,10 @@ namespace ZimmerBot.Core.Knowledge
         // FIXME: some mixing of concerns here - should be wrapped differently
         context.CurrentTokenIndex = 0;
 
-        return Predicate.CalculateTriggerScore(context, new EndOfSequenceWRegex());
+        // FIXME: need only be calculated once and for all!
+        double size = Predicate.CalculateSize();
+
+        return Predicate.CalculateTriggerScore(context, new EndOfSequenceWRegex()) * size;
 
         // This is somewhat a hack: we need to rafactor topics and state-predicate into a common "predicat" concept
         //return 0; // FIXME  Predicate.CalculateTriggerScore(context);

@@ -1,10 +1,17 @@
-﻿using ZimmerBot.Core.Knowledge;
+﻿using System;
+using ZimmerBot.Core.Knowledge;
 
 
 namespace ZimmerBot.Core.WordRegex
 {
   public class EndOfSequenceWRegex : WRegex
   {
+    public override double CalculateSize()
+    {
+      return 0;
+    }
+
+
     public override WRegex GetLookahead()
     {
       return this;

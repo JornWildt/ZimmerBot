@@ -15,6 +15,7 @@ namespace ZimmerBot.Console
       RunStandardTests();
     }
 
+
     private static void RunElizaTest()
     {
       KnowledgeBase kb = InitializeElizaKnowledgeBase();

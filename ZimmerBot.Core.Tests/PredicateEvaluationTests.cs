@@ -24,11 +24,11 @@ namespace ZimmerBot.Core.Tests
     public void CanEvaluateWordSequenceWRegex()
     {
       Trigger t = new Trigger("I", "am", "happy");
-      Assert.AreEqual(0.001, CalculateScore(t, "Test"));
-      Assert.AreEqual(1, CalculateScore(t, "I am happy"));
-      Assert.AreEqual(0.1, CalculateScore(t, "I very happy"));
-      Assert.AreEqual(0.25, CalculateScore(t, "I happy am"));
-      Assert.AreEqual(0.5, CalculateScore(t, "I am very happy"));
+      Assert.AreEqual(0.003, CalculateScore(t, "Test"));
+      Assert.AreEqual(3, CalculateScore(t, "I am happy"));
+      Assert.AreEqual(0.3, CalculateScore(t, "I very happy"));
+      Assert.AreEqual(0.75, CalculateScore(t, "I happy am"));
+      Assert.AreEqual(1.5, CalculateScore(t, "I am very happy"));
     }
 
 
@@ -37,10 +37,10 @@ namespace ZimmerBot.Core.Tests
     {
       Trigger t = new Trigger("I", new WildcardWRegex(), "happy");
       Assert.AreEqual(0.0, CalculateScore(t, "Test"));
-      Assert.AreEqual(1.0, CalculateScore(t, "I am happy"));
-      Assert.AreEqual(1.0, CalculateScore(t, "I very happy"));
-      Assert.AreEqual(0.5, CalculateScore(t, "I happy am"));
-      Assert.AreEqual(0.5, CalculateScore(t, "I am very happy"));
+      Assert.AreEqual(3.0, CalculateScore(t, "I am happy"));
+      Assert.AreEqual(3.0, CalculateScore(t, "I very happy"));
+      Assert.AreEqual(1.5, CalculateScore(t, "I happy am"));
+      Assert.AreEqual(1.5, CalculateScore(t, "I am very happy"));
     }
 
 
@@ -49,10 +49,10 @@ namespace ZimmerBot.Core.Tests
     {
       Trigger t = new Trigger("I", new WildcardWRegex(), new WildcardWRegex(), "happy");
       Assert.AreEqual(0.0, CalculateScore(t, "Test"));
-      Assert.AreEqual(0.5, CalculateScore(t, "I am happy"));
-      Assert.AreEqual(0.5, CalculateScore(t, "I very happy"));
-      Assert.AreEqual(0.25, CalculateScore(t, "I happy am"));
-      Assert.AreEqual(1.0, CalculateScore(t, "I am very happy"));
+      Assert.AreEqual(2.0, CalculateScore(t, "I am happy"));
+      Assert.AreEqual(2.0, CalculateScore(t, "I very happy"));
+      Assert.AreEqual(1.0, CalculateScore(t, "I happy am"));
+      Assert.AreEqual(4.0, CalculateScore(t, "I am very happy"));
     }
 
 
@@ -60,13 +60,13 @@ namespace ZimmerBot.Core.Tests
     public void CanEvaluateWordRepitionWRegex()
     {
       Trigger t = new Trigger("Run", new RepitionWRegex(new WordWRegex("very")), "fast");
-      Assert.AreEqual(0.01, CalculateScore(t, "Test"));
-      Assert.AreEqual(0.01, CalculateScore(t, "very"));
-      Assert.AreEqual(0.1, CalculateScore(t, "Run"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run fast"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run very fast"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run very very fast"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run very very very fast"));
+      Assert.AreEqual(0.03, CalculateScore(t, "Test"));
+      Assert.AreEqual(0.03, CalculateScore(t, "very"));
+      Assert.AreEqual(0.3, CalculateScore(t, "Run"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run fast"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run very fast"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run very very fast"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run very very very fast"));
     }
 
 
@@ -74,13 +74,13 @@ namespace ZimmerBot.Core.Tests
     public void CanEvaluateWildcardRepitionWRegex()
     {
       Trigger t = new Trigger("Run", new RepitionWRegex(new WildcardWRegex()), "fast");
-      Assert.AreEqual(0.01, CalculateScore(t, "Test"));
-      Assert.AreEqual(0.01, CalculateScore(t, "very"));
-      Assert.AreEqual(0.1, CalculateScore(t, "Run"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run fast"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run very fast"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run very very fast"));
-      Assert.AreEqual(1.0, CalculateScore(t, "Run very very very fast"));
+      Assert.AreEqual(0.03, CalculateScore(t, "Test"));
+      Assert.AreEqual(0.03, CalculateScore(t, "very"));
+      Assert.AreEqual(0.3, CalculateScore(t, "Run"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run fast"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run very fast"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run very very fast"));
+      Assert.AreEqual(3.0, CalculateScore(t, "Run very very very fast"));
     }
 
 
@@ -88,11 +88,11 @@ namespace ZimmerBot.Core.Tests
     public void CanEvaluateChoiceWRegex()
     {
       Trigger t = new Trigger("She", new ChoiceWRegex(new WordWRegex("sleeps"), new WordWRegex("walks")), "today");
-      Assert.AreEqual(0.001, CalculateScore(t, "Test"));
-      Assert.AreEqual(0.05, CalculateScore(t, "she today"));
-      Assert.AreEqual(0.1, CalculateScore(t, "she runs today"));
-      Assert.AreEqual(1.0, CalculateScore(t, "she sleeps today"));
-      Assert.AreEqual(1.0, CalculateScore(t, "she walks today"));
+      Assert.AreEqual(0.003, CalculateScore(t, "Test"));
+      Assert.AreEqual(0.15, CalculateScore(t, "she today"));
+      Assert.AreEqual(0.3, CalculateScore(t, "she runs today"));
+      Assert.AreEqual(3.0, CalculateScore(t, "she sleeps today"));
+      Assert.AreEqual(3.0, CalculateScore(t, "she walks today"));
     }
 
 

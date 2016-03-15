@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -23,6 +24,12 @@ namespace ZimmerBot.Core.WordRegex
 
     public static StateWRegex Equals(string variable, object value)
       => new StateWRegex(variable, value);
+
+
+    public override double CalculateSize()
+    {
+      return 1;
+    }
 
 
     public override WRegex GetLookahead()

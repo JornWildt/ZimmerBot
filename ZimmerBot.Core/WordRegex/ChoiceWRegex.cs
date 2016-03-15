@@ -25,6 +25,12 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    public override double CalculateSize()
+    {
+      return Math.Max(Left.CalculateSize(), Right.CalculateSize());
+    }
+
+
     public override WRegex GetLookahead()
     {
       return new ChoiceWRegex(Left.GetLookahead(), Right.GetLookahead());

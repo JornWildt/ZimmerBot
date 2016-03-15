@@ -5,6 +5,8 @@ namespace ZimmerBot.Core.WordRegex
 {
   public abstract class WRegex
   {
+    public abstract double CalculateSize();
+
     public abstract WRegex GetLookahead();
 
     public abstract double CalculateTriggerScore(EvaluationContext context, WRegex lookahead);

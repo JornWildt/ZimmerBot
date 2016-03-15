@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -16,6 +17,12 @@ namespace ZimmerBot.Core.WordRegex
     {
       Condition.Requires(a, "a").IsNotNull();
       A = a;
+    }
+
+
+    public override double CalculateSize()
+    {
+      return A.CalculateSize();
     }
 
 

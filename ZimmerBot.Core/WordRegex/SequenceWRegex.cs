@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
 using ZimmerBot.Core.Knowledge;
 
@@ -19,6 +19,12 @@ namespace ZimmerBot.Core.WordRegex
     public void Add(WRegex p)
     {
       Sequence.Add(p);
+    }
+
+
+    public override double CalculateSize()
+    {
+      return Sequence.Sum(w => w.CalculateSize());
     }
 
 
