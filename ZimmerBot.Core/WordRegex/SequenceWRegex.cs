@@ -34,18 +34,20 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
       double score = 1;
 
       for (int i = 0; i < Sequence.Count; ++i)
       {
         WRegex lookahead2 = (i < Sequence.Count - 1 ? Sequence[i + 1].GetLookahead() : lookahead);
-        double s = Sequence[i].CalculateTriggerScore(context, lookahead2);
-        score = score * s;
+        MatchResult result = Sequence[i].CalculateMatchResult(context, lookahead2);
+        score = score * result.Score;
       }
 
-      return score;
+      // FIXME: transfer match values
+
+      return new MatchResult(score);
     }
   }
 }

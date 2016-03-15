@@ -32,11 +32,11 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
       // Empty sequnce is a match
       if (context.CurrentTokenIndex >= context.Input.Count)
-        return 1;
+        return new MatchResult(1);
 
       int currentTokenIndex = context.CurrentTokenIndex;
 
@@ -45,19 +45,19 @@ namespace ZimmerBot.Core.WordRegex
         int index = context.CurrentTokenIndex;
 
         WRegex lookahead2 = lookahead.GetLookahead();
-        double lookaheadScore = lookahead.CalculateTriggerScore(context, lookahead2);
+        MatchResult lookaheadResult = lookahead.CalculateMatchResult(context, lookahead2);
 
         context.CurrentTokenIndex = index;
-        double score = A.CalculateTriggerScore(context, lookahead);
+        MatchResult result = A.CalculateMatchResult(context, lookahead);
 
-        if (score < 1 || lookaheadScore == 1)
+        if (result.Score < 1 || lookaheadResult.Score == 1)
         {
           context.CurrentTokenIndex = index;
           break;
         }
       }
 
-      return 1;
+      return new MatchResult(1);
     }
   }
 }

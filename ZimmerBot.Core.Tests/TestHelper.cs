@@ -1,5 +1,8 @@
-﻿using NUnit.Framework;
-
+﻿using System;
+using NUnit.Framework;
+using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Tests
 {
@@ -83,6 +86,27 @@ namespace ZimmerBot.Core.Tests
     /// </summary>
     protected virtual void TestFixtureTearDown()
     {
+    }
+
+
+    protected WRegex.MatchResult CalculateMatchResult(Trigger t, string text)
+    {
+      ZTokenizer tokenizer = new ZTokenizer();
+      ZStatementSequence sequence = tokenizer.Tokenize(text);
+      ZTokenSequence input = sequence.Statements[0];
+
+      BotState state = new BotState();
+      EvaluationContext context = new EvaluationContext(state, input);
+      WRegex.MatchResult result = t.CalculateTriggerScore(context);
+      return result;
+    }
+
+
+    protected double CalculateScore(Trigger t, string text)
+    {
+      WRegex.MatchResult result = CalculateMatchResult(t, text);
+      Console.WriteLine("Score for '{0}' = {1}.", text, result.Score);
+      return Math.Round(result.Score, 4);
     }
   }
 }

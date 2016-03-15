@@ -6,6 +6,18 @@ namespace ZimmerBot.Core.WordRegex
 {
   public class WildcardWRegex : WRegex
   {
+    public WildcardWRegex()
+      : this(null)
+    {
+    }
+
+
+    public WildcardWRegex(string matchName)
+    {
+      MatchName = matchName;
+    }
+
+
     public override double CalculateSize()
     {
       return 1;
@@ -18,15 +30,15 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
       if (context.CurrentTokenIndex < context.Input.Count)
       {
         ++context.CurrentTokenIndex;
-        return 1;
+        return new MatchResult(1);
       }
 
-      return 0;
+      return new MatchResult(0);
     }
   }
 }

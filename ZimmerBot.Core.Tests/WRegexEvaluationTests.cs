@@ -1,14 +1,12 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.WordRegex;
 
 
 namespace ZimmerBot.Core.Tests
 {
   [TestFixture]
-  public class PredicateEvaluationTests : TestHelper
+  public class WRegexEvaluationTests : TestHelper
   {
     [Test]
     public void CanEvaluateWordWRegex()
@@ -93,21 +91,6 @@ namespace ZimmerBot.Core.Tests
       Assert.AreEqual(0.3, CalculateScore(t, "she runs today"));
       Assert.AreEqual(3.0, CalculateScore(t, "she sleeps today"));
       Assert.AreEqual(3.0, CalculateScore(t, "she walks today"));
-    }
-
-
-    protected double CalculateScore(Trigger t, string text)
-    {
-      ZTokenizer tokenizer = new ZTokenizer();
-      ZStatementSequence sequence = tokenizer.Tokenize(text);
-      ZTokenSequence input = sequence.Statements[0];
-
-      BotState state = new BotState();
-      EvaluationContext context = new EvaluationContext(state, input);
-      double score = t.CalculateTriggerScore(context);
-
-      Console.WriteLine("Score for '{0}' = {1}.", text, score);
-      return Math.Round(score, 4);
     }
   }
 }

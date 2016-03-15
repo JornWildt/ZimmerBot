@@ -18,9 +18,11 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
-      return context.CurrentTokenIndex >= context.Input.Count ? 1 : 0;
+      return context.CurrentTokenIndex >= context.Input.Count
+        ? new MatchResult(1) 
+        : new MatchResult(0);
     }
   }
 }

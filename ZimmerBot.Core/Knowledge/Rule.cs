@@ -61,7 +61,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Reaction CalculateReaction(EvaluationContext context)
     {
-      double score = Trigger.CalculateTriggerScore(context);
+      double score = Trigger.CalculateTriggerScore(context).Score;
 
       if (score == 0)
         return null;

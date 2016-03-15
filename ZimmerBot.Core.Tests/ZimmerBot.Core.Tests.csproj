@@ -45,9 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PredicateEvaluationTests.cs" />
+    <Compile Include="WRegexEvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
+    <Compile Include="WRegexMatchValueTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

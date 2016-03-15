@@ -11,9 +11,16 @@ namespace ZimmerBot.Core.WordRegex
 
 
     public WordWRegex(string w)
+      : this(w, null)
+    {
+    }
+
+
+    public WordWRegex(string w, string matchName)
     {
       Condition.Requires(w, "w").IsNotNull();
       Word = w;
+      MatchName = matchName;
     }
 
 
@@ -29,7 +36,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
       // This calculation is admittingly not perfect - but it makes some sort of sense ...
 
@@ -38,7 +45,7 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return 1;
+          return new MatchResult(1).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
         }
       }
 
@@ -47,7 +54,7 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex + 1].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return 0.5;
+          return new MatchResult(0.5).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex].OriginalText); ;
         }
       }
 
@@ -56,7 +63,7 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex - 1].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return 0.5;
+          return new MatchResult(0.5).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 2].OriginalText); ;
         }
       }
 
@@ -65,7 +72,7 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex + 2].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return 0.25;
+          return new MatchResult(0.25).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex + 1].OriginalText); ;
         }
       }
 
@@ -74,12 +81,12 @@ namespace ZimmerBot.Core.WordRegex
         if (context.Input[context.CurrentTokenIndex - 2].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return 0.25;
+          return new MatchResult(0.25).RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 3].OriginalText); ;
         }
       }
 
       ++context.CurrentTokenIndex;
-      return 0.1;
+      return new MatchResult(0.1);
     }
   }
 }

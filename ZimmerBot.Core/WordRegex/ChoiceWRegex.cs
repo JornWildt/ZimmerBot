@@ -37,23 +37,23 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
       int index = context.CurrentTokenIndex;
-      double score1 = Left.CalculateTriggerScore(context, lookahead);
+      MatchResult result1 = Left.CalculateMatchResult(context, lookahead);
       int index1 = context.CurrentTokenIndex;
 
       context.CurrentTokenIndex = index;
-      double score2 = Right.CalculateTriggerScore(context, lookahead);
+      MatchResult result2 = Right.CalculateMatchResult(context, lookahead);
 
-      if (score1 >= score2)
+      if (result1.Score >= result2.Score)
       {
         // Restore token index to what it was after score 1 calculation
         context.CurrentTokenIndex = index1;
-        return score1;
+        return result1;
       }
 
-      return score2;
+      return result2;
     }
   }
 }

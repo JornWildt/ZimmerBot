@@ -38,11 +38,11 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
       if (context.State[Variable] != null)
-        return (context.State[Variable].Equals(Value) ? 2 : 0);
-      return (context.State[Variable] == Value ? 2 : 0);
+        return (context.State[Variable].Equals(Value) ? new MatchResult(2) : new MatchResult(0));
+      return (context.State[Variable] == Value ? new MatchResult(2) : new MatchResult(0));
     }
   }
 }
