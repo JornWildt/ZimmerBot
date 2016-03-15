@@ -11,7 +11,14 @@ namespace ZimmerBot.Core.WordRegex
 
 
     public SequenceWRegex()
+      : this(null)
     {
+    }
+
+
+    public SequenceWRegex(string matchName)
+    {
+      MatchName = matchName;
       Sequence = new List<WRegex>();
     }
 
@@ -36,7 +43,7 @@ namespace ZimmerBot.Core.WordRegex
 
     public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
-      MatchResult result = null;
+      MatchResult result = new MatchResult(1, "");
 
       for (int i = 0; i < Sequence.Count; ++i)
       {

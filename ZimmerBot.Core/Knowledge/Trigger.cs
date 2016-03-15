@@ -1,4 +1,5 @@
 ﻿using System;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.WordRegex;
 
 
@@ -6,9 +7,11 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class Trigger
   {
-    protected WRegex Predicate { get; set; }
+    protected WRegex Regex { get; set; }
 
-    protected double PredicateSize { get; set; }
+    protected double RegexSize { get; set; }
+
+    protected Expression Condition { get; set; }
 
 
     public Trigger(params object[] topics)
@@ -27,14 +30,14 @@ namespace ZimmerBot.Core.Knowledge
           throw new InvalidOperationException(string.Format("Cannot add {0} ({1} as trigger predicate.", t, t.GetType()));
       }
 
-      Predicate = p;
-      PredicateSize = p.CalculateSize();
+      Regex = p;
+      RegexSize = p.CalculateSize();
     }
 
 
-    public Trigger(StateWRegex p)
+    public void SetCondition(Expression c)
     {
-      Predicate = p;
+      Condition = c;
     }
 
 
@@ -43,8 +46,20 @@ namespace ZimmerBot.Core.Knowledge
       // FIXME: some mixing of concerns here - should be wrapped differently
       context.CurrentTokenIndex = 0;
 
-      WRegex.MatchResult result = Predicate.CalculateMatchResult(context, new EndOfSequenceWRegex());
-      return new WRegex.MatchResult(result, result.Score * PredicateSize, result.MatchedText);
+      double conditionModifier = 1;
+
+      if (Condition != null)
+      {
+        object value = Condition.Evaluate(context);
+        if (value is bool)
+          conditionModifier = ((bool)value) ? 1 : 0;
+      }
+
+      WRegex.MatchResult result = Regex.CalculateMatchResult(context, new EndOfSequenceWRegex());
+
+      double totalScore = conditionModifier * result.Score * Math.Max(RegexSize,1);
+
+      return new WRegex.MatchResult(result, totalScore, result.MatchedText);
     }
   }
 }

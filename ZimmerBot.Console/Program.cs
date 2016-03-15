@@ -16,7 +16,7 @@ namespace ZimmerBot.Console
       Bot b = new Bot(kb);
 
       // Remove this line if you do not want to see a bunch of test interactions
-      RunTestOutput(b);
+      //RunTestOutput(b);
 
       // Run bot
       ConsoleBotEnvironment.RunInteractiveConsoleBot("ZimmerBot> ", b);

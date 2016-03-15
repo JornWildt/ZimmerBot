@@ -22,7 +22,7 @@ namespace ZimmerBotEliza
     private static string InputModifier(string s)
     {
       // Introduce a tiny break before answering way too quick
-      System.Threading.Thread.Sleep((int)(Randomizer.NextDouble() * 500 + 200));
+      //System.Threading.Thread.Sleep((int)(Randomizer.NextDouble() * 500 + 200));
 
       return s;
     }

@@ -36,14 +36,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule AddRule(StateWRegex p)
-    {
-      Rule r = new Rule(p);
-      Rules.Add(r);
-      return r;
-    }
-
-
     public void ExpandTokens(ZTokenSequence input)
     {
       foreach (ZToken t in input)

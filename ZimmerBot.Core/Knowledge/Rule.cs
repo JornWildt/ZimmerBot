@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
@@ -26,12 +27,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule(StateWRegex p)
-    {
-      Trigger = new Trigger(p);
-    }
-
-
     public Rule Describe(string description)
     {
       Description = description;
@@ -42,6 +37,13 @@ namespace ZimmerBot.Core.Knowledge
     public Rule Parameter(string name)
     {
       ParameterMap.Add(name);
+      return this;
+    }
+
+
+    public Rule Condition(Expression c)
+    {
+      Trigger.SetCondition(c);
       return this;
     }
 

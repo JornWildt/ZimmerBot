@@ -1,4 +1,5 @@
-﻿using ZimmerBot.Core.Knowledge;
+﻿using ZimmerBot.Core.Expressions;
+using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.WordRegex;
 
 
@@ -77,7 +78,11 @@ namespace ZimmerBotEliza
           "Hvis jeg kunne <m> hvad så?",
           "Hvorfor spørger du om jeg kan <m>?"));
 
-      dd.AddRule(new RepitionWRegex(new WildcardWRegex(), "r"))
+      SequenceWRegex r = new SequenceWRegex();
+      r.Add(new WildcardWRegex());
+      r.Add(new RepitionWRegex(new WildcardWRegex()));
+
+      dd.AddRule(r)
         .Response(i => ResponseHelper.OneOf(i,
           "Hmmm, fortæl mig noget mere om det?",
           "Okay. Lad os skifte fokus lidt ... fortæl mig om din familie?",
@@ -89,6 +94,16 @@ namespace ZimmerBotEliza
           "Meget interessant.",
           "Okay. Og hvad fortæller det så dig?",
           "Hvilke følelser mærker du når du siger det?"));
+
+      // Startup rule
+      dd.AddRule()
+        .Condition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .Response("Hej. Mit navn er Eliza. Jeg er et chatbot.");
+
+      // Random talk
+      // - trigger after no conversation in X seconds with probability Y when condition Z is fullfilled
+      // - dd.AddRule().When("state.conversation.secondsSinceLastEntry > 10 AND random(10)<1").
+      // - dd.AddRule().When(new RandomFunc(new IntegerConstant(10) ...)
     }
   }
 }

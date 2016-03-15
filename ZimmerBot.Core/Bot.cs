@@ -32,7 +32,7 @@ namespace ZimmerBot.Core
       KnowledgeBase = kb;
       State = new BotState();
 
-      State["dialogue.responseCount"] = 0; // FIXME: use string constants
+      State["state.conversation.entries.Count"] = 0d; // FIXME: use string constants
     }
 
 
@@ -105,6 +105,10 @@ namespace ZimmerBot.Core
         ZStatementSequence statements = tokenizer.Tokenize(req.Input);
         List<string> output = new List<string>();
 
+        // Always evaluate at least one empty statement in order to invoke triggers without regex
+        if (statements.Statements.Count == 0)
+          statements.Statements.Add(new ZTokenSequence());
+
         foreach (ZTokenSequence input in statements.Statements)
         {
           KnowledgeBase.ExpandTokens(input);
@@ -117,7 +121,7 @@ namespace ZimmerBot.Core
           else
             output.Add("???");
 
-          State["dialogue.responseCount"] = (int)State["dialogue.responseCount"] + 1;
+          State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
         }
 
         return new Response
