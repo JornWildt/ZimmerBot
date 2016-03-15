@@ -10,8 +10,8 @@ namespace ZimmerBot.Console.Domains
     {
       Domain dd = kb.NewDomain("Psychotherapy");
 
-      dd.AddRule("behøver", new RepitionWRegex(new WildcardWRegex()))
-        .Response("NÅH HAR DU DET");
+      dd.AddRule("jeg", "har", "brug", "for", new RepitionWRegex(new WildcardWRegex(), "x"))
+        .Response("Hvorfor? Gør <x> dig glad?");
     }
   }
 }

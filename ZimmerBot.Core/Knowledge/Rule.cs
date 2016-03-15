@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
 
@@ -16,7 +17,7 @@ namespace ZimmerBot.Core.Knowledge
     protected HashSet<string> ParameterMap = new HashSet<string>();
 
 
-    protected Func<ZTokenSequence, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
+    protected Func<WRegex.MatchResult, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
     public Rule(params object[] topics)
@@ -45,7 +46,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Response(Func<ZTokenSequence, Func<string>> g)
+    public Rule Response(Func<WRegex.MatchResult, Func<string>> g)
     {
       OutputGenerator = g;
       return this;
@@ -54,16 +55,16 @@ namespace ZimmerBot.Core.Knowledge
 
     public Rule Response(string s)
     {
-      OutputGenerator = i => () => s;
+      OutputGenerator = i => () => TextMerge.MergeTemplate(s, i.Matches);
       return this;
     }
 
 
     public Reaction CalculateReaction(EvaluationContext context)
     {
-      double score = Trigger.CalculateTriggerScore(context).Score;
+      WRegex.MatchResult result = Trigger.CalculateTriggerScore(context);
 
-      if (score == 0)
+      if (result.Score < 0.5)
         return null;
 
       Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
@@ -76,7 +77,7 @@ namespace ZimmerBot.Core.Knowledge
       if (ParameterMap.Count > generatorParameters.Count)
         return null;
 
-      return new Reaction(score, OutputGenerator(context.Input));
+      return new Reaction(result.Score, OutputGenerator(result));
     }
   }
 }

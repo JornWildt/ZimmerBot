@@ -44,7 +44,7 @@ namespace ZimmerBot.Core.Knowledge
       context.CurrentTokenIndex = 0;
 
       WRegex.MatchResult result = Predicate.CalculateMatchResult(context, new EndOfSequenceWRegex());
-      return new WRegex.MatchResult(result.Score * PredicateSize);
+      return new WRegex.MatchResult(result, result.Score * PredicateSize);
     }
   }
 }

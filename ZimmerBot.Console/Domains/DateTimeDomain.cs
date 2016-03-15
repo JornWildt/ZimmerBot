@@ -17,18 +17,18 @@ namespace ZimmerBot.Console.Domains
         .And("Juli").And("August").And("September").And("Oktober").And("November").And("December")
         .Is("month");
 
-      dd.AddRule("question-is", "det", "week-day")
-        .Describe("Er det <ugedag>")
-        .Parameter("week-day")
-        .Response(i => DateTimeProcessors.IsItDay(i["week-day"], "<answer>."));
+      //dd.AddRule("question-is", "det", "week-day")
+      //  .Describe("Er det <ugedag>")
+      //  .Parameter("week-day")
+      //  .Response(i => DateTimeProcessors.IsItDay(i["week-day"], "<answer>."));
 
       dd.AddRule("question-which", "dag")
         .Response(i => DateTimeProcessors.ThisDay("I dag er det <answer>"));
 
-      dd.AddRule("question-is", "det", "month")
-        .Describe("Er det <måned>")
-        .Parameter("month")
-        .Response(i => DateTimeProcessors.IsItMonth(i["month"], "Om det er <month>? <answer>."));
+      //dd.AddRule("question-is", "det", "month")
+      //  .Describe("Er det <måned>")
+      //  .Parameter("month")
+      //  .Response(i => DateTimeProcessors.IsItMonth(i["month"], "Om det er <month>? <answer>."));
 
       dd.AddRule("question-which", "måned")
         .Response(i => DateTimeProcessors.ThisMonth("I dag er det <answer>"));

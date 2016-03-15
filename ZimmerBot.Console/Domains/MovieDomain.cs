@@ -18,15 +18,15 @@ namespace ZimmerBot.Console.Domains
       md.DefineWord("skrevet").Is("movie-written");
       md.DefineWord("spillede").And("spiller").Is("movie-played");
 
-      md.AddRule("question-when", "movie-title", "movie-recorded")
-        .Describe("Hvornår blev en film optaget.")
-        .Parameter("movie-title")
-        .Response(i => MovieProcessors.FindRecordedDate(i["movie-title"], "<movie_title> blev optaget <answer>."));
+      //md.AddRule("question-when", "movie-title", "movie-recorded")
+      //  .Describe("Hvornår blev en film optaget.")
+      //  .Parameter("movie-title")
+      //  .Response(i => MovieProcessors.FindRecordedDate(i["movie-title"], "<movie_title> blev optaget <answer>."));
 
-      md.AddRule("question-who", "movie-title", "movie-played")
-        .Describe("Hvem spillede med i.")
-        .Parameter("movie-title")
-        .Response(i => MovieProcessors.FindActorsInMovie(i["movie-title"], "Det gjorde <answer:{x | <x>}; separator=\",\">."));
+      //md.AddRule("question-who", "movie-title", "movie-played")
+      //  .Describe("Hvem spillede med i.")
+      //  .Parameter("movie-title")
+      //  .Response(i => MovieProcessors.FindActorsInMovie(i["movie-title"], "Det gjorde <answer:{x | <x>}; separator=\",\">."));
     }
   }
 }

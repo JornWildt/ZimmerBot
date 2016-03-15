@@ -12,7 +12,7 @@ namespace ZimmerBot.Console
     static void Main(string[] args)
     {
       RunElizaTest();
-      RunStandardTests();
+      //RunStandardTests();
     }
 
 
@@ -22,7 +22,7 @@ namespace ZimmerBot.Console
       Bot b = new Bot(kb);
 
       Invoke(b, "behøver mere sukker");
-      Invoke(b, "jeg behøver mere sukker");
+      Invoke(b, "jeg har brug for mere sukker");
     }
 
 

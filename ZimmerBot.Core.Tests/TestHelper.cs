@@ -11,7 +11,8 @@ namespace ZimmerBot.Core.Tests
     /// <summary>
     /// Do not call. For use by NUnit only.
     /// </summary>
-    [OneTimeSetUp]
+    //[OneTimeSetUp]
+    [TestFixtureSetUp]
     public void MasterTestFixtureSetUp()
     {
       TestFixtureSetUp();
@@ -72,7 +73,8 @@ namespace ZimmerBot.Core.Tests
     /// <summary>
     /// Do not call. For use by NUnit only.
     /// </summary>
-    [OneTimeTearDown]
+    //[OneTimeTearDown]
+    [TestFixtureTearDown]
     public void TestFixtureMasterTearDown()
     {
       TestFixtureTearDown();

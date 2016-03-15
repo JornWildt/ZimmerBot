@@ -13,10 +13,10 @@ namespace ZimmerBot.Console.Domains
       dd.DefineWord("vejr").And("vejret").Is("weather");
 
       // "Hvad|hvordan er vejret i Boston"
-      dd.AddRule("question", "weather", "location")
-        .Describe("Hvad er vejret?")
-        .Parameter("location")
-        .Response(i => WeatherProcessors.GetWeatherDescription(i["location"], DateTime.Now, "Vejret omkring <location> er <answer>"));
+      //dd.AddRule("question", "weather", "location")
+      //  .Describe("Hvad er vejret?")
+      //  .Parameter("location")
+      //  .Response(i => WeatherProcessors.GetWeatherDescription(i["location"], DateTime.Now, "Vejret omkring <location> er <answer>"));
     }
   }
 }

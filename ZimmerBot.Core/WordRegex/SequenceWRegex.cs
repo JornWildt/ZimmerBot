@@ -36,18 +36,18 @@ namespace ZimmerBot.Core.WordRegex
 
     public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
-      double score = 1;
+      MatchResult result = null;
 
       for (int i = 0; i < Sequence.Count; ++i)
       {
         WRegex lookahead2 = (i < Sequence.Count - 1 ? Sequence[i + 1].GetLookahead() : lookahead);
-        MatchResult result = Sequence[i].CalculateMatchResult(context, lookahead2);
-        score = score * result.Score;
+        MatchResult subResult = Sequence[i].CalculateMatchResult(context, lookahead2);
+        result = MatchResult.Sequence(result, subResult);
       }
 
       // FIXME: transfer match values
 
-      return new MatchResult(score);
+      return result;
     }
   }
 }
