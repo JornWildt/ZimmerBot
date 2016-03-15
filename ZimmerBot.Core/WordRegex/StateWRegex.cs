@@ -1,9 +1,10 @@
 ﻿using CuttingEdge.Conditions;
+using ZimmerBot.Core.Knowledge;
 
 
-namespace ZimmerBot.Core.Knowledge
+namespace ZimmerBot.Core.WordRegex
 {
-  public class StatePredicate
+  public class StateWRegex : WRegex
   {
     protected string Variable { get; set; }
 
@@ -11,7 +12,7 @@ namespace ZimmerBot.Core.Knowledge
 
 
     // Assume: variable = value
-    public StatePredicate(string variable, object value)
+    public StateWRegex(string variable, object value)
     {
       Condition.Requires(variable, "variable").IsNotNullOrEmpty();
 
@@ -20,10 +21,17 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public static StatePredicate Equals(string variable, object value)
-      => new StatePredicate(variable, value);
+    public static StateWRegex Equals(string variable, object value)
+      => new StateWRegex(variable, value);
 
-    public double CalculateTriggerScore(EvaluationContext context)
+
+    public override WRegex GetLookahead()
+    {
+      return this;
+    }
+
+
+    public override double CalculateTriggerScore(EvaluationContext context, WRegex lookahead)
     {
       if (context.State[Variable] != null)
         return (context.State[Variable].Equals(Value) ? 2 : 0);

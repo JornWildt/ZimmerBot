@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.WordRegex;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -27,7 +28,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule AddRule(params string[] topics)
+    public Rule AddRule(params object[] topics)
     {
       Rule r = new Rule(topics);
       Rules.Add(r);
@@ -35,7 +36,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule AddRule(StatePredicate p)
+    public Rule AddRule(StateWRegex p)
     {
       Rule r = new Rule(p);
       Rules.Add(r);

@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{98006B05-07ED-4664-84EC-D1B3E3F99274}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZimmerBot.Console</RootNamespace>
-    <AssemblyName>ZimmerBot.Console</AssemblyName>
+    <RootNamespace>ZimmerBot.Core.Tests</RootNamespace>
+    <AssemblyName>ZimmerBot.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +23,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.2.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.2.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,24 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domains\DateTimeDomain.cs" />
-    <Compile Include="Domains\ElizaDomain.cs" />
-    <Compile Include="Domains\GeneralDomain.cs" />
-    <Compile Include="Domains\GeographyDomain.cs" />
-    <Compile Include="Domains\MovieDomain.cs" />
-    <Compile Include="Domains\SelfDomain.cs" />
-    <Compile Include="Domains\WeatherDomain.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="PredicateEvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZimmerBot.cBrain.F2.Domain\ZimmerBot.cBrain.F2.Domain.csproj">
-      <Project>{01a5bb46-8256-4a46-afc3-6f8a94ccbb4b}</Project>
-      <Name>ZimmerBot.cBrain.F2.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ZimmerBot.Core\ZimmerBot.Core.csproj">
       <Project>{8ec30ae6-170e-4621-ae14-4a3985e3d062}</Project>
       <Name>ZimmerBot.Core</Name>

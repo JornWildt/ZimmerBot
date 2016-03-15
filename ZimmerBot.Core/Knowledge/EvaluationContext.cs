@@ -10,6 +10,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public ZTokenSequence Input { get; protected set; }
 
+    public int CurrentTokenIndex { get; set; }
 
 
     public EvaluationContext(BotState state, ZTokenSequence input)

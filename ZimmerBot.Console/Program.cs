@@ -1,4 +1,5 @@
-﻿using ZimmerBot.cBrain.F2.Domain;
+﻿using System;
+using ZimmerBot.cBrain.F2.Domain;
 using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
@@ -9,6 +10,32 @@ namespace ZimmerBot.Console
   class Program
   {
     static void Main(string[] args)
+    {
+      RunElizaTest();
+      //RunStandardTests();
+    }
+
+    private static void RunElizaTest()
+    {
+      KnowledgeBase kb = InitializeElizaKnowledgeBase();
+      Bot b = new Bot(kb);
+
+      Invoke(b, "behøver mere sukker");
+      Invoke(b, "jeg behøver mere sukker");
+    }
+
+
+    static KnowledgeBase InitializeElizaKnowledgeBase()
+    {
+      KnowledgeBase kb = new KnowledgeBase();
+
+      ElizaDomain.Initialize(kb);
+
+      return kb;
+    }
+
+
+    private static void RunStandardTests()
     {
       KnowledgeBase kb = InitializeKnowledgeBase();
       Bot b = new Bot(kb);

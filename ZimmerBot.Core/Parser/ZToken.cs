@@ -49,7 +49,7 @@ namespace ZimmerBot.Core.Parser
       if (Equivalents.Count == 0)
         return true;
 
-      return Equivalents.Any(m => m == v);
+      return Equivalents.Any(m => m.Equals(v, StringComparison.CurrentCultureIgnoreCase));
     }
 
 

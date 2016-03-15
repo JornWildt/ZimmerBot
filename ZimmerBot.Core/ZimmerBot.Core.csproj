@@ -66,10 +66,16 @@
     <Compile Include="IBotEnvironment.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
-    <Compile Include="Knowledge\StatePredicate.cs" />
+    <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
+    <Compile Include="WordRegex\StateWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
+    <Compile Include="WordRegex\WRegex.cs" />
+    <Compile Include="WordRegex\SequenceWRegex.cs" />
+    <Compile Include="WordRegex\WildcardWRegex.cs" />
+    <Compile Include="WordRegex\WordWRegex.cs" />
+    <Compile Include="WordRegex\RepitionWRegex.cs" />
     <Compile Include="Processors\DateTimeProcessor.cs" />
     <Compile Include="Processors\MovieProcessors.cs" />
     <Compile Include="Processors\SelfProcessors.cs" />

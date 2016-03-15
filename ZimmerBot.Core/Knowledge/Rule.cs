@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.WordRegex;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -18,13 +19,13 @@ namespace ZimmerBot.Core.Knowledge
     protected Func<ZTokenSequence, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
-    public Rule(params string[] topics)
+    public Rule(params object[] topics)
     {
       Trigger = new Trigger(topics);
     }
 
 
-    public Rule(StatePredicate p)
+    public Rule(StateWRegex p)
     {
       Trigger = new Trigger(p);
     }
@@ -62,7 +63,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       double score = Trigger.CalculateTriggerScore(context);
 
-      if (score < 2)
+      if (score == 0)
         return null;
 
       Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
