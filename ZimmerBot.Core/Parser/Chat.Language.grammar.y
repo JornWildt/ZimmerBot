@@ -15,8 +15,10 @@
 
 %token T_NUMBER
 %token T_WORD
+%token T_STRING
 %token T_DELIMITER
 %token T_EMAIL
+%token T_URL
 
 
 %%
@@ -41,9 +43,12 @@ itemSeq
   | /* empty */   { $$.ts = new ZTokenSequence(); }
   ;
 
-item   : T_NUMBER    { $$.t = $1.t; }
-       | T_WORD      { $$.t = $1.t; }
-       | T_EMAIL     { $$.t = $1.t; }
-       ;
+item
+  : T_NUMBER    { $$.t = $1.t; }
+  | T_WORD      { $$.t = $1.t; }
+  | T_STRING    { $$.t = $1.t; }
+  | T_EMAIL     { $$.t = $1.t; }
+  | T_URL       { $$.t = $1.t; }
+  ;
 
 %%

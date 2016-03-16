@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 14-03-2016 20:12:36
+// DateTime: 16-03-2016 22:39:53
 // UserName: Jorn
-// Input file <Parser\Chat.Language.grammar.y - 14-03-2016 20:12:35>
+// Input file <Parser\Chat.Language.grammar.y - 16-03-2016 22:37:45>
 
 // options: no-lines gplex
 
@@ -20,8 +20,8 @@ using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Parser
 {
-internal enum Token {error=2,EOF=3,T_NUMBER=4,T_WORD=5,T_DELIMITER=6,
-    T_EMAIL=7};
+internal enum Token {error=2,EOF=3,T_NUMBER=4,T_WORD=5,T_STRING=6,
+    T_DELIMITER=7,T_EMAIL=8,T_URL=9};
 
 internal partial struct ValueType
 { 
@@ -54,23 +54,25 @@ internal partial class ChatParser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[13];
-  private static State[] states = new State[11];
+  private static Rule[] rules = new Rule[15];
+  private static State[] states = new State[13];
   private static string[] nonTerms = new string[] {
       "main", "$accept", "statementSeq", "statement", "itemSeq", "item", };
 
   static ChatParser() {
-    states[0] = new State(new int[]{6,-5,4,-5,5,-5,7,-5,3,-3},new int[]{-1,1,-3,3});
+    states[0] = new State(new int[]{7,-5,4,-5,5,-5,6,-5,8,-5,9,-5,3,-3},new int[]{-1,1,-3,3});
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
-    states[3] = new State(new int[]{3,-2,6,-9,4,-9,5,-9,7,-9},new int[]{-4,4,-5,5});
+    states[3] = new State(new int[]{3,-2,7,-9,4,-9,5,-9,6,-9,8,-9,9,-9},new int[]{-4,4,-5,5});
     states[4] = new State(-4);
-    states[5] = new State(new int[]{6,7,4,8,5,9,7,10,3,-6},new int[]{-6,6});
+    states[5] = new State(new int[]{7,7,4,8,5,9,6,10,8,11,9,12,3,-6},new int[]{-6,6});
     states[6] = new State(-8);
     states[7] = new State(-7);
     states[8] = new State(-10);
     states[9] = new State(-11);
     states[10] = new State(-12);
+    states[11] = new State(-13);
+    states[12] = new State(-14);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
@@ -80,12 +82,14 @@ internal partial class ChatParser: ShiftReduceParser<ValueType, LexLocation>
     rules[4] = new Rule(-3, new int[]{-3,-4});
     rules[5] = new Rule(-3, new int[]{});
     rules[6] = new Rule(-4, new int[]{-5});
-    rules[7] = new Rule(-4, new int[]{-5,6});
+    rules[7] = new Rule(-4, new int[]{-5,7});
     rules[8] = new Rule(-5, new int[]{-5,-6});
     rules[9] = new Rule(-5, new int[]{});
     rules[10] = new Rule(-6, new int[]{4});
     rules[11] = new Rule(-6, new int[]{5});
-    rules[12] = new Rule(-6, new int[]{7});
+    rules[12] = new Rule(-6, new int[]{6});
+    rules[13] = new Rule(-6, new int[]{8});
+    rules[14] = new Rule(-6, new int[]{9});
   }
 
   protected override void Initialize() {
@@ -130,7 +134,13 @@ internal partial class ChatParser: ShiftReduceParser<ValueType, LexLocation>
       case 11: // item -> T_WORD
 { CurrentSemanticValue.t = ValueStack[ValueStack.Depth-1].t; }
         break;
-      case 12: // item -> T_EMAIL
+      case 12: // item -> T_STRING
+{ CurrentSemanticValue.t = ValueStack[ValueStack.Depth-1].t; }
+        break;
+      case 13: // item -> T_EMAIL
+{ CurrentSemanticValue.t = ValueStack[ValueStack.Depth-1].t; }
+        break;
+      case 14: // item -> T_URL
 { CurrentSemanticValue.t = ValueStack[ValueStack.Depth-1].t; }
         break;
     }
