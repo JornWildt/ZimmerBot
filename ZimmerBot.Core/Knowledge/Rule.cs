@@ -17,6 +17,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected Trigger Trigger { get; set; }
 
+    protected double? ScoreModifier { get; set; }
+
 
     protected HashSet<string> ParameterMap = new HashSet<string>();
 
@@ -59,6 +61,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public Rule WithScoreModifier(double m)
+    {
+      ScoreModifier = m;
+      return this;
+    }
+
+
     public Rule Response(Func<WRegex.MatchResult, Func<string>> g)
     {
       OutputGenerator = g;
@@ -84,6 +93,9 @@ namespace ZimmerBot.Core.Knowledge
         return null;
 
       WRegex.MatchResult result = Trigger.CalculateTriggerScore(context);
+
+      if (ScoreModifier != null)
+        result.Score = result.Score * ScoreModifier.Value;
 
       if (result.Score < 0.5)
         return null;

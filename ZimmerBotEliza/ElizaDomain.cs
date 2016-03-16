@@ -12,6 +12,10 @@ namespace ZimmerBotEliza
     {
       Domain dd = kb.NewDomain("Psykoterapi");
 
+      dd.AddRule(new ChoiceWRegex(new WordWRegex("hej"), new ChoiceWRegex(new WordWRegex("dav"), new WordWRegex("goddag"))))
+        .Response(i => ResponseHelper.OneOf(i,
+          "Velkommen. Hvad kan jeg hjælpe dig med?"));
+
       dd.AddRule("jeg", "har", "brug", "for", new RepitionWRegex(new WildcardWRegex(), "x"))
         .Response("Hvorfor? Gør <x> dig glad?");
 
@@ -52,6 +56,12 @@ namespace ZimmerBotEliza
           "Hvad får dig til at spørge om det?",
           "Hvor lang tid har du været?"));
 
+      dd.AddRule("tak", new RepitionWRegex(new WildcardWRegex(), "m"))
+        .Response(i => ResponseHelper.OneOf(i,
+          "Selv tak",
+          "Velbekomme",
+          "Godt. Gjorde det dig glad?"));
+
       dd.AddRule("er", "du", new RepitionWRegex(new WildcardWRegex(), "m"))
         .Response(i => ResponseHelper.OneOf(i,
           "Hvorfor er det vigtigt om jeg er <m>?",
@@ -67,11 +77,19 @@ namespace ZimmerBotEliza
           "Hvad ville du gøre hvis det ikke skete?",
           "Hvis det lykkedes, hvad ville du så gøre?"));
 
+      dd.AddRule("jeg", "har", new RepitionWRegex(new WildcardWRegex(), "m"))
+        .Response(i => ResponseHelper.OneOf(i,
+          "Hvorfor fortæller du mig at du har <m>?",
+          "Virkeligt? Hvorfor?",
+          "Nu hvor du har det, hvad vil du så gøre nu?"));
+
       dd.AddRule("fordi", new RepitionWRegex(new WildcardWRegex(), "m"))
         .Response(i => ResponseHelper.OneOf(i,
           "Er det virkelig den rigtige årsag?",
           "Kan du komme på andre årsager? Hvilke?",
-          "Kan det være årsag til andre ting?"));
+          "Kan det være årsag til andre ting?",
+          "Fordi hvad?",
+          "Kan du uddybe det?"));
 
       dd.AddRule("kan", "du", new RepitionWRegex(new WildcardWRegex(), "m"))
         .Response(i => ResponseHelper.OneOf(i,
@@ -84,6 +102,7 @@ namespace ZimmerBotEliza
       r.Add(new RepitionWRegex(new WildcardWRegex()));
 
       dd.AddRule(r)
+        .WithScoreModifier(0.25)
         .Response(i => ResponseHelper.OneOf(i,
           "Hmmm, fortæl mig noget mere om det?",
           "Okay. Lad os skifte fokus lidt ... fortæl mig om din familie?",
@@ -103,7 +122,8 @@ namespace ZimmerBotEliza
 
       dd.AddRule()
         .WithSchedule(TimeSpan.FromSeconds(30))
-        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.NotEquals))
+         .WithCondition(new FunctionCallExpr("probability", new ConstantNumberExpr(0.33)))
+        //.WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.NotEquals))
         .Response(i => ResponseHelper.OneOf(i, 
           "Nåh... ?",
           "Hmmm ...",

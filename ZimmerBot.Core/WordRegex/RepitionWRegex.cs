@@ -59,13 +59,13 @@ namespace ZimmerBot.Core.WordRegex
         context.CurrentTokenIndex = index;
         MatchResult result = A.CalculateMatchResult(context, lookahead);
 
-        if (lookaheadResult.Score == 1)
+        if (lookaheadResult.Score > 0.999)
         {
           // Lookahead match => reset token position to position prior to lookahead match and keep lastResult
           context.CurrentTokenIndex = index;
           break;
         }
-        else if (result.Score == 1)
+        else if (result.Score > 0.999)
         {
           // No lookahead match but match sub-regex => keep token position (as we matched input), store sub-result in lastResult and continue
           lastResult = result;
