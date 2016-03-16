@@ -69,7 +69,7 @@ namespace ZimmerBot.Core
       }
       while (!string.IsNullOrEmpty(input));
 
-      bh.Abort();
+      bh.Shutdown();
     }
   }
 }

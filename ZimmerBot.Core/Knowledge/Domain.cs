@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Quartz;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.WordRegex;
 
@@ -33,6 +34,15 @@ namespace ZimmerBot.Core.Knowledge
       Rule r = new Rule(topics);
       Rules.Add(r);
       return r;
+    }
+
+
+    public void RegisterScheduledJobs(IScheduler scheduler)
+    {
+      foreach (Rule r in Rules)
+      {
+        r.RegisterScheduledJobs(scheduler);
+      }
     }
 
 

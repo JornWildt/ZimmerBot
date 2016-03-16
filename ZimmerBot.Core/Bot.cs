@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using CuttingEdge.Conditions;
+using Quartz;
+using Quartz.Impl;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
@@ -21,6 +23,8 @@ namespace ZimmerBot.Core
     protected IBotEnvironment Environment { get; set; }
 
     protected WorkQueue<Request> WorkQueue { get; set; }
+
+    protected IScheduler Scheduler { get; set; }
 
     protected bool IsRunning { get; set; }
 
@@ -58,13 +62,44 @@ namespace ZimmerBot.Core
         botThread.IsBackground = true;
         botThread.Start();
 
-        BotHandle bh = new BotHandle(WorkQueue, botThread);
+        InitializeScheduler();
+
+        BotHandle bh = new BotHandle(this, WorkQueue, botThread);
 
         // Give the bot a chance to emit a startup message
         bh.Invoke(new Request { Input = "" });
 
         return bh;
       }
+    }
+
+
+    private void InitializeScheduler()
+    {
+      Scheduler = StdSchedulerFactory.GetDefaultScheduler();
+
+      foreach (Domain d in KnowledgeBase.GetDomains())
+      {
+        d.RegisterScheduledJobs(Scheduler);
+      }
+
+      //IJobDetail job = JobBuilder.Create<SchedulerJob>()
+      //    .WithIdentity("job2", "group1")
+      //    .Build();
+
+      //ITrigger trigger = TriggerBuilder.Create()
+      //    .WithIdentity("trigger2", "group1")
+      //    .StartNow()
+      //    .WithSimpleSchedule(x => x
+      //        .WithIntervalInSeconds(10)
+      //        .RepeatForever())
+      //    .Build();
+
+      //// Tell quartz to schedule the job using our trigger
+      //Scheduler.ScheduleJob(job, trigger);
+
+      Scheduler.Start();
+
     }
 
 
@@ -89,6 +124,14 @@ namespace ZimmerBot.Core
           Environment.Log(LogLevel.Error, "Error in bot background thread", ex);
         }
       }
+
+      Scheduler.Shutdown();
+    }
+
+
+    internal void Shutdown()
+    {
+      Scheduler.Shutdown();
     }
 
 
@@ -128,6 +171,15 @@ namespace ZimmerBot.Core
         {
           Output = output.ToArray()
         };
+      }
+    }
+
+
+    class SchedulerJob : IJob
+    {
+      public void Execute(IJobExecutionContext context)
+      {
+        Console.WriteLine("SCHEDULE");
       }
     }
   }

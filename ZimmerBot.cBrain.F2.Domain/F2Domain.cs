@@ -1,4 +1,5 @@
-﻿using ZimmerBot.Core.Expressions;
+﻿using System;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.WordRegex;
 
@@ -12,15 +13,15 @@ namespace ZimmerBot.cBrain.F2.Domain
       var f2d = kb.NewDomain("cBrain F2");
 
       f2d.AddRule()
-        .Condition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
          .Response("Hej, jeg er F2-assistenten Dr. Zimmer Frei (mit Alles)");
 
       f2d.AddRule()
-        .Condition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
          .Response("- men kald mig bare Zimmer, det gør mine venner.");
 
       f2d.AddRule()
-        .Condition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
          .Response("Spørg mig om hvad som helst :-)");
 
       f2d.AddRule("f2").Response("F2 er fantastisk!");
@@ -31,6 +32,10 @@ namespace ZimmerBot.cBrain.F2.Domain
 
       f2d.AddRule("Hvem", "skabte", "dig")
          .Response("Jørn");
+
+      f2d.AddRule()
+         .WithSchedule(TimeSpan.FromSeconds(5))
+         .Response("HEJ. Vil du høre en vittighed?");
     }
   }
 }

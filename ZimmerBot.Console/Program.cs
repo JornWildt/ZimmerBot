@@ -58,7 +58,7 @@ namespace ZimmerBot.Console
       }
       while (!string.IsNullOrEmpty(input));
 
-      bh.Abort();
+      bh.Shutdown();
     }
 
     #endregion

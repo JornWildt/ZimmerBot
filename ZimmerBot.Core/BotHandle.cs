@@ -8,16 +8,20 @@ namespace ZimmerBot.Core
 {
   public class BotHandle
   {
+    private Bot B { get; set; }
+
     private Thread BotThread { get; set; }
 
     private WorkQueue<Request> WorkQueue { get; set; }
 
 
-    public BotHandle(WorkQueue<Request> workQueue, Thread botThread)
+    public BotHandle(Bot b, WorkQueue<Request> workQueue, Thread botThread)
     {
+      Condition.Requires(b, "b").IsNotNull();
       Condition.Requires(workQueue, "workQueue").IsNotNull();
       Condition.Requires(botThread, "botThread").IsNotNull();
 
+      B = b;
       WorkQueue = workQueue;
       BotThread = botThread;
     }
@@ -36,9 +40,10 @@ namespace ZimmerBot.Core
     /// <summary>
     /// Stop background handling - abort bot thread.
     /// </summary>
-    public void Abort()
+    public void Shutdown()
     {
       BotThread.Abort();
+      B.Shutdown();
     }
   }
 }

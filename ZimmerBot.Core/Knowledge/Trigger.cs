@@ -1,4 +1,5 @@
 ﻿using System;
+using Quartz;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.WordRegex;
 
@@ -12,6 +13,8 @@ namespace ZimmerBot.Core.Knowledge
     protected double RegexSize { get; set; }
 
     protected Expression Condition { get; set; }
+
+    protected TimeSpan? Schedule { get; set; }
 
 
     public Trigger(params object[] topics)
@@ -35,9 +38,37 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void SetCondition(Expression c)
+    public Trigger WithCondition(Expression c)
     {
       Condition = c;
+      return this;
+    }
+
+
+    public Trigger WithSchedule(TimeSpan interval)
+    {
+      Schedule = interval;
+      return this;
+    }
+
+
+    public void RegisterScheduledJobs(IScheduler scheduler, string ruleId)
+    {
+      if (Schedule != null)
+      {
+        IJobDetail job = JobBuilder.Create<ScheduledTriggerJob>()
+          .UsingJobData("ruleId", ruleId)
+          .Build();
+
+        ITrigger trigger = TriggerBuilder.Create()
+            .StartNow()
+            .WithSimpleSchedule(x => x
+                .WithInterval(Schedule.Value)
+                .RepeatForever())
+            .Build();
+
+        scheduler.ScheduleJob(job, trigger);
+      }
     }
 
 
@@ -60,6 +91,32 @@ namespace ZimmerBot.Core.Knowledge
       double totalScore = conditionModifier * result.Score * Math.Max(RegexSize,1);
 
       return new WRegex.MatchResult(result, totalScore, result.MatchedText);
+    }
+
+
+    private class ScheduledTriggerJob : IJob
+    {
+      public void Execute(IJobExecutionContext context)
+      {
+        string ruleId = context.JobDetail.JobDataMap.GetString("ruleId");
+        Console.WriteLine("RD: " + ruleId);
+        Rule r = RuleRepository.Get(ruleId);
+
+        // FIXME: how can this be shared between Bot and Trigger ... what is missing?
+        // - Swap it: save BotID and RuleID then lookup BOT and ask to run RuleID
+
+        //EvaluationContext context = new EvaluationContext(State, input);
+        //ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
+
+        //if (reactions.Count > 0)
+        //  foreach (Reaction r in reactions)
+        //    output.Add(r.GenerateResponse(input));
+        //else
+        //  output.Add("???");
+
+        //State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
+
+      }
     }
   }
 }

@@ -97,7 +97,7 @@ namespace ZimmerBotEliza
 
       // Startup rule
       dd.AddRule()
-        .Condition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
         .Response("Hej. Mit navn er Eliza. Jeg er et chatbot.");
 
       // Random talk

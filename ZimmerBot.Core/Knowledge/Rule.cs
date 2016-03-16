@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Quartz;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
@@ -10,6 +11,8 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class Rule
   {
+    public string Id { get; protected set; }
+
     public string Description { get; protected set; }
 
     protected Trigger Trigger { get; set; }
@@ -23,6 +26,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Rule(params object[] topics)
     {
+      Id = Guid.NewGuid().ToString();
       Trigger = new Trigger(topics);
     }
 
@@ -41,9 +45,16 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Condition(Expression c)
+    public Rule WithCondition(Expression c)
     {
-      Trigger.SetCondition(c);
+      Trigger.WithCondition(c);
+      return this;
+    }
+
+
+    public Rule WithSchedule(TimeSpan interval)
+    {
+      Trigger.WithSchedule(interval);
       return this;
     }
 
@@ -51,14 +62,20 @@ namespace ZimmerBot.Core.Knowledge
     public Rule Response(Func<WRegex.MatchResult, Func<string>> g)
     {
       OutputGenerator = g;
+      RuleRepository.Add(this);
       return this;
     }
 
 
     public Rule Response(string s)
     {
-      OutputGenerator = i => () => TextMerge.MergeTemplate(s, i.Matches);
-      return this;
+      return Response(i => () => TextMerge.MergeTemplate(s, i.Matches));
+    }
+
+
+    public void RegisterScheduledJobs(IScheduler scheduler)
+    {
+      Trigger.RegisterScheduledJobs(scheduler, Id);
     }
 
 
