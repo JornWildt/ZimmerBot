@@ -84,6 +84,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public WRegex.MatchResult CalculateTriggerScore(EvaluationContext context)
     {
+      if (!context.ExecuteScheduledRules && Schedule != null)
+        return new WRegex.MatchResult(0, "");
+
       // FIXME: some mixing of concerns here - should be wrapped differently
       context.CurrentTokenIndex = 0;
 
@@ -124,11 +127,8 @@ namespace ZimmerBot.Core.Knowledge
         string ruleId = context.JobDetail.JobDataMap.GetString("ruleId");
         string botId = context.JobDetail.JobDataMap.GetString("botId");
 
-        //Console.WriteLine("RD: " + ruleId);
-        //Console.WriteLine("BD: " + botId);
-
         Bot b = BotRepository.Get(botId);
-        b.Invoke(new Request { Input = null }, callbackToEnvironment: true);
+        b.Invoke(new Request { Input = null, RuleId = ruleId }, executeScheduledRules: true, callbackToEnvironment: true);
       }
     }
   }

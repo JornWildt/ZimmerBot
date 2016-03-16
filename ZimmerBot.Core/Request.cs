@@ -3,5 +3,7 @@
   public class Request
   {
     public string Input { get; set; }
+
+    public string RuleId { get; set; }
   }
 }

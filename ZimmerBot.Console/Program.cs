@@ -1,5 +1,4 @@
-﻿using System;
-using ZimmerBot.cBrain.F2.Domain;
+﻿using ZimmerBot.cBrain.F2.Domain;
 using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
@@ -11,6 +10,8 @@ namespace ZimmerBot.Console
   {
     static void Main(string[] args)
     {
+      ZimmerBotConfiguration.Initialize();
+
       // Initialize bot
       KnowledgeBase kb = InitializeKnowledgeBase();
       Bot b = new Bot(kb);
@@ -20,6 +21,8 @@ namespace ZimmerBot.Console
 
       // Run bot
       ConsoleBotEnvironment.RunInteractiveConsoleBot("ZimmerBot> ", b);
+
+      ZimmerBotConfiguration.Shutdown();
     }
 
 
@@ -37,31 +40,6 @@ namespace ZimmerBot.Console
 
       return kb;
     }
-
-
-    #region Interactive asynchronous bot via console
-
-    static void RunInteractive(Bot b)
-    {
-      BotHandle bh = b.Run(new ConsoleBotEnvironment("ZimmerBot> "));
-
-      string input;
-      System.Console.Write("> ");
-
-      do
-      {
-        input = System.Console.ReadLine();
-        if (!string.IsNullOrEmpty(input))
-        {
-          bh.Invoke(new Request { Input = input });
-        }
-      }
-      while (!string.IsNullOrEmpty(input));
-
-      bh.Shutdown();
-    }
-
-    #endregion
 
 
     #region Some sanity checks for manual checking in output (and fun)

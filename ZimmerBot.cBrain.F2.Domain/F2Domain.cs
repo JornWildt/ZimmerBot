@@ -35,7 +35,9 @@ namespace ZimmerBot.cBrain.F2.Domain
 
       f2d.AddRule()
          .WithSchedule(TimeSpan.FromSeconds(5))
-         .Response("HEJ. Vil du høre en vittighed?");
+         .Response(i => ResponseHelper.OneOf(i,
+          "Nåh... ?", 
+          "Er der nogen kan en vittighed?"));
     }
   }
 }

@@ -10,15 +10,21 @@ namespace ZimmerBot.Core.Knowledge
 
     public ZTokenSequence Input { get; protected set; }
 
+    public string RestrictToRuleId { get; protected set; }
+
+    public bool ExecuteScheduledRules { get; protected set; }
+
     public int CurrentTokenIndex { get; set; }
 
 
-    public EvaluationContext(BotState state, ZTokenSequence input)
+    public EvaluationContext(BotState state, ZTokenSequence input, string ruleId, bool executeScheduledRules)
     {
       Condition.Requires(state, "state").IsNotNull();
 
       State = state;
       Input = input;
+      RestrictToRuleId = ruleId;
+      ExecuteScheduledRules = executeScheduledRules;
     }
   }
 }

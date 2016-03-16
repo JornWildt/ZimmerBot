@@ -98,7 +98,7 @@ namespace ZimmerBot.Core.Tests
       ZTokenSequence input = sequence.Statements[0];
 
       BotState state = new BotState();
-      EvaluationContext context = new EvaluationContext(state, input);
+      EvaluationContext context = new EvaluationContext(state, input, null, executeScheduledRules: false);
       WRegex.MatchResult result = t.CalculateTriggerScore(context);
       return result;
     }

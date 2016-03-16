@@ -12,10 +12,12 @@ namespace ZimmerBotEliza
 
     static void Main(string[] args)
     {
+      ZimmerBotConfiguration.Initialize();
       KnowledgeBase kb = new KnowledgeBase();
       ElizaDomain.Initialize(kb);
       Bot b = new Bot(kb);
       ConsoleBotEnvironment.RunInteractiveConsoleBot("Eliza> ", b, InputModifier);
+      ZimmerBotConfiguration.Shutdown();
     }
 
 

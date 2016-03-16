@@ -26,8 +26,6 @@ namespace ZimmerBot.Core
 
     protected WorkQueue<Request> WorkQueue { get; set; }
 
-    protected IScheduler Scheduler { get; set; }
-
     protected bool IsRunning { get; set; }
 
 
@@ -80,14 +78,10 @@ namespace ZimmerBot.Core
 
     private void InitializeScheduler()
     {
-      Scheduler = StdSchedulerFactory.GetDefaultScheduler();
-
       foreach (Domain d in KnowledgeBase.GetDomains())
       {
-        d.RegisterScheduledJobs(Scheduler, Id);
+        d.RegisterScheduledJobs(StdSchedulerFactory.GetDefaultScheduler(), Id);
       }
-
-      Scheduler.Start();
     }
 
 
@@ -111,14 +105,11 @@ namespace ZimmerBot.Core
           Environment.Log(LogLevel.Error, "Error in bot background thread", ex);
         }
       }
-
-      Scheduler.Shutdown();
     }
 
 
     internal void Shutdown()
     {
-      Scheduler.Shutdown();
       BotRepository.Remove(Id);
     }
 
@@ -128,16 +119,17 @@ namespace ZimmerBot.Core
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    public Response Invoke(Request req, bool callbackToEnvironment = false)
+    public Response Invoke(Request req, bool executeScheduledRules = false, bool callbackToEnvironment = false)
     {
       lock (StateLock)
       {
-        ZTokenizer tokenizer = new ZTokenizer();
-        ZStatementSequence statements = tokenizer.Tokenize(req.Input);
         List<string> output = new List<string>();
 
-        if (statements != null)
+        if (req.Input != null)
         {
+          ZTokenizer tokenizer = new ZTokenizer();
+          ZStatementSequence statements = tokenizer.Tokenize(req.Input);
+
           // Always evaluate at least one empty statement in order to invoke triggers without regex
           if (statements.Statements.Count == 0)
             statements.Statements.Add(new ZTokenSequence());
@@ -145,7 +137,7 @@ namespace ZimmerBot.Core
           foreach (ZTokenSequence input in statements.Statements)
           {
             KnowledgeBase.ExpandTokens(input);
-            EvaluationContext context = new EvaluationContext(State, input);
+            EvaluationContext context = new EvaluationContext(State, input, req.RuleId, executeScheduledRules);
             ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
 
             if (reactions.Count > 0)
@@ -157,7 +149,7 @@ namespace ZimmerBot.Core
         }
         else
         {
-          EvaluationContext context = new EvaluationContext(State, null);
+          EvaluationContext context = new EvaluationContext(State, null, req.RuleId, executeScheduledRules);
           ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
 
           if (reactions.Count > 0)

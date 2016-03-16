@@ -62,7 +62,6 @@ namespace ZimmerBot.Core.Knowledge
     public Rule Response(Func<WRegex.MatchResult, Func<string>> g)
     {
       OutputGenerator = g;
-      RuleRepository.Add(this);
       return this;
     }
 
@@ -81,6 +80,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public Reaction CalculateReaction(EvaluationContext context)
     {
+      if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
+        return null;
+
       WRegex.MatchResult result = Trigger.CalculateTriggerScore(context);
 
       if (result.Score < 0.5)
