@@ -23,15 +23,18 @@ namespace ZimmerBot.Core
     {
       string[] output = response.Output;
 
-      // Move cursor to the left if anything is on the line already
-      if (Console.CursorLeft > 1)
-        Console.WriteLine("");
+      if (output.Length > 0)
+      {
+        // Move cursor to the left if anything is on the line already
+        if (Console.CursorLeft > 1)
+          Console.WriteLine("");
 
-      foreach (string s in output)
-        Console.WriteLine(Prompt + s);
+        foreach (string s in output)
+          Console.WriteLine(Prompt + s);
 
-      // Prompt ready for user
-      Console.Write("> ");
+        // Prompt ready for user
+        Console.Write("> ");
+      }
     }
 
 

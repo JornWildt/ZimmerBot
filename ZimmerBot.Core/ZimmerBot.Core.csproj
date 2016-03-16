@@ -78,6 +78,7 @@
     <Compile Include="Expressions\BinaryOperatorExpr.cs" />
     <Compile Include="Expressions\ConstantNumberExpr.cs" />
     <Compile Include="Expressions\Expression.cs" />
+    <Compile Include="Expressions\FunctionCallExpr.cs" />
     <Compile Include="Expressions\IdentifierExpression.cs" />
     <Compile Include="IBotEnvironment.cs" />
     <Compile Include="Knowledge\BotRepository.cs" />

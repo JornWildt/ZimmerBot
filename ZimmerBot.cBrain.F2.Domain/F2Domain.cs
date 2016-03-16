@@ -34,6 +34,7 @@ namespace ZimmerBot.cBrain.F2.Domain
          .Response("Jørn");
 
       f2d.AddRule()
+         .WithCondition(new FunctionCallExpr("probability", new ConstantNumberExpr(0.2)))
          .WithSchedule(TimeSpan.FromSeconds(5))
          .Response(i => ResponseHelper.OneOf(i,
           "Nåh... ?", 

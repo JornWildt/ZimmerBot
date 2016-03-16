@@ -155,21 +155,26 @@ namespace ZimmerBot.Core
           if (reactions.Count > 0)
             foreach (Reaction r in reactions)
               output.Add(r.GenerateResponse(new ZTokenSequence()));
-          else
-            output.Add("???");
         }
 
-        State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
-
-        Response response = new Response
+        if (output.Count > 0)
         {
-          Output = output.ToArray()
-        };
+          State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
 
-        if (callbackToEnvironment)
-          Environment.HandleResponse(response);
+          Response response = new Response
+          {
+            Output = output.ToArray()
+          };
 
-        return response;
+          if (callbackToEnvironment)
+            Environment.HandleResponse(response);
+
+          return response;
+        }
+        else
+        {
+          return new Response { Output = output.ToArray() };
+        }
       }
     }
   }
