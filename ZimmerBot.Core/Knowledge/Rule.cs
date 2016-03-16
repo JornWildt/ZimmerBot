@@ -19,10 +19,6 @@ namespace ZimmerBot.Core.Knowledge
 
     protected double? ScoreModifier { get; set; }
 
-
-    protected HashSet<string> ParameterMap = new HashSet<string>();
-
-
     protected Func<WRegex.MatchResult, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
@@ -36,13 +32,6 @@ namespace ZimmerBot.Core.Knowledge
     public Rule Describe(string description)
     {
       Description = description;
-      return this;
-    }
-
-
-    public Rule Parameter(string name)
-    {
-      ParameterMap.Add(name);
       return this;
     }
 
@@ -101,15 +90,6 @@ namespace ZimmerBot.Core.Knowledge
         return null;
 
       Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
-
-      if (context.Input != null)
-        foreach (ZToken t in context.Input)
-          t.ExtractParameter(ParameterMap, generatorParameters);
-
-      // Some parameter values are missing => ignore
-      // FIXME: need only counting!
-      if (ParameterMap.Count > generatorParameters.Count)
-        return null;
 
       return new Reaction(result.Score, OutputGenerator(result));
     }

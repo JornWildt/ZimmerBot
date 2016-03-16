@@ -35,7 +35,7 @@ namespace ZimmerBot.cBrain.F2.Domain
 
       f2d.AddRule()
          .WithCondition(new FunctionCallExpr("probability", new ConstantNumberExpr(0.2)))
-         .WithSchedule(TimeSpan.FromSeconds(5))
+         .WithSchedule(TimeSpan.FromSeconds(60))
          .Response(i => ResponseHelper.OneOf(i,
           "Nåh... ?", 
           "Er der nogen kan en vittighed?"));

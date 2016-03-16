@@ -1,6 +1,7 @@
 ﻿using System;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Processors;
+using ZimmerBot.Core.WordRegex;
 
 
 namespace ZimmerBot.Console.Domains
@@ -10,13 +11,11 @@ namespace ZimmerBot.Console.Domains
     public static void Initialize(KnowledgeBase kb)
     {
       Domain dd = kb.NewDomain("Vejret");
-      dd.DefineWord("vejr").And("vejret").Is("weather");
+      dd.DefineWord("vejr").And("vejret");
 
       // "Hvad|hvordan er vejret i Boston"
-      //dd.AddRule("question", "weather", "location")
-      //  .Describe("Hvad er vejret?")
-      //  .Parameter("location")
-      //  .Response(i => WeatherProcessors.GetWeatherDescription(i["location"], DateTime.Now, "Vejret omkring <location> er <answer>"));
+      dd.AddRule("question", new RepitionWRegex(new WildcardWRegex()), "vejret", new RepitionWRegex(new WildcardWRegex()), new WordWRegex("location", "l"))
+        .Response(i => WeatherProcessors.GetWeatherDescription(i.Matches["l"], DateTime.Now, "Vejret omkring <location> er <answer>"));
     }
   }
 }
