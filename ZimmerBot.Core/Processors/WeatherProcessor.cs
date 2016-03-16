@@ -5,7 +5,7 @@ using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Processors
 {
-  public static class WeatherProcessors
+  public static class WeatherProcessor
   {
     public static Func<string> GetWeatherDescription(object location, DateTime time, string template)
     {

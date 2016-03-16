@@ -36,6 +36,7 @@ namespace ZimmerBot.Console
       MovieDomain.Initialize(kb);
       DateTimeDomain.Initialize(kb);
       SelfDomain.Initialize(kb);
+      LanguageDomain.Initialize(kb);
       F2Domain.Initialize(kb);
 
       return kb;

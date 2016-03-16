@@ -15,7 +15,7 @@ namespace ZimmerBot.Console.Domains
 
       // "Hvad|hvordan er vejret i Boston"
       dd.AddRule("question", new RepitionWRegex(new WildcardWRegex()), "vejret", new RepitionWRegex(new WildcardWRegex()), new WordWRegex("location", "l"))
-        .Response(i => WeatherProcessors.GetWeatherDescription(i.Matches["l"], DateTime.Now, "Vejret omkring <location> er <answer>"));
+        .Response(i => WeatherProcessor.GetWeatherDescription(i.Matches["l"], DateTime.Now, "Vejret omkring <location> er <answer>"));
     }
   }
 }

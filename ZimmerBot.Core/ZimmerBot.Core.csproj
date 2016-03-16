@@ -84,6 +84,7 @@
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
+    <Compile Include="Processors\LanguageProcessor.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="Processors\DateTimeProcessor.cs" />
     <Compile Include="Processors\MovieProcessors.cs" />
     <Compile Include="Processors\SelfProcessors.cs" />
-    <Compile Include="Processors\WeatherSource.cs" />
+    <Compile Include="Processors\WeatherProcessor.cs" />
     <Compile Include="Knowledge\Domain.cs" />
     <Compile Include="Knowledge\KnowledgeBase.cs" />
     <Compile Include="Knowledge\ReactionSet.cs" />
