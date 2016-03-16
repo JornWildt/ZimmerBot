@@ -73,9 +73,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterScheduledJobs(IScheduler scheduler)
+    public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
-      Trigger.RegisterScheduledJobs(scheduler, Id);
+      Trigger.RegisterScheduledJobs(scheduler, botId, Id);
     }
 
 
@@ -88,8 +88,9 @@ namespace ZimmerBot.Core.Knowledge
 
       Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
 
-      foreach (ZToken t in context.Input)
-        t.ExtractParameter(ParameterMap, generatorParameters);
+      if (context.Input != null)
+        foreach (ZToken t in context.Input)
+          t.ExtractParameter(ParameterMap, generatorParameters);
 
       // Some parameter values are missing => ignore
       // FIXME: need only counting!

@@ -19,22 +19,30 @@ namespace ZimmerBot.Core.Knowledge
 
     public Trigger(params object[] topics)
     {
-      SequenceWRegex p = new SequenceWRegex();
-
-      foreach (object t in topics)
+      if (topics.Length > 0)
       {
-        if (t is string)
-          p.Add(new WordWRegex((string)t));
-        else if (t is WRegex)
-          p.Add((WRegex)t);
-        else if (t == null)
-          throw new ArgumentNullException("t", "Null item in topics");
-        else
-          throw new InvalidOperationException(string.Format("Cannot add {0} ({1} as trigger predicate.", t, t.GetType()));
-      }
+        SequenceWRegex p = new SequenceWRegex();
 
-      Regex = p;
-      RegexSize = p.CalculateSize();
+        foreach (object t in topics)
+        {
+          if (t is string)
+            p.Add(new WordWRegex((string)t));
+          else if (t is WRegex)
+            p.Add((WRegex)t);
+          else if (t == null)
+            throw new ArgumentNullException("t", "Null item in topics");
+          else
+            throw new InvalidOperationException(string.Format("Cannot add {0} ({1} as trigger predicate.", t, t.GetType()));
+        }
+
+        Regex = p;
+        RegexSize = p.CalculateSize();
+      }
+      else
+      {
+        Regex = null;
+        RegexSize = 0;
+      }
     }
 
 
@@ -52,16 +60,18 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterScheduledJobs(IScheduler scheduler, string ruleId)
+    public void RegisterScheduledJobs(IScheduler scheduler, string botId, string ruleId)
     {
       if (Schedule != null)
       {
         IJobDetail job = JobBuilder.Create<ScheduledTriggerJob>()
           .UsingJobData("ruleId", ruleId)
+          .UsingJobData("botId", botId)
           .Build();
 
         ITrigger trigger = TriggerBuilder.Create()
-            .StartNow()
+            //.StartNow()
+            .StartAt(DateTime.Now.Add(Schedule.Value))
             .WithSimpleSchedule(x => x
                 .WithInterval(Schedule.Value)
                 .RepeatForever())
@@ -77,6 +87,7 @@ namespace ZimmerBot.Core.Knowledge
       // FIXME: some mixing of concerns here - should be wrapped differently
       context.CurrentTokenIndex = 0;
 
+
       double conditionModifier = 1;
 
       if (Condition != null)
@@ -86,7 +97,19 @@ namespace ZimmerBot.Core.Knowledge
           conditionModifier = ((bool)value) ? 1 : 0;
       }
 
-      WRegex.MatchResult result = Regex.CalculateMatchResult(context, new EndOfSequenceWRegex());
+      WRegex.MatchResult result;
+
+      if (Regex != null)
+      {
+        if (context.Input != null)
+          result = Regex.CalculateMatchResult(context, new EndOfSequenceWRegex());
+        else
+          result = new WRegex.MatchResult(0, "");
+      }
+      else
+      {
+        result = new WRegex.MatchResult(1, "");
+      }
 
       double totalScore = conditionModifier * result.Score * Math.Max(RegexSize,1);
 
@@ -99,23 +122,13 @@ namespace ZimmerBot.Core.Knowledge
       public void Execute(IJobExecutionContext context)
       {
         string ruleId = context.JobDetail.JobDataMap.GetString("ruleId");
-        Console.WriteLine("RD: " + ruleId);
-        Rule r = RuleRepository.Get(ruleId);
+        string botId = context.JobDetail.JobDataMap.GetString("botId");
 
-        // FIXME: how can this be shared between Bot and Trigger ... what is missing?
-        // - Swap it: save BotID and RuleID then lookup BOT and ask to run RuleID
+        //Console.WriteLine("RD: " + ruleId);
+        //Console.WriteLine("BD: " + botId);
 
-        //EvaluationContext context = new EvaluationContext(State, input);
-        //ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
-
-        //if (reactions.Count > 0)
-        //  foreach (Reaction r in reactions)
-        //    output.Add(r.GenerateResponse(input));
-        //else
-        //  output.Add("???");
-
-        //State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
-
+        Bot b = BotRepository.Get(botId);
+        b.Invoke(new Request { Input = null }, callbackToEnvironment: true);
       }
     }
   }

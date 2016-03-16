@@ -14,6 +14,8 @@ namespace ZimmerBot.Core
 {
   public class Bot
   {
+    public string Id { get; protected set; }
+
     private object StateLock = new object();
 
     protected KnowledgeBase KnowledgeBase { get; set; }
@@ -33,6 +35,7 @@ namespace ZimmerBot.Core
     {
       Condition.Requires(kb, "kb").IsNotNull();
 
+      Id = Guid.NewGuid().ToString();
       KnowledgeBase = kb;
       State = new BotState();
 
@@ -55,6 +58,7 @@ namespace ZimmerBot.Core
           throw new InvalidOperationException("Cannot run bot asynchronously twice.");
         IsRunning = true;
 
+        BotRepository.Add(this);
         Environment = env;
         WorkQueue = new WorkQueue<Request>();
 
@@ -67,7 +71,7 @@ namespace ZimmerBot.Core
         BotHandle bh = new BotHandle(this, WorkQueue, botThread);
 
         // Give the bot a chance to emit a startup message
-        bh.Invoke(new Request { Input = "" });
+        bh.Invoke(new Request { Input = null });
 
         return bh;
       }
@@ -80,26 +84,10 @@ namespace ZimmerBot.Core
 
       foreach (Domain d in KnowledgeBase.GetDomains())
       {
-        d.RegisterScheduledJobs(Scheduler);
+        d.RegisterScheduledJobs(Scheduler, Id);
       }
 
-      //IJobDetail job = JobBuilder.Create<SchedulerJob>()
-      //    .WithIdentity("job2", "group1")
-      //    .Build();
-
-      //ITrigger trigger = TriggerBuilder.Create()
-      //    .WithIdentity("trigger2", "group1")
-      //    .StartNow()
-      //    .WithSimpleSchedule(x => x
-      //        .WithIntervalInSeconds(10)
-      //        .RepeatForever())
-      //    .Build();
-
-      //// Tell quartz to schedule the job using our trigger
-      //Scheduler.ScheduleJob(job, trigger);
-
       Scheduler.Start();
-
     }
 
 
@@ -112,8 +100,7 @@ namespace ZimmerBot.Core
         try
         {
           Request request = WorkQueue.Dequeue(TimeSpan.FromDays(1));
-          Response response = Invoke(request);
-          Environment.HandleResponse(response);
+          Invoke(request, callbackToEnvironment: true);
         }
         catch (ThreadAbortException)
         {
@@ -132,6 +119,7 @@ namespace ZimmerBot.Core
     internal void Shutdown()
     {
       Scheduler.Shutdown();
+      BotRepository.Remove(Id);
     }
 
 
@@ -140,7 +128,7 @@ namespace ZimmerBot.Core
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    public Response Invoke(Request req)
+    public Response Invoke(Request req, bool callbackToEnvironment = false)
     {
       lock (StateLock)
       {
@@ -148,38 +136,48 @@ namespace ZimmerBot.Core
         ZStatementSequence statements = tokenizer.Tokenize(req.Input);
         List<string> output = new List<string>();
 
-        // Always evaluate at least one empty statement in order to invoke triggers without regex
-        if (statements.Statements.Count == 0)
-          statements.Statements.Add(new ZTokenSequence());
-
-        foreach (ZTokenSequence input in statements.Statements)
+        if (statements != null)
         {
-          KnowledgeBase.ExpandTokens(input);
-          EvaluationContext context = new EvaluationContext(State, input);
+          // Always evaluate at least one empty statement in order to invoke triggers without regex
+          if (statements.Statements.Count == 0)
+            statements.Statements.Add(new ZTokenSequence());
+
+          foreach (ZTokenSequence input in statements.Statements)
+          {
+            KnowledgeBase.ExpandTokens(input);
+            EvaluationContext context = new EvaluationContext(State, input);
+            ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
+
+            if (reactions.Count > 0)
+              foreach (Reaction r in reactions)
+                output.Add(r.GenerateResponse(input));
+            else
+              output.Add("???");
+          }
+        }
+        else
+        {
+          EvaluationContext context = new EvaluationContext(State, null);
           ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
 
           if (reactions.Count > 0)
             foreach (Reaction r in reactions)
-              output.Add(r.GenerateResponse(input));
+              output.Add(r.GenerateResponse(new ZTokenSequence()));
           else
             output.Add("???");
-
-          State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
         }
 
-        return new Response
+        State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
+
+        Response response = new Response
         {
           Output = output.ToArray()
         };
-      }
-    }
 
+        if (callbackToEnvironment)
+          Environment.HandleResponse(response);
 
-    class SchedulerJob : IJob
-    {
-      public void Execute(IJobExecutionContext context)
-      {
-        Console.WriteLine("SCHEDULE");
+        return response;
       }
     }
   }

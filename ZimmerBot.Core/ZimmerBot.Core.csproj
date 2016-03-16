@@ -80,6 +80,7 @@
     <Compile Include="Expressions\Expression.cs" />
     <Compile Include="Expressions\IdentifierExpression.cs" />
     <Compile Include="IBotEnvironment.cs" />
+    <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Knowledge\RuleRepository.cs" />

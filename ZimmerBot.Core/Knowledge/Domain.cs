@@ -37,11 +37,11 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterScheduledJobs(IScheduler scheduler)
+    public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
       foreach (Rule r in Rules)
       {
-        r.RegisterScheduledJobs(scheduler);
+        r.RegisterScheduledJobs(scheduler, botId);
       }
     }
 

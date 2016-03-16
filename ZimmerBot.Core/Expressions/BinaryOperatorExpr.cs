@@ -7,7 +7,7 @@ namespace ZimmerBot.Core.Expressions
 {
   public class BinaryOperatorExpr : Expression
   {
-    public enum OperatorType { Equals }
+    public enum OperatorType { Equals, NotEquals }
 
     public Expression Left { get; protected set; }
 
@@ -36,6 +36,8 @@ namespace ZimmerBot.Core.Expressions
       {
         case OperatorType.Equals:
           return EqualsOp(a, b);
+        case OperatorType.NotEquals:
+          return !EqualsOp(a, b);
       }
 
       throw new InvalidOperationException("Unhandled operator type: " + Operator);

@@ -1,4 +1,5 @@
-﻿using ZimmerBot.Core.Expressions;
+﻿using System;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.WordRegex;
 
@@ -100,10 +101,14 @@ namespace ZimmerBotEliza
         .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
         .Response("Hej. Mit navn er Eliza. Jeg er et chatbot.");
 
-      // Random talk
-      // - trigger after no conversation in X seconds with probability Y when condition Z is fullfilled
-      // - dd.AddRule().When("state.conversation.secondsSinceLastEntry > 10 AND random(10)<1").
-      // - dd.AddRule().When(new RandomFunc(new IntegerConstant(10) ...)
+      dd.AddRule()
+        .WithSchedule(TimeSpan.FromSeconds(30))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.NotEquals))
+        .Response(i => ResponseHelper.OneOf(i, 
+          "Nåh... ?",
+          "Hmmm ...",
+          "Fortæl mere?",
+          "Er du der?"));
     }
   }
 }

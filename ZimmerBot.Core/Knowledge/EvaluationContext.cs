@@ -16,7 +16,6 @@ namespace ZimmerBot.Core.Knowledge
     public EvaluationContext(BotState state, ZTokenSequence input)
     {
       Condition.Requires(state, "state").IsNotNull();
-      Condition.Requires(input, "input").IsNotNull();
 
       State = state;
       Input = input;
