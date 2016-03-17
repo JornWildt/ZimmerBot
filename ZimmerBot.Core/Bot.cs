@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using CuttingEdge.Conditions;
-using Quartz;
+using log4net;
 using Quartz.Impl;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;

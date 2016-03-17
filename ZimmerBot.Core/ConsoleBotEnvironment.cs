@@ -1,5 +1,6 @@
 ﻿using System;
 using CuttingEdge.Conditions;
+using log4net;
 
 
 namespace ZimmerBot.Core
@@ -9,6 +10,9 @@ namespace ZimmerBot.Core
   /// </summary>
   public class ConsoleBotEnvironment : IBotEnvironment
   {
+    static ILog Logger = LogManager.GetLogger(typeof(Bot));
+
+
     public string Prompt { get; set; }
 
 
@@ -40,14 +44,43 @@ namespace ZimmerBot.Core
 
     public void Log(LogLevel level, string msg, Exception ex)
     {
-      Console.WriteLine("LOG: {0} - {1}", level, msg);
-      Console.WriteLine(ex.Message);
+      switch (level)
+      {
+        case LogLevel.Debug:
+          Logger.Debug(msg, ex);
+          break;
+        case LogLevel.Info:
+          Logger.Info(msg, ex);
+          break;
+        case LogLevel.Warn:
+          Logger.Warn(msg, ex);
+          break;
+        case LogLevel.Error:
+          Console.WriteLine("Internal error");
+          Logger.Error(msg, ex);
+          break;
+      }
     }
 
 
     public void Log(LogLevel level, string msg, params object[] args)
     {
-      Console.WriteLine("LOG: {0} - {1}", level, string.Format(msg, args));
+      switch (level)
+      {
+        case LogLevel.Debug:
+          Logger.DebugFormat(msg, args);
+          break;
+        case LogLevel.Info:
+          Logger.InfoFormat(msg, args);
+          break;
+        case LogLevel.Warn:
+          Logger.WarnFormat(msg, args);
+          break;
+        case LogLevel.Error:
+          Console.WriteLine("Internal error");
+          Logger.ErrorFormat(msg, args);
+          break;
+      }
     }
 
 

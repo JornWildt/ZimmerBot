@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
-
+using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -54,6 +54,18 @@ namespace ZimmerBot.Core.Knowledge
     {
       ProcessorRegistration p = Processors[name];
       return p.Processor(input);
+    }
+
+
+    public static Func<string> Invoke(WRegex.MatchResult matches, string functionName, params string[] parameters)
+    {
+      ProcessorInput input = new ProcessorInput();
+      foreach (string p in parameters)
+      {
+        object value = (matches.Matches.ContainsKey(p) ? matches.Matches[p] : null);
+        input.Inputs.Add(value);
+      }
+      return Invoke(functionName, input);
     }
   }
 }
