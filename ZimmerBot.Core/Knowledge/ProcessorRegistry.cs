@@ -57,12 +57,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public static Func<string> Invoke(WRegex.MatchResult matches, string functionName, params string[] parameters)
+    public static Func<string> Invoke(ResponseContext rc, string functionName, params string[] parameters)
     {
       ProcessorInput input = new ProcessorInput();
       foreach (string p in parameters)
       {
-        object value = (matches.Matches.ContainsKey(p) ? matches.Matches[p] : null);
+        object value = (rc.Match.Matches.ContainsKey(p) ? rc.Match.Matches[p] : null);
         input.Inputs.Add(value);
       }
       return Invoke(functionName, input);

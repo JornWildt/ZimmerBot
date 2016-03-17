@@ -91,6 +91,7 @@
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Knowledge\ProcessorRegistry.cs" />
+    <Compile Include="Knowledge\ResponseContext.cs" />
     <Compile Include="Processors\LanguageProcessor.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />

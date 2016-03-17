@@ -9,10 +9,10 @@ namespace ZimmerBot.Core.Knowledge
     public static Random Randomizer = new Random();
 
 
-    public static Func<string> OneOf(WRegex.MatchResult result, params object[] choices)
+    public static Func<string> OneOf(ResponseContext rc, params object[] choices)
     {
       return () =>
-        TextMerge.MergeTemplate(choices[Randomizer.Next(choices.Length)].ToString(), result.Matches);
+        TextMerge.MergeTemplate(choices[Randomizer.Next(choices.Length)].ToString(), rc.Match.Matches);
     }
   }
 }

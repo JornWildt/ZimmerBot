@@ -11,7 +11,7 @@ namespace ZimmerBot.Console.Domains
       Domain dr = kb.NewDomain("Rejseplanen");
 
       dr.AddRule("find", "station", new WildcardWRegex("s"))
-        .Response(m => ProcessorRegistry.Invoke(m, "Rejseplanen.FindStation", "s"));
+        .Response(c => ProcessorRegistry.Invoke(c, "Rejseplanen.FindStation", "s"));
 
       dr.AddRule("find", "station")
         .Response("Hvilken station?");

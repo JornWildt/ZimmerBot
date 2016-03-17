@@ -19,7 +19,7 @@ namespace ZimmerBot.Core.Knowledge
 
     protected double? ScoreModifier { get; set; }
 
-    protected Func<WRegex.MatchResult, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
+    protected Func<ResponseContext, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
     public Rule(params object[] topics)
@@ -57,7 +57,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Response(Func<WRegex.MatchResult, Func<string>> g)
+    public Rule Response(Func<ResponseContext, Func<string>> g)
     {
       OutputGenerator = g;
       return this;
@@ -66,7 +66,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Rule Response(string s)
     {
-      return Response(i => () => TextMerge.MergeTemplate(s, i.Matches));
+      return Response(c => () => TextMerge.MergeTemplate(s, c.Match.Matches));
     }
 
 
@@ -89,9 +89,8 @@ namespace ZimmerBot.Core.Knowledge
       if (result.Score < 0.5)
         return null;
 
-      Dictionary<string, string> generatorParameters = new Dictionary<string, string>();
-
-      return new Reaction(result.Score, OutputGenerator(result));
+      ResponseContext rc = new ResponseContext(context.State, context.Input, result);
+      return new Reaction(result.Score, OutputGenerator(rc));
     }
   }
 }

@@ -12,7 +12,7 @@ namespace ZimmerBot.Console.Domains
       Domain ds = kb.NewDomain("Sprog");
 
       ds.AddRule("oversæt", new RepitionWRegex(new WildcardWRegex(), "t"), "til", new WildcardWRegex("s"))
-        .Response(i => LanguageProcessor.Translate(i.Matches["t"], i.Matches["s"], "Javel. Det er: '<answer>'."));
+        .Response(c => LanguageProcessor.Translate(c.Match.Matches["t"], c.Match.Matches["s"], "Javel. Det er: '<answer>'."));
     }
   }
 }
