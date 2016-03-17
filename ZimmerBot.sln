@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Core.Tests", "Zim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBotEliza", "ZimmerBotEliza\ZimmerBotEliza.csproj", "{7696547A-B1FC-4237-9F74-FFE3641A2F46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rejseplanen.ZimmerBot.AddOn", "Rejseplanen.ZimmerBot.AddOn\Rejseplanen.ZimmerBot.AddOn.csproj", "{5D3573AE-AD9F-4CCA-8779-F117077B7EAE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AddOns", "AddOns", "{DA18A7CE-7F59-4CDD-9221-3D97866581B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +43,15 @@ Global
 		{7696547A-B1FC-4237-9F74-FFE3641A2F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7696547A-B1FC-4237-9F74-FFE3641A2F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7696547A-B1FC-4237-9F74-FFE3641A2F46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
 	EndGlobalSection
 EndGlobal

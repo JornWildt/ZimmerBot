@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{5D3573AE-AD9F-4CCA-8779-F117077B7EAE}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZimmerBot.Console</RootNamespace>
-    <AssemblyName>ZimmerBot.Console</AssemblyName>
+    <RootNamespace>Rejseplanen.ZimmerBot.AddOn</RootNamespace>
+    <AssemblyName>Rejseplanen.ZimmerBot.AddOn</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,10 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,14 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,37 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domains\DateTimeDomain.cs" />
-    <Compile Include="Domains\GeneralDomain.cs" />
-    <Compile Include="Domains\GeographyDomain.cs" />
-    <Compile Include="Domains\LanguageDomain.cs" />
-    <Compile Include="Domains\MovieDomain.cs" />
-    <Compile Include="Domains\RejseplanenDomain.cs" />
-    <Compile Include="Domains\SelfDomain.cs" />
-    <Compile Include="Domains\WeatherDomain.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="RejseplanenApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RejseplanenProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Rejseplanen.ZimmerBot.AddOn\Rejseplanen.ZimmerBot.AddOn.csproj">
-      <Project>{5d3573ae-ad9f-4cca-8779-f117077b7eae}</Project>
-      <Name>Rejseplanen.ZimmerBot.AddOn</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZimmerBot.cBrain.F2.Domain\ZimmerBot.cBrain.F2.Domain.csproj">
-      <Project>{01a5bb46-8256-4a46-afc3-6f8a94ccbb4b}</Project>
-      <Name>ZimmerBot.cBrain.F2.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ZimmerBot.Core\ZimmerBot.Core.csproj">
       <Project>{8ec30ae6-170e-4621-ae14-4a3985e3d062}</Project>
       <Name>ZimmerBot.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="README.TXT" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

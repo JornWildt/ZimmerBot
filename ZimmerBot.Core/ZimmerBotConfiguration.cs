@@ -7,6 +7,7 @@ namespace ZimmerBot.Core
   {
     public static void Initialize()
     {
+      AddOnHandling.AddOnLoader.InitializeAddOns();
       StdSchedulerFactory.GetDefaultScheduler().Start();
     }
 
@@ -14,6 +15,7 @@ namespace ZimmerBot.Core
     public static void Shutdown()
     {
       StdSchedulerFactory.GetDefaultScheduler().Shutdown();
+      AddOnHandling.AddOnLoader.ShutdownAddOns();
     }
   }
 }

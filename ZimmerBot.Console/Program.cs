@@ -1,4 +1,5 @@
-﻿using ZimmerBot.cBrain.F2.Domain;
+﻿using log4net;
+using ZimmerBot.cBrain.F2.Domain;
 using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
@@ -8,8 +9,14 @@ namespace ZimmerBot.Console
 {
   class Program
   {
+    static ILog Logger = LogManager.GetLogger(typeof(Program));
+
+
     static void Main(string[] args)
     {
+      log4net.Config.XmlConfigurator.Configure();
+      Logger.Info("STARTING ZimmerBot.Console");
+
       ZimmerBotConfiguration.Initialize();
 
       // Initialize bot
@@ -38,6 +45,7 @@ namespace ZimmerBot.Console
       SelfDomain.Initialize(kb);
       LanguageDomain.Initialize(kb);
       F2Domain.Initialize(kb);
+      RejseplanenDomain.Initialize(kb);
 
       return kb;
     }
