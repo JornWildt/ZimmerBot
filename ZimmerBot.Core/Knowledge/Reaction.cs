@@ -1,6 +1,5 @@
-﻿using System;
-using ZimmerBot.Core.Parser;
-using static ZimmerBot.Core.Knowledge.ProcessorRegistry;
+﻿using ZimmerBot.Core.Processors;
+
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -10,10 +9,10 @@ namespace ZimmerBot.Core.Knowledge
 
     protected ResponseContext Context { get; set; }
 
-    protected Invocation Inv { get; set; } // FIXME - better name
+    protected CallBinding Inv { get; set; } // FIXME - better name
 
 
-    public Reaction(ResponseContext rc, Invocation generator)
+    public Reaction(ResponseContext rc, CallBinding generator)
     {
       Score = rc.Match.Score;
       Context = rc;
@@ -23,10 +22,6 @@ namespace ZimmerBot.Core.Knowledge
 
     public string GenerateResponse()
     {
-      //ProcessorInput pi = new ProcessorInput(Context, Inv);
-      //if (Inv == null)
-      //  return "DUH!";
-
       return Inv.Run(Context);
     }
   }

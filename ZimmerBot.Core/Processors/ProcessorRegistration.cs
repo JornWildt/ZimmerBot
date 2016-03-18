@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CuttingEdge.Conditions;
 
 
-namespace ZimmerBot.Core.Knowledge
+namespace ZimmerBot.Core.Processors
 {
   public class ProcessorRegistration
   {
@@ -12,6 +12,7 @@ namespace ZimmerBot.Core.Knowledge
     public List<string> RequiredOutputTemplateNames { get; protected set; }
 
     public Func<ProcessorInput, Func<string>> Processor { get; protected set; }
+
 
     public ProcessorRegistration(string name, Func<ProcessorInput, Func<string>> processor)
     {
@@ -22,6 +23,7 @@ namespace ZimmerBot.Core.Knowledge
       RequiredOutputTemplateNames = new List<string>();
       Processor = processor;
     }
+
 
     public ProcessorRegistration WithRequiredTemplate(string templateName)
     {

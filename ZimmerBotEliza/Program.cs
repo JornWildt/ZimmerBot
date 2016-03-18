@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
 
@@ -7,11 +8,16 @@ namespace ZimmerBotEliza
 {
   class Program
   {
+    static ILog Logger = LogManager.GetLogger(typeof(Program));
+
     static Random Randomizer = new Random();
 
 
     static void Main(string[] args)
     {
+      log4net.Config.XmlConfigurator.Configure();
+      Logger.Info("**** STARTING ZimmerBotEliza ****");
+
       ZimmerBotConfiguration.Initialize();
       KnowledgeBase kb = new KnowledgeBase();
       ElizaDomain.Initialize(kb);

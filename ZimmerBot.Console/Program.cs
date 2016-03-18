@@ -15,7 +15,7 @@ namespace ZimmerBot.Console
     static void Main(string[] args)
     {
       log4net.Config.XmlConfigurator.Configure();
-      Logger.Info("STARTING ZimmerBot.Console");
+      Logger.Info("**** STARTING ZimmerBot.Console ****");
 
       ZimmerBotConfiguration.Initialize();
 

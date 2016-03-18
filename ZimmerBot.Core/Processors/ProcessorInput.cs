@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
-using ZimmerBot.Core.WordRegex;
+using ZimmerBot.Core.Knowledge;
 
 
-namespace ZimmerBot.Core.Knowledge
+namespace ZimmerBot.Core.Processors
 {
   public class ProcessorInput
   {

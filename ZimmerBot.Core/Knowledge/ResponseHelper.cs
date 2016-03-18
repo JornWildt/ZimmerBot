@@ -1,6 +1,7 @@
 ﻿using System;
+using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.Utilities;
-using ZimmerBot.Core.WordRegex;
+
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -9,12 +10,13 @@ namespace ZimmerBot.Core.Knowledge
     public static Random Randomizer = new Random();
 
 
-    public static Invocation OneOf(params object[] choices)
+    public static CallBinding OneOf(params object[] choices)
     {
+      // Fake a processor registration
       ProcessorRegistration p = new ProcessorRegistration(
        "oneOf", 
         inp => () => TextMerge.MergeTemplate(choices[Randomizer.Next(choices.Length)].ToString(), inp.Context.Match.Matches));
-      Invocation i = new Invocation(p);
+      CallBinding i = new CallBinding(p);
       return i;
     }
   }

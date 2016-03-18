@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using log4net;
+using ZimmerBot.Core.Processors;
 
 
-namespace ZimmerBot.Core.Knowledge
+namespace ZimmerBot.Core.Processors
 {
   public static class ProcessorRegistry
   {
@@ -14,28 +15,23 @@ namespace ZimmerBot.Core.Knowledge
 
     public static ProcessorRegistration RegisterProcessor(string name, Func<ProcessorInput, Func<string>> processor)
     {
+      Logger.Debug($"Register processor function '{name}'");
       ProcessorRegistration pr = new ProcessorRegistration(name, processor);
       Processors.Add(name, pr);
       return pr;
     }
 
 
-    public static Invocation Invoke(string functionName, params string[] parameters)
+    public static CallBinding BindTo(string functionName, params string[] parameters)
     {
+      Logger.Debug($"Bind function '{functionName}' to parameters.");
+
       if (!Processors.ContainsKey(functionName))
         throw new ArgumentException($"No processor function named {functionName} found.");
 
       ProcessorRegistration p = Processors[functionName];
 
-      return new Invocation(p, parameters);
-
-      //ProcessorInput input = new ProcessorInput(rc);
-      //foreach (string p in parameters)
-      //{
-      //  object value = (rc.Match.Matches.ContainsKey(p) ? rc.Match.Matches[p] : null);
-      //  input.Inputs.Add(value);
-      //}
-      //return Invoke(functionName, input);
+      return new CallBinding(p, parameters);
     }
   }
 }

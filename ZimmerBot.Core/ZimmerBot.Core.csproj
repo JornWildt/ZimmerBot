@@ -90,10 +90,10 @@
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
-    <Compile Include="Knowledge\Invocation.cs" />
-    <Compile Include="Knowledge\ProcessorInput.cs" />
-    <Compile Include="Knowledge\ProcessorRegistration.cs" />
-    <Compile Include="Knowledge\ProcessorRegistry.cs" />
+    <Compile Include="Processors\CallBinding.cs" />
+    <Compile Include="Processors\ProcessorInput.cs" />
+    <Compile Include="Processors\ProcessorRegistration.cs" />
+    <Compile Include="Processors\ProcessorRegistry.cs" />
     <Compile Include="Knowledge\ResponseContext.cs" />
     <Compile Include="Processors\LanguageProcessor.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />

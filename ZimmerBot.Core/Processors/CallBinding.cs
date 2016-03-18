@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
-using static ZimmerBot.Core.Knowledge.ProcessorRegistry;
+using log4net;
+using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Processors;
 
 
-namespace ZimmerBot.Core.Knowledge
+namespace ZimmerBot.Core.Processors
 {
-  public class Invocation
+  public class CallBinding
   {
+    private static ILog Logger = LogManager.GetLogger(typeof(CallBinding));
+
     protected ProcessorRegistration P { get; set; }
 
     protected string[] ParameterNames { get; set; }
@@ -15,7 +18,7 @@ namespace ZimmerBot.Core.Knowledge
     protected Dictionary<string, string> OutputTemplates { get; set; }
 
 
-    public Invocation(ProcessorRegistration p, params string[] parameterNames)
+    public CallBinding(ProcessorRegistration p, params string[] parameterNames)
     {
       Condition.Requires(parameterNames, "parameterNames").IsNotNull();
 
@@ -25,26 +28,26 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Invocation WithTemplate(string template)
+    public CallBinding WithTemplate(string template)
     {
       OutputTemplates.Add("default", template);
       return this;
     }
 
 
-    public Invocation WithTemplate(string name, string template)
+    public CallBinding WithTemplate(string name, string template)
     {
       OutputTemplates.Add(name, template);
       return this;
     }
 
 
-    public void Verify()
+    public void VerifyBinding()
     {
       foreach (string requiredTemplateName in P.RequiredOutputTemplateNames)
       {
         if (!OutputTemplates.ContainsKey(requiredTemplateName))
-          Logger.Warn($"Required template '{requiredTemplateName}' is missing in invocation of function '{P.Name}'.");
+          Logger.Warn($"Required template '{requiredTemplateName}' is missing in binding of function '{P.Name}'.");
       }
     }
 

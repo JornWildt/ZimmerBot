@@ -11,3 +11,4 @@ packages/
 Graphs/
 .nuget/
 ConnectionStrings.config
+SciTE.session

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using log4net;
-using Ramone;
 using Rejseplanen.ZimmerBot.AddOn.Schemas;
-using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.Utilities;
-using WebRequest = Ramone.Request;
-using WebResponse = Ramone.Response;
 
 
 namespace Rejseplanen.ZimmerBot.AddOn

@@ -1,9 +1,9 @@
 ﻿using System;
 using Quartz;
 using ZimmerBot.Core.Expressions;
+using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
-using static ZimmerBot.Core.Knowledge.ProcessorRegistry;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.Knowledge
 
     protected double? ScoreModifier { get; set; }
 
-    protected Invocation OutputGenerator { get; set; } // FIXME: better naming, cleanup
+    protected CallBinding OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
     public Rule(params object[] topics)
@@ -56,19 +56,18 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Response(Invocation f)
+    public Rule WithResponse(CallBinding f)
     {
+      f.VerifyBinding();
       OutputGenerator = f;
       return this;
     }
 
 
-    public Rule Response(string s)
+    public Rule WithResponse(string s)
     {
       ProcessorRegistration p = new ProcessorRegistration("echo", inp => () => TextMerge.MergeTemplate(s, inp.Context.Match.Matches));
-      OutputGenerator = new Invocation(p);
-      return this;
-      //return Response(c => new Invocation(null, () => TextMerge.MergeTemplate(s, c.Match.Matches)));
+      return WithResponse(new CallBinding(p));
     }
 
 
