@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.Knowledge
 
     protected double? ScoreModifier { get; set; }
 
-    protected CallBinding OutputGenerator { get; set; } // FIXME: better naming, cleanup
+    protected CallBinding ResponseBinding { get; set; }
 
 
     public Rule(params object[] topics)
@@ -56,10 +56,10 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule WithResponse(CallBinding f)
+    public Rule WithResponse(CallBinding b)
     {
-      f.VerifyBinding();
-      OutputGenerator = f;
+      b.VerifyBinding();
+      ResponseBinding = b;
       return this;
     }
 
@@ -91,7 +91,7 @@ namespace ZimmerBot.Core.Knowledge
         return null;
 
       ResponseContext rc = new ResponseContext(context.State, context.Input, result);
-      return new Reaction(rc, OutputGenerator);
+      return new Reaction(rc, ResponseBinding);
     }
   }
 }

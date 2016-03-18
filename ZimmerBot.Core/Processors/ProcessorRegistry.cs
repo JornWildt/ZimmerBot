@@ -13,12 +13,12 @@ namespace ZimmerBot.Core.Processors
     private static Dictionary<string, ProcessorRegistration> Processors = new Dictionary<string, ProcessorRegistration>();
 
 
-    public static ProcessorRegistration RegisterProcessor(string name, Func<ProcessorInput, string> processor)
+    public static ProcessorRegistration RegisterProcessor(string name, Func<ProcessorInput, string> f)
     {
       Logger.Debug($"Register processor function '{name}'");
-      ProcessorRegistration pr = new ProcessorRegistration(name, processor);
-      Processors.Add(name, pr);
-      return pr;
+      ProcessorRegistration registration = new ProcessorRegistration(name, f);
+      Processors.Add(name, registration);
+      return registration;
     }
 
 

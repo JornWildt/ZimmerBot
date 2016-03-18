@@ -1,4 +1,5 @@
-﻿using ZimmerBot.Core.Processors;
+﻿using CuttingEdge.Conditions;
+using ZimmerBot.Core.Processors;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -9,20 +10,23 @@ namespace ZimmerBot.Core.Knowledge
 
     protected ResponseContext Context { get; set; }
 
-    protected CallBinding Inv { get; set; } // FIXME - better name
+    protected CallBinding ResponseBinding { get; set; } // FIXME - better name
 
 
-    public Reaction(ResponseContext rc, CallBinding generator)
+    public Reaction(ResponseContext context, CallBinding b)
     {
-      Score = rc.Match.Score;
-      Context = rc;
-      Inv = generator;
+      Condition.Requires(context, nameof(context)).IsNotNull();
+      Condition.Requires(b, nameof(b)).IsNotNull();
+
+      Score = context.Match.Score;
+      Context = context;
+      ResponseBinding = b;
     }
 
 
     public string GenerateResponse()
     {
-      return Inv.Run(Context);
+      return ResponseBinding.Invoke(Context);
     }
   }
 }

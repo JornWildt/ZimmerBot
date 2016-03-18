@@ -110,7 +110,7 @@ namespace ZimmerBotEliza
           "Hvad får dig til at sige det?",
           "Aha ...",
           "Javel ...",
-          "Okay ...",
+          "Okay ... og hvad så?",
           "Meget interessant.",
           "Okay. Og hvad fortæller det så dig?",
           "Hvilke følelser mærker du når du siger det?"));

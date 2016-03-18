@@ -11,17 +11,17 @@ namespace ZimmerBot.Core.Processors
 
     public List<string> RequiredOutputTemplateNames { get; protected set; }
 
-    public Func<ProcessorInput, string> Processor { get; protected set; }
+    public Func<ProcessorInput, string> Function { get; protected set; }
 
 
-    public ProcessorRegistration(string name, Func<ProcessorInput, string> processor)
+    public ProcessorRegistration(string name, Func<ProcessorInput, string> f)
     {
-      Condition.Requires(name, "name").IsNotNullOrEmpty();
-      Condition.Requires(processor, "processor").IsNotNull();
+      Condition.Requires(name, nameof(name)).IsNotNullOrEmpty();
+      Condition.Requires(f, nameof(f)).IsNotNull();
 
       Name = name;
       RequiredOutputTemplateNames = new List<string>();
-      Processor = processor;
+      Function = f;
     }
 
 

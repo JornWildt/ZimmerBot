@@ -11,18 +11,19 @@ namespace ZimmerBot.Core.Processors
   {
     private static ILog Logger = LogManager.GetLogger(typeof(CallBinding));
 
-    protected ProcessorRegistration P { get; set; }
+    protected ProcessorRegistration Processor { get; set; }
 
     protected string[] ParameterNames { get; set; }
 
     protected Dictionary<string, string> OutputTemplates { get; set; }
 
 
-    public CallBinding(ProcessorRegistration p, params string[] parameterNames)
+    public CallBinding(ProcessorRegistration processor, params string[] parameterNames)
     {
-      Condition.Requires(parameterNames, "parameterNames").IsNotNull();
+      Condition.Requires(processor, nameof(processor)).IsNotNull();
+      Condition.Requires(parameterNames, nameof(parameterNames)).IsNotNull();
 
-      P = p;
+      Processor = processor;
       ParameterNames = parameterNames;
       OutputTemplates = new Dictionary<string, string>();
     }
@@ -44,25 +45,25 @@ namespace ZimmerBot.Core.Processors
 
     public void VerifyBinding()
     {
-      foreach (string requiredTemplateName in P.RequiredOutputTemplateNames)
+      foreach (string requiredTemplateName in Processor.RequiredOutputTemplateNames)
       {
         if (!OutputTemplates.ContainsKey(requiredTemplateName))
-          Logger.Warn($"Required template '{requiredTemplateName}' is missing in binding of function '{P.Name}'.");
+          Logger.Warn($"Required template '{requiredTemplateName}' is missing in binding of function '{Processor.Name}'.");
       }
     }
 
 
-    public string Run(ResponseContext rc)
+    public string Invoke(ResponseContext context)
     {
       List<object> inputs = new List<object>();
       foreach (string parameterName in ParameterNames)
       {
-        object value = rc.Match.Matches[parameterName];
+        object value = context.Match.Matches[parameterName];
         inputs.Add(value);
       }
 
-      ProcessorInput input = new ProcessorInput(rc, inputs, OutputTemplates);
-      return P.Processor(input);
+      ProcessorInput input = new ProcessorInput(context, inputs, OutputTemplates);
+      return Processor.Function(input);
     }
   }
 }
