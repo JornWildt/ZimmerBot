@@ -1,57 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using CuttingEdge.Conditions;
-using ZimmerBot.Core.WordRegex;
+using log4net;
+
 
 namespace ZimmerBot.Core.Knowledge
 {
   public static class ProcessorRegistry
   {
-    private class ProcessorRegistration
-    {
-      public string Name { get; protected set; }
-
-      public Func<ProcessorInput, Func<string>> Processor { get; protected set; }
-
-      public ProcessorRegistration(string name, Func<ProcessorInput, Func<string>> processor)
-      {
-        Condition.Requires(name, "name").IsNotNullOrEmpty();
-        Condition.Requires(processor, "processor").IsNotNull();
-
-        Name = name;
-        Processor = processor;
-      }
-    }
-
+    public static ILog Logger = LogManager.GetLogger(typeof(ProcessorRegistry));
 
     private static Dictionary<string, ProcessorRegistration> Processors = new Dictionary<string, ProcessorRegistration>();
 
 
-    public static void AddProcessor(string name, Func<ProcessorInput, Func<string>> processor)
+    public static ProcessorRegistration RegisterProcessor(string name, Func<ProcessorInput, Func<string>> processor)
     {
-      Processors.Add(name, new ProcessorRegistration(name, processor));
+      ProcessorRegistration pr = new ProcessorRegistration(name, processor);
+      Processors.Add(name, pr);
+      return pr;
     }
 
 
-    public static Func<string> Invoke(string name, ProcessorInput input)
+    public static Invocation Invoke(string functionName, params string[] parameters)
     {
-      if (!Processors.ContainsKey(name))
-        throw new ArgumentException($"No processor function named {name} found.");
+      if (!Processors.ContainsKey(functionName))
+        throw new ArgumentException($"No processor function named {functionName} found.");
 
-      ProcessorRegistration p = Processors[name];
-      return p.Processor(input);
-    }
+      ProcessorRegistration p = Processors[functionName];
 
+      return new Invocation(p, parameters);
 
-    public static Func<string> Invoke(ResponseContext rc, string template, string functionName, params string[] parameters)
-    {
-      ProcessorInput input = new ProcessorInput(rc, template);
-      foreach (string p in parameters)
-      {
-        object value = (rc.Match.Matches.ContainsKey(p) ? rc.Match.Matches[p] : null);
-        input.Inputs.Add(value);
-      }
-      return Invoke(functionName, input);
+      //ProcessorInput input = new ProcessorInput(rc);
+      //foreach (string p in parameters)
+      //{
+      //  object value = (rc.Match.Matches.ContainsKey(p) ? rc.Match.Matches[p] : null);
+      //  input.Inputs.Add(value);
+      //}
+      //return Invoke(functionName, input);
     }
   }
 }

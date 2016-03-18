@@ -22,24 +22,24 @@ namespace ZimmerBot.Console.Domains
       //  .Parameter("week-day")
       //  .Response(i => DateTimeProcessors.IsItDay(i["week-day"], "<answer>."));
 
-      dd.AddRule("question-which", "dag")
-        .Response(i => DateTimeProcessors.ThisDay("I dag er det <answer>"));
+      //dd.AddRule("question-which", "dag")
+      //  .Response(i => DateTimeProcessors.ThisDay("I dag er det <answer>"));
 
       //dd.AddRule("question-is", "det", "month")
       //  .Describe("Er det <måned>")
       //  .Parameter("month")
       //  .Response(i => DateTimeProcessors.IsItMonth(i["month"], "Om det er <month>? <answer>."));
 
-      dd.AddRule("question-which", "måned")
-        .Response(i => DateTimeProcessors.ThisMonth("I dag er det <answer>"));
+      //dd.AddRule("question-which", "måned")
+      //  .Response(i => DateTimeProcessors.ThisMonth("I dag er det <answer>"));
 
-      dd.AddRule("hvad", "er", "klokken")
-        //.AddRule("question", "klokken|tiden")
-        .Response(i => DateTimeProcessors.Time("Klokken er <answer>"));
+      //dd.AddRule("hvad", "er", "klokken")
+      //  //.AddRule("question", "klokken|tiden")
+      //  .Response(i => DateTimeProcessors.Time("Klokken er <answer>"));
 
-      dd.AddRule("hvilken", "dato", "er")
-        //.AddRule("question", "klokken|tiden")
-        .Response(i => DateTimeProcessors.Time("Det er <answer>"));
+      //dd.AddRule("hvilken", "dato", "er")
+      //  //.AddRule("question", "klokken|tiden")
+      //  .Response(i => DateTimeProcessors.Time("Det er <answer>"));
     }
   }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using ZimmerBot.Core.Parser;
-
+using static ZimmerBot.Core.Knowledge.ProcessorRegistry;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -8,19 +8,26 @@ namespace ZimmerBot.Core.Knowledge
   {
     public double Score { get; protected set; }
 
-    protected Func<string> Generator { get; set; }
+    protected ResponseContext Context { get; set; }
+
+    protected Invocation Inv { get; set; } // FIXME - better name
 
 
-    public Reaction(double score, Func<string> generator)
+    public Reaction(ResponseContext rc, Invocation generator)
     {
-      Score = score;
-      Generator = generator;
+      Score = rc.Match.Score;
+      Context = rc;
+      Inv = generator;
     }
 
 
-    public string GenerateResponse(ZTokenSequence input)
+    public string GenerateResponse()
     {
-      return Generator();
+      //ProcessorInput pi = new ProcessorInput(Context, Inv);
+      //if (Inv == null)
+      //  return "DUH!";
+
+      return Inv.Run(Context);
     }
   }
 }

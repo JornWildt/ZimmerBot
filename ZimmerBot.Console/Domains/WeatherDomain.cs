@@ -14,8 +14,8 @@ namespace ZimmerBot.Console.Domains
       dd.DefineWord("vejr").And("vejret");
 
       // "Hvad|hvordan er vejret i Boston"
-      dd.AddRule("question", new RepitionWRegex(new WildcardWRegex()), "vejret", new RepitionWRegex(new WildcardWRegex()), new WordWRegex("location", "l"))
-        .Response(i => WeatherProcessor.GetWeatherDescription(i.Match.Matches["l"], DateTime.Now, "Vejret omkring <location> er <answer>"));
+      //dd.AddRule("question", new RepitionWRegex(new WildcardWRegex()), "vejret", new RepitionWRegex(new WildcardWRegex()), new WordWRegex("location", "l"))
+      //  .Response(i => WeatherProcessor.GetWeatherDescription(i.Match.Matches["l"], DateTime.Now, "Vejret omkring <location> er <answer>"));
     }
   }
 }

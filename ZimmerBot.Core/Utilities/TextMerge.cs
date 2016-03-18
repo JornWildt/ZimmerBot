@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Antlr4.StringTemplate;
 
@@ -8,6 +9,19 @@ namespace ZimmerBot.Core.Utilities
 {
   public static class TextMerge
   {
+    public static string MergeTemplate(IDictionary<string, string> templates, object source)
+    {
+      return MergeTemplate(templates, "default", source);
+    }
+
+
+    public static string MergeTemplate(IDictionary<string,string> templates, string templateName, object source)
+    {
+      string template = templates[templateName];
+      return MergeTemplate(template, source);
+    }
+
+
     public static string MergeTemplate(string template, IDictionary source)
     {
       Template t = new Template(template);
@@ -26,6 +40,9 @@ namespace ZimmerBot.Core.Utilities
 
     public static string MergeTemplate(string template, object source)
     {
+      if (source is IDictionary)
+        return MergeTemplate(template, (IDictionary)source);
+
       Template t = new Template(template);
 
       if (source != null)

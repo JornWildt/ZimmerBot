@@ -12,7 +12,11 @@ namespace Rejseplanen.ZimmerBot.AddOn
     public void Initialize()
     {
       // Register processor functions available for use in rules
-      ProcessorRegistry.AddProcessor("Rejseplanen.FindStoppested", RejseplanenProcessor.FindStop);
+      ProcessorRegistry
+        .RegisterProcessor("Rejseplanen.FindStoppested", RejseplanenProcessor.FindStop)
+        .WithRequiredTemplate("default")
+        .WithRequiredTemplate("empty")
+        .WithRequiredTemplate("error");
     }
 
 

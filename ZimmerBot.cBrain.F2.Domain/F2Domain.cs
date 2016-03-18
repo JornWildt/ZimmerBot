@@ -26,19 +26,19 @@ namespace ZimmerBot.cBrain.F2.Domain
 
       f2d.AddRule("f2").Response("F2 er fantastisk!");
 
-      f2d.AddRule("hvor", "gammel", "er", "du")
-        //.AddTrigger("Hvornår er du fra")
-         .Response(i => ResponseHelper.OneOf(i, "Jeg er ny-i-jobbet.", "Det ved jeg snart ikke.", "Det føles som evigheder.", "Jeg blev skabt i marts 2016."));
+      //f2d.AddRule("hvor", "gammel", "er", "du")
+      //  //.AddTrigger("Hvornår er du fra")
+      //   .Response(ResponseHelper.OneOf("Jeg er ny-i-jobbet.", "Det ved jeg snart ikke.", "Det føles som evigheder.", "Jeg blev skabt i marts 2016."));
 
       f2d.AddRule("Hvem", "skabte", "dig")
          .Response("Jørn");
 
-      f2d.AddRule()
-         .WithCondition(new FunctionCallExpr("probability", new ConstantNumberExpr(0.2)))
-         .WithSchedule(TimeSpan.FromSeconds(60))
-         .Response(i => ResponseHelper.OneOf(i,
-          "Nåh... ?", 
-          "Er der nogen der kan en vittighed?"));
+      //f2d.AddRule()
+      //   .WithCondition(new FunctionCallExpr("probability", new ConstantNumberExpr(0.2)))
+      //   .WithSchedule(TimeSpan.FromSeconds(60))
+      //   .Response(i => ResponseHelper.OneOf(i,
+      //    "Nåh... ?", 
+      //    "Er der nogen der kan en vittighed?"));
     }
   }
 }

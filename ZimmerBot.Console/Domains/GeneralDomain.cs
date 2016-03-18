@@ -14,9 +14,9 @@ namespace ZimmerBot.Console.Domains
       d.DefineWord("Hvad").Is("question").Is("question-what");
       d.DefineWord("Hvilken").Is("question").Is("question-which");
 
-      d.AddRule("question")
-       .Describe("Hvornår?")
-       .Response(i => () => "Hvad tror du selv?");
+      //d.AddRule("question")
+      // .Describe("Hvornår?")
+      // .Response(i => () => "Hvad tror du selv?");
     }
   }
 }

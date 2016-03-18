@@ -8,19 +8,21 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class ProcessorInput
   {
-    public List<object> Inputs { get; protected set; }
-
     public ResponseContext Context { get; protected set; }
 
-    // FIXME: better naming (output template?)
-    public string Template { get; protected set; }
+    public List<object> Inputs { get; protected set; }
+
+    public Dictionary<string,string> OutputTemplates { get; protected set; }
 
 
-    public ProcessorInput(ResponseContext rc, string template)
+    public ProcessorInput(ResponseContext context, List<object> inputs, Dictionary<string, string> outputTemplates)
     {
-      Inputs = new List<object>();
-      Context = rc;
-      Template = template;
+      Condition.Requires(inputs, "inputs").IsNotNull();
+      Condition.Requires(outputTemplates, "outputTemplates").IsNotNull();
+
+      Context = context;
+      Inputs = inputs;
+      OutputTemplates = outputTemplates;
     }
 
 

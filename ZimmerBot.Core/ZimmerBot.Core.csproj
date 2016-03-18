@@ -90,7 +90,9 @@
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
+    <Compile Include="Knowledge\Invocation.cs" />
     <Compile Include="Knowledge\ProcessorInput.cs" />
+    <Compile Include="Knowledge\ProcessorRegistration.cs" />
     <Compile Include="Knowledge\ProcessorRegistry.cs" />
     <Compile Include="Knowledge\ResponseContext.cs" />
     <Compile Include="Processors\LanguageProcessor.cs" />

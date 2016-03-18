@@ -141,7 +141,7 @@ namespace ZimmerBot.Core
 
             if (reactions.Count > 0)
               foreach (Reaction r in reactions)
-                output.Add(r.GenerateResponse(input));
+                output.Add(r.GenerateResponse());
             else
               output.Add("???");
           }
@@ -153,7 +153,7 @@ namespace ZimmerBot.Core
 
           if (reactions.Count > 0)
             foreach (Reaction r in reactions)
-              output.Add(r.GenerateResponse(new ZTokenSequence()));
+              output.Add(r.GenerateResponse());
         }
 
         if (output.Count > 0)

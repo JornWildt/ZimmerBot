@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Quartz;
 using ZimmerBot.Core.Expressions;
-using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
+using static ZimmerBot.Core.Knowledge.ProcessorRegistry;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -19,7 +18,7 @@ namespace ZimmerBot.Core.Knowledge
 
     protected double? ScoreModifier { get; set; }
 
-    protected Func<ResponseContext, Func<string>> OutputGenerator { get; set; } // FIXME: better naming, cleanup
+    protected Invocation OutputGenerator { get; set; } // FIXME: better naming, cleanup
 
 
     public Rule(params object[] topics)
@@ -57,16 +56,19 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Response(Func<ResponseContext, Func<string>> g)
+    public Rule Response(Invocation f)
     {
-      OutputGenerator = g;
+      OutputGenerator = f;
       return this;
     }
 
 
     public Rule Response(string s)
     {
-      return Response(c => () => TextMerge.MergeTemplate(s, c.Match.Matches));
+      ProcessorRegistration p = new ProcessorRegistration("echo", inp => () => TextMerge.MergeTemplate(s, inp.Context.Match.Matches));
+      OutputGenerator = new Invocation(p);
+      return this;
+      //return Response(c => new Invocation(null, () => TextMerge.MergeTemplate(s, c.Match.Matches)));
     }
 
 
@@ -90,7 +92,7 @@ namespace ZimmerBot.Core.Knowledge
         return null;
 
       ResponseContext rc = new ResponseContext(context.State, context.Input, result);
-      return new Reaction(result.Score, OutputGenerator(rc));
+      return new Reaction(rc, OutputGenerator);
     }
   }
 }

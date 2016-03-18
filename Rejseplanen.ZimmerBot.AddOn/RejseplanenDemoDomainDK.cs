@@ -18,12 +18,20 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
       // Expected question: where is a specific stoppested
       dr.AddRule("find", "stoppested", new WildcardWRegex("s"))
-        .Response(c => ProcessorRegistry.Invoke(c, "Fandt '<StopName>'", "Rejseplanen.FindStoppested", "s"));
+        .Response(ProcessorRegistry
+          .Invoke("Rejseplanen.FindStoppested", "s")
+          .WithTemplate("Fandt '<stopName>'")
+          .WithTemplate("empty", "Stoppestedet <s> kunne ikke findes")
+          .WithTemplate("error", "Det kan jeg desværre ikke - der er kludder i maskineriet"));
 
       // For debugging, shorthand ...
       // Should really be implemented as a recursive call to the evaluater with "find stoppested <s>" as input.
       dr.AddRule("fs", new WildcardWRegex("s"))
-        .Response(c => ProcessorRegistry.Invoke(c, "Fandt '<StopName>'", "Rejseplanen.FindStoppested", "s"));
+        .Response(ProcessorRegistry
+          .Invoke("Rejseplanen.FindStoppested", "s")
+          .WithTemplate("Fandt '<stopName>'")
+          .WithTemplate("empty", "Stoppestedet <s> kunne ikke findes")
+          .WithTemplate("error", "Det kan jeg desværre ikke - der er kludder i maskineriet"));
 
       // Variation of question: missing the stoppested name and asking for it.
       // - A future solution would setup an expectation of some sort of answer (like the stoppested name)

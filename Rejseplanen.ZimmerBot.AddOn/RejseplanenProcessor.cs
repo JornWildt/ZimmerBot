@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using log4net;
 using Ramone;
 using Rejseplanen.ZimmerBot.AddOn.Schemas;
@@ -14,10 +15,18 @@ namespace Rejseplanen.ZimmerBot.AddOn
   {
     static ILog Logger = LogManager.GetLogger(typeof(RejseplanenProcessor));
 
+    public class FindStopResponse
+    {
+      public string stopName { get; set; }
+    }
 
     public static Func<string> FindStop(ProcessorInput input)
     {
       string name = input.GetParameter<string>(0);
+
+      var parameters = new Dictionary<string, object>();
+      foreach (var item in input.Context.Match.Matches)
+        parameters[item.Key] = item.Value;
 
       try
       {
@@ -31,22 +40,17 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
           if (stop != null)
           {
-            var parameters = new
-            {
-              StopName = stop.name,
-              StopId = stop.id
-            };
-
-            return () => TextMerge.MergeTemplate(input.Template, parameters);
+            parameters["stopName"] = stop.name;
+            return () => TextMerge.MergeTemplate(input.OutputTemplates, parameters);
           }
         }
 
-        return () => "EMPTY";
+        return () => TextMerge.MergeTemplate(input.OutputTemplates, "empty", parameters);
       }
       catch (Exception ex)
       {
         Logger.Error("Failed to access Rejseplanen", ex);
-        return () => "ERROR: " + ex.Message;
+        return () => TextMerge.MergeTemplate(input.OutputTemplates, "error", parameters);
       }
     }
   }
