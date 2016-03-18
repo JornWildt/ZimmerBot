@@ -10,3 +10,4 @@ Logs/
 packages/
 Graphs/
 .nuget/
+ConnectionStrings.config

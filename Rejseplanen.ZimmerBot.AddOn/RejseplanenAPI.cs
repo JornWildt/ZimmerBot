@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using log4net;
 using Ramone;
 using Ramone.MediaTypes.Xml;
 using Rejseplanen.ZimmerBot.AddOn.Schemas;
 using WebRequest = Ramone.Request;
-using WebResponse = Ramone.Response;
 
 
 namespace Rejseplanen.ZimmerBot.AddOn
@@ -22,9 +18,14 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
     public RejseplanenAPI()
     {
-      // FIXME: NO URL in GitHUB!!!!!
-      RejseplanenService.CodecManager.AddXml<LocationList>(MediaType.TextXml);
-      //RejseplanenService.CodecManager.AddCodec<XmlSerializerCodec>(MediaType.TextXml);
+      if (ConfigurationManager.ConnectionStrings["Rejseplanen.Url"] == null)
+        throw new InvalidOperationException($"Missing connection string 'Rejseplanen.Url'");
+
+      string baseUrl = ConfigurationManager.ConnectionStrings["Rejseplanen.Url"].ConnectionString;
+      RejseplanenService = RamoneConfiguration.NewService(new Uri(baseUrl));
+
+      // This should rather have been in Ramone's standard codecs
+      RejseplanenService.CodecManager.AddCodec<XmlSerializerCodec>(MediaType.TextXml);
     }
 
 
@@ -41,7 +42,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
       WebRequest request = session.Bind("location?input={i}", new { i = input });
 
-      using (var response = request.Get<LocationList>())
+      using (var response = request.AcceptXml().Get<LocationList>())
       {
         return response.Body;
       }

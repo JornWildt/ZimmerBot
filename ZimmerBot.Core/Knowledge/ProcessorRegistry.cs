@@ -35,6 +35,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public static Func<string> Invoke(string name, ProcessorInput input)
     {
+      if (!Processors.ContainsKey(name))
+        throw new ArgumentException($"No processor function named {name} found.");
+
       ProcessorRegistration p = Processors[name];
       return p.Processor(input);
     }

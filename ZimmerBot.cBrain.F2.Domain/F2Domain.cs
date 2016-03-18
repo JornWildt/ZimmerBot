@@ -38,7 +38,7 @@ namespace ZimmerBot.cBrain.F2.Domain
          .WithSchedule(TimeSpan.FromSeconds(60))
          .Response(i => ResponseHelper.OneOf(i,
           "Nåh... ?", 
-          "Er der nogen kan en vittighed?"));
+          "Er der nogen der kan en vittighed?"));
     }
   }
 }
