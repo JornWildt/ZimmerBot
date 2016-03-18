@@ -7,7 +7,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
   {
     public void Initialize()
     {
-      ProcessorRegistry.AddProcessor("Rejseplanen.FindStation", RejseplanenProcessor.FindStation);
+      ProcessorRegistry.AddProcessor("Rejseplanen.FindStation", RejseplanenProcessor.FindStop);
     }
 
 

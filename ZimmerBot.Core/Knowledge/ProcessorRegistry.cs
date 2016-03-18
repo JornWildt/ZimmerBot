@@ -7,23 +7,6 @@ namespace ZimmerBot.Core.Knowledge
 {
   public static class ProcessorRegistry
   {
-    public class ProcessorInput
-    {
-      public List<object> Inputs { get; protected set; }
-
-      public ProcessorInput()
-      {
-        Inputs = new List<object>();
-      }
-
-      public ProcessorInput(object p1)
-        : this()
-      {
-        Inputs.Add(p1);
-      }
-    }
-
-
     private class ProcessorRegistration
     {
       public string Name { get; protected set; }
@@ -57,9 +40,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public static Func<string> Invoke(ResponseContext rc, string functionName, params string[] parameters)
+    public static Func<string> Invoke(ResponseContext rc, string template, string functionName, params string[] parameters)
     {
-      ProcessorInput input = new ProcessorInput();
+      ProcessorInput input = new ProcessorInput(rc, template);
       foreach (string p in parameters)
       {
         object value = (rc.Match.Matches.ContainsKey(p) ? rc.Match.Matches[p] : null);

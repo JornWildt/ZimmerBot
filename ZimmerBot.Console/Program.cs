@@ -45,7 +45,7 @@ namespace ZimmerBot.Console
       SelfDomain.Initialize(kb);
       LanguageDomain.Initialize(kb);
       F2Domain.Initialize(kb);
-      RejseplanenDomain.Initialize(kb);
+      Rejseplanen.ZimmerBot.AddOn.RejseplanenDemoDomainDK.Initialize(kb);
 
       return kb;
     }
