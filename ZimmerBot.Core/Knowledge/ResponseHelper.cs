@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Knowledge
       // Fake a processor registration
       ProcessorRegistration p = new ProcessorRegistration(
        "oneOf", 
-        inp => () => TextMerge.MergeTemplate(choices[Randomizer.Next(choices.Length)].ToString(), inp.Context.Match.Matches));
+        inp => TextMerge.MergeTemplate(choices[Randomizer.Next(choices.Length)].ToString(), inp.Context.Match.Matches));
       CallBinding i = new CallBinding(p);
       return i;
     }

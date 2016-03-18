@@ -66,7 +66,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Rule WithResponse(string s)
     {
-      ProcessorRegistration p = new ProcessorRegistration("echo", inp => () => TextMerge.MergeTemplate(s, inp.Context.Match.Matches));
+      ProcessorRegistration p = new ProcessorRegistration("echo", inp => TextMerge.MergeTemplate(s, inp.Context.Match.Matches));
       return WithResponse(new CallBinding(p));
     }
 

@@ -17,7 +17,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
       public string stopName { get; set; }
     }
 
-    public static Func<string> FindStop(ProcessorInput input)
+    public static string FindStop(ProcessorInput input)
     {
       string name = input.GetParameter<string>(0);
 
@@ -38,16 +38,16 @@ namespace Rejseplanen.ZimmerBot.AddOn
           if (stop != null)
           {
             parameters["stopName"] = stop.name;
-            return () => TextMerge.MergeTemplate(input.OutputTemplates, parameters);
+            return TextMerge.MergeTemplate(input.OutputTemplates, parameters);
           }
         }
 
-        return () => TextMerge.MergeTemplate(input.OutputTemplates, "empty", parameters);
+        return TextMerge.MergeTemplate(input.OutputTemplates, "empty", parameters);
       }
       catch (Exception ex)
       {
         Logger.Error("Failed to access Rejseplanen", ex);
-        return () => TextMerge.MergeTemplate(input.OutputTemplates, "error", parameters);
+        return TextMerge.MergeTemplate(input.OutputTemplates, "error", parameters);
       }
     }
   }

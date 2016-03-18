@@ -62,7 +62,7 @@ namespace ZimmerBot.Core.Processors
       }
 
       ProcessorInput input = new ProcessorInput(rc, inputs, OutputTemplates);
-      return P.Processor(input)(); // FIXME - one too many delegates
+      return P.Processor(input);
     }
   }
 }
