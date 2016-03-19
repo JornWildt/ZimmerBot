@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using CuttingEdge.Conditions;
 using Quartz;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Processors;
@@ -12,6 +14,8 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Id { get; protected set; }
 
+    public Domain Domain { get; set; }
+
     public string Description { get; protected set; }
 
     protected Trigger Trigger { get; set; }
@@ -20,11 +24,19 @@ namespace ZimmerBot.Core.Knowledge
 
     protected CallBinding ResponseBinding { get; set; }
 
+    protected List<Func<Domain,Rule>> ExpectedAnswers { get; set; }
 
-    public Rule(params object[] topics)
+    protected int? TimeToLive { get; set; }
+
+
+    public Rule(Domain d, params object[] topics)
     {
+      Condition.Requires(d, nameof(d)).IsNotNull();
+
       Id = Guid.NewGuid().ToString();
+      Domain = d;
       Trigger = new Trigger(topics);
+      ExpectedAnswers = new List<Func<Domain,Rule>>();
     }
 
 
@@ -71,6 +83,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public Rule ExpectAnswer(Func<Domain,Rule> answerSetup)
+    {
+      ExpectedAnswers.Add(answerSetup);
+      return this;
+    }
+
+
     public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
       Trigger.RegisterScheduledJobs(scheduler, botId, Id);
@@ -79,6 +98,16 @@ namespace ZimmerBot.Core.Knowledge
 
     public Reaction CalculateReaction(EvaluationContext context)
     {
+      if (TimeToLive != null)
+      {
+        if (TimeToLive.Value == 0)
+        {
+          Domain.QueueRuleForRemoval(this);
+          return null;
+        }
+        TimeToLive = TimeToLive.Value - 1;
+      }
+
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
         return null;
 
@@ -91,7 +120,21 @@ namespace ZimmerBot.Core.Knowledge
         return null;
 
       ResponseContext rc = new ResponseContext(context.State, context.Input, result);
-      return new Reaction(rc, ResponseBinding);
+      return new Reaction(rc, this);
+    }
+
+
+    public string Invoke(ResponseContext context)
+    {
+      string result = ResponseBinding.Invoke(context);
+
+      foreach (var ea in ExpectedAnswers)
+      {
+        Rule r = ea(Domain);
+        r.TimeToLive = 1;
+      }
+
+      return result;
     }
   }
 }

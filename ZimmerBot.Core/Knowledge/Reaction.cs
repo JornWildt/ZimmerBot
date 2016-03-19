@@ -10,23 +10,23 @@ namespace ZimmerBot.Core.Knowledge
 
     protected ResponseContext Context { get; set; }
 
-    protected CallBinding ResponseBinding { get; set; } // FIXME - better name
+    protected Rule Rule { get; set; } // FIXME - better name
 
 
-    public Reaction(ResponseContext context, CallBinding b)
+    public Reaction(ResponseContext context, Rule rule)
     {
       Condition.Requires(context, nameof(context)).IsNotNull();
-      Condition.Requires(b, nameof(b)).IsNotNull();
+      Condition.Requires(rule, nameof(rule)).IsNotNull();
 
       Score = context.Match.Score;
       Context = context;
-      ResponseBinding = b;
+      Rule = rule;
     }
 
 
     public string GenerateResponse()
     {
-      return ResponseBinding.Invoke(Context);
+      return Rule.Invoke(Context);
     }
   }
 }

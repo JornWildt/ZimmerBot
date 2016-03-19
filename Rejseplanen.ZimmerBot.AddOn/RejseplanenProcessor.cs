@@ -25,6 +25,8 @@ namespace Rejseplanen.ZimmerBot.AddOn
       foreach (var item in input.Context.Match.Matches)
         parameters[item.Key] = item.Value;
 
+      Logger.Debug($"Looking for station '{name}' in Rejseplanen");
+
       try
       {
         RejseplanenAPI api = new RejseplanenAPI();

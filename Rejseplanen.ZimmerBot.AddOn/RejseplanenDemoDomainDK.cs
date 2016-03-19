@@ -35,9 +35,15 @@ namespace Rejseplanen.ZimmerBot.AddOn
           .WithTemplate("error", "Det kan jeg desværre ikke - der er kludder i maskineriet"));
 
       // Variation of question: missing the stoppested name and asking for it.
-      // - A future solution would setup an expectation of some sort of answer (like the stoppested name)
       dr.AddRule("find", new WordWRegex("stoppested", "s"))
-        .WithResponse("Hvilken <s>?");
+        .WithResponse("Hvilken <s>?")
+        .ExpectAnswer(d =>
+          d.AddRule(new WildcardWRegex("s"))
+           .WithResponse(ProcessorRegistry
+           .BindTo("Rejseplanen.FindStoppested", "s")
+           .WithTemplate("Fandt '<stopName>'")
+           .WithTemplate("empty", "Stoppestedet <s> kunne ikke findes")
+           .WithTemplate("error", "Det kan jeg desværre ikke - der er kludder i maskineriet")));
     }
   }
 }

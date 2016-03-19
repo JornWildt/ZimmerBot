@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Quartz;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.WordRegex;
@@ -13,6 +14,8 @@ namespace ZimmerBot.Core.Knowledge
     private List<WordDefinition> WordDefinitions = new List<WordDefinition>();
 
     private List<Rule> Rules = new List<Rule>();
+
+    private List<Rule> RemovedRules = new List<Rule>();
 
 
     internal Domain(string name)
@@ -31,9 +34,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public Rule AddRule(params object[] topics)
     {
-      Rule r = new Rule(topics);
+      Rule r = new Rule(this, topics);
       Rules.Add(r);
       return r;
+    }
+
+
+    public void QueueRuleForRemoval(Rule r)
+    {
+      RemovedRules.Add(r);
     }
 
 
@@ -60,12 +69,17 @@ namespace ZimmerBot.Core.Knowledge
 
     public void FindMatchingReactions(EvaluationContext context, ReactionSet reactions)
     {
+      RemovedRules.Clear();
+
       foreach (Rule r in Rules)
       {
         Reaction reaction = r.CalculateReaction(context);
         if (reaction != null)
           reactions.Add(reaction);
       }
+
+      foreach (Rule r in RemovedRules)
+        Rules.Remove(r);
     }
   }
 }
