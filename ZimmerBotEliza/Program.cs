@@ -1,6 +1,7 @@
 ﻿using System;
 using log4net;
 using ZimmerBot.Core;
+using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -20,7 +21,13 @@ namespace ZimmerBotEliza
 
       ZimmerBotConfiguration.Initialize();
       KnowledgeBase kb = new KnowledgeBase();
-      ElizaDomain.Initialize(kb);
+      Domain de = kb.NewDomain("Eliza");
+
+      ConfigurationParser cfg = new ConfigurationParser();
+      cfg.ParseConfigurationFromFile(de, "Eliza.txt");
+
+      //ElizaDomain.Initialize(kb);
+
       Bot b = new Bot(kb);
       ConsoleBotEnvironment.RunInteractiveConsoleBot("Eliza> ", b, InputModifier);
       ZimmerBotConfiguration.Shutdown();

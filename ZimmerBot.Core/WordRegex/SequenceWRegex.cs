@@ -29,6 +29,12 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    public void Insert(int index, WRegex p)
+    {
+      Sequence.Insert(0, p);
+    }
+
+
     public override double CalculateSize()
     {
       return Sequence.Sum(w => w.CalculateSize());

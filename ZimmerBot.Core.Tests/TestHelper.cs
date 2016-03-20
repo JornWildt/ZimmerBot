@@ -1,94 +1,15 @@
 ﻿using System;
 using NUnit.Framework;
+using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Tests
 {
-  public class TestHelper
+  public class TestHelper : TestHelperBase
   {
-    /// <summary>
-    /// Do not call. For use by NUnit only.
-    /// </summary>
-    //[OneTimeSetUp]
-    [TestFixtureSetUp]
-    public void MasterTestFixtureSetUp()
-    {
-      TestFixtureSetUp();
-    }
-
-
-    /// <summary>
-    /// Executed only once before all tests. Override in subclasses to do subclass
-    /// set up. Remember to call base.TestFixtureSetUp().
-    /// NOTE: The [TestFixtureSetUp] attribute cannot be used in subclasses because it is already
-    /// in use.
-    /// </summary>
-    protected virtual void TestFixtureSetUp()
-    {
-    }
-
-
-    /// <summary>
-    /// Do not call. For use by NUnit only.
-    /// </summary>
-    [SetUp]
-    public void MasterSetUp()
-    {
-      SetUp();
-    }
-
-
-    /// <summary>
-    /// Executed before each test method is run. Override in subclasses to do subclass
-    /// set up. Remember to call base.SetUp().
-    /// NOTE: The [SetUp] attribute cannot be used in subclasses because it is already
-    /// in use.
-    /// </summary>
-    protected virtual void SetUp()
-    {
-    }
-
-
-    /// <summary>
-    /// Do not call. For use by NUnit only.
-    /// </summary>
-    [TearDown]
-    public void MasterTearDown()
-    {
-      TearDown();
-    }
-
-    /// <summary>
-    /// Executed after each test method is run.  Override in subclasses to do subclass
-    /// clean up. Remember to call base.TearDown().
-    /// NOTE: [TearDown] attribute cannot be used in subclasses because it is
-    /// already in use.
-    /// </summary>
-    protected virtual void TearDown()
-    {
-    }
-
-    /// <summary>
-    /// Do not call. For use by NUnit only.
-    /// </summary>
-    //[OneTimeTearDown]
-    [TestFixtureTearDown]
-    public void TestFixtureMasterTearDown()
-    {
-      TestFixtureTearDown();
-    }
-
-    /// <summary>
-    /// Executed only once after all tests.  Override in subclasses to do subclass
-    /// clean up. Remember to call base.TestFixtureTearDown().
-    /// NOTE: [TestFixtureTearDown] attribute cannot be used in subclasses because it is
-    /// already in use.
-    /// </summary>
-    protected virtual void TestFixtureTearDown()
-    {
-    }
+    protected ConfigurationParser CfgParser = new ConfigurationParser();
 
 
     protected WRegex.MatchResult CalculateMatchResult(Trigger t, string text)
@@ -109,6 +30,55 @@ namespace ZimmerBot.Core.Tests
       WRegex.MatchResult result = CalculateMatchResult(t, text);
       Console.WriteLine("Score for '{0}' = {1}.", text, result.Score);
       return Math.Round(result.Score, 4);
+    }
+
+
+    protected Rule ParseRule(string s)
+    {
+      KnowledgeBase kb = new KnowledgeBase();
+      Domain d = kb.NewDomain("Test");
+      CfgParser.ParseConfiguration(d, s);
+
+      Assert.AreEqual(1, d.Rules.Count);
+      Rule r = d.Rules[0];
+      return r;
+    }
+
+
+    protected T ParseRuleAndGetRootWRegex<T>(string s)
+      where T : WRegex
+    {
+      Rule r = ParseRule(s);
+      Assert.IsInstanceOf<T>(r.Domain.Rules[0].Trigger.Regex);
+      T seq = (T)r.Domain.Rules[0].Trigger.Regex;
+
+      return seq;
+    }
+
+
+    protected void VerifyMatch(WRegex x, string s)
+    {
+      WRegex.MatchResult result = CalculateMatch(x, s);
+      Assert.IsTrue(result.Score > 0.9, $"The input '{s}' does not match with the wregex.");
+    }
+
+
+    protected void VerifyNoMatch(WRegex x, string s)
+    {
+      WRegex.MatchResult result = CalculateMatch(x, s);
+      Assert.IsTrue(result.Score < 0.9, $"The input '{s}' unexpectedly match with the wregex.");
+    }
+
+
+    protected WRegex.MatchResult CalculateMatch(WRegex x, string s)
+    {
+      BotState state = new BotState();
+      ZTokenizer tokenizer = new ZTokenizer();
+      ZStatementSequence stm = tokenizer.Tokenize(s);
+      ZTokenSequence input = stm.Statements[0];
+      EvaluationContext context = new EvaluationContext(state, input, null, false);
+      WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
+      return result;
     }
   }
 }

@@ -16,6 +16,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
       // Various ways of saying "stoppested"
       dr.DefineWord("station").And("holdeplads").Is("stoppested");
+      dr.DefineWord("kører").Is("afgår");
 
       // Expected question: where is a specific stoppested
       dr.AddRule("find", "stoppested", new WildcardWRegex("s"))
@@ -37,6 +38,20 @@ namespace Rejseplanen.ZimmerBot.AddOn
       // Variation of question: missing the stoppested name and asking for it.
       dr.AddRule("find", new WordWRegex("stoppested", "s"))
         .WithResponse("Hvilken <s>?")
+        .ExpectAnswer(d =>
+          d.AddRule("månen")
+           .WithResponse("Hop i havet ..."))
+        .ExpectAnswer(d =>
+          d.AddRule(new WildcardWRegex("s"))
+           .WithScoreModifier(0.5)
+           .WithResponse(ProcessorRegistry
+           .BindTo("Rejseplanen.FindStoppested", "s")
+           .WithTemplate("Fandt '<stopName>'")
+           .WithTemplate("empty", "Stoppestedet <s> kunne ikke findes")
+           .WithTemplate("error", "Det kan jeg desværre ikke - der er kludder i maskineriet")));
+
+      dr.AddRule("Hvornår", "afgår", "næste", "tog")
+        .WithResponse("Hvorfra?")
         .ExpectAnswer(d =>
           d.AddRule(new WildcardWRegex("s"))
            .WithResponse(ProcessorRegistry

@@ -8,18 +8,18 @@ namespace ZimmerBot.Core.WordRegex
   /// <summary>
   /// Represents zero or more repetisions of a predicate
   /// </summary>
-  public class RepitionWRegex : WRegex
+  public class RepetitionWRegex : WRegex
   {
     public WRegex A { get; protected set; }
 
 
-    public RepitionWRegex(WRegex a)
+    public RepetitionWRegex(WRegex a)
       : this(a, null)
     {
     }
 
 
-    public RepitionWRegex(WRegex a, string matchName)
+    public RepetitionWRegex(WRegex a, string matchName)
     {
       Condition.Requires(a, "a").IsNotNull();
       A = a;
@@ -79,18 +79,14 @@ namespace ZimmerBot.Core.WordRegex
         }
       }
 
-      //string matchText = "";
-
-      //if (!string.IsNullOrEmpty(MatchName) && context.CurrentTokenIndex > startIndex)
-      //{
-      //  for (int i = startIndex; i < context.CurrentTokenIndex; ++i)
-      //    matchText += (i == startIndex ? "" : " ") + context.Input[i].OriginalText;
-      //}
-
       if (lastResult == null)
-        return new MatchResult(1, matchedText).RegisterMatch(MatchName, matchedText);
+        return new MatchResult(1, matchedText)
+          .RegisterMatch((context.CurrentRepetitionIndex++).ToString(), matchedText)
+          .RegisterMatch(MatchName, matchedText);
       else
-        return lastResult.RegisterMatch(MatchName, matchedText);
+        return lastResult
+          .RegisterMatch((context.CurrentRepetitionIndex++).ToString(), matchedText)
+          .RegisterMatch(MatchName, matchedText);
     }
   }
 }

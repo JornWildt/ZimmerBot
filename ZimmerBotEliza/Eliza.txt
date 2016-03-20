@@ -1,0 +1,10 @@
+﻿### Eliza chatbot demo
+
+> hej|dav|goddag
+: Velkommen. Hvad kan jeg hjælpe dig med?
+
+> jeg har brug for *
+: Hvorfor? Gør <1> dig glad?
+
+> * (far|mor) *
+: Fortæl mig mere om din <2> ...

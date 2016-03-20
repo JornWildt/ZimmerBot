@@ -11,15 +11,15 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Name { get; protected set; }
 
-    private List<WordDefinition> WordDefinitions = new List<WordDefinition>();
+    public List<WordDefinition> WordDefinitions { get; protected set; }
 
-    private List<Rule> Rules = new List<Rule>();
-
-    private List<Rule> RemovedRules = new List<Rule>();
+    public List<Rule> Rules { get; protected set; }
 
 
     internal Domain(string name)
     {
+      WordDefinitions = new List<WordDefinition>();
+      Rules = new List<Rule>();
       Name = name;
     }
 
@@ -40,9 +40,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void QueueRuleForRemoval(Rule r)
+    public void RemoveRule(Rule r)
     {
-      RemovedRules.Add(r);
+      Rules.Remove(r);
     }
 
 
@@ -69,17 +69,14 @@ namespace ZimmerBot.Core.Knowledge
 
     public void FindMatchingReactions(EvaluationContext context, ReactionSet reactions)
     {
-      RemovedRules.Clear();
+      List<Rule> safeRuleList = new List<Rule>(Rules);
 
-      foreach (Rule r in Rules)
+      foreach (Rule r in safeRuleList)
       {
         Reaction reaction = r.CalculateReaction(context);
         if (reaction != null)
           reactions.Add(reaction);
       }
-
-      foreach (Rule r in RemovedRules)
-        Rules.Remove(r);
     }
   }
 }

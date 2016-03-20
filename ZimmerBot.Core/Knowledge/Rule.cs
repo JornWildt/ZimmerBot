@@ -18,15 +18,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public string Description { get; protected set; }
 
-    protected Trigger Trigger { get; set; }
+    public Trigger Trigger { get; protected set; }
 
-    protected double? ScoreModifier { get; set; }
+    public double? ScoreModifier { get; protected set; }
 
-    protected CallBinding ResponseBinding { get; set; }
+    public CallBinding ResponseBinding { get; protected set; }
 
-    protected List<Func<Domain,Rule>> ExpectedAnswers { get; set; }
+    public List<Func<Domain,Rule>> ExpectedAnswers { get; protected set; }
 
-    protected int? TimeToLive { get; set; }
+    public int? TimeToLive { get; protected set; }
 
 
     public Rule(Domain d, params object[] topics)
@@ -102,7 +102,7 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (TimeToLive.Value == 0)
         {
-          Domain.QueueRuleForRemoval(this);
+          Domain.RemoveRule(this);
           return null;
         }
         TimeToLive = TimeToLive.Value - 1;
@@ -132,6 +132,11 @@ namespace ZimmerBot.Core.Knowledge
       {
         Rule r = ea(Domain);
         r.TimeToLive = 1;
+        //r.WithScoreModifier(2);
+        if (r.ScoreModifier != null)
+          r.ScoreModifier *= 2;
+        else
+          r.ScoreModifier = 2;
       }
 
       return result;

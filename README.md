@@ -8,3 +8,18 @@ the author for any problems you may run into.
 
 License: MIT (see LICENSE)
 
+## Credits
+
+The ZimmerBot language is heavily inspired by both https://www.rivescript.com/ 
+and AIML http://www.alicebot.org/aiml.html.
+
+ZimmerBot itself builds on a lot of NuGet packages from various sources:
+
+- CuttingEdge.Conditions
+- Ramone
+- YaccLexTools
+- log4net
+- Quartz.net
+- Antlr4.StringTemplate
+- NUnit
+

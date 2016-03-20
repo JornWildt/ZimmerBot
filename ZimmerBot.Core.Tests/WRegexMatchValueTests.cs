@@ -81,7 +81,7 @@ namespace ZimmerBot.Core.Tests
     [Test]
     public void CanMatchValuesForRepetitionWRegex()
     {
-      Trigger t = new Trigger("mosquito", new RepitionWRegex(new WordWRegex("and", "a"), "b"), "bee");
+      Trigger t = new Trigger("mosquito", new RepetitionWRegex(new WordWRegex("and", "a"), "b"), "bee");
 
       WRegex.MatchResult result = CalculateMatchResult(t, "mosquito bee");
       Assert.AreEqual(3, result.Score);
@@ -103,7 +103,7 @@ namespace ZimmerBot.Core.Tests
     [Test]
     public void CanMatchValuesForEndRepetitionWRegex()
     {
-      Trigger t = new Trigger("mosquito", new RepitionWRegex(new WordWRegex("and", "a"), "b"));
+      Trigger t = new Trigger("mosquito", new RepetitionWRegex(new WordWRegex("and", "a"), "b"));
 
       WRegex.MatchResult result = CalculateMatchResult(t, "mosquito");
       Assert.AreEqual(2, result.Score);

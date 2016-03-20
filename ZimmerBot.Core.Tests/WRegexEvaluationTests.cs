@@ -57,7 +57,7 @@ namespace ZimmerBot.Core.Tests
     [Test]
     public void CanEvaluateWordRepitionWRegex()
     {
-      Trigger t = new Trigger("Run", new RepitionWRegex(new WordWRegex("very")), "fast");
+      Trigger t = new Trigger("Run", new RepetitionWRegex(new WordWRegex("very")), "fast");
       Assert.AreEqual(0.03, CalculateScore(t, "Test"));
       Assert.AreEqual(0.03, CalculateScore(t, "very"));
       Assert.AreEqual(0.3, CalculateScore(t, "Run"));
@@ -71,7 +71,7 @@ namespace ZimmerBot.Core.Tests
     [Test]
     public void CanEvaluateWildcardRepitionWRegex()
     {
-      Trigger t = new Trigger("Run", new RepitionWRegex(new WildcardWRegex()), "fast");
+      Trigger t = new Trigger("Run", new RepetitionWRegex(new WildcardWRegex()), "fast");
       Assert.AreEqual(0.03, CalculateScore(t, "Test"));
       Assert.AreEqual(0.03, CalculateScore(t, "very"));
       Assert.AreEqual(0.3, CalculateScore(t, "Run"));
@@ -84,7 +84,7 @@ namespace ZimmerBot.Core.Tests
     [Test]
     public void CanEvaluateDoubleWildcardRepetition()
     {
-      Trigger t = new Trigger(new RepitionWRegex(new WildcardWRegex()), "mother", new RepitionWRegex(new WildcardWRegex()));
+      Trigger t = new Trigger(new RepetitionWRegex(new WildcardWRegex()), "mother", new RepetitionWRegex(new WildcardWRegex()));
       Assert.AreEqual(3, CalculateScore(t, "I miss my mother"));
       Assert.AreEqual(3, CalculateScore(t, "I miss my mother so much"));
       Assert.AreEqual(3, CalculateScore(t, "mother is the best"));

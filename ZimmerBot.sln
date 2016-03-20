@@ -17,6 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rejseplanen.ZimmerBot.AddOn
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AddOns", "AddOns", "{DA18A7CE-7F59-4CDD-9221-3D97866581B2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{9C0A35DA-0017-418B-BFEA-8BFCAAA1ABEF}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

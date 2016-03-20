@@ -16,6 +16,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public int CurrentTokenIndex { get; set; }
 
+    public int CurrentRepetitionIndex { get; set; }
+
 
     public EvaluationContext(BotState state, ZTokenSequence input, string ruleId, bool executeScheduledRules)
     {

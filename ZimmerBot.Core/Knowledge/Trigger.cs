@@ -8,31 +8,30 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class Trigger
   {
-    protected WRegex Regex { get; set; }
+    public WRegex Regex { get; protected set; }
 
-    protected double RegexSize { get; set; }
+    public double RegexSize { get; protected set; }
 
-    protected Expression Condition { get; set; }
+    public Expression Condition { get; protected set; }
 
-    protected TimeSpan? Schedule { get; set; }
+    public TimeSpan? Schedule { get; protected set; }
 
 
     public Trigger(params object[] topics)
     {
-      if (topics.Length > 0)
+      if (topics.Length == 1)
+      {
+        Regex = GetRegex(topics[0]);
+        RegexSize = Regex.CalculateSize();
+      }
+      else if (topics.Length > 1)
       {
         SequenceWRegex p = new SequenceWRegex();
 
         foreach (object t in topics)
         {
-          if (t is string)
-            p.Add(new WordWRegex((string)t));
-          else if (t is WRegex)
-            p.Add((WRegex)t);
-          else if (t == null)
-            throw new ArgumentNullException("t", "Null item in topics");
-          else
-            throw new InvalidOperationException(string.Format("Cannot add {0} ({1} as trigger predicate.", t, t.GetType()));
+          WRegex r = GetRegex(t);
+          p.Add(r);
         }
 
         Regex = p;
@@ -43,6 +42,19 @@ namespace ZimmerBot.Core.Knowledge
         Regex = null;
         RegexSize = 0;
       }
+    }
+
+
+    private WRegex GetRegex(object t)
+    {
+      if (t is string)
+        return new WordWRegex((string)t);
+      else if (t is WRegex)
+        return (WRegex)t;
+      else if (t == null)
+        throw new ArgumentNullException("t", "Null item in topics");
+      else
+        throw new InvalidOperationException(string.Format("Cannot add {0} ({1} as trigger predicate.", t, t.GetType()));
     }
 
 
@@ -89,6 +101,7 @@ namespace ZimmerBot.Core.Knowledge
 
       // FIXME: some mixing of concerns here - should be wrapped differently
       context.CurrentTokenIndex = 0;
+      context.CurrentRepetitionIndex = 1;
 
 
       double conditionModifier = 1;

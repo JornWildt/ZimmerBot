@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Label="YltParsers">
-    <Names>Chat-ZimmerBot-Core-Parser</Names>
+    <Names>Chat-ZimmerBot-Core-Parser;Config-ZimmerBot-Core-ConfigParser</Names>
   </PropertyGroup>
   <PropertyGroup Label="YltProperties">
     <YltTools>$(SolutionDir)packages\YaccLexTools.0.2.2\tools\</YltTools>
@@ -40,6 +40,9 @@
   </PropertyGroup>
   <PropertyGroup Label="GenerateChat-ZimmerBot-Core-ParserProperties">
     <Chat-ZimmerBot-Core-ParserParser>$(ProjectDir)Parser\Chat</Chat-ZimmerBot-Core-ParserParser>
+  </PropertyGroup>
+  <PropertyGroup Label="GenerateConfig-ZimmerBot-Core-ConfigParserProperties">
+    <Config-ZimmerBot-Core-ConfigParserParser>$(ProjectDir)ConfigParser\Config</Config-ZimmerBot-Core-ConfigParserParser>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr4.StringTemplate, Version=4.0.6.9004, Culture=neutral, processorArchitecture=MSIL">
@@ -79,6 +82,7 @@
     <Compile Include="AddOnHandling\AddOnLoader.cs" />
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="Bot.cs" />
+    <Compile Include="ConfigParser\ConfigurationParser.cs" />
     <Compile Include="ConsoleBotEnvironment.cs" />
     <Compile Include="BotHandle.cs" />
     <Compile Include="Expressions\BinaryOperatorExpr.cs" />
@@ -101,11 +105,12 @@
     <Compile Include="Parser\ZStatementSequence.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
+    <Compile Include="WordRegex\GroupWRegex.cs" />
     <Compile Include="WordRegex\WRegex.cs" />
     <Compile Include="WordRegex\SequenceWRegex.cs" />
     <Compile Include="WordRegex\WildcardWRegex.cs" />
     <Compile Include="WordRegex\WordWRegex.cs" />
-    <Compile Include="WordRegex\RepitionWRegex.cs" />
+    <Compile Include="WordRegex\RepetitionWRegex.cs" />
     <Compile Include="Processors\DateTimeProcessor.cs" />
     <Compile Include="Processors\MovieProcessors.cs" />
     <Compile Include="Processors\SelfProcessors.cs" />
@@ -160,9 +165,34 @@
     <None Include="Parser\Chat.parser" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup Label="Config-ZimmerBot-Core-ConfigParserFiles">
+    <Compile Include="ConfigParser\Config.Parser.cs">
+      <DependentUpon>Config.parser</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigParser\Config.Parser.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Config.Language.grammar.y</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigParser\Config.Scanner.cs">
+      <DependentUpon>Config.parser</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigParser\Config.Scanner.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Config.Language.analyzer.lex</DependentUpon>
+    </Compile>
+    <None Include="ConfigParser\Config.Language.analyzer.lex">
+      <DependentUpon>Config.parser</DependentUpon>
+    </None>
+    <None Include="ConfigParser\Config.Language.grammar.y">
+      <DependentUpon>Config.parser</DependentUpon>
+    </None>
+    <None Include="ConfigParser\Config.parser" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild" DependsOnTargets="YltBuildGen" />
-  <Target Name="YltBuildGen" DependsOnTargets="GenerateChat-ZimmerBot-Core-Parser" />
+  <Target Name="YltBuildGen" DependsOnTargets="GenerateChat-ZimmerBot-Core-Parser;GenerateConfig-ZimmerBot-Core-ConfigParser" />
   <Target Name="GenerateChat-ZimmerBot-Core-Parser" Inputs="$(Chat-ZimmerBot-Core-ParserParser).Language.analyzer.lex;$(Chat-ZimmerBot-Core-ParserParser).Language.grammar.y" Outputs="$(Chat-ZimmerBot-Core-ParserParser).Scanner.Generated.cs;$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs">
     <Message Text="Generating scanner for $(Chat-ZimmerBot-Core-ParserParser) ..." />
     <Exec Command="$(GplexTool) &quot;/out:$(Chat-ZimmerBot-Core-ParserParser).Scanner.Generated.cs&quot; &quot;$(Chat-ZimmerBot-Core-ParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
@@ -171,6 +201,16 @@
     <Message Text="Generating parser for $(Chat-ZimmerBot-Core-ParserParser) ..." />
     <Exec Command="$(GppgTool) /no-lines /gplex &quot;$(Chat-ZimmerBot-Core-ParserParser).Language.grammar.y&quot; &gt; &quot;$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs">
       <Output TaskParameter="Outputs" ItemName="Chat" />
+    </Exec>
+  </Target>
+  <Target Name="GenerateConfig-ZimmerBot-Core-ConfigParser" Inputs="$(Config-ZimmerBot-Core-ConfigParserParser).Language.analyzer.lex;$(Config-ZimmerBot-Core-ConfigParserParser).Language.grammar.y" Outputs="$(Config-ZimmerBot-Core-ConfigParserParser).Scanner.Generated.cs;$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs">
+    <Message Text="Generating scanner for $(Config-ZimmerBot-Core-ConfigParserParser) ..." />
+    <Exec Command="$(GplexTool) &quot;/out:$(Config-ZimmerBot-Core-ConfigParserParser).Scanner.Generated.cs&quot; &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
+      <Output TaskParameter="Outputs" ItemName="ConfigScanner" />
+    </Exec>
+    <Message Text="Generating parser for $(Config-ZimmerBot-Core-ConfigParserParser) ..." />
+    <Exec Command="$(GppgTool) /no-lines /gplex &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Language.grammar.y&quot; &gt; &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs">
+      <Output TaskParameter="Outputs" ItemName="Config" />
     </Exec>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
