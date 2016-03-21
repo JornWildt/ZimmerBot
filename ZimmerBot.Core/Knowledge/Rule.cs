@@ -22,6 +22,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public double? ScoreModifier { get; protected set; }
 
+    public List<string> OutputTemplates { get; protected set; }
+
     public CallBinding ResponseBinding { get; protected set; }
 
     public List<Func<Domain,Rule>> ExpectedAnswers { get; protected set; }
@@ -36,7 +38,11 @@ namespace ZimmerBot.Core.Knowledge
       Id = Guid.NewGuid().ToString();
       Domain = d;
       Trigger = new Trigger(topics);
+      OutputTemplates = new List<string>();
       ExpectedAnswers = new List<Func<Domain,Rule>>();
+
+      // Defauly response binding is print out one of the output templates
+      ResponseBinding = ResponseHelper.OneOf(OutputTemplates);
     }
 
 
@@ -78,8 +84,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public Rule WithResponse(string s)
     {
-      ProcessorRegistration p = new ProcessorRegistration("echo", inp => TextMerge.MergeTemplate(s, inp.Context.Match.Matches));
-      return WithResponse(new CallBinding(p));
+      OutputTemplates.Add(s);
+      return this;
+    }
+
+
+    public Rule WithResponses(IEnumerable<string> s)
+    {
+      OutputTemplates.AddRange(s);
+      return this;
     }
 
 

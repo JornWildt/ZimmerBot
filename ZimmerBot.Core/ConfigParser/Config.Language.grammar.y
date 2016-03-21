@@ -7,6 +7,7 @@
 
 %union { 
   public WRegex regex;
+  public List<string> outputTemplates;
   public string s;
 }
 
@@ -18,6 +19,7 @@
 %token T_LPAR
 %token T_RPAR
 %token T_STAR
+%token T_PLUS
 %token T_OUTPUT
 %token T_WORD
 %token T_STRING
@@ -34,11 +36,11 @@ ruleSeq
   ;
 
 rule
-  : input output 
+  : input outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.s != null)
-        r.WithResponse($2.s);
+      if ($2.outputTemplates != null)
+        r.WithResponses($2.outputTemplates);
       Console.WriteLine("RULE: " + $2.s); 
     }
   ;
@@ -68,25 +70,22 @@ inputPattern
       { $$.regex = new WordWRegex($1.s); Console.WriteLine("Word"); }
   | T_STAR
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); Console.WriteLine("*"); }
+  | T_PLUS
+      { $$.regex =  new SequenceWRegex().Add(new WildcardWRegex()).Add(new RepetitionWRegex(new WildcardWRegex())); Console.WriteLine("+"); }
   ;
 
 outputSeq
-  : outputSeq output
-  | /* empty */
+  : outputSeq output  { $1.outputTemplates.Add($2.s); $$ = $1; }
+  | /* empty */       { $$.outputTemplates = new List<string>(); }
   ;
 
 output
   : outputPattern { Console.WriteLine("OUTPUT: " + $1.s); $$.s = $1.s; }
   ;
 
-outputPatternSeq
-  : outputPatternSeq outputPattern
-  | /* empty */
-  ;
-
 outputPattern
   : T_COLON  
-      { ((ConfigScanner)Scanner).BEGIN(2); Console.WriteLine(": ..."); } 
+      { ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT { $$.s = $3.s; }
   ;
 

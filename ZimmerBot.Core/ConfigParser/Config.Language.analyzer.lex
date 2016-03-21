@@ -33,6 +33,7 @@ Other      .
 \(          { return (int)Token.T_LPAR; }
 \)          { return (int)Token.T_RPAR; }
 \*          { return (int)Token.T_STAR; }
+\+          { return (int)Token.T_PLUS; }
 
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }

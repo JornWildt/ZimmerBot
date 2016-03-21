@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 20-03-2016 22:33:32>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 21-03-2016 20:00:49>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 20-03-2016 22:33:33
+//  DateTime: 21-03-2016 20:02:46
 //  UserName: Jorn
 // ==========================================================================
 
@@ -18,6 +18,7 @@
 
 %union { 
   public WRegex regex;
+  public List<string> outputTemplates;
   public string s;
 }
 
@@ -29,16 +30,15 @@
 %token T_LPAR
 %token T_RPAR
 %token T_STAR
+%token T_PLUS
 %token T_OUTPUT
 %token T_WORD
 %token T_STRING
 
 %%
-// Warning: NonTerminal symbol "outputSeq" is unreachable
-// Warning: NonTerminal symbol "outputPatternSeq" is unreachable
-// Warning: NonTerminal symbol "inputSeq" is unreachable
 // Warning: NonTerminal symbol "inputPatternSeq" is unreachable
-// -------------------------------------------------------------
+// Warning: NonTerminal symbol "inputSeq" is unreachable
+// ------------------------------------------------------------
 
 main
   : ruleSeq
@@ -50,11 +50,11 @@ ruleSeq
   ;
 
 rule
-  : input output 
+  : input outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.s != null)
-        r.WithResponse($2.s);
+      if ($2.outputTemplates != null)
+        r.WithResponses($2.outputTemplates);
       Console.WriteLine("RULE: " + $2.s); 
     }
   ;
@@ -84,25 +84,22 @@ inputPattern
       { $$.regex = new WordWRegex($1.s); Console.WriteLine("Word"); }
   | T_STAR
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); Console.WriteLine("*"); }
+  | T_PLUS
+      { $$.regex =  new SequenceWRegex().Add(new WildcardWRegex()).Add(new RepetitionWRegex(new WildcardWRegex())); Console.WriteLine("+"); }
   ;
 
 outputSeq
-  : outputSeq output
-  | /* empty */
+  : outputSeq output  { $1.outputTemplates.Add($2.s); $$ = $1; }
+  | /* empty */       { $$.outputTemplates = new List<string>(); }
   ;
 
 output
   : outputPattern { Console.WriteLine("OUTPUT: " + $1.s); $$.s = $1.s; }
   ;
 
-outputPatternSeq
-  : outputPatternSeq outputPattern
-  | /* empty */
-  ;
-
 outputPattern
   : T_COLON  
-      { ((ConfigScanner)Scanner).BEGIN(2); Console.WriteLine(": ..."); } 
+      { ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT { $$.s = $3.s; }
   ;
 

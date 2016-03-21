@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 20-03-2016 22:33:33
+//  DateTime: 21-03-2016 20:02:46
 //  UserName: Jorn
-//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 20-03-2016 21:24:11>
+//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 21-03-2016 20:02:44>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: verbose, parser, stack, minimize
@@ -126,8 +126,8 @@ namespace ZimmerBot.Core.ConfigParser
         
         enum Result {accept, noMatch, contextFound};
 
-        const int maxAccept = 20;
-        const int initial = 21;
+        const int maxAccept = 21;
+        const int initial = 22;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
@@ -169,9 +169,9 @@ StringBuilder StringInput = null;
         }
     };
 
-    static int[] startState = new int[] {21, 11, 14, 18, 0};
+    static int[] startState = new int[] {22, 12, 15, 19, 0};
 
-    static Table[] NxS = new Table[22] {
+    static Table[] NxS = new Table[23] {
 /* NxS[   0] */ new Table(0, 0, 0, null), // Shortest string ""
 /* NxS[   1] */ // Shortest string "\t"
       new Table(9, 24, -1, new sbyte[] {1, -1, -1, -1, -1, -1, 
@@ -182,45 +182,46 @@ StringBuilder StringInput = null;
 /* NxS[   4] */ new Table(0, 0, -1, null), // Shortest string "("
 /* NxS[   5] */ new Table(0, 0, -1, null), // Shortest string ")"
 /* NxS[   6] */ new Table(0, 0, -1, null), // Shortest string "*"
-/* NxS[   7] */ new Table(0, 0, -1, null), // Shortest string ":"
-/* NxS[   8] */ new Table(0, 0, -1, null), // Shortest string ">"
-/* NxS[   9] */ // Shortest string "A"
-      new Table(65, 58, -1, new sbyte[] {9, 9, 9, 9, 9, 9, 
-          9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
-          9, 9, 9, 9, -1, -1, -1, -1, 9, -1, 9, 9, 9, 9, 9, 9, 
-          9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
-          9, 9, 9, 9}),
-/* NxS[  10] */ new Table(0, 0, -1, null), // Shortest string "|"
-/* NxS[  11] */ // Shortest string ""
-      new Table(10, 25, 12, new sbyte[] {-1, 12, 12, 12, 12, 12, 
-          12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 
-          12, 12, 13}),
-/* NxS[  12] */ // Shortest string "\x01"
-      new Table(10, 25, 12, new sbyte[] {-1, 12, 12, 12, 12, 12, 
-          12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 
-          12, 12, -1}),
-/* NxS[  13] */ new Table(0, 0, -1, null), // Shortest string "\""
-/* NxS[  14] */ // Shortest string ""
-      new Table(10, 4, 15, new sbyte[] {16, 15, 15, 17}),
-/* NxS[  15] */ // Shortest string "\x01"
-      new Table(10, 4, 15, new sbyte[] {-1, 15, 15, -1}),
-/* NxS[  16] */ new Table(0, 0, -1, null), // Shortest string "\n"
-/* NxS[  17] */ // Shortest string "\r"
-      new Table(10, 1, -1, new sbyte[] {16}),
-/* NxS[  18] */ // Shortest string ""
-      new Table(10, 4, 19, new sbyte[] {20, 19, 19, 20}),
-/* NxS[  19] */ // Shortest string "\x01"
-      new Table(10, 4, 19, new sbyte[] {-1, 19, 19, -1}),
-/* NxS[  20] */ new Table(0, 0, -1, null), // Shortest string "\n"
-/* NxS[  21] */ // Shortest string ""
+/* NxS[   7] */ new Table(0, 0, -1, null), // Shortest string "+"
+/* NxS[   8] */ new Table(0, 0, -1, null), // Shortest string ":"
+/* NxS[   9] */ new Table(0, 0, -1, null), // Shortest string ">"
+/* NxS[  10] */ // Shortest string "A"
+      new Table(65, 58, -1, new sbyte[] {10, 10, 10, 10, 10, 10, 
+          10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 
+          10, 10, 10, 10, -1, -1, -1, -1, 10, -1, 10, 10, 10, 10, 10, 10, 
+          10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 
+          10, 10, 10, 10}),
+/* NxS[  11] */ new Table(0, 0, -1, null), // Shortest string "|"
+/* NxS[  12] */ // Shortest string ""
+      new Table(10, 25, 13, new sbyte[] {-1, 13, 13, 13, 13, 13, 
+          13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 
+          13, 13, 14}),
+/* NxS[  13] */ // Shortest string "\x01"
+      new Table(10, 25, 13, new sbyte[] {-1, 13, 13, 13, 13, 13, 
+          13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 
+          13, 13, -1}),
+/* NxS[  14] */ new Table(0, 0, -1, null), // Shortest string "\""
+/* NxS[  15] */ // Shortest string ""
+      new Table(10, 4, 16, new sbyte[] {17, 16, 16, 18}),
+/* NxS[  16] */ // Shortest string "\x01"
+      new Table(10, 4, 16, new sbyte[] {-1, 16, 16, -1}),
+/* NxS[  17] */ new Table(0, 0, -1, null), // Shortest string "\n"
+/* NxS[  18] */ // Shortest string "\r"
+      new Table(10, 1, -1, new sbyte[] {17}),
+/* NxS[  19] */ // Shortest string ""
+      new Table(10, 4, 20, new sbyte[] {21, 20, 20, 21}),
+/* NxS[  20] */ // Shortest string "\x01"
+      new Table(10, 4, 20, new sbyte[] {-1, 20, 20, -1}),
+/* NxS[  21] */ new Table(0, 0, -1, null), // Shortest string "\n"
+/* NxS[  22] */ // Shortest string ""
       new Table(9, 116, -1, new sbyte[] {1, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-          -1, 1, -1, 2, 3, -1, -1, -1, -1, 4, 5, 6, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7, -1, -1, -1, 8, 
-          -1, -1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
-          9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, -1, -1, -1, -1, 
-          9, -1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
-          9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, -1, 10}),
+          -1, 1, -1, 2, 3, -1, -1, -1, -1, 4, 5, 6, 7, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8, -1, -1, -1, 9, 
+          -1, -1, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 
+          10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, -1, -1, -1, -1, 
+          10, -1, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 
+          10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, -1, 11}),
     };
 
 int NextState() {
@@ -666,40 +667,43 @@ return (int)Token.T_RPAR;
         case 6: // Recognized '\*',	Shortest string "*"
 return (int)Token.T_STAR;
             break;
-        case 7: // Recognized ':',	Shortest string ":"
+        case 7: // Recognized '\+',	Shortest string "+"
+return (int)Token.T_PLUS;
+            break;
+        case 8: // Recognized ':',	Shortest string ":"
 return (int)Token.T_COLON;
             break;
-        case 8: // Recognized '>',	Shortest string ">"
+        case 9: // Recognized '>',	Shortest string ">"
 return (int)Token.T_GT;
             break;
-        case 9: // Recognized '{Word}',	Shortest string "A"
+        case 10: // Recognized '{Word}',	Shortest string "A"
 yylval.s = yytext; return (int)Token.T_WORD;
             break;
-        case 10: // Recognized '\|',	Shortest string "|"
+        case 11: // Recognized '\|',	Shortest string "|"
 return (int)Token.T_PIPE;
             break;
-        case 11: // In <str> Recognized '[^\n\"]*',	Shortest string ""
-        case 12: // In <str> Recognized '[^\n\"]*',	Shortest string "\x01"
+        case 12: // In <str> Recognized '[^\n\"]*',	Shortest string ""
+        case 13: // In <str> Recognized '[^\n\"]*',	Shortest string "\x01"
 StringInput.Append(yytext);
             break;
-        case 13: // In <str> Recognized '\"',	Shortest string "\""
+        case 14: // In <str> Recognized '\"',	Shortest string "\""
 BEGIN(INITIAL); 
                 /*yylval.t = new ZToken(StringInput.ToString(), ZToken.TokenType.Word); */
                 return (int)Token.T_STRING;
             break;
-        case 14: // In <output> Recognized '[^\r\n]*',	Shortest string ""
-        case 15: // In <output> Recognized '[^\r\n]*',	Shortest string "\x01"
+        case 15: // In <output> Recognized '[^\r\n]*',	Shortest string ""
+        case 16: // In <output> Recognized '[^\r\n]*',	Shortest string "\x01"
 yylval.s = yytext; Console.WriteLine("OOO: " + yytext);
             break;
-        case 16: // In <output> Recognized '\r\n?|\n',	Shortest string "\n"
-        case 17: // In <output> Recognized '\r\n?|\n',	Shortest string "\r"
+        case 17: // In <output> Recognized '\r\n?|\n',	Shortest string "\n"
+        case 18: // In <output> Recognized '\r\n?|\n',	Shortest string "\r"
 Console.WriteLine("O-end"); BEGIN(INITIAL); return (int)Token.T_OUTPUT;
             break;
-        case 18: // In <comment> Recognized '[^\r\n]*',	Shortest string ""
-        case 19: // In <comment> Recognized '[^\r\n]*',	Shortest string "\x01"
+        case 19: // In <comment> Recognized '[^\r\n]*',	Shortest string ""
+        case 20: // In <comment> Recognized '[^\r\n]*',	Shortest string "\x01"
 /* skip */
             break;
-        case 20: // In <comment> Recognized '\r|\n',	Shortest string "\n"
+        case 21: // In <comment> Recognized '\r|\n',	Shortest string "\n"
 BEGIN(INITIAL);
             break;
         default:

@@ -3,6 +3,7 @@ using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.WordRegex;
 
+
 namespace ZimmerBot.Core.Tests.ConfigParser
 {
   [TestFixture]

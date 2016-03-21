@@ -23,9 +23,10 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public void Add(WRegex p)
+    public SequenceWRegex Add(WRegex p)
     {
       Sequence.Add(p);
+      return this;
     }
 
 

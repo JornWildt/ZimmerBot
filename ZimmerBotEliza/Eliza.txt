@@ -8,3 +8,79 @@
 
 > * (far|mor) *
 : Fortæl mig mere om din <2> ...
+: Hvad var dit forhold til din <2>?
+: Hvad føler du i forhold til din <m>?
+: Hvordan forholder det sig til dine følelser i dag?
+: Ja, gode familierelationer er vigtige.
+
+> * (barn|barndom) *
+: Havde du nogle nære venner som barn?
+: Hvad er din ynglingserindring fra din barndom?
+: Blev du ind i mellem drillet af de andre børn?
+: Hvordan tror du at dine barndomsoplevelser har påvirket dig i dag?
+
+> du *
+: Nu snakker vi om dig. Prøv igen.
+: Hvorfor siger du det om mig?
+: Hvad får dig til at sige det?
+: Hvorfor bekymrer du dig om det?
+
+> jeg er *
+: Hvorfor tror du at du er <1>?
+: Søger du råd hos mig fordi du er <1>?
+: Hvor lang tid har du været det?
+: Hvordan har du det med at være <1>?
+: Hvad får dig til at sige at du er <1>?
+
+> hvorfor *
+: Ja, fortæl mig hvorfor?
+: Hvad tror du?
+: Hvad får dig til at spørge om det?
+: Hvor lang tid har du været?
+
+> tak *
+: Selv tak
+: Velbekomme
+: Godt. Gjorde det dig glad?
+
+> er du +
+: Hvorfor er det vigtigt om jeg er <3>?
+: Ville du foretrække det hvis jeg ikke var <3>?
+: Måske tror du at jeg er <3>?
+: Jeg kunne godt være <3> - hvad tror du?
+: Jeg kunne godt være <3> - hvad ville det betyde for dig?
+
+> jeg vil *
+: Hvad ville det betyde hvis du <1>?
+: Hvorfor vil du det?
+: Hvad ville du gøre hvis det ikke skete?
+: Hvis det lykkedes, hvad ville du så gøre?
+
+> jeg har *
+: Hvorfor fortæller du mig at du har <1>?
+: Virkeligt? Hvorfor?
+: Nu hvor du har det, hvad vil du så gøre nu?
+
+> fordi *
+: Er det virkelig den rigtige årsag?
+: Kan du komme på andre årsager? Hvilke?
+: Kan det være årsag til andre ting?
+: Fordi hvad?
+: Kan du uddybe det?
+
+> kan du *
+: Hvad får dig til at tro at jeg kan det?
+: Hvis jeg kunne <1> hvad så?
+: Hvorfor spørger du om jeg kan <1>?
+
+> *
+: Hmmm, fortæl mig noget mere om det?
+: Okay. Lad os skifte fokus lidt ... fortæl mig om din familie?
+: Kan du uddybe det?
+: Hvad får dig til at sige det?
+: Aha ...
+: Javel ...
+: Okay ... og hvad så?
+: Meget interessant.
+: Okay. Og hvad fortæller det så dig?
+: Hvilke følelser mærker du når du siger det?

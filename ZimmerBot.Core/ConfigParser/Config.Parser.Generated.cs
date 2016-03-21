@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 20-03-2016 22:33:33
+// DateTime: 21-03-2016 20:02:46
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 20-03-2016 22:33:32>
+// Input file <ConfigParser\Config.Language.grammar.y - 21-03-2016 20:00:49>
 
 // options: no-lines gplex
 
@@ -21,11 +21,13 @@ using ZimmerBot.Core.WordRegex;
 namespace ZimmerBot.Core.ConfigParser
 {
 internal enum Token {error=2,EOF=3,T_GT=4,T_COLON=5,T_PIPE=6,
-    T_LPAR=7,T_RPAR=8,T_STAR=9,T_OUTPUT=10,T_WORD=11,T_STRING=12};
+    T_LPAR=7,T_RPAR=8,T_STAR=9,T_PLUS=10,T_OUTPUT=11,T_WORD=12,
+    T_STRING=13};
 
 internal partial struct ValueType
 { 
   public WRegex regex;
+  public List<string> outputTemplates;
   public string s;
 }
 // Abstract base class for GPLEX scanners
@@ -53,35 +55,37 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[23];
-  private static State[] states = new State[21];
+  private static Rule[] rules = new Rule[22];
+  private static State[] states = new State[23];
   private static string[] nonTerms = new string[] {
-      "main", "$accept", "ruleSeq", "rule", "input", "output", "inputSeq", "inputPattern", 
-      "inputPatternSeq", "outputSeq", "outputPattern", "outputPatternSeq", "Anon@1", 
+      "main", "$accept", "ruleSeq", "rule", "input", "outputSeq", "inputSeq", 
+      "inputPattern", "inputPatternSeq", "output", "outputPattern", "Anon@1", 
       };
 
   static ConfigParser() {
     states[0] = new State(-4,new int[]{-1,1,-3,3});
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
-    states[3] = new State(new int[]{4,11,3,-2},new int[]{-4,4,-5,5});
+    states[3] = new State(new int[]{4,12,3,-2},new int[]{-4,4,-5,5});
     states[4] = new State(-3);
-    states[5] = new State(new int[]{5,8},new int[]{-6,6,-11,7});
-    states[6] = new State(-5);
-    states[7] = new State(-18);
-    states[8] = new State(-21,new int[]{-13,9});
-    states[9] = new State(new int[]{10,10});
-    states[10] = new State(-22);
-    states[11] = new State(new int[]{7,16,11,19,9,20},new int[]{-8,12});
-    states[12] = new State(new int[]{6,14,7,16,11,19,9,20,5,-8},new int[]{-8,13});
-    states[13] = new State(new int[]{6,14,7,16,11,19,9,20,5,-11,8,-11},new int[]{-8,13});
-    states[14] = new State(new int[]{7,16,11,19,9,20},new int[]{-8,15});
-    states[15] = new State(new int[]{6,14,7,16,11,19,9,20,5,-12,8,-12},new int[]{-8,13});
-    states[16] = new State(new int[]{7,16,11,19,9,20},new int[]{-8,17});
-    states[17] = new State(new int[]{8,18,6,14,7,16,11,19,9,20},new int[]{-8,13});
-    states[18] = new State(-13);
-    states[19] = new State(-14);
-    states[20] = new State(-15);
+    states[5] = new State(-18,new int[]{-6,6});
+    states[6] = new State(new int[]{5,9,4,-5,3,-5},new int[]{-10,7,-11,8});
+    states[7] = new State(-17);
+    states[8] = new State(-19);
+    states[9] = new State(-20,new int[]{-12,10});
+    states[10] = new State(new int[]{11,11});
+    states[11] = new State(-21);
+    states[12] = new State(new int[]{7,17,12,20,9,21,10,22},new int[]{-8,13});
+    states[13] = new State(new int[]{6,15,7,17,12,20,9,21,10,22,5,-8,4,-8,3,-8},new int[]{-8,14});
+    states[14] = new State(new int[]{6,15,7,17,12,20,9,21,10,22,5,-11,4,-11,3,-11,8,-11},new int[]{-8,14});
+    states[15] = new State(new int[]{7,17,12,20,9,21,10,22},new int[]{-8,16});
+    states[16] = new State(new int[]{6,15,7,17,12,20,9,21,10,22,5,-12,4,-12,3,-12,8,-12},new int[]{-8,14});
+    states[17] = new State(new int[]{7,17,12,20,9,21,10,22},new int[]{-8,18});
+    states[18] = new State(new int[]{8,19,6,15,7,17,12,20,9,21,10,22},new int[]{-8,14});
+    states[19] = new State(-13);
+    states[20] = new State(-14);
+    states[21] = new State(-15);
+    states[22] = new State(-16);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
@@ -98,15 +102,14 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     rules[11] = new Rule(-8, new int[]{-8,-8});
     rules[12] = new Rule(-8, new int[]{-8,6,-8});
     rules[13] = new Rule(-8, new int[]{7,-8,8});
-    rules[14] = new Rule(-8, new int[]{11});
+    rules[14] = new Rule(-8, new int[]{12});
     rules[15] = new Rule(-8, new int[]{9});
-    rules[16] = new Rule(-10, new int[]{-10,-6});
-    rules[17] = new Rule(-10, new int[]{});
-    rules[18] = new Rule(-6, new int[]{-11});
-    rules[19] = new Rule(-12, new int[]{-12,-11});
+    rules[16] = new Rule(-8, new int[]{10});
+    rules[17] = new Rule(-6, new int[]{-6,-10});
+    rules[18] = new Rule(-6, new int[]{});
+    rules[19] = new Rule(-10, new int[]{-11});
     rules[20] = new Rule(-12, new int[]{});
-    rules[21] = new Rule(-13, new int[]{});
-    rules[22] = new Rule(-11, new int[]{5,-13,10});
+    rules[21] = new Rule(-11, new int[]{5,-12,11});
   }
 
   protected override void Initialize() {
@@ -121,11 +124,11 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 162, 1522
     switch (action)
     {
-      case 5: // rule -> input, output
+      case 5: // rule -> input, outputSeq
 { 
       Knowledge.Rule r = Domain.AddRule(ValueStack[ValueStack.Depth-2].regex);
-      if (ValueStack[ValueStack.Depth-1].s != null)
-        r.WithResponse(ValueStack[ValueStack.Depth-1].s);
+      if (ValueStack[ValueStack.Depth-1].outputTemplates != null)
+        r.WithResponses(ValueStack[ValueStack.Depth-1].outputTemplates);
       Console.WriteLine("RULE: " + ValueStack[ValueStack.Depth-1].s); 
     }
         break;
@@ -153,13 +156,22 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 15: // inputPattern -> T_STAR
 { CurrentSemanticValue.regex = new RepetitionWRegex(new WildcardWRegex()); Console.WriteLine("*"); }
         break;
-      case 18: // output -> outputPattern
+      case 16: // inputPattern -> T_PLUS
+{ CurrentSemanticValue.regex =  new SequenceWRegex().Add(new WildcardWRegex()).Add(new RepetitionWRegex(new WildcardWRegex())); Console.WriteLine("+"); }
+        break;
+      case 17: // outputSeq -> outputSeq, output
+{ ValueStack[ValueStack.Depth-2].outputTemplates.Add(ValueStack[ValueStack.Depth-1].s); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+        break;
+      case 18: // outputSeq -> /* empty */
+{ CurrentSemanticValue.outputTemplates = new List<string>(); }
+        break;
+      case 19: // output -> outputPattern
 { Console.WriteLine("OUTPUT: " + ValueStack[ValueStack.Depth-1].s); CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s; }
         break;
-      case 21: // Anon@1 -> /* empty */
-{ ((ConfigScanner)Scanner).BEGIN(2); Console.WriteLine(": ..."); }
+      case 20: // Anon@1 -> /* empty */
+{ ((ConfigScanner)Scanner).BEGIN(2); }
         break;
-      case 22: // outputPattern -> T_COLON, Anon@1, T_OUTPUT
+      case 21: // outputPattern -> T_COLON, Anon@1, T_OUTPUT
 { CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s; }
         break;
     }
