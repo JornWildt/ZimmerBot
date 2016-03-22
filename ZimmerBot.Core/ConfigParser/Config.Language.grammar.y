@@ -117,7 +117,7 @@ output
 outputPattern
   : T_COLON  
       { ((ConfigScanner)Scanner).BEGIN(2); } 
-    T_OUTPUT { $$.s = $3.s; }
+    T_OUTPUT { $$.s = $3.s.Trim(); }
   ;
 
 call
@@ -140,7 +140,7 @@ expr
   ;
 
 exprIdentifier
-  : exprReference { $$.expr = new IdentifierExpression($1.s); }
+  : exprReference { $$.expr = new IdentifierExpr($1.s); }
   ;
 
 exprReference

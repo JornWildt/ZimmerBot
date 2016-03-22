@@ -4,12 +4,12 @@ using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Expressions
 {
-  public class IdentifierExpression : Expression
+  public class IdentifierExpr : Expression
   {
     public string Identifier { get; protected set; }
 
 
-    public IdentifierExpression(string identifier)
+    public IdentifierExpr(string identifier)
     {
       Condition.Requires(identifier, "identifier").IsNotNullOrEmpty();
 
@@ -17,7 +17,7 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    public override object Evaluate(EvaluationContext context)
+    public override object Evaluate(ExpressionEvaluationContext context)
     {
       return context.State[Identifier];
     }

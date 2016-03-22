@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-03-2016 17:09:31>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-03-2016 21:56:47>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 22-03-2016 17:10:46
+//  DateTime: 22-03-2016 21:56:48
 //  UserName: Jorn
 // ==========================================================================
 
@@ -131,7 +131,7 @@ output
 outputPattern
   : T_COLON  
       { ((ConfigScanner)Scanner).BEGIN(2); } 
-    T_OUTPUT { $$.s = $3.s; }
+    T_OUTPUT { $$.s = $3.s.Trim(); }
   ;
 
 call
@@ -154,7 +154,7 @@ expr
   ;
 
 exprIdentifier
-  : exprReference { $$.expr = new IdentifierExpression($1.s); }
+  : exprReference { $$.expr = new IdentifierExpr($1.s); }
   ;
 
 exprReference

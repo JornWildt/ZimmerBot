@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 22-03-2016 17:10:46
+// DateTime: 22-03-2016 21:56:48
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 22-03-2016 17:09:31>
+// Input file <ConfigParser\Config.Language.grammar.y - 22-03-2016 21:56:47>
 
 // options: no-lines gplex
 
@@ -226,7 +226,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { ((ConfigScanner)Scanner).BEGIN(2); }
         break;
       case 25: // outputPattern -> T_COLON, Anon@1, T_OUTPUT
-{ CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s; }
+{ CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s.Trim(); }
         break;
       case 26: // call -> T_EXCL, T_CALL, exprReference, T_LPAR, exprSeq, T_RPAR
 { CurrentSemanticValue.expr = new FunctionCallExpr(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-2].exprList); }
@@ -244,7 +244,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.expr = new ConstantValueExpr(ValueStack[ValueStack.Depth-1].s); }
         break;
       case 31: // exprIdentifier -> exprReference
-{ CurrentSemanticValue.expr = new IdentifierExpression(ValueStack[ValueStack.Depth-1].s); }
+{ CurrentSemanticValue.expr = new IdentifierExpr(ValueStack[ValueStack.Depth-1].s); }
         break;
       case 32: // exprReference -> exprReference, T_DOT, T_WORD
 { CurrentSemanticValue.s = ValueStack[ValueStack.Depth-3].s + "." + ValueStack[ValueStack.Depth-1].s; }

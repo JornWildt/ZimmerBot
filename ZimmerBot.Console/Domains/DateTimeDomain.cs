@@ -8,7 +8,7 @@ namespace ZimmerBot.Console.Domains
   {
     public static void Initialize()
     {
-      ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekDay", DateTimeProcessors.IsItDay);
+      ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekDay", DateTimeProcessors.IsItWeekDay);
 
 
       //Domain dd = kb.NewDomain("Datoer");

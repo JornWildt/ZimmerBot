@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CuttingEdge.Conditions;
-using ZimmerBot.Core.Knowledge;
+
 
 namespace ZimmerBot.Core.Expressions
 {
@@ -31,7 +29,7 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    public override object Evaluate(EvaluationContext context)
+    public override object Evaluate(ExpressionEvaluationContext context)
     {
       // FIXME: handle through some sort of registration system or maybe even reflection
       if (FunctionName == "probability")
@@ -41,7 +39,7 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    private object Invoke1(EvaluationContext context, Type[] types, Func<object,object> f, string name)
+    private object Invoke1(ExpressionEvaluationContext context, Type[] types, Func<object,object> f, string name)
     {
       List<object> inputValues = CalculateInputValues(context);
       CheckParameters(types, inputValues, name);
@@ -49,7 +47,7 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    private List<object> CalculateInputValues(EvaluationContext context)
+    private List<object> CalculateInputValues(ExpressionEvaluationContext context)
     {
       return Parameters.Select(p => p.Evaluate(context)).ToList();
     }

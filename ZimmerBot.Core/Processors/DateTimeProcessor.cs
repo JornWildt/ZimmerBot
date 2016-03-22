@@ -8,11 +8,17 @@ namespace ZimmerBot.Core.Processors
 {
   public static class DateTimeProcessors
   {
-    public static object IsItDay(ProcessorInput input)
+    public static void RegisterProcessors()
+    {
+      ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekDay", IsItWeekDay);
+    }
+
+
+    public static object IsItWeekDay(ProcessorInput input)
     {
       var thisDay = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
 
-      string inpDay = "xx";// input.Inputs[0].ToString(); // Original text?
+      string inpDay = input.GetParameter<string>(0);
       bool answer = thisDay.Equals(inpDay, StringComparison.CurrentCultureIgnoreCase);
 
       return new { day = inpDay, answer = answer }; // TextMerge.MergeTemplate(template, new { day = day.OriginalText, answer = answer });

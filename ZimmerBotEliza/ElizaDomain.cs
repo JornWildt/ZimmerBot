@@ -117,12 +117,12 @@ namespace ZimmerBotEliza
 
       // Startup rule
       dd.AddRule()
-        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantValueExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpr("state.conversation.entries.Count"), new ConstantValueExpr(0), BinaryOperatorExpr.OperatorType.Equals))
         .WithResponse("Hej. Mit navn er Eliza.");
 
       // Startup rule
       dd.AddRule()
-        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantValueExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpr("state.conversation.entries.Count"), new ConstantValueExpr(0), BinaryOperatorExpr.OperatorType.Equals))
         .WithResponse("Jeg er en chatbot med speciale i psykiatri. Hvad kan jeg hjælpe dig med?");
 
       // FIXME: this rules should not fire when someone has just said something. It should wait 30 sec. after last entry.

@@ -3,7 +3,9 @@ using NUnit.Framework;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.WordRegex;
+
 
 namespace ZimmerBot.Core.Tests
 {
@@ -12,7 +14,22 @@ namespace ZimmerBot.Core.Tests
     protected ConfigurationParser CfgParser = new ConfigurationParser();
 
 
-    protected WRegex.MatchResult CalculateMatchResult(Trigger t, string text)
+    protected override void TestFixtureSetUp()
+    {
+      base.TestFixtureSetUp();
+      GeneralProcessors.RegisterProcessors();
+      DateTimeProcessors.RegisterProcessors();
+    }
+
+
+    protected Reaction CalculateReaction(Rule r, string text)
+    {
+      EvaluationContext context = BuildEvaluationContextFromInput(text);
+      return r.CalculateReaction(context);
+    }
+
+
+    protected EvaluationContext BuildEvaluationContextFromInput(string text)
     {
       ZTokenizer tokenizer = new ZTokenizer();
       ZStatementSequence sequence = tokenizer.Tokenize(text);
@@ -20,6 +37,13 @@ namespace ZimmerBot.Core.Tests
 
       BotState state = new BotState();
       EvaluationContext context = new EvaluationContext(state, input, null, executeScheduledRules: false);
+      return context;
+    }
+
+
+    protected WRegex.MatchResult CalculateMatchResult(Trigger t, string text)
+    {
+      EvaluationContext context = BuildEvaluationContextFromInput(text);
       WRegex.MatchResult result = t.CalculateTriggerScore(context);
       return result;
     }

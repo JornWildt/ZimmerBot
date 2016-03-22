@@ -17,7 +17,28 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : xxx
 : yyy
 ");
-      
+    }
+
+
+    [Test]
+    public void CanParseCallStatement()
+    {
+      Rule r = ParseRule(@"
+> aaa (bbb)
+! call General.Echo($1)
+: ccc <result>
+");
+
+      Assert.IsNotNull(r.OutputStatements);
+      Assert.AreEqual(2, r.OutputStatements.Count);
+      Assert.IsInstanceOf<CallOutputStatment>(r.OutputStatements[0]);
+      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[1]);
+
+      Reaction reaction = CalculateReaction(r, "aaa bbb");
+      Assert.IsNotNull(reaction);
+
+      string result = reaction.GenerateResponse();
+      Assert.AreEqual("ccc bbb", result);
     }
   }
 }

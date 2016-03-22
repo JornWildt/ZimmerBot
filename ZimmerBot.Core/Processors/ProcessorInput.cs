@@ -24,7 +24,7 @@ namespace ZimmerBot.Core.Processors
 
     public T GetParameter<T>(int i)
     {
-      if (Inputs.Count <= i)
+      if (i >= Inputs.Count)
         throw new ArgumentOutOfRangeException($"Input parameter {i} out of range. Got only {Inputs.Count} parameters.");
 
       object input = Inputs[i];

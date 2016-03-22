@@ -39,8 +39,9 @@ Other      .
 \*          { return (int)Token.T_STAR; }
 \+          { return (int)Token.T_PLUS; }
 
-
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
+
+$[0-9]+     { yylval.s = yytext; return (int)Token.T_WORD; } /* FIXME - not a word */
 
 aggregate   { return (int)Token.T_AGGREGATE; }
 call        { return (int)Token.T_CALL; }

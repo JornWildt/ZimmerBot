@@ -108,7 +108,9 @@ namespace ZimmerBot.Core.Knowledge
 
       if (Condition != null)
       {
-        object value = Condition.Evaluate(context);
+        // FIXME: make bot state available
+        ExpressionEvaluationContext eec = new ExpressionEvaluationContext();
+        object value = Condition.Evaluate(eec);
         if (value is bool)
           conditionModifier = ((bool)value) ? 1 : 0;
       }

@@ -27,7 +27,7 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    public override object Evaluate(EvaluationContext context)
+    public override object Evaluate(ExpressionEvaluationContext context)
     {
       object a = Left.Evaluate(context);
       object b = Right.Evaluate(context);

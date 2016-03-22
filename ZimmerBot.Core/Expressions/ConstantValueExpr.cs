@@ -14,7 +14,7 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    public override object Evaluate(EvaluationContext context)
+    public override object Evaluate(ExpressionEvaluationContext context)
     {
       return Value;
     }
