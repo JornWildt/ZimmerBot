@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
@@ -28,6 +29,14 @@ namespace ZimmerBot.Core.ConfigParser
       MemoryStream stream = new MemoryStream(inputBuffer);
       this.Scanner = new ConfigScanner(stream);
       this.Parse();
+    }
+
+
+    protected void RegisterAggregates(List<string> words, List<string> keys)
+    {
+      WordDefinition wd = Domain.DefineWords(words);
+      foreach (string k in keys)
+        wd.Is(k);
     }
 
 

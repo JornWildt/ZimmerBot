@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using Quartz;
+using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.Utilities;
@@ -22,13 +23,20 @@ namespace ZimmerBot.Core.Knowledge
 
     public double? ScoreModifier { get; protected set; }
 
-    public List<string> OutputTemplates { get; protected set; }
-
-    public CallBinding ResponseBinding { get; protected set; }
+    public List<OutputStatement> OutputStatements { get; protected set; }
 
     public List<Func<Domain,Rule>> ExpectedAnswers { get; protected set; }
 
     public int? TimeToLive { get; protected set; }
+
+
+    #region OBSOLETE
+
+    public List<string> OutputTemplates { get; protected set; }
+
+    public CallBinding ResponseBinding { get; protected set; }
+
+    #endregion
 
 
     public Rule(Domain d, params object[] topics)
@@ -74,6 +82,15 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public Rule WithOutputStatements(IEnumerable<OutputStatement> output)
+    {
+      OutputStatements = new List<OutputStatement>(output);
+      return this;
+    }
+
+
+    #region OBSOLETE
+
     public Rule WithResponse(CallBinding b)
     {
       b.VerifyBinding();
@@ -94,6 +111,8 @@ namespace ZimmerBot.Core.Knowledge
       OutputTemplates.AddRange(s);
       return this;
     }
+
+    #endregion
 
 
     public Rule ExpectAnswer(Func<Domain,Rule> answerSetup)
@@ -137,15 +156,26 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public static Random Randomizer = new Random();
+
+
     public string Invoke(ResponseContext context)
     {
-      string result = ResponseBinding.Invoke(context);
+      OutputExecutionContect ox_context = new OutputExecutionContect(context);
+
+      foreach (OutputStatement output in OutputStatements)
+      {
+        output.Execute(ox_context);
+      }
+
+      string selectedTemplate = ox_context.OutputTemplates[Randomizer.Next(ox_context.OutputTemplates.Count)];
+      string result = TextMerge.MergeTemplate(selectedTemplate, ox_context.LastValue);
+
 
       foreach (var ea in ExpectedAnswers)
       {
         Rule r = ea(Domain);
         r.TimeToLive = 1;
-        //r.WithScoreModifier(2);
         if (r.ScoreModifier != null)
           r.ScoreModifier *= 2;
         else

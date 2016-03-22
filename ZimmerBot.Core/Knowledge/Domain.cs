@@ -32,6 +32,14 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public WordDefinition DefineWords(IEnumerable<string> words)
+    {
+      WordDefinition w = new WordDefinition(words);
+      WordDefinitions.Add(w);
+      return w;
+    }
+
+
     public Rule AddRule(params object[] topics)
     {
       Rule r = new Rule(this, topics);

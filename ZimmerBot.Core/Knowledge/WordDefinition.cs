@@ -9,15 +9,20 @@ namespace ZimmerBot.Core.Knowledge
   {
     public List<string> Words { get; protected set; }
 
-    protected List<string> Equivalents { get; set; }
+    public List<string> Equivalents { get; protected set; }
 
+
+
+    internal WordDefinition(IEnumerable<string> words)
+    {
+      Words = new List<string>(words);
+      Equivalents = new List<string>();
+    }
 
 
     internal WordDefinition(string word)
+      : this(new string[] { word })
     {
-      Words = new List<string>();
-      Equivalents = new List<string>();
-      Words.Add(word);
     }
 
 

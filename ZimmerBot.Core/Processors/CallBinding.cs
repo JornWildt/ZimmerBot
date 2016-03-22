@@ -5,17 +5,19 @@ using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Processors;
 
 
+// OBSOLETE
+
 namespace ZimmerBot.Core.Processors
 {
   public class CallBinding
   {
     private static ILog Logger = LogManager.GetLogger(typeof(CallBinding));
 
-    protected ProcessorRegistration Processor { get; set; }
+    public ProcessorRegistration Processor { get; protected set; }
 
-    protected string[] ParameterNames { get; set; }
+    public string[] ParameterNames { get; protected set; }
 
-    protected Dictionary<string, string> OutputTemplates { get; set; }
+    public Dictionary<string, string> OutputTemplates { get; protected set; }
 
 
     public CallBinding(ProcessorRegistration processor, params string[] parameterNames)
@@ -53,7 +55,7 @@ namespace ZimmerBot.Core.Processors
     }
 
 
-    public string Invoke(ResponseContext context)
+    public object Invoke(ResponseContext context)
     {
       List<object> inputs = new List<object>();
       foreach (string parameterName in ParameterNames)
@@ -62,7 +64,7 @@ namespace ZimmerBot.Core.Processors
         inputs.Add(value);
       }
 
-      ProcessorInput input = new ProcessorInput(context, inputs, OutputTemplates);
+      ProcessorInput input = new ProcessorInput(context, inputs);
       return Processor.Function(input);
     }
   }

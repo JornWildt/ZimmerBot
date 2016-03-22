@@ -22,6 +22,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{0013B72B-EC79-47AD-B8E9-4E2A60D899DE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{2BEB86D2-57E2-4DC9-9C0C-E71223688FE6}"
+	ProjectSection(SolutionItems) = preProject
+		Examples\da-DK\date-time.txt = Examples\da-DK\date-time.txt
+		Examples\da-DK\general.txt = Examples\da-DK\general.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +66,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
+		{2BEB86D2-57E2-4DC9-9C0C-E71223688FE6} = {0013B72B-EC79-47AD-B8E9-4E2A60D899DE}
 	EndGlobalSection
 EndGlobal

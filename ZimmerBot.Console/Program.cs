@@ -2,6 +2,7 @@
 using ZimmerBot.cBrain.F2.Domain;
 using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
+using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -35,17 +36,14 @@ namespace ZimmerBot.Console
 
     static KnowledgeBase InitializeKnowledgeBase()
     {
+      ConfigurationParser cfg = new ConfigurationParser();
+
       KnowledgeBase kb = new KnowledgeBase();
 
-      GeographyDomain.Initialize(kb);
-      WeatherDomain.Initialize(kb);
-      GeneralDomain.Initialize(kb);
-      MovieDomain.Initialize(kb);
-      DateTimeDomain.Initialize(kb);
-      SelfDomain.Initialize(kb);
-      LanguageDomain.Initialize(kb);
-      F2Domain.Initialize(kb);
-      Rejseplanen.ZimmerBot.AddOn.RejseplanenDemoDomainDK.Initialize(kb);
+      DateTimeDomain.Initialize();
+
+      Domain dd = kb.NewDomain("DateTime");
+      cfg.ParseConfigurationFromFile(dd, "..\\..\\..\\Examples\\da-DK\\date-time.txt");
 
       return kb;
     }

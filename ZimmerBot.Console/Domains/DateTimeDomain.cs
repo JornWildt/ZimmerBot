@@ -6,16 +6,19 @@ namespace ZimmerBot.Console.Domains
 {
   public class DateTimeDomain
   {
-    public static void Initialize(KnowledgeBase kb)
+    public static void Initialize()
     {
-      Domain dd = kb.NewDomain("Datoer");
+      ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekDay", DateTimeProcessors.IsItDay);
 
-      dd.DefineWord("Mandag").And("Tirsdag").And("Onsday").And("Torsdag").And("Fredag").And("Lørdag").And("Søndag")
-        .Is("day").Is("week-day");
 
-      dd.DefineWord("Januar").And("Februar").And("Marts").And("April").And("Maj").And("Juni")
-        .And("Juli").And("August").And("September").And("Oktober").And("November").And("December")
-        .Is("month");
+      //Domain dd = kb.NewDomain("Datoer");
+
+      //dd.DefineWord("Mandag").And("Tirsdag").And("Onsday").And("Torsdag").And("Fredag").And("Lørdag").And("Søndag")
+      //  .Is("day").Is("week-day");
+
+      //dd.DefineWord("Januar").And("Februar").And("Marts").And("April").And("Maj").And("Juni")
+      //  .And("Juli").And("August").And("September").And("Oktober").And("November").And("December")
+      //  .Is("month");
 
       //dd.AddRule("question-is", "det", "week-day")
       //  .Describe("Er det <ugedag>")

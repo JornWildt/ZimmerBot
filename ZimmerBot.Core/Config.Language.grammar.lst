@@ -1,31 +1,42 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 21-03-2016 20:00:49>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-03-2016 17:09:31>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 21-03-2016 20:02:46
+//  DateTime: 22-03-2016 17:10:46
 //  UserName: Jorn
 // ==========================================================================
 
 
 %namespace ZimmerBot.Core.ConfigParser
 %using ZimmerBot.Core.WordRegex
+%using ZimmerBot.Core.Expressions
 %partial
 %parsertype ConfigParser
 %visibility internal
 %tokentype Token
 
 %union { 
+  public OutputStatement output;
+  public List<OutputStatement> outputList;
   public WRegex regex;
-  public List<string> outputTemplates;
+  public Expression expr;
+  public List<Expression> exprList;
+  public List<string> stringList;
   public string s;
 }
 
 %start main
 
+%token T_AGGREGATE
+%token T_CALL
 %token T_GT
 %token T_COLON
+%token T_EXCL
+%token T_DOT
+%token T_IMPLIES
+%token T_COMMA
 %token T_PIPE
 %token T_LPAR
 %token T_RPAR
@@ -41,23 +52,37 @@
 // ------------------------------------------------------------
 
 main
-  : ruleSeq
+  : statementSeq
   ;
 
-ruleSeq
-  : ruleSeq rule
+statementSeq
+  : statementSeq statement
   | /* empty */
+  ;
+
+statement
+  : configuration
+  | rule
+  ;
+
+configuration
+  : T_EXCL T_AGGREGATE wordSeq T_IMPLIES wordSeq { RegisterAggregates($3.stringList, $5.stringList); }
   ;
 
 rule
   : input outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.outputTemplates != null)
-        r.WithResponses($2.outputTemplates);
-      Console.WriteLine("RULE: " + $2.s); 
+      if ($2.stringList != null)
+        r.WithResponses($2.stringList);
+      if ($2.outputList != null)
+        r.WithOutputStatements($2.outputList);
     }
   ;
+
+/******************************************************************************
+  INPUT
+******************************************************************************/
 
 inputSeq
   : inputSeq input
@@ -77,24 +102,30 @@ inputPattern
   : inputPattern inputPattern 
       { $$.regex = CombineSequence($1.regex, $2.regex); }
   | inputPattern T_PIPE inputPattern
-      { $$.regex = new ChoiceWRegex($1.regex, $3.regex); Console.WriteLine("|"); }
+      { $$.regex = new ChoiceWRegex($1.regex, $3.regex); }
   | T_LPAR inputPattern T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD     
-      { $$.regex = new WordWRegex($1.s); Console.WriteLine("Word"); }
+      { $$.regex = new WordWRegex($1.s); }
   | T_STAR
-      { $$.regex = new RepetitionWRegex(new WildcardWRegex()); Console.WriteLine("*"); }
+      { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
-      { $$.regex =  new SequenceWRegex().Add(new WildcardWRegex()).Add(new RepetitionWRegex(new WildcardWRegex())); Console.WriteLine("+"); }
+      { $$.regex =  new SequenceWRegex().Add(new WildcardWRegex()).Add(new RepetitionWRegex(new WildcardWRegex())); }
   ;
 
+
+/******************************************************************************
+  OUTPUT
+******************************************************************************/
+
 outputSeq
-  : outputSeq output  { $1.outputTemplates.Add($2.s); $$ = $1; }
-  | /* empty */       { $$.outputTemplates = new List<string>(); }
+  : outputSeq output  { $1.outputList.Add($2.output); $$ = $1; }
+  | /* empty */       { $$.outputList = new List<OutputStatement>(); }
   ;
 
 output
-  : outputPattern { Console.WriteLine("OUTPUT: " + $1.s); $$.s = $1.s; }
+  : outputPattern { $$.output = new TemplateOutputStatement($1.s); }
+  | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
   ;
 
 outputPattern
@@ -103,6 +134,42 @@ outputPattern
     T_OUTPUT { $$.s = $3.s; }
   ;
 
+call
+  : T_EXCL T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($3.s, $5.exprList); }
+  ;
+
+
+/******************************************************************************
+  EXPRESSION
+******************************************************************************/
+
+exprSeq
+  : exprSeq T_COMMA expr { $1.exprList.Add($3.expr); $$ = $1; }
+  | expr                 { $$.exprList = new List<Expression>(); $$.exprList.Add($1.expr); }
+  ;
+
+expr
+  : exprIdentifier { $$ = $1; }
+  | T_STRING       { $$.expr = new ConstantValueExpr($1.s); }
+  ;
+
+exprIdentifier
+  : exprReference { $$.expr = new IdentifierExpression($1.s); }
+  ;
+
+exprReference
+  : exprReference T_DOT T_WORD { $$.s = $1.s + "." + $3.s; }
+  | T_WORD                     { $$.s = $1.s; }
+  ;
+
+/******************************************************************************
+  OTHER
+******************************************************************************/
+
+wordSeq
+  : wordSeq T_COMMA T_WORD { $$.stringList.Add($3.s); }
+  | T_WORD                 { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
 
 %%// ==========================================================================
 

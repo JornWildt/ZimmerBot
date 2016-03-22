@@ -23,8 +23,8 @@ namespace ZimmerBot.Core.Expressions
 
     public FunctionCallExpr(string functionName, List<Expression> parameters)
     {
-      Condition.Requires(functionName, "functionName").IsNotNullOrEmpty();
-      Condition.Requires(parameters, "parameters").IsNotNull();
+      Condition.Requires(functionName, nameof(functionName)).IsNotNullOrEmpty();
+      Condition.Requires(parameters, nameof(parameters)).IsNotNull();
 
       FunctionName = functionName;
       Parameters = parameters;

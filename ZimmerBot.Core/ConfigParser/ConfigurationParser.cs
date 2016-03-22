@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.ConfigParser

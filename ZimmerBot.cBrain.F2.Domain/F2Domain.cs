@@ -13,15 +13,15 @@ namespace ZimmerBot.cBrain.F2.Domain
       var f2d = kb.NewDomain("cBrain F2");
 
       f2d.AddRule()
-        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantValueExpr(0), BinaryOperatorExpr.OperatorType.Equals))
          .WithResponse("Hej, jeg er F2-assistenten Dr. Zimmer Frei (mit Alles)");
 
       f2d.AddRule()
-        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantValueExpr(0), BinaryOperatorExpr.OperatorType.Equals))
          .WithResponse("- men kald mig bare Zimmer, det gør mine venner.");
 
       f2d.AddRule()
-        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantNumberExpr(0), BinaryOperatorExpr.OperatorType.Equals))
+        .WithCondition(new BinaryOperatorExpr(new IdentifierExpression("state.conversation.entries.Count"), new ConstantValueExpr(0), BinaryOperatorExpr.OperatorType.Equals))
          .WithResponse("Spørg mig om hvad som helst :-)");
 
       f2d.AddRule("f2").WithResponse("F2 er fantastisk!");

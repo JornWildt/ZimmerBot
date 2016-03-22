@@ -33,12 +33,18 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected Rule ParseRule(string s)
+    protected Domain ParseDomain(string s)
     {
       KnowledgeBase kb = new KnowledgeBase();
       Domain d = kb.NewDomain("Test");
       CfgParser.ParseConfiguration(d, s);
+      return d;
+    }
 
+
+    protected Rule ParseRule(string s)
+    {
+      Domain d = ParseDomain(s);
       Assert.AreEqual(1, d.Rules.Count);
       Rule r = d.Rules[0];
       return r;

@@ -6,7 +6,7 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [a-zA-Z_]+
+Word       [a-zA-Z_æøåÆØÅ]+
 Comment    #
 Space      [ \t]
 eol        (\r\n?|\n)
@@ -29,6 +29,10 @@ Other      .
 
 >           { return (int)Token.T_GT; }
 :           { return (int)Token.T_COLON; }
+!           { return (int)Token.T_EXCL; }
+=>          { return (int)Token.T_IMPLIES; }
+,           { return (int)Token.T_COMMA; }
+\.          { return (int)Token.T_DOT; }
 \|          { return (int)Token.T_PIPE; }
 \(          { return (int)Token.T_LPAR; }
 \)          { return (int)Token.T_RPAR; }
@@ -37,6 +41,9 @@ Other      .
 
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
+
+aggregate   { return (int)Token.T_AGGREGATE; }
+call        { return (int)Token.T_CALL; }
 
 {Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }
 
@@ -55,7 +62,7 @@ Other      .
 <comment>[^\r\n]* /* skip */
 <comment>\r|\n    { BEGIN(INITIAL); }
 
-<output>[^\r\n]*    { yylval.s = yytext; Console.WriteLine("OOO: " + yytext); }
-<output>\r\n?|\n    { Console.WriteLine("O-end"); BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
+<output>[^\r\n]*    { yylval.s = yytext; }
+<output>\r\n?|\n    { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
 
 %%

@@ -1,0 +1,9 @@
+﻿### Various rules for understanding dates and time
+
+! aggregate mandag, tirsdag, onsdag, torsdag, fredag, lørdag, søndag => dag, ugedag
+! aggregate januar, februar, marts, april, maj, juni, juli, august, september, oktober, november, december => måned
+
+> er det (ugedag)
+! call DateTime.IsItWeekDay("<1>")
+: <if(answer)>Ja, for fanden!<else>Næh, desværre<endif>
+

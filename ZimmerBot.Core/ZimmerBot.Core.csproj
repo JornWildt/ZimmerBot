@@ -83,10 +83,11 @@
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="ConfigParser\ConfigurationParser.cs" />
+    <Compile Include="ConfigParser\OutputStatement.cs" />
     <Compile Include="ConsoleBotEnvironment.cs" />
     <Compile Include="BotHandle.cs" />
     <Compile Include="Expressions\BinaryOperatorExpr.cs" />
-    <Compile Include="Expressions\ConstantNumberExpr.cs" />
+    <Compile Include="Expressions\ConstantValueExpr.cs" />
     <Compile Include="Expressions\Expression.cs" />
     <Compile Include="Expressions\FunctionCallExpr.cs" />
     <Compile Include="Expressions\IdentifierExpression.cs" />

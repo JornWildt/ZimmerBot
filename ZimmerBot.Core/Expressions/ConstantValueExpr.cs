@@ -3,12 +3,12 @@
 
 namespace ZimmerBot.Core.Expressions
 {
-  public class ConstantNumberExpr : Expression
+  public class ConstantValueExpr : Expression
   {
-    public double Value { get; protected set; }
+    public object Value { get; protected set; }
 
 
-    public ConstantNumberExpr(double value)
+    public ConstantValueExpr(object value)
     {
       Value = value;
     }

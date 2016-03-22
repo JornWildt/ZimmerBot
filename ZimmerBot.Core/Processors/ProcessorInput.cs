@@ -12,17 +12,13 @@ namespace ZimmerBot.Core.Processors
 
     public List<object> Inputs { get; protected set; }
 
-    public Dictionary<string,string> OutputTemplates { get; protected set; }
 
-
-    public ProcessorInput(ResponseContext context, List<object> inputs, Dictionary<string, string> outputTemplates)
+    public ProcessorInput(ResponseContext context, List<object> inputs)
     {
       Condition.Requires(inputs, "inputs").IsNotNull();
-      Condition.Requires(outputTemplates, "outputTemplates").IsNotNull();
 
       Context = context;
       Inputs = inputs;
-      OutputTemplates = outputTemplates;
     }
 
 

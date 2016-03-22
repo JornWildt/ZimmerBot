@@ -97,8 +97,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 > (aaa bbb) | ccc
 : ok
 ");
-      Assert.IsInstanceOf<SequenceWRegex>(ch.Left);
-      Assert.AreEqual(2, ((SequenceWRegex)ch.Left).Sequence.Count);
+      Assert.IsInstanceOf<GroupWRegex>(ch.Left);
+      GroupWRegex left = (GroupWRegex)ch.Left;
+      Assert.AreEqual(2, ((SequenceWRegex)left.Sub).Sequence.Count);
       Assert.IsInstanceOf<WordWRegex>(ch.Right);
       Assert.AreEqual("ccc", ((WordWRegex)ch.Right).Word);
 

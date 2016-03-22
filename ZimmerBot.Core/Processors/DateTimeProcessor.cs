@@ -8,49 +8,48 @@ namespace ZimmerBot.Core.Processors
 {
   public static class DateTimeProcessors
   {
-    public static Func<string> IsItDay(ZToken day, string template)
+    public static object IsItDay(ProcessorInput input)
     {
       var thisDay = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
 
-      string answer = thisDay.Equals(day.OriginalText, StringComparison.CurrentCultureIgnoreCase)
-        ? "Ja" : "Nej";
+      string inpDay = "xx";// input.Inputs[0].ToString(); // Original text?
+      bool answer = thisDay.Equals(inpDay, StringComparison.CurrentCultureIgnoreCase);
 
-      return () => TextMerge.MergeTemplate(template, new { day = day.OriginalText, answer = answer });
+      return new { day = inpDay, answer = answer }; // TextMerge.MergeTemplate(template, new { day = day.OriginalText, answer = answer });
     }
 
 
-    public static Func<string> ThisDay(string template)
+    public static Func<object> ThisDay(string template)
     {
       var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
 
-      return () => TextMerge.MergeTemplate(template, new { answer = answer });
+      return () => new { answer = answer };// TextMerge.MergeTemplate(template, new { answer = answer });
     }
 
 
-    public static Func<string> Time(string template)
+    public static Func<object> Time(string template)
     {
       var answer = DateTime.Now;//.ToShortTimeString();
 
-      return () => TextMerge.MergeTemplate(template, new { answer = answer });
+      return () => new { answer = answer }; // TextMerge.MergeTemplate(template, new { answer = answer });
     }
 
 
-    public static Func<string> IsItMonth(ZToken month, string template)
+    public static Func<object> IsItMonth(ZToken month, string template)
     {
       var thisMonth = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 
-      string answer = thisMonth.Equals(month.OriginalText, StringComparison.CurrentCultureIgnoreCase)
-        ? "Ja" : "Nej";
+      bool answer = thisMonth.Equals(month.OriginalText, StringComparison.CurrentCultureIgnoreCase);
 
-      return () => TextMerge.MergeTemplate(template, new { month = month.OriginalText, answer = answer });
+      return () => new { month = month.OriginalText, answer = answer }; // TextMerge.MergeTemplate(template, new { month = month.OriginalText, answer = answer });
     }
 
 
-    public static Func<string> ThisMonth(string template)
+    public static Func<object> ThisMonth(string template)
     {
       var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 
-      return () => TextMerge.MergeTemplate(template, new { answer = answer });
+      return () => new { answer = answer };//TextMerge.MergeTemplate(template, new { answer = answer });
     }
   }
 }
