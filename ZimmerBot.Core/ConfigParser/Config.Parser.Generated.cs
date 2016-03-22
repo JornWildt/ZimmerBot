@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 22-03-2016 21:56:48
+// DateTime: 22-03-2016 22:16:07
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 22-03-2016 21:56:47>
+// Input file <ConfigParser\Config.Language.grammar.y - 22-03-2016 22:16:04>
 
 // options: no-lines gplex
 
@@ -61,19 +61,19 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[36];
-  private static State[] states = new State[49];
+  private static Rule[] rules = new Rule[38];
+  private static State[] states = new State[50];
   private static string[] nonTerms = new string[] {
       "main", "$accept", "statementSeq", "statement", "configuration", "rule", 
       "wordSeq", "input", "outputSeq", "inputSeq", "inputPattern", "inputPatternSeq", 
       "output", "outputPattern", "call", "Anon@1", "exprReference", "exprSeq", 
-      "expr", "exprIdentifier", };
+      "exprSeq2", "expr", "exprIdentifier", };
 
   static ConfigParser() {
     states[0] = new State(-4,new int[]{-1,1,-3,3});
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
-    states[3] = new State(new int[]{8,6,6,38,3,-2},new int[]{-4,4,-5,5,-6,14,-8,15});
+    states[3] = new State(new int[]{8,6,6,39,3,-2},new int[]{-4,4,-5,5,-6,14,-8,15});
     states[4] = new State(-3);
     states[5] = new State(-5);
     states[6] = new State(new int[]{4,7});
@@ -82,8 +82,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[9] = new State(new int[]{18,13},new int[]{-7,10});
     states[10] = new State(new int[]{11,11,8,-7,6,-7,3,-7});
     states[11] = new State(new int[]{18,12});
-    states[12] = new State(-34);
-    states[13] = new State(-35);
+    states[12] = new State(-36);
+    states[13] = new State(-37);
     states[14] = new State(-6);
     states[15] = new State(-21,new int[]{-9,16});
     states[16] = new State(new int[]{7,19,8,23,6,-8,3,-8},new int[]{-13,17,-14,18,-15,22});
@@ -94,31 +94,32 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[21] = new State(-25);
     states[22] = new State(-23);
     states[23] = new State(new int[]{5,24});
-    states[24] = new State(new int[]{18,35},new int[]{-17,25});
-    states[25] = new State(new int[]{13,26,9,33});
-    states[26] = new State(new int[]{18,35,19,36},new int[]{-18,27,-19,37,-20,31,-17,32});
-    states[27] = new State(new int[]{14,28,11,29});
+    states[24] = new State(new int[]{18,36},new int[]{-17,25});
+    states[25] = new State(new int[]{13,26,9,34});
+    states[26] = new State(new int[]{18,36,19,37,14,-28},new int[]{-18,27,-19,29,-20,38,-21,32,-17,33});
+    states[27] = new State(new int[]{14,28});
     states[28] = new State(-26);
-    states[29] = new State(new int[]{18,35,19,36},new int[]{-19,30,-20,31,-17,32});
-    states[30] = new State(-27);
+    states[29] = new State(new int[]{11,30,14,-27});
+    states[30] = new State(new int[]{18,36,19,37},new int[]{-20,31,-21,32,-17,33});
     states[31] = new State(-29);
-    states[32] = new State(new int[]{9,33,14,-31,11,-31});
-    states[33] = new State(new int[]{18,34});
-    states[34] = new State(-32);
-    states[35] = new State(-33);
-    states[36] = new State(-30);
-    states[37] = new State(-28);
-    states[38] = new State(new int[]{13,43,18,46,15,47,16,48},new int[]{-11,39});
-    states[39] = new State(new int[]{12,41,13,43,18,46,15,47,16,48,7,-11,8,-11,6,-11,3,-11},new int[]{-11,40});
-    states[40] = new State(new int[]{12,41,13,43,18,46,15,47,16,48,7,-14,8,-14,6,-14,3,-14,14,-14},new int[]{-11,40});
-    states[41] = new State(new int[]{13,43,18,46,15,47,16,48},new int[]{-11,42});
-    states[42] = new State(new int[]{12,41,13,43,18,46,15,47,16,48,7,-15,8,-15,6,-15,3,-15,14,-15},new int[]{-11,40});
-    states[43] = new State(new int[]{13,43,18,46,15,47,16,48},new int[]{-11,44});
-    states[44] = new State(new int[]{14,45,12,41,13,43,18,46,15,47,16,48},new int[]{-11,40});
-    states[45] = new State(-16);
-    states[46] = new State(-17);
-    states[47] = new State(-18);
-    states[48] = new State(-19);
+    states[32] = new State(-31);
+    states[33] = new State(new int[]{9,34,11,-33,14,-33});
+    states[34] = new State(new int[]{18,35});
+    states[35] = new State(-34);
+    states[36] = new State(-35);
+    states[37] = new State(-32);
+    states[38] = new State(-30);
+    states[39] = new State(new int[]{13,44,18,47,15,48,16,49},new int[]{-11,40});
+    states[40] = new State(new int[]{12,42,13,44,18,47,15,48,16,49,7,-11,8,-11,6,-11,3,-11},new int[]{-11,41});
+    states[41] = new State(new int[]{12,42,13,44,18,47,15,48,16,49,7,-14,8,-14,6,-14,3,-14,14,-14},new int[]{-11,41});
+    states[42] = new State(new int[]{13,44,18,47,15,48,16,49},new int[]{-11,43});
+    states[43] = new State(new int[]{12,42,13,44,18,47,15,48,16,49,7,-15,8,-15,6,-15,3,-15,14,-15},new int[]{-11,41});
+    states[44] = new State(new int[]{13,44,18,47,15,48,16,49},new int[]{-11,45});
+    states[45] = new State(new int[]{14,46,12,42,13,44,18,47,15,48,16,49},new int[]{-11,41});
+    states[46] = new State(-16);
+    states[47] = new State(-17);
+    states[48] = new State(-18);
+    states[49] = new State(-19);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
@@ -148,15 +149,17 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     rules[24] = new Rule(-16, new int[]{});
     rules[25] = new Rule(-14, new int[]{7,-16,17});
     rules[26] = new Rule(-15, new int[]{8,5,-17,13,-18,14});
-    rules[27] = new Rule(-18, new int[]{-18,11,-19});
-    rules[28] = new Rule(-18, new int[]{-19});
-    rules[29] = new Rule(-19, new int[]{-20});
-    rules[30] = new Rule(-19, new int[]{19});
-    rules[31] = new Rule(-20, new int[]{-17});
-    rules[32] = new Rule(-17, new int[]{-17,9,18});
-    rules[33] = new Rule(-17, new int[]{18});
-    rules[34] = new Rule(-7, new int[]{-7,11,18});
-    rules[35] = new Rule(-7, new int[]{18});
+    rules[27] = new Rule(-18, new int[]{-19});
+    rules[28] = new Rule(-18, new int[]{});
+    rules[29] = new Rule(-19, new int[]{-19,11,-20});
+    rules[30] = new Rule(-19, new int[]{-20});
+    rules[31] = new Rule(-20, new int[]{-21});
+    rules[32] = new Rule(-20, new int[]{19});
+    rules[33] = new Rule(-21, new int[]{-17});
+    rules[34] = new Rule(-17, new int[]{-17,9,18});
+    rules[35] = new Rule(-17, new int[]{18});
+    rules[36] = new Rule(-7, new int[]{-7,11,18});
+    rules[37] = new Rule(-7, new int[]{18});
   }
 
   protected override void Initialize() {
@@ -231,31 +234,37 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 26: // call -> T_EXCL, T_CALL, exprReference, T_LPAR, exprSeq, T_RPAR
 { CurrentSemanticValue.expr = new FunctionCallExpr(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-2].exprList); }
         break;
-      case 27: // exprSeq -> exprSeq, T_COMMA, expr
-{ ValueStack[ValueStack.Depth-3].exprList.Add(ValueStack[ValueStack.Depth-1].expr); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
-        break;
-      case 28: // exprSeq -> expr
-{ CurrentSemanticValue.exprList = new List<Expression>(); CurrentSemanticValue.exprList.Add(ValueStack[ValueStack.Depth-1].expr); }
-        break;
-      case 29: // expr -> exprIdentifier
+      case 27: // exprSeq -> exprSeq2
 { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }
         break;
-      case 30: // expr -> T_STRING
+      case 28: // exprSeq -> /* empty */
+{ CurrentSemanticValue.exprList = new List<Expression>(); }
+        break;
+      case 29: // exprSeq2 -> exprSeq2, T_COMMA, expr
+{ ValueStack[ValueStack.Depth-3].exprList.Add(ValueStack[ValueStack.Depth-1].expr); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+        break;
+      case 30: // exprSeq2 -> expr
+{ CurrentSemanticValue.exprList = new List<Expression>(); CurrentSemanticValue.exprList.Add(ValueStack[ValueStack.Depth-1].expr); }
+        break;
+      case 31: // expr -> exprIdentifier
+{ CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }
+        break;
+      case 32: // expr -> T_STRING
 { CurrentSemanticValue.expr = new ConstantValueExpr(ValueStack[ValueStack.Depth-1].s); }
         break;
-      case 31: // exprIdentifier -> exprReference
+      case 33: // exprIdentifier -> exprReference
 { CurrentSemanticValue.expr = new IdentifierExpr(ValueStack[ValueStack.Depth-1].s); }
         break;
-      case 32: // exprReference -> exprReference, T_DOT, T_WORD
+      case 34: // exprReference -> exprReference, T_DOT, T_WORD
 { CurrentSemanticValue.s = ValueStack[ValueStack.Depth-3].s + "." + ValueStack[ValueStack.Depth-1].s; }
         break;
-      case 33: // exprReference -> T_WORD
+      case 35: // exprReference -> T_WORD
 { CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s; }
         break;
-      case 34: // wordSeq -> wordSeq, T_COMMA, T_WORD
+      case 36: // wordSeq -> wordSeq, T_COMMA, T_WORD
 { CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].s); }
         break;
-      case 35: // wordSeq -> T_WORD
+      case 37: // wordSeq -> T_WORD
 { CurrentSemanticValue.stringList = new List<string>(); CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].s); }
         break;
     }

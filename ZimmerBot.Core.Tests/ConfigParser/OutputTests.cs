@@ -40,5 +40,27 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       string result = reaction.GenerateResponse();
       Assert.AreEqual("ccc bbb", result);
     }
+
+
+    [Test]
+    public void CanParseCallStatementWithZeroParameters()
+    {
+      Rule r = ParseRule(@"
+> aaa
+! call DateTime.ThisDay()
+: ccc <answer>
+");
+
+      Assert.IsNotNull(r.OutputStatements);
+      Assert.AreEqual(2, r.OutputStatements.Count);
+      Assert.IsInstanceOf<CallOutputStatment>(r.OutputStatements[0]);
+      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[1]);
+
+      Reaction reaction = CalculateReaction(r, "aaa");
+      Assert.IsNotNull(reaction);
+
+      string result = reaction.GenerateResponse();
+      StringAssert.IsMatch("ccc ..+", result);
+    }
   }
 }

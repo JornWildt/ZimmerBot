@@ -168,6 +168,13 @@ namespace ZimmerBot.Core.Knowledge
         output.Execute(ox_context);
       }
 
+      // FIXME: do some more efficient combination of matches, botstate and other state elements for lookup
+      //foreach (var m in context.Match.Matches)
+      //{
+      //  ec.State[m.Key] = m.Value;
+      //  ec.State["$" + m.Key] = m.Value;
+      //}
+
       string selectedTemplate = ox_context.OutputTemplates[Randomizer.Next(ox_context.OutputTemplates.Count)];
       string result = TextMerge.MergeTemplate(selectedTemplate, ox_context.LastValue);
 

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
-using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.WordRegex;
 
 
@@ -12,14 +11,6 @@ namespace ZimmerBot.Core.Tests
   public class TestHelper : TestHelperBase
   {
     protected ConfigurationParser CfgParser = new ConfigurationParser();
-
-
-    protected override void TestFixtureSetUp()
-    {
-      base.TestFixtureSetUp();
-      GeneralProcessors.RegisterProcessors();
-      DateTimeProcessors.RegisterProcessors();
-    }
 
 
     protected Reaction CalculateReaction(Rule r, string text)

@@ -1,0 +1,24 @@
+﻿using NUnit.Framework;
+using ZimmerBot.Core.StandardProcessors;
+
+
+namespace ZimmerBot.Core.Tests
+{
+  [SetUpFixture]
+  public class SetupFixture
+  {
+    private static bool Initialized = false;
+
+    [SetUp]
+    public void Setup()
+    {
+      if (Initialized)
+        return;
+
+      GeneralProcessors.Initialize();
+      DateTimeProcessors.Initialize();
+
+      Initialized = true;
+    }
+  }
+}

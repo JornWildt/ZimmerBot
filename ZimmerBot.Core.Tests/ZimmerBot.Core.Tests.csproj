@@ -49,6 +49,7 @@
     <Compile Include="ConfigParser\InputPatternTests.cs" />
     <Compile Include="ConfigParser\OutputTests.cs" />
     <Compile Include="ConfigParser\WordAggregationTests.cs" />
+    <Compile Include="SetupFixture.cs" />
     <Compile Include="TestHelperBase.cs" />
     <Compile Include="WRegexEvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

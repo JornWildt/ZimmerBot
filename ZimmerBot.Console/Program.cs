@@ -1,10 +1,8 @@
 ﻿using log4net;
-using ZimmerBot.cBrain.F2.Domain;
-using ZimmerBot.Console.Domains;
 using ZimmerBot.Core;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
-
+using ZimmerBot.Core.StandardProcessors;
 
 namespace ZimmerBot.Console
 {
@@ -36,11 +34,12 @@ namespace ZimmerBot.Console
 
     static KnowledgeBase InitializeKnowledgeBase()
     {
+      GeneralProcessors.Initialize();
+      DateTimeProcessors.Initialize();
+
       ConfigurationParser cfg = new ConfigurationParser();
 
       KnowledgeBase kb = new KnowledgeBase();
-
-      DateTimeDomain.Initialize();
 
       Domain dd = kb.NewDomain("DateTime");
       cfg.ParseConfigurationFromFile(dd, "..\\..\\..\\Examples\\da-DK\\date-time.txt");

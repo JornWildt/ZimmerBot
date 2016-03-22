@@ -5,5 +5,26 @@
 
 > er det (ugedag)
 ! call DateTime.IsItWeekDay($1)
-: <if(answer)>Ja, for fanden!<else>Næh, desværre<endif>
+: <if(answer)>Ja, for fanden!<else>Næh, desværre.<endif>
+
+> hvilken dag er det *
+! call DateTime.ThisDay()
+: Det er <answer>.
+
+> er det (måned)
+! call DateTime.IsItMonth($1)
+: <if(answer)>Ja, det er <answer>.<else>Næh, desværre.<endif>
+
+> hvilken måned er det *
+! call DateTime.ThisMonth()
+: Det er <answer>.
+
+> hvad er klokken
+! call DateTime.Time()
+: Klokken er <answer>.
+
+> hvilken dato er det
+! call DateTime.Time()
+: Ifølge mit indre ur burde det være <answer>.
+: Tjah, <answer>.
 

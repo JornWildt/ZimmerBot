@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-03-2016 21:56:47>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-03-2016 22:16:04>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 22-03-2016 21:56:48
+//  DateTime: 22-03-2016 22:16:07
 //  UserName: Jorn
 // ==========================================================================
 
@@ -144,7 +144,12 @@ call
 ******************************************************************************/
 
 exprSeq
-  : exprSeq T_COMMA expr { $1.exprList.Add($3.expr); $$ = $1; }
+  : exprSeq2    { $$ = $1; }
+  | /* empty */ { $$.exprList = new List<Expression>(); }
+  ;
+
+exprSeq2
+  : exprSeq2 T_COMMA expr { $1.exprList.Add($3.expr); $$ = $1; }
   | expr                 { $$.exprList = new List<Expression>(); $$.exprList.Add($1.expr); }
   ;
 

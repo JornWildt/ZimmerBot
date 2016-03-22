@@ -100,12 +100,11 @@
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Processors\CallBinding.cs" />
-    <Compile Include="Processors\GeneralProcessors.cs" />
+    <Compile Include="StandardProcessors\GeneralProcessors.cs" />
     <Compile Include="Processors\ProcessorInput.cs" />
     <Compile Include="Processors\ProcessorRegistration.cs" />
     <Compile Include="Processors\ProcessorRegistry.cs" />
     <Compile Include="Knowledge\ResponseContext.cs" />
-    <Compile Include="Processors\LanguageProcessor.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />
@@ -117,10 +116,8 @@
     <Compile Include="WordRegex\WildcardWRegex.cs" />
     <Compile Include="WordRegex\WordWRegex.cs" />
     <Compile Include="WordRegex\RepetitionWRegex.cs" />
-    <Compile Include="Processors\DateTimeProcessor.cs" />
-    <Compile Include="Processors\MovieProcessors.cs" />
-    <Compile Include="Processors\SelfProcessors.cs" />
-    <Compile Include="Processors\WeatherProcessor.cs" />
+    <Compile Include="StandardProcessors\DateTimeProcessors.cs" />
+    <Compile Include="StandardProcessors\SelfProcessors.cs" />
     <Compile Include="Knowledge\Domain.cs" />
     <Compile Include="Knowledge\KnowledgeBase.cs" />
     <Compile Include="Knowledge\ReactionSet.cs" />

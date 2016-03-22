@@ -9,7 +9,7 @@
 > * (far|mor) *
 : Fortæl mig mere om din <2> ...
 : Hvad var dit forhold til din <2>?
-: Hvad føler du i forhold til din <m>?
+: Hvad føler du i forhold til din <2>?
 : Hvordan forholder det sig til dine følelser i dag?
 : Ja, gode familierelationer er vigtige.
 

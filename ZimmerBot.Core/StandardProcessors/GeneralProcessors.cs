@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ZimmerBot.Core.Processors;
 
-namespace ZimmerBot.Core.Processors
+
+namespace ZimmerBot.Core.StandardProcessors
 {
   public static class GeneralProcessors
   {
-    public static void RegisterProcessors()
+    public static void Initialize()
     {
       ProcessorRegistry.RegisterProcessor("General.Echo", Echo);
     }

@@ -130,7 +130,12 @@ call
 ******************************************************************************/
 
 exprSeq
-  : exprSeq T_COMMA expr { $1.exprList.Add($3.expr); $$ = $1; }
+  : exprSeq2    { $$ = $1; }
+  | /* empty */ { $$.exprList = new List<Expression>(); }
+  ;
+
+exprSeq2
+  : exprSeq2 T_COMMA expr { $1.exprList.Add($3.expr); $$ = $1; }
   | expr                 { $$.exprList = new List<Expression>(); $$.exprList.Add($1.expr); }
   ;
 
