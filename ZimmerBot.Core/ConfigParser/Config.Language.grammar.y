@@ -59,8 +59,6 @@ rule
   : input outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.stringList != null)
-        r.WithResponses($2.stringList);
       if ($2.outputList != null)
         r.WithOutputStatements($2.outputList);
     }

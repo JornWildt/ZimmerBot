@@ -30,15 +30,6 @@ namespace ZimmerBot.Core.Knowledge
     public int? TimeToLive { get; protected set; }
 
 
-    #region OBSOLETE
-
-    public List<string> OutputTemplates { get; protected set; }
-
-    public CallBinding ResponseBinding { get; protected set; }
-
-    #endregion
-
-
     public Rule(Domain d, params object[] topics)
     {
       Condition.Requires(d, nameof(d)).IsNotNull();
@@ -46,11 +37,7 @@ namespace ZimmerBot.Core.Knowledge
       Id = Guid.NewGuid().ToString();
       Domain = d;
       Trigger = new Trigger(topics);
-      OutputTemplates = new List<string>();
       ExpectedAnswers = new List<Func<Domain,Rule>>();
-
-      // Defauly response binding is to print out one of the output templates
-      ResponseBinding = ResponseHelper.OneOf(OutputTemplates);
     }
 
 
@@ -87,32 +74,6 @@ namespace ZimmerBot.Core.Knowledge
       OutputStatements = new List<OutputStatement>(output);
       return this;
     }
-
-
-    #region OBSOLETE
-
-    public Rule WithResponse(CallBinding b)
-    {
-      b.VerifyBinding();
-      ResponseBinding = b;
-      return this;
-    }
-
-
-    public Rule WithResponse(string s)
-    {
-      OutputTemplates.Add(s);
-      return this;
-    }
-
-
-    public Rule WithResponses(IEnumerable<string> s)
-    {
-      OutputTemplates.AddRange(s);
-      return this;
-    }
-
-    #endregion
 
 
     public Rule ExpectAnswer(Func<Domain,Rule> answerSetup)

@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-03-2016 22:16:04>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 23-03-2016 20:13:53>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 22-03-2016 22:16:07
+//  DateTime: 23-03-2016 20:13:55
 //  UserName: Jorn
 // ==========================================================================
 
@@ -73,8 +73,6 @@ rule
   : input outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.stringList != null)
-        r.WithResponses($2.stringList);
       if ($2.outputList != null)
         r.WithOutputStatements($2.outputList);
     }

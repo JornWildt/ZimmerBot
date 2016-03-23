@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 22-03-2016 22:16:07
+// DateTime: 23-03-2016 20:13:55
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 22-03-2016 22:16:04>
+// Input file <ConfigParser\Config.Language.grammar.y - 23-03-2016 20:13:53>
 
 // options: no-lines gplex
 
@@ -180,8 +180,6 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 8: // rule -> input, outputSeq
 { 
       Knowledge.Rule r = Domain.AddRule(ValueStack[ValueStack.Depth-2].regex);
-      if (ValueStack[ValueStack.Depth-1].stringList != null)
-        r.WithResponses(ValueStack[ValueStack.Depth-1].stringList);
       if (ValueStack[ValueStack.Depth-1].outputList != null)
         r.WithOutputStatements(ValueStack[ValueStack.Depth-1].outputList);
     }

@@ -1,0 +1,6 @@
+﻿! aggregate station, holdeplads => stoppested
+! aggregate kører => afgår
+
+> find stoppested *
+! call Rejseplanen.FindStoppested($1)
+: Fandt '<stopName>'

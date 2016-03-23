@@ -41,8 +41,11 @@ namespace ZimmerBot.Console
 
       KnowledgeBase kb = new KnowledgeBase();
 
-      Domain dd = kb.NewDomain("DateTime");
-      cfg.ParseConfigurationFromFile(dd, "..\\..\\..\\Examples\\da-DK\\date-time.txt");
+      Domain d = kb.NewDomain("DateTime");
+      cfg.ParseConfigurationFromFile(d, "..\\..\\..\\Examples\\da-DK\\date-time.txt");
+
+      d = kb.NewDomain("Rejseplanen");
+      cfg.ParseConfigurationFromFile(d, "..\\..\\..\\Examples\\da-DK\\rejseplanen.txt");
 
       return kb;
     }

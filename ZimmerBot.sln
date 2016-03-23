@@ -28,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{2BEB86D2
 	ProjectSection(SolutionItems) = preProject
 		Examples\da-DK\date-time.txt = Examples\da-DK\date-time.txt
 		Examples\da-DK\general.txt = Examples\da-DK\general.txt
+		Examples\da-DK\rejseplanen.txt = Examples\da-DK\rejseplanen.txt
 	EndProjectSection
 EndProject
 Global
