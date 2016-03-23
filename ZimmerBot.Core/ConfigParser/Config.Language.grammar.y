@@ -117,13 +117,13 @@ output
 
 outputPattern
   : T_COLON  
-      { ((ConfigScanner)Scanner).BEGIN(2); } 
+      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>("default", $3.s.Trim()); }
+      { $$.template = new KeyValuePair<string,string>("default", ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
   | T_LBRACE T_WORD T_RBRACE T_COLON 
-      { ((ConfigScanner)Scanner).BEGIN(2); } 
+      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>($2.s, $6.s.Trim()); }
+      { $$.template = new KeyValuePair<string,string>($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
   ;
 
 call

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 23-03-2016 21:52:23
+// DateTime: 23-03-2016 22:21:15
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 23-03-2016 21:52:22>
+// Input file <ConfigParser\Config.Language.grammar.y - 23-03-2016 22:20:49>
 
 // options: no-lines gplex
 
@@ -233,16 +233,16 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.output = new CallOutputStatment(ValueStack[ValueStack.Depth-1].expr as FunctionCallExpr); }
         break;
       case 24: // Anon@1 -> /* empty */
-{ ((ConfigScanner)Scanner).BEGIN(2); }
+{ ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); }
         break;
       case 25: // outputPattern -> T_COLON, Anon@1, T_OUTPUT
-{ CurrentSemanticValue.template = new KeyValuePair<string,string>("default", ValueStack[ValueStack.Depth-1].s.Trim()); }
+{ CurrentSemanticValue.template = new KeyValuePair<string,string>("default", ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
         break;
       case 26: // Anon@2 -> /* empty */
-{ ((ConfigScanner)Scanner).BEGIN(2); }
+{ ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); }
         break;
       case 27: // outputPattern -> T_LBRACE, T_WORD, T_RBRACE, T_COLON, Anon@2, T_OUTPUT
-{ CurrentSemanticValue.template = new KeyValuePair<string,string>(ValueStack[ValueStack.Depth-5].s, ValueStack[ValueStack.Depth-1].s.Trim()); }
+{ CurrentSemanticValue.template = new KeyValuePair<string,string>(ValueStack[ValueStack.Depth-5].s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
         break;
       case 28: // call -> T_EXCL, T_CALL, exprReference, T_LPAR, exprSeq, T_RPAR
 { CurrentSemanticValue.expr = new FunctionCallExpr(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-2].exprList); }

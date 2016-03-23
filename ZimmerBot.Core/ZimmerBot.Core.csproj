@@ -101,7 +101,7 @@
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Processors\ProcessorOutput.cs" />
     <Compile Include="Processors\CallBinding.cs" />
-    <Compile Include="StandardProcessors\GeneralProcessors.cs" />
+    <Compile Include="StandardProcessors\GeneralProcessor.cs" />
     <Compile Include="Processors\ProcessorInput.cs" />
     <Compile Include="Processors\ProcessorRegistration.cs" />
     <Compile Include="Processors\ProcessorRegistry.cs" />
@@ -118,7 +118,7 @@
     <Compile Include="WordRegex\WildcardWRegex.cs" />
     <Compile Include="WordRegex\WordWRegex.cs" />
     <Compile Include="WordRegex\RepetitionWRegex.cs" />
-    <Compile Include="StandardProcessors\DateTimeProcessors.cs" />
+    <Compile Include="StandardProcessors\DateTimeProcessor.cs" />
     <Compile Include="StandardProcessors\SelfProcessors.cs" />
     <Compile Include="Knowledge\Domain.cs" />
     <Compile Include="Knowledge\KnowledgeBase.cs" />

@@ -15,8 +15,8 @@ namespace ZimmerBot.Core.Tests
       if (Initialized)
         return;
 
-      GeneralProcessors.Initialize();
-      DateTimeProcessors.Initialize();
+      GeneralProcessor.Initialize();
+      DateTimeProcessor.Initialize();
 
       Initialized = true;
     }

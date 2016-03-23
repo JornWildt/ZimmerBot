@@ -4,7 +4,7 @@ using ZimmerBot.Core.Processors;
 
 namespace ZimmerBot.Core.StandardProcessors
 {
-  public static class GeneralProcessors
+  public static class GeneralProcessor
   {
     public static void Initialize()
     {

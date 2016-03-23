@@ -78,6 +78,19 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
+    public void CanMakeMultiLineOutput()
+    {
+      Rule r = ParseRule(@"
+> aaa
+: ccc\
+ddd");
+
+      string result = GetResponseFrom(r, "aaa");
+      StringAssert.IsMatch("ccc\r\nddd", result);
+    }
+
+
+    [Test]
     public void CanSpecifyOutputTemplate()
     {
       Rule r = ParseRule(@"

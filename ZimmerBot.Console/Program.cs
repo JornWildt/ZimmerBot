@@ -34,8 +34,8 @@ namespace ZimmerBot.Console
 
     static KnowledgeBase InitializeKnowledgeBase()
     {
-      GeneralProcessors.Initialize();
-      DateTimeProcessors.Initialize();
+      GeneralProcessor.Initialize();
+      DateTimeProcessor.Initialize();
 
       ConfigurationParser cfg = new ConfigurationParser();
 

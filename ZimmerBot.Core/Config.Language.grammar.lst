@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 23-03-2016 21:52:22>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 23-03-2016 22:20:49>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 23-03-2016 21:52:23
+//  DateTime: 23-03-2016 22:21:15
 //  UserName: Jorn
 // ==========================================================================
 
@@ -131,13 +131,13 @@ output
 
 outputPattern
   : T_COLON  
-      { ((ConfigScanner)Scanner).BEGIN(2); } 
+      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>("default", $3.s.Trim()); }
+      { $$.template = new KeyValuePair<string,string>("default", ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
   | T_LBRACE T_WORD T_RBRACE T_COLON 
-      { ((ConfigScanner)Scanner).BEGIN(2); } 
+      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>($2.s, $6.s.Trim()); }
+      { $$.template = new KeyValuePair<string,string>($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
   ;
 
 call

@@ -19,7 +19,7 @@ Other      .
 %x comment
 
 %{
- StringBuilder StringInput = null;
+ internal StringBuilder StringInput = null;
 %}
 
 
@@ -56,16 +56,20 @@ call        { return (int)Token.T_CALL; }
 
 
 <str>[^\n\"]* { StringInput.Append(yytext); }
-<str>\"       { 
-                BEGIN(INITIAL); 
-                /*yylval.t = new ZToken(StringInput.ToString(), ZToken.TokenType.Word); */
-                return (int)Token.T_STRING; 
-              }
+<str>\"       { BEGIN(INITIAL); return (int)Token.T_STRING; }
 
 <comment>[^\r\n]* /* skip */
 <comment>\r|\n    { BEGIN(INITIAL); }
 
+
+<output>[^\r\n\\]*    { StringInput.Append(yytext); }
+<output>\\(\r\n?|\n)  { StringInput.Append(yytext.Substring(1)); }
+<output>\\[^\r\n]     { StringInput.Append(yytext.Substring(1)); }
+<output>\r\n?|\n      { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
+
+/*
 <output>[^\r\n]*    { yylval.s = yytext; }
 <output>\r\n?|\n    { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
+*/
 
 %%

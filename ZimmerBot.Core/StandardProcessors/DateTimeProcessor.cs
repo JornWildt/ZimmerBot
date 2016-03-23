@@ -6,7 +6,7 @@ using ZimmerBot.Core.Processors;
 
 namespace ZimmerBot.Core.StandardProcessors
 {
-  public static class DateTimeProcessors
+  public static class DateTimeProcessor
   {
     public static void Initialize()
     {
