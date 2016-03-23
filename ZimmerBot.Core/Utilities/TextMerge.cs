@@ -30,7 +30,9 @@ namespace ZimmerBot.Core.Utilities
       {
         foreach (string key in source.Keys)
         {
-          t.Add(key, source[key]);
+          // FIXME: not smart if those dotted values are supposed to be available ...
+          if (!key.Contains("."))
+            t.Add(key, source[key]);
         }
       }
 
