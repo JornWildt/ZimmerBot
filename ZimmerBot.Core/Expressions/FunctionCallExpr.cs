@@ -47,7 +47,7 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    private List<object> CalculateInputValues(ExpressionEvaluationContext context)
+    public List<object> CalculateInputValues(ExpressionEvaluationContext context)
     {
       return Parameters.Select(p => p.Evaluate(context)).ToList();
     }

@@ -24,12 +24,7 @@ namespace ZimmerBot.Core.ConfigParser
       ProcessorRegistration processor = ProcessorRegistry.GetProcessor(Function.FunctionName);
       ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);
 
-      List<object> inputs = new List<object>();
-      foreach (Expression expr in Function.Parameters)
-      {
-        object p = expr.Evaluate(ec);
-        inputs.Add(p);
-      }
+      List<object> inputs = Function.CalculateInputValues(ec);
 
       ProcessorInput inp = new ProcessorInput(context.ResponseContext, inputs);
       ProcessorOutput result = processor.Function(inp);
