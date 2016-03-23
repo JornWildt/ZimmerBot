@@ -21,7 +21,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
-    public void CanParseCallStatement()
+    public void CanUseMatchesInCallStatement()
     {
       Rule r = ParseRule(@"
 > aaa (bbb)
@@ -61,6 +61,19 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
       string result = reaction.GenerateResponse();
       StringAssert.IsMatch("ccc ..+", result);
+    }
+
+
+    [Test]
+    public void CanUseMatchInOutputTemplate()
+    {
+      Rule r = ParseRule(@"
+> (aaa)
+: ccc <1>
+");
+
+      string result = GetResponseFrom(r, "aaa");
+      StringAssert.IsMatch("ccc aaa", result);
     }
   }
 }

@@ -20,6 +20,14 @@ namespace ZimmerBot.Core.Tests
     }
 
 
+    protected string GetResponseFrom(Rule r, string text)
+    {
+      Reaction reaction = CalculateReaction(r, text);
+      string result = reaction.GenerateResponse();
+      return result;
+    }
+
+
     protected EvaluationContext BuildEvaluationContextFromInput(string text)
     {
       ZTokenizer tokenizer = new ZTokenizer();

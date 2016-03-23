@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using ZimmerBot.Core.Processors;
 
@@ -24,7 +25,10 @@ namespace ZimmerBot.Core.StandardProcessors
       string day = input.GetParameter<string>(0);
       bool answer = thisDay.Equals(day, StringComparison.CurrentCultureIgnoreCase);
 
-      return new { day = day, answer = answer }; // TextMerge.MergeTemplate(template, new { day = day.OriginalText, answer = answer });
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["day"] = day;
+      result["answer"] = answer;
+      return result;
     }
 
 
@@ -32,7 +36,9 @@ namespace ZimmerBot.Core.StandardProcessors
     {
       var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
 
-      return new { answer = answer };// TextMerge.MergeTemplate(template, new { answer = answer });
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["answer"] = answer;
+      return result;
     }
 
 
@@ -40,7 +46,9 @@ namespace ZimmerBot.Core.StandardProcessors
     {
       var answer = DateTime.Now;//.ToShortTimeString();
 
-      return new { answer = answer }; // TextMerge.MergeTemplate(template, new { answer = answer });
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["answer"] = answer;
+      return result;
     }
 
 
@@ -51,7 +59,10 @@ namespace ZimmerBot.Core.StandardProcessors
       string month = input.GetParameter<string>(0);
       bool answer = thisMonth.Equals(month, StringComparison.CurrentCultureIgnoreCase);
 
-      return new { month = month, answer = answer }; // TextMerge.MergeTemplate(template, new { month = month.OriginalText, answer = answer });
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["month"] = month;
+      result["answer"] = answer;
+      return result;
     }
 
 
@@ -59,7 +70,9 @@ namespace ZimmerBot.Core.StandardProcessors
     {
       var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 
-      return new { answer = answer };//TextMerge.MergeTemplate(template, new { answer = answer });
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["answer"] = answer;
+      return result;
     }
   }
 }

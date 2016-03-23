@@ -9,13 +9,13 @@ namespace ZimmerBot.Core.Utilities
 {
   public static class TextMerge
   {
-    public static string MergeTemplate(IDictionary<string, string> templates, object source)
+    public static string MergeTemplate(ChainedDictionary<string, string> templates, object source)
     {
       return MergeTemplate(templates, "default", source);
     }
 
 
-    public static string MergeTemplate(IDictionary<string,string> templates, string templateName, object source)
+    public static string MergeTemplate(ChainedDictionary<string,string> templates, string templateName, object source)
     {
       string template = templates[templateName];
       return MergeTemplate(template, source);

@@ -5,7 +5,7 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class BotState
   {
-    protected Dictionary<string, object> State { get; set; }
+    public Dictionary<string, object> State { get; protected set; }
 
 
     public BotState()

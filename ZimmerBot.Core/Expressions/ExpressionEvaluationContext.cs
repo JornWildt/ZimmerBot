@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 
 
 namespace ZimmerBot.Core.Expressions
 {
   public class ExpressionEvaluationContext
   {
-    public Dictionary<string, object> State { get; protected set; }
+    public IDictionary<string, object> Variables { get; protected set; }
 
-    public ExpressionEvaluationContext()
+
+    public ExpressionEvaluationContext(IDictionary<string, object> variables)
     {
-      State = new Dictionary<string, object>();
+      Condition.Requires(variables, nameof(variables)).IsNotNull();
+      Variables = variables;
     }
   }
 }

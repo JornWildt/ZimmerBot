@@ -22,24 +22,23 @@ namespace ZimmerBot.Core.ConfigParser
     public override void Execute(OutputExecutionContect context)
     {
       ProcessorRegistration processor = ProcessorRegistry.GetProcessor(Function.FunctionName);
-      ExpressionEvaluationContext ec = new ExpressionEvaluationContext();
-
-      // FIXME: do some more efficient combination of matches, botstate and other state elements for lookup
-      foreach (var m in context.ResponseContext.Match.Matches)
-      {
-        ec.State["$" + m.Key] = m.Value;
-      }
+      ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);
 
       List<object> inputs = new List<object>();
       foreach (Expression expr in Function.Parameters)
       {
-        //context.ResponseContext.State
         object p = expr.Evaluate(ec);
         inputs.Add(p);
       }
 
       ProcessorInput inp = new ProcessorInput(context.ResponseContext, inputs);
       context.LastValue = processor.Function(inp);
+
+      // Make the output values available to to templates
+      if (context.LastValue is IDictionary<string, object>)
+      {
+        context.ResponseContext.Variables.Push((IDictionary < string, object > )context.LastValue);
+      }
     }
   }
 }

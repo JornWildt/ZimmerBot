@@ -19,7 +19,7 @@ namespace ZimmerBot.Core.Expressions
 
     public override object Evaluate(ExpressionEvaluationContext context)
     {
-      return context.State[Identifier];
+      return context.Variables[Identifier];
     }
   }
 }

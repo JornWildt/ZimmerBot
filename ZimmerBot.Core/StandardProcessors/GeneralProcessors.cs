@@ -1,4 +1,5 @@
-﻿using ZimmerBot.Core.Processors;
+﻿using System.Collections.Generic;
+using ZimmerBot.Core.Processors;
 
 
 namespace ZimmerBot.Core.StandardProcessors
@@ -13,8 +14,10 @@ namespace ZimmerBot.Core.StandardProcessors
 
     public static object Echo(ProcessorInput input)
     {
-      string result = input.GetParameter<string>(0);
-      return new { result = result };
+      string text = input.GetParameter<string>(0);
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["result"] = text;
+      return result;
     }
   }
 }
