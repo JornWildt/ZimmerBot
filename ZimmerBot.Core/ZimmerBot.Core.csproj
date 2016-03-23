@@ -100,7 +100,6 @@
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
     <Compile Include="Processors\ProcessorOutput.cs" />
-    <Compile Include="Processors\CallBinding.cs" />
     <Compile Include="StandardProcessors\GeneralProcessor.cs" />
     <Compile Include="Processors\ProcessorInput.cs" />
     <Compile Include="Processors\ProcessorRegistration.cs" />

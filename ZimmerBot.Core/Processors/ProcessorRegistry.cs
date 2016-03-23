@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using log4net;
-using ZimmerBot.Core.Processors;
 
 
 namespace ZimmerBot.Core.Processors
@@ -28,19 +27,6 @@ namespace ZimmerBot.Core.Processors
         throw new ArgumentException($"No processor function named {functionName} found.");
       ProcessorRegistration p = Processors[functionName];
       return p;
-    }
-
-
-    public static CallBinding BindTo(string functionName, params string[] parameters)
-    {
-      Logger.Debug($"Bind function '{functionName}' to parameters.");
-
-      if (!Processors.ContainsKey(functionName))
-        throw new ArgumentException($"No processor function named {functionName} found.");
-
-      ProcessorRegistration p = Processors[functionName];
-
-      return new CallBinding(p, parameters);
     }
   }
 }
