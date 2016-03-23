@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.StandardProcessors
     }
 
 
-    public static object IsItWeekDay(ProcessorInput input)
+    public static ProcessorOutput IsItWeekDay(ProcessorInput input)
     {
       var thisDay = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
 
@@ -28,31 +28,31 @@ namespace ZimmerBot.Core.StandardProcessors
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["day"] = day;
       result["answer"] = answer;
-      return result;
+      return new ProcessorOutput(result);
     }
 
 
-    public static object ThisDay(ProcessorInput input)
+    public static ProcessorOutput ThisDay(ProcessorInput input)
     {
       var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["answer"] = answer;
-      return result;
+      return new ProcessorOutput(result);
     }
 
 
-    public static object Time(ProcessorInput input)
+    public static ProcessorOutput Time(ProcessorInput input)
     {
       var answer = DateTime.Now;//.ToShortTimeString();
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["answer"] = answer;
-      return result;
+      return new ProcessorOutput(result);
     }
 
 
-    public static object IsItMonth(ProcessorInput input)
+    public static ProcessorOutput IsItMonth(ProcessorInput input)
     {
       var thisMonth = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 
@@ -62,17 +62,17 @@ namespace ZimmerBot.Core.StandardProcessors
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["month"] = month;
       result["answer"] = answer;
-      return result;
+      return new ProcessorOutput(result);
     }
 
 
-    public static object ThisMonth(ProcessorInput input)
+    public static ProcessorOutput ThisMonth(ProcessorInput input)
     {
       var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["answer"] = answer;
-      return result;
+      return new ProcessorOutput(result);
     }
   }
 }

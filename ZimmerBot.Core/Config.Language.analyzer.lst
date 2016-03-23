@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 20-03-2016 21:23:50
+//  DateTime: 23-03-2016 21:47:21
 //  UserName: Jorn
 // ==========================================================================
 
@@ -17,7 +17,7 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [a-zA-Z_]+
+Word       [a-zA-Z_æøåÆØÅ]+
 Comment    #
 Space      [ \t]
 eol        (\r\n?|\n)
@@ -40,15 +40,34 @@ Other      .
 
 >           { return (int)Token.T_GT; }
 :           { return (int)Token.T_COLON; }
-|           { return (int)Token.T_PIPE; }
-(           { return (int)Token.T_LPAR; }
-// Error: Expected character <')'> 
+!           { return (int)Token.T_EXCL; }
+=>          { return (int)Token.T_IMPLIES; }
+,           { return (int)Token.T_COMMA; }
+\.          { return (int)Token.T_DOT; }
+\|          { return (int)Token.T_PIPE; }
+\(          { return (int)Token.T_LPAR; }
+\)          { return (int)Token.T_RPAR; }
+{          { return (int)Token.T_LBRACE; }
+//---------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// Error: Invalid production rule
+// Error: Invalid production rule
+// Error: Parser error <Syntax error, unexpected {> 
+// Error: Expected end-of-line here
+// -------------------------------------------------
+}          { return (int)Token.T_RBRACE; }
+//---------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// Error: Invalid production rule
+// Error: Expected end-of-line here
 // --------------------------------
-)           { return (int)Token.T_RPAR; }
-*           { return (int)Token.T_STAR; }
-
+\*          { return (int)Token.T_STAR; }
+\+          { return (int)Token.T_PLUS; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
+
+$[0-9]+     { yylval.s = yytext; return (int)Token.T_WORD; } /* FIXME - not a word */
+
+aggregate   { return (int)Token.T_AGGREGATE; }
+call        { return (int)Token.T_CALL; }
 
 {Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }
 
@@ -67,8 +86,8 @@ Other      .
 <comment>[^\r\n]* /* skip */
 <comment>\r|\n    { BEGIN(INITIAL); }
 
-<output>[^\r\n]*    { yylval.s = yytext; Console.WriteLine("OOO: " + yytext); }
-<output>\r\n?|\n    { Console.WriteLine("O-end"); BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
+<output>[^\r\n]*    { yylval.s = yytext; }
+<output>\r\n?|\n    { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
 
 %%// ==========================================================================
 

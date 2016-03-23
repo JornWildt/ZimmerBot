@@ -75,5 +75,30 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       string result = GetResponseFrom(r, "aaa");
       StringAssert.IsMatch("ccc aaa", result);
     }
+
+
+    [Test]
+    public void CanSpecifyOutputTemplate()
+    {
+      Rule r = ParseRule(@"
+> aaa
+: bbb
+{xxx}: ccc
+");
+
+      Assert.AreEqual(2, r.OutputStatements.Count);
+      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[0]);
+      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[1]);
+      TemplateOutputStatement ts = (TemplateOutputStatement)r.OutputStatements[0];
+      Assert.AreEqual("default", ts.Template.Key);
+      Assert.AreEqual("bbb", ts.Template.Value);
+
+      ts = (TemplateOutputStatement)r.OutputStatements[1];
+      Assert.AreEqual("xxx", ts.Template.Key);
+      Assert.AreEqual("ccc", ts.Template.Value);
+
+      string result = GetResponseFrom(r, "aaa");
+      StringAssert.IsMatch("bbb", result);
+    }
   }
 }

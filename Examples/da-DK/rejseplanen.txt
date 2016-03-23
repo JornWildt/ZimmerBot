@@ -4,3 +4,5 @@
 > find stoppested *
 ! call Rejseplanen.FindStoppested($1)
 : Fandt '<stopName>'
+{empty}: Der var ikke nogen station ved det navn
+{error}: Kludder i maskineriet!

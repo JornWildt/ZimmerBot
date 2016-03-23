@@ -11,6 +11,7 @@
   public List<OutputStatement> outputList;
   public WRegex regex;
   public Expression expr;
+  public KeyValuePair<string,string> template;
   public List<Expression> exprList;
   public List<string> stringList;
   public string s;
@@ -29,6 +30,8 @@
 %token T_PIPE
 %token T_LPAR
 %token T_RPAR
+%token T_LBRACE
+%token T_RBRACE
 %token T_STAR
 %token T_PLUS
 %token T_OUTPUT
@@ -108,14 +111,19 @@ outputSeq
   ;
 
 output
-  : outputPattern { $$.output = new TemplateOutputStatement($1.s); }
+  : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
   | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
   ;
 
 outputPattern
   : T_COLON  
       { ((ConfigScanner)Scanner).BEGIN(2); } 
-    T_OUTPUT { $$.s = $3.s.Trim(); }
+    T_OUTPUT 
+      { $$.template = new KeyValuePair<string,string>("default", $3.s.Trim()); }
+  | T_LBRACE T_WORD T_RBRACE T_COLON 
+      { ((ConfigScanner)Scanner).BEGIN(2); } 
+    T_OUTPUT 
+      { $$.template = new KeyValuePair<string,string>($2.s, $6.s.Trim()); }
   ;
 
 call

@@ -12,12 +12,12 @@ namespace ZimmerBot.Core.StandardProcessors
     }
 
 
-    public static object Echo(ProcessorInput input)
+    public static ProcessorOutput Echo(ProcessorInput input)
     {
       string text = input.GetParameter<string>(0);
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["result"] = text;
-      return result;
+      return new ProcessorOutput(result);
     }
   }
 }

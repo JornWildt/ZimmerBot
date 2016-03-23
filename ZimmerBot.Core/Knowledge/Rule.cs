@@ -129,9 +129,18 @@ namespace ZimmerBot.Core.Knowledge
         output.Execute(ox_context);
       }
 
-      string selectedTemplate = ox_context.OutputTemplates[Randomizer.Next(ox_context.OutputTemplates.Count)];
-      string result = TextMerge.MergeTemplate(selectedTemplate, context.Variables);
+      string templateName = "default";
+      if (ox_context.LastValue != null)
+        templateName = ox_context.LastValue.TemplateName;
 
+      string result = "";
+      if (ox_context.OutputTemplates.ContainsKey(templateName))
+      {
+        IList<string> templates = ox_context.OutputTemplates[templateName];
+
+        string selectedTemplate = templates[Randomizer.Next(templates.Count)];
+        result = TextMerge.MergeTemplate(selectedTemplate, context.Variables);
+      }
 
       foreach (var ea in ExpectedAnswers)
       {

@@ -32,12 +32,14 @@ namespace ZimmerBot.Core.ConfigParser
       }
 
       ProcessorInput inp = new ProcessorInput(context.ResponseContext, inputs);
-      context.LastValue = processor.Function(inp);
+      ProcessorOutput result = processor.Function(inp);
 
-      // Make the output values available to to templates
-      if (context.LastValue is IDictionary<string, object>)
+      context.LastValue = result;
+
+      // Make the output values available to templates
+      if (result.Value is IDictionary<string, object>)
       {
-        context.ResponseContext.Variables.Push((IDictionary < string, object > )context.LastValue);
+        context.ResponseContext.Variables.Push((IDictionary < string, object > )result.Value);
       }
     }
   }

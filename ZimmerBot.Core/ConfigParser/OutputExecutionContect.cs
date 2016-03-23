@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Processors;
 
 
 namespace ZimmerBot.Core.ConfigParser
@@ -9,9 +10,9 @@ namespace ZimmerBot.Core.ConfigParser
   {
     public ResponseContext ResponseContext { get; set; }
 
-    public List<string> OutputTemplates { get; set; }
+    public Dictionary<string,List<string>> OutputTemplates { get; set; }
 
-    public object LastValue { get; set; }
+    public ProcessorOutput LastValue { get; set; }
 
 
     public OutputExecutionContect(ResponseContext context)
@@ -19,8 +20,16 @@ namespace ZimmerBot.Core.ConfigParser
       Condition.Requires(context, nameof(context)).IsNotNull();
 
       ResponseContext = context;
-      OutputTemplates = new List<string>();
-      LastValue = new object();
+      OutputTemplates = new Dictionary<string, List<string>>();
+      LastValue = null;
+    }
+
+
+    public void AddOutputTemplate(KeyValuePair<string, string> template)
+    {
+      if (!OutputTemplates.ContainsKey(template.Key))
+        OutputTemplates[template.Key] = new List<string>();
+      OutputTemplates[template.Key].Add(template.Value);
     }
   }
 }

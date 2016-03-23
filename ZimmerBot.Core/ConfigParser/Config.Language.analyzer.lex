@@ -36,6 +36,8 @@ Other      .
 \|          { return (int)Token.T_PIPE; }
 \(          { return (int)Token.T_LPAR; }
 \)          { return (int)Token.T_RPAR; }
+\{          { return (int)Token.T_LBRACE; }
+\}          { return (int)Token.T_RBRACE; }
 \*          { return (int)Token.T_STAR; }
 \+          { return (int)Token.T_PLUS; }
 
