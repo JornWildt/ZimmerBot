@@ -106,6 +106,8 @@
     <Compile Include="Processors\ProcessorRegistry.cs" />
     <Compile Include="Knowledge\ResponseContext.cs" />
     <Compile Include="Utilities\ChainedDictionary.cs" />
+    <Compile Include="Utilities\ErrorCollection.cs" />
+    <Compile Include="Utilities\ParserException.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />

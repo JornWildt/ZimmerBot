@@ -2,7 +2,7 @@
 using log4net;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
-
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Console
 {
@@ -20,12 +20,20 @@ namespace ZimmerBot.Console
       // Initialize bot framework
       ZimmerBotConfiguration.Initialize();
 
-      // Initialize bot from files in example directory
-      KnowledgeBase kb = KnowledgeBase.LoadFromFiles("..\\..\\..\\Examples\\da-DK");
-      Bot b = new Bot(kb);
+      try
+      {
+        // Initialize bot from files in example directory
+        KnowledgeBase kb = KnowledgeBase.LoadFromFiles("..\\..\\..\\Examples\\da-DK");
+        Bot b = new Bot(kb);
 
-      // Run bot
-      ConsoleBotEnvironment.RunInteractiveConsoleBot("ZimmerBot> ", b);
+        // Run bot
+        ConsoleBotEnvironment.RunInteractiveConsoleBot("ZimmerBot> ", b);
+      }
+      catch (ParserException ex)
+      {
+        Logger.Fatal(ex);
+        System.Console.WriteLine("Parser error:\n" + ex.ToString());
+      }
 
       // Shutdown framework again (this is required as there are some background threads that need to be aborted)
       ZimmerBotConfiguration.Shutdown();

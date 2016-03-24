@@ -4,7 +4,7 @@ using log4net;
 using ZimmerBot.Core;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
-
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBotEliza
 {
@@ -22,12 +22,20 @@ namespace ZimmerBotEliza
       // Initialize bot framework
       ZimmerBotConfiguration.Initialize();
 
-      // Initialize bot from Eliza file
-      KnowledgeBase kb = KnowledgeBase.LoadFromFiles(".");
-      Bot b = new Bot(kb);
+      try
+      {
+        // Initialize bot from Eliza file
+        KnowledgeBase kb = KnowledgeBase.LoadFromFiles(".");
+        Bot b = new Bot(kb);
 
-      // Run bot
-      ConsoleBotEnvironment.RunInteractiveConsoleBot("Eliza> ", b);
+        // Run bot
+        ConsoleBotEnvironment.RunInteractiveConsoleBot("Eliza> ", b);
+      }
+      catch (ParserException ex)
+      {
+        Logger.Fatal(ex);
+        System.Console.WriteLine("Parser error:\n" + ex.ToString());
+      }
 
       // Shutdown framework again (this is required as there are some background threads that need to be aborted)
       ZimmerBotConfiguration.Shutdown();

@@ -2,17 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.ConfigParser
 {
   internal partial class ConfigParser
   {
-    //protected KnowledgeBase KB { get; set; }
-
     protected Domain Domain { get; set; }
-
-    //protected ConfigScanner ConfigScanner { get; set; }
 
 
     public ConfigParser(Domain d) 
@@ -27,14 +24,16 @@ namespace ZimmerBot.Core.ConfigParser
     {
       byte[] inputBuffer = System.Text.Encoding.Default.GetBytes(s);
       MemoryStream stream = new MemoryStream(inputBuffer);
-      Parse(stream);
+      Parse(stream, "string input");
     }
 
 
-    public void Parse(Stream s)
+    public void Parse(Stream s, string filename)
     {
       this.Scanner = new ConfigScanner(s);
       this.Parse();
+      if (((ConfigScanner)Scanner).Errors.Count > 0)
+        throw new ParserException(filename, ((ConfigScanner)Scanner).Errors);
     }
 
 

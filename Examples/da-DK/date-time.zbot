@@ -1,5 +1,7 @@
 ﻿### Various rules for understanding dates and time
 
+xx
+
 ! aggregate mandag, tirsdag, onsdag, torsdag, fredag, lørdag, søndag => dag, ugedag
 ! aggregate januar, februar, marts, april, maj, juni, juli, august, september, oktober, november, december => måned
 

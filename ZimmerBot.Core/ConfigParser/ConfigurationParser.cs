@@ -20,7 +20,7 @@ namespace ZimmerBot.Core.ConfigParser
       using (Stream s = new FileStream(filename, FileMode.Open))
       {
         ConfigParser parser = new ConfigParser(d);
-        parser.Parse(s);
+        parser.Parse(s, filename);
       }
     }
   }
