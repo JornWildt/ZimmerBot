@@ -32,7 +32,7 @@ namespace ZimmerBot.Core.ConfigParser
     {
       this.Scanner = new ConfigScanner(s);
       this.Parse();
-      if (((ConfigScanner)Scanner).Errors.Count > 0)
+      if (((ConfigScanner)Scanner).Errors != null && ((ConfigScanner)Scanner).Errors.Count > 0)
         throw new ParserException(filename, ((ConfigScanner)Scanner).Errors);
     }
 

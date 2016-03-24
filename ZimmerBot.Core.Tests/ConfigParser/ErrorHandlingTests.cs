@@ -16,7 +16,19 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ";
       KnowledgeBase kb = new KnowledgeBase();
       Domain d = kb.NewDomain("Test");
-      Assert.Throws<ParserException>(() => CfgParser.ParseConfigurationString(d, s));
+      try
+      {
+        CfgParser.ParseConfigurationString(d, s);
+        Assert.Fail("Missing exception");
+      }
+      catch (ParserException ex)
+      {
+        Assert.AreEqual("string input", ex.Filename);
+        Assert.AreEqual(1, ex.Errors.Count);
+        Assert.AreEqual(3 , ex.Errors[0].LineNo);
+        Assert.AreEqual(1, ex.Errors[0].Position);
+        StringAssert.EndsWith("(3,1)", ex.Message);
+      }
     }
   }
 }
