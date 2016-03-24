@@ -1,0 +1,105 @@
+// Parser Conflict Information for grammar file "ConfigParser\Config.Language.grammar.y - 24-03-2016 23:46:05"
+
+Shift/Reduce conflict on symbol "T_EXCL", parser will shift
+ Reduce 8:	rule -> input, condition, outputSeq
+ Shift "T_EXCL":	State-17 -> State-30
+  Items for From-state State 17
+    8 rule: input condition outputSeq .
+	-lookahead: T_EXCL, T_GT, EOF
+    19 outputSeq: outputSeq . output 
+  Items for Next-state State 30
+    27 call: T_EXCL . T_CALL exprReference T_LPAR exprSeq T_RPAR 
+
+Shift/Reduce conflict on symbol "T_PIPE", parser will shift
+ Reduce 11:	inputPattern -> inputPattern, inputPattern
+ Shift "T_PIPE":	State-59 -> State-60
+  Items for From-state State 59
+    11 inputPattern: inputPattern inputPattern .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+    11 inputPattern: inputPattern . inputPattern 
+    12 inputPattern: inputPattern . T_PIPE inputPattern 
+  Items for Next-state State 60
+    12 inputPattern: inputPattern T_PIPE . inputPattern 
+
+Shift/Reduce conflict on symbol "T_LPAR", parser will shift
+ Reduce 11:	inputPattern -> inputPattern, inputPattern
+ Shift "T_LPAR":	State-59 -> State-62
+  Items for From-state State 59
+    11 inputPattern: inputPattern inputPattern .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+    11 inputPattern: inputPattern . inputPattern 
+    12 inputPattern: inputPattern . T_PIPE inputPattern 
+  Items for Next-state State 62
+    13 inputPattern: T_LPAR . inputPattern T_RPAR 
+
+Shift/Reduce conflict on symbol "T_WORD", parser will shift
+ Reduce 11:	inputPattern -> inputPattern, inputPattern
+ Shift "T_WORD":	State-59 -> State-65
+  Items for From-state State 59
+    11 inputPattern: inputPattern inputPattern .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+    11 inputPattern: inputPattern . inputPattern 
+    12 inputPattern: inputPattern . T_PIPE inputPattern 
+  Items for Next-state State 65
+    14 inputPattern: T_WORD .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+
+Shift/Reduce conflict on symbol "T_STAR", parser will shift
+ Reduce 11:	inputPattern -> inputPattern, inputPattern
+ Shift "T_STAR":	State-59 -> State-66
+  Items for From-state State 59
+    11 inputPattern: inputPattern inputPattern .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+    11 inputPattern: inputPattern . inputPattern 
+    12 inputPattern: inputPattern . T_PIPE inputPattern 
+  Items for Next-state State 66
+    15 inputPattern: T_STAR .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+
+Shift/Reduce conflict on symbol "T_PLUS", parser will shift
+ Reduce 11:	inputPattern -> inputPattern, inputPattern
+ Shift "T_PLUS":	State-59 -> State-67
+  Items for From-state State 59
+    11 inputPattern: inputPattern inputPattern .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+    11 inputPattern: inputPattern . inputPattern 
+    12 inputPattern: inputPattern . T_PIPE inputPattern 
+  Items for Next-state State 67
+    16 inputPattern: T_PLUS .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+
+Shift/Reduce conflict on symbol "T_LPAR", parser will shift
+ Reduce 12:	inputPattern -> inputPattern, T_PIPE, inputPattern
+ Shift "T_LPAR":	State-61 -> State-62
+  Items for From-state State 61
+    12 inputPattern: inputPattern T_PIPE inputPattern .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+    11 inputPattern: inputPattern . inputPattern 
+    12 inputPattern: inputPattern . T_PIPE inputPattern 
+  Items for Next-state State 62
+    13 inputPattern: T_LPAR . inputPattern T_RPAR 
+
+Shift/Reduce conflict on symbol "T_WORD", parser will shift
+ Reduce 12:	inputPattern -> inputPattern, T_PIPE, inputPattern
+ Shift "T_WORD":	State-61 -> State-65
+  Items for From-state State 61
+    12 inputPattern: inputPattern T_PIPE inputPattern .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+    11 inputPattern: inputPattern . inputPattern 
+    12 inputPattern: inputPattern . T_PIPE inputPattern 
+  Items for Next-state State 65
+    14 inputPattern: T_WORD .
+	-lookahead: T_PIPE, T_LPAR, T_WORD, T_STAR, T_PLUS, T_AMP, T_COLON, 
+                T_LBRACE, T_EXCL, T_GT, EOF, T_RPAR
+
+// End conflict information for parser

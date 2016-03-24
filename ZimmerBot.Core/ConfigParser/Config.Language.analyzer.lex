@@ -7,10 +7,9 @@
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
 Word       [[:IsLetter:]]+
+Number     [0-9]+(\.[0-9]+)?
 Comment    #
 Space      [ \t]
-eol        (\r\n?|\n)
-Other      .
 
 
 /* No. 1-3 */
@@ -40,13 +39,16 @@ Other      .
 \}          { return (int)Token.T_RBRACE; }
 \*          { return (int)Token.T_STAR; }
 \+          { return (int)Token.T_PLUS; }
+&           { return (int)Token.T_AMP; }
+=           { return (int)Token.T_EQU; }
+$           { return (int)Token.T_DOLLAR; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-$[0-9]+     { yylval.s = yytext; return (int)Token.T_WORD; } /* FIXME - not a word */
-
 abstraction { return (int)Token.T_ABSTRACTION; }
 call        { return (int)Token.T_CALL; }
+
+{Number}    { yylval.s = yytext; return (int)Token.T_NUMBER; }
 
 {Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }
 
@@ -66,10 +68,5 @@ call        { return (int)Token.T_CALL; }
 <output>\\(\r\n?|\n)  { StringInput.Append(yytext.Substring(1)); }
 <output>\\[^\r\n]     { StringInput.Append(yytext.Substring(1)); }
 <output>\r\n?|\n      { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
-
-/*
-<output>[^\r\n]*    { yylval.s = yytext; }
-<output>\r\n?|\n    { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
-*/
 
 %%

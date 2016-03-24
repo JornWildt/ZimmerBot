@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigParser\BasicConfigParserTests.cs" />
+    <Compile Include="ConfigParser\ConditionTests.cs" />
+    <Compile Include="ConfigParser\EmptyInputTests.cs" />
     <Compile Include="ConfigParser\ErrorHandlingTests.cs" />
     <Compile Include="ConfigParser\InputPatternTests.cs" />
     <Compile Include="ConfigParser\OutputTests.cs" />

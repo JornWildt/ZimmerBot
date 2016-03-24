@@ -17,6 +17,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : xxx
 : yyy
 ");
+
+      Assert.AreEqual(2, r.OutputStatements.Count);
     }
 
 

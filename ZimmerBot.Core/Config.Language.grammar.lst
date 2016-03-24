@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-03-2016 21:40:31>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-03-2016 23:01:46>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 24-03-2016 21:40:32
+//  DateTime: 24-03-2016 23:01:48
 //  UserName: Jorn
 // ==========================================================================
 
@@ -32,10 +32,6 @@
 
 %token T_ABSTRACTION
 %token T_CALL
-%token T_GT
-%token T_COLON
-%token T_EXCL
-%token T_DOT
 %token T_IMPLIES
 %token T_COMMA
 %token T_PIPE
@@ -43,15 +39,18 @@
 %token T_RPAR
 %token T_LBRACE
 %token T_RBRACE
-%token T_STAR
-%token T_PLUS
+%token T_AMP
 %token T_OUTPUT
 %token T_WORD
 %token T_STRING
 
+%left T_EXCL, T_GT, T_COLON
+%left T_EQU
+%left T_PLUS, T_STAR
+%left T_DOT
+
 %%
 // Warning: NonTerminal symbol "inputPatternSeq" is unreachable
-// Warning: NonTerminal symbol "inputSeq" is unreachable
 // ------------------------------------------------------------
 
 main
@@ -73,7 +72,7 @@ configuration
   ;
 
 rule
-  : input outputSeq
+  : input condition outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
       if ($2.outputList != null)
@@ -85,13 +84,9 @@ rule
   INPUT
 ******************************************************************************/
 
-inputSeq
-  : inputSeq input
-  | /* empty */
-  ;
-
 input
   : T_GT inputPattern { $$.regex = $2.regex; }
+  | T_GT              { $$.regex = null; }
   ;
 
 inputPatternSeq
@@ -112,6 +107,15 @@ inputPattern
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
       { $$.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
+  ;
+
+
+/******************************************************************************
+  CONDITION
+******************************************************************************/
+
+condition
+  : T_AMP expr
   ;
 
 
@@ -160,6 +164,15 @@ exprSeq2
   ;
 
 expr
+  : exprBinary { $$ = $1; }
+  | exprUnary  { $$ = $1; }
+  ;
+
+exprBinary
+  : expr T_EQU expr { $$.expr = new BinaryOperatorExpr($1.expr, $2.expr, BinaryOperatorExpr.OperatorType.Equals); }
+  ;
+
+exprUnary
   : exprIdentifier { $$ = $1; }
   | T_STRING       { $$.expr = new ConstantValueExpr($1.s); }
   ;

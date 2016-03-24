@@ -204,7 +204,7 @@
       <Output TaskParameter="Outputs" ItemName="ChatScanner" />
     </Exec>
     <Message Text="Generating parser for $(Chat-ZimmerBot-Core-ParserParser) ..." />
-    <Exec Command="$(GppgTool) /no-lines /gplex &quot;$(Chat-ZimmerBot-Core-ParserParser).Language.grammar.y&quot; &gt; &quot;$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs">
+    <Exec Command="$(GppgTool) /no-lines /conflicts /gplex &quot;$(Chat-ZimmerBot-Core-ParserParser).Language.grammar.y&quot; &gt; &quot;$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs">
       <Output TaskParameter="Outputs" ItemName="Chat" />
     </Exec>
   </Target>
@@ -214,7 +214,7 @@
       <Output TaskParameter="Outputs" ItemName="ConfigScanner" />
     </Exec>
     <Message Text="Generating parser for $(Config-ZimmerBot-Core-ConfigParserParser) ..." />
-    <Exec Command="$(GppgTool) /no-lines /gplex &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Language.grammar.y&quot; &gt; &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs">
+    <Exec Command="$(GppgTool) /no-lines /conflicts /gplex &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Language.grammar.y&quot; &gt; &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs">
       <Output TaskParameter="Outputs" ItemName="Config" />
     </Exec>
   </Target>

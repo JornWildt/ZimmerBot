@@ -84,3 +84,8 @@
 : Meget interessant.
 : Okay. Og hvad fortæller det så dig?
 : Hvilke følelser mærker du når du siger det?
+
+>
+& (state.conversation.entries.Count = 0)
+: Hej. Mit navn er Eliza.\
+Jeg er en chatbot med speciale i psykiatri. Hvad kan jeg hjælpe dig med?

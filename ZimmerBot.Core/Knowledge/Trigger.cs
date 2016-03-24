@@ -19,7 +19,12 @@ namespace ZimmerBot.Core.Knowledge
 
     public Trigger(params object[] topics)
     {
-      if (topics.Length == 1)
+      if (topics == null || topics.Length == 0 || topics[0] == null)
+      {
+        Regex = null;
+        RegexSize = 0;
+      }
+      else if (topics.Length == 1)
       {
         Regex = GetRegex(topics[0]);
         RegexSize = Regex.CalculateSize();
@@ -36,11 +41,6 @@ namespace ZimmerBot.Core.Knowledge
 
         Regex = p;
         RegexSize = p.CalculateSize();
-      }
-      else
-      {
-        Regex = null;
-        RegexSize = 0;
       }
     }
 
@@ -82,7 +82,6 @@ namespace ZimmerBot.Core.Knowledge
           .Build();
 
         ITrigger trigger = TriggerBuilder.Create()
-            //.StartNow()
             .StartAt(DateTime.Now.Add(Schedule.Value))
             .WithSimpleSchedule(x => x
                 .WithInterval(Schedule.Value)

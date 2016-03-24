@@ -19,24 +19,29 @@
 
 %start main
 
+%token T_EXCL, T_GT, T_COLON
+
 %token T_ABSTRACTION
 %token T_CALL
-%token T_GT
-%token T_COLON
-%token T_EXCL
-%token T_DOT
+
 %token T_IMPLIES
 %token T_COMMA
-%token T_PIPE
 %token T_LPAR
 %token T_RPAR
 %token T_LBRACE
 %token T_RBRACE
-%token T_STAR
-%token T_PLUS
+%token T_AMP
 %token T_OUTPUT
 %token T_WORD
 %token T_STRING
+%token T_NUMBER
+
+%left T_EQU
+%left T_PLUS, T_STAR
+%left T_PIPE
+%left T_DOT
+
+%token T_DOLLAR
 
 %%
 
@@ -59,11 +64,13 @@ configuration
   ;
 
 rule
-  : input outputSeq
+  : input condition outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.outputList != null)
-        r.WithOutputStatements($2.outputList);
+      if ($2.expr != null)
+        r.WithCondition($2.expr);
+      if ($3.outputList != null)
+        r.WithOutputStatements($3.outputList);
     }
   ;
 
@@ -71,18 +78,9 @@ rule
   INPUT
 ******************************************************************************/
 
-inputSeq
-  : inputSeq input
-  | /* empty */
-  ;
-
 input
   : T_GT inputPattern { $$.regex = $2.regex; }
-  ;
-
-inputPatternSeq
-  : inputPatternSeq inputPattern { ((SequenceWRegex)$1.regex).Add($2.regex); }
-  | /* empty */                  { $$.regex = new SequenceWRegex(); }
+  | T_GT              { $$.regex = null; }
   ;
 
 inputPattern
@@ -98,6 +96,16 @@ inputPattern
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
       { $$.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
+  ;
+
+
+/******************************************************************************
+  CONDITION
+******************************************************************************/
+
+condition
+  : T_AMP T_LPAR expr T_RPAR { $$.expr = $3.expr; }
+  | /* empty */              { $$.expr = null; }
   ;
 
 
@@ -146,12 +154,23 @@ exprSeq2
   ;
 
 expr
+  : exprBinary { $$ = $1; }
+  | exprUnary  { $$ = $1; }
+  ;
+
+exprBinary
+  : expr T_EQU expr { $$.expr = new BinaryOperatorExpr($1.expr, $3.expr, BinaryOperatorExpr.OperatorType.Equals); }
+  ;
+
+exprUnary
   : exprIdentifier { $$ = $1; }
-  | T_STRING       { $$.expr = new ConstantValueExpr($1.s); }
+  | T_STRING       { $$.expr = new ConstantValueExpr(((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_NUMBER       { $$.expr = new ConstantValueExpr(TryParseDouble($1.s)); }
   ;
 
 exprIdentifier
-  : exprReference { $$.expr = new IdentifierExpr($1.s); }
+  : exprReference     { $$.expr = new IdentifierExpr($1.s); }
+  | T_DOLLAR T_NUMBER { $$.expr = new IdentifierExpr("$"+$2.s); }
   ;
 
 exprReference

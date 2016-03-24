@@ -1,5 +1,5 @@
-﻿! aggregate station, holdeplads => stoppested
-! aggregate kører => afgår
+﻿! abstraction station, holdeplads => stoppested
+! abstraction kører => afgår
 
 > find stoppested *
 ! call Rejseplanen.FindStoppested($1)
