@@ -51,7 +51,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public static KnowledgeBase LoadFromFileMatches(string path, string pattern, SearchOption option)
+    public static KnowledgeBase LoadFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.AllDirectories)
     {
       ConfigurationParser cfg = new ConfigurationParser();
       KnowledgeBase kb = new KnowledgeBase();

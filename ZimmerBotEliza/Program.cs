@@ -23,7 +23,7 @@ namespace ZimmerBotEliza
       ZimmerBotConfiguration.Initialize();
 
       // Initialize bot from Eliza file
-      KnowledgeBase kb = KnowledgeBase.LoadFromFileMatches(".", "Eliza.txt", SearchOption.TopDirectoryOnly);
+      KnowledgeBase kb = KnowledgeBase.LoadFromFiles(".");
       Bot b = new Bot(kb);
 
       // Run bot

@@ -21,7 +21,7 @@ namespace ZimmerBot.Console
       ZimmerBotConfiguration.Initialize();
 
       // Initialize bot from files in example directory
-      KnowledgeBase kb = KnowledgeBase.LoadFromFileMatches("..\\..\\..\\Examples\\da-DK", "*.txt", SearchOption.TopDirectoryOnly);
+      KnowledgeBase kb = KnowledgeBase.LoadFromFiles("..\\..\\..\\Examples\\da-DK");
       Bot b = new Bot(kb);
 
       // Run bot
