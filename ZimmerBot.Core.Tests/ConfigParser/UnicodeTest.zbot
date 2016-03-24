@@ -1,0 +1,6 @@
+﻿> (Über) Åsen
+: Østers: <1>
+
+> (ÆØÅ)
+! call General.Echo($1)
+: Got: '<result>'
