@@ -6,7 +6,7 @@ namespace ZimmerBot.Core.ConfigParser
 {
   public class ConfigurationParser
   {
-    public void ParseConfiguration(Domain d, string s)
+    public void ParseConfigurationString(Domain d, string s)
     {
       if (!s.EndsWith("\n"))
         s += "\n";
@@ -17,9 +17,11 @@ namespace ZimmerBot.Core.ConfigParser
 
     public void ParseConfigurationFromFile(Domain d, string filename)
     {
-      // FIXME: make it stream based
-      string s = File.ReadAllText(filename);
-      ParseConfiguration(d, s);
+      using (Stream s = new FileStream(filename, FileMode.Open))
+      {
+        ConfigParser parser = new ConfigParser(d);
+        parser.Parse(s);
+      }
     }
   }
 }

@@ -16,7 +16,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       KnowledgeBase kb = new KnowledgeBase();
       Domain d = kb.NewDomain("Test");
 
-      CfgParser.ParseConfiguration(d, @"
+      CfgParser.ParseConfigurationString(d, @"
 > Dav
 : selv hej
 ");
@@ -32,7 +32,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       KnowledgeBase kb = new KnowledgeBase();
       Domain d = kb.NewDomain("Test");
 
-      CfgParser.ParseConfiguration(d, @"
+      CfgParser.ParseConfigurationString(d, @"
 ### Rule 1
 > Dav
 : selv hej
@@ -49,7 +49,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       KnowledgeBase kb = new KnowledgeBase();
       Domain d = kb.NewDomain("Test");
 
-      CfgParser.ParseConfiguration(d, @"
+      CfgParser.ParseConfigurationString(d, @"
 ### Flere mønstre til samme regel
 > Hej
 > Dav

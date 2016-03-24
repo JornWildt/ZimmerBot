@@ -1,8 +1,8 @@
-﻿using log4net;
+﻿using System.IO;
+using log4net;
 using ZimmerBot.Core;
-using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.StandardProcessors;
+
 
 namespace ZimmerBot.Console
 {
@@ -13,41 +13,22 @@ namespace ZimmerBot.Console
 
     static void Main(string[] args)
     {
+      // Start logging
       log4net.Config.XmlConfigurator.Configure();
       Logger.Info("**** STARTING ZimmerBot.Console ****");
 
+      // Initialize bot framework
       ZimmerBotConfiguration.Initialize();
 
-      // Initialize bot
-      KnowledgeBase kb = InitializeKnowledgeBase();
+      // Initialize bot from files in example directory
+      KnowledgeBase kb = KnowledgeBase.LoadFromFileMatches("..\\..\\..\\Examples\\da-DK", "*.txt", SearchOption.TopDirectoryOnly);
       Bot b = new Bot(kb);
-
-      // Remove this line if you do not want to see a bunch of test interactions
-      //RunTestOutput(b);
 
       // Run bot
       ConsoleBotEnvironment.RunInteractiveConsoleBot("ZimmerBot> ", b);
 
+      // Shutdown framework again (this is required as there are some background threads that need to be aborted)
       ZimmerBotConfiguration.Shutdown();
-    }
-
-
-    static KnowledgeBase InitializeKnowledgeBase()
-    {
-      GeneralProcessor.Initialize();
-      DateTimeProcessor.Initialize();
-
-      ConfigurationParser cfg = new ConfigurationParser();
-
-      KnowledgeBase kb = new KnowledgeBase();
-
-      Domain d = kb.NewDomain("DateTime");
-      cfg.ParseConfigurationFromFile(d, "..\\..\\..\\Examples\\da-DK\\date-time.txt");
-
-      d = kb.NewDomain("Rejseplanen");
-      cfg.ParseConfigurationFromFile(d, "..\\..\\..\\Examples\\da-DK\\rejseplanen.txt");
-
-      return kb;
     }
 
 

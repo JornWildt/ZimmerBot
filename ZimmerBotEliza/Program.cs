@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using log4net;
 using ZimmerBot.Core;
 using ZimmerBot.Core.ConfigParser;
@@ -11,35 +12,25 @@ namespace ZimmerBotEliza
   {
     static ILog Logger = LogManager.GetLogger(typeof(Program));
 
-    static Random Randomizer = new Random();
-
 
     static void Main(string[] args)
     {
+      // Start logging
       log4net.Config.XmlConfigurator.Configure();
       Logger.Info("**** STARTING ZimmerBotEliza ****");
 
+      // Initialize bot framework
       ZimmerBotConfiguration.Initialize();
-      KnowledgeBase kb = new KnowledgeBase();
-      Domain de = kb.NewDomain("Eliza");
 
-      ConfigurationParser cfg = new ConfigurationParser();
-      cfg.ParseConfigurationFromFile(de, "Eliza.txt");
-
-      //ElizaDomain.Initialize(kb);
-
+      // Initialize bot from Eliza file
+      KnowledgeBase kb = KnowledgeBase.LoadFromFileMatches(".", "Eliza.txt", SearchOption.TopDirectoryOnly);
       Bot b = new Bot(kb);
-      ConsoleBotEnvironment.RunInteractiveConsoleBot("Eliza> ", b, InputModifier);
+
+      // Run bot
+      ConsoleBotEnvironment.RunInteractiveConsoleBot("Eliza> ", b);
+
+      // Shutdown framework again (this is required as there are some background threads that need to be aborted)
       ZimmerBotConfiguration.Shutdown();
-    }
-
-
-    private static string InputModifier(string s)
-    {
-      // Introduce a tiny break before answering way too quick
-      //System.Threading.Thread.Sleep((int)(Randomizer.NextDouble() * 500 + 200));
-
-      return s;
     }
   }
 }

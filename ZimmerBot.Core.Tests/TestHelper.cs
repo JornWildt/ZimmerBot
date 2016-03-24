@@ -60,7 +60,7 @@ namespace ZimmerBot.Core.Tests
     {
       KnowledgeBase kb = new KnowledgeBase();
       Domain d = kb.NewDomain("Test");
-      CfgParser.ParseConfiguration(d, s);
+      CfgParser.ParseConfigurationString(d, s);
       return d;
     }
 

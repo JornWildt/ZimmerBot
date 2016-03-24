@@ -6,7 +6,7 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [a-zA-Z_זרוֶ״ֵ]+
+Word       [[:IsLetter:]]+
 Comment    #
 Space      [ \t]
 eol        (\r\n?|\n)

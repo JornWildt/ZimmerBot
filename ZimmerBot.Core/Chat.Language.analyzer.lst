@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 16-03-2016 22:25:31
+//  DateTime: 24-03-2016 09:15:47
 //  UserName: Jorn
 // ==========================================================================
 
@@ -17,13 +17,13 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [a-zA-ZæøåÆØÅ]+
+Word       [[:isLetter:]]+
+//------------^^^^^^^^
+// Error: Unknown character predicate <isLetter> 
+// ----------------------------------------------
 Number     [0-9]+(\.[0-9]+)?
 EMail      [a-zA-Z0-9+-_]+(\.[a-zA-Z0-9+-_])*@([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9]([a-z0-9\-]*[a-z0-9])?
-URL        (https?:/)11
-//-----------------^
-// Error: Expected character <')'> 
-// --------------------------------
+URL        (https?:\/\/|www\.)[a-zA-Z+&@#/%=~_?!:;,.]*[a-zA-Z+&@#/%=~_?!:;]+
 Delimiter  (\r\n?|\n|\.|\?|;|:)
 NotWh      [^ \t\r\n]
 Space      [ \t]
@@ -41,11 +41,13 @@ Other      .
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-{Word}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.Word); return (int)Token.T_WORD; }
+{Word}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.Word); Console.WriteLine("["+yytext+"]"); return (int)Token.T_WORD; }
 
 {Number}		{ yylval.t = new ZToken(yytext, ZToken.TokenType.Number); return (int)Token.T_NUMBER; }
 
 {EMail}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_EMAIL; }
+
+{URL}		    { yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_URL; }
 
 {Delimiter}	{ yylval.t = new ZToken(yytext); return (int)Token.T_DELIMITER; }
 

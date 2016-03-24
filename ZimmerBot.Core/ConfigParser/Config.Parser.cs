@@ -27,7 +27,13 @@ namespace ZimmerBot.Core.ConfigParser
     {
       byte[] inputBuffer = System.Text.Encoding.Default.GetBytes(s);
       MemoryStream stream = new MemoryStream(inputBuffer);
-      this.Scanner = new ConfigScanner(stream);
+      Parse(stream);
+    }
+
+
+    public void Parse(Stream s)
+    {
+      this.Scanner = new ConfigScanner(s);
       this.Parse();
     }
 

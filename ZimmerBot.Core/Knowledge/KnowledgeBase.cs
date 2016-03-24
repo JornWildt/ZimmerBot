@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
 
 
@@ -46,6 +48,21 @@ namespace ZimmerBot.Core.Knowledge
         d.FindMatchingReactions(context, reactions);
 
       return reactions;
+    }
+
+
+    public static KnowledgeBase LoadFromFileMatches(string path, string pattern, SearchOption option)
+    {
+      ConfigurationParser cfg = new ConfigurationParser();
+      KnowledgeBase kb = new KnowledgeBase();
+
+      foreach (string filename in Directory.EnumerateFiles(path, pattern, option))
+      {
+        Domain d = kb.NewDomain(Path.GetFileName(filename));
+        cfg.ParseConfigurationFromFile(d, filename);
+      }
+
+      return kb;
     }
   }
 }

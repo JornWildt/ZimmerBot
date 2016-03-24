@@ -198,7 +198,7 @@
   <Target Name="YltBuildGen" DependsOnTargets="GenerateChat-ZimmerBot-Core-Parser;GenerateConfig-ZimmerBot-Core-ConfigParser" />
   <Target Name="GenerateChat-ZimmerBot-Core-Parser" Inputs="$(Chat-ZimmerBot-Core-ParserParser).Language.analyzer.lex;$(Chat-ZimmerBot-Core-ParserParser).Language.grammar.y" Outputs="$(Chat-ZimmerBot-Core-ParserParser).Scanner.Generated.cs;$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs">
     <Message Text="Generating scanner for $(Chat-ZimmerBot-Core-ParserParser) ..." />
-    <Exec Command="$(GplexTool) &quot;/out:$(Chat-ZimmerBot-Core-ParserParser).Scanner.Generated.cs&quot; &quot;$(Chat-ZimmerBot-Core-ParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
+    <Exec Command="$(GplexTool) /unicode &quot;/out:$(Chat-ZimmerBot-Core-ParserParser).Scanner.Generated.cs&quot; &quot;$(Chat-ZimmerBot-Core-ParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
       <Output TaskParameter="Outputs" ItemName="ChatScanner" />
     </Exec>
     <Message Text="Generating parser for $(Chat-ZimmerBot-Core-ParserParser) ..." />
@@ -208,7 +208,7 @@
   </Target>
   <Target Name="GenerateConfig-ZimmerBot-Core-ConfigParser" Inputs="$(Config-ZimmerBot-Core-ConfigParserParser).Language.analyzer.lex;$(Config-ZimmerBot-Core-ConfigParserParser).Language.grammar.y" Outputs="$(Config-ZimmerBot-Core-ConfigParserParser).Scanner.Generated.cs;$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs">
     <Message Text="Generating scanner for $(Config-ZimmerBot-Core-ConfigParserParser) ..." />
-    <Exec Command="$(GplexTool) &quot;/out:$(Config-ZimmerBot-Core-ConfigParserParser).Scanner.Generated.cs&quot; &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
+    <Exec Command="$(GplexTool) /unicode &quot;/out:$(Config-ZimmerBot-Core-ConfigParserParser).Scanner.Generated.cs&quot; &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
       <Output TaskParameter="Outputs" ItemName="ConfigScanner" />
     </Exec>
     <Message Text="Generating parser for $(Config-ZimmerBot-Core-ConfigParserParser) ..." />
