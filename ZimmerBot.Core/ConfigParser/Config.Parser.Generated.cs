@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 24-03-2016 09:16:07
+// DateTime: 24-03-2016 21:21:10
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 23-03-2016 22:20:49>
+// Input file <ConfigParser\Config.Language.grammar.y - 24-03-2016 21:21:07>
 
 // options: no-lines gplex
 
@@ -21,7 +21,7 @@ using ZimmerBot.Core.Expressions;
 
 namespace ZimmerBot.Core.ConfigParser
 {
-internal enum Token {error=2,EOF=3,T_AGGREGATE=4,T_CALL=5,T_GT=6,
+internal enum Token {error=2,EOF=3,T_ABSTRACTION=4,T_CALL=5,T_GT=6,
     T_COLON=7,T_EXCL=8,T_DOT=9,T_IMPLIES=10,T_COMMA=11,T_PIPE=12,
     T_LPAR=13,T_RPAR=14,T_LBRACE=15,T_RBRACE=16,T_STAR=17,T_PLUS=18,
     T_OUTPUT=19,T_WORD=20,T_STRING=21};
@@ -183,8 +183,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 162, 1522
     switch (action)
     {
-      case 7: // configuration -> T_EXCL, T_AGGREGATE, wordSeq, T_IMPLIES, wordSeq
-{ RegisterAggregates(ValueStack[ValueStack.Depth-3].stringList, ValueStack[ValueStack.Depth-1].stringList); }
+      case 7: // configuration -> T_EXCL, T_ABSTRACTION, wordSeq, T_IMPLIES, wordSeq
+{ RegisterAbstractions(ValueStack[ValueStack.Depth-3].stringList, ValueStack[ValueStack.Depth-1].stringList); }
         break;
       case 8: // rule -> input, outputSeq
 { 

@@ -5,13 +5,13 @@ using ZimmerBot.Core.Knowledge;
 namespace ZimmerBot.Core.Tests.ConfigParser
 {
   [TestFixture]
-  public class WordAggregationTests : TestHelper
+  public class WordAbstractionTests : TestHelper
   {
     [Test]
-    public void CanParseSingleWordAggregations()
+    public void CanParseSingleWordAbstractions()
     {
       Domain d = ParseDomain(@"
-! aggregate monday => weekday
+! abstraction monday => weekday
 ");
 
       Assert.AreEqual(1, d.WordDefinitions.Count);
@@ -23,10 +23,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
-    public void CanParseMultiWordAggregations()
+    public void CanParseMultiWordAbstractions()
     {
       Domain d = ParseDomain(@"
-! aggregate monday,tuesday => weekday , day
+! abstraction monday,tuesday => weekday , day
 ");
 
       Assert.AreEqual(1, d.WordDefinitions.Count);

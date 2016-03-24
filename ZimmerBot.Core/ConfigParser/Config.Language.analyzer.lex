@@ -45,7 +45,7 @@ Other      .
 
 $[0-9]+     { yylval.s = yytext; return (int)Token.T_WORD; } /* FIXME - not a word */
 
-aggregate   { return (int)Token.T_AGGREGATE; }
+abstraction { return (int)Token.T_ABSTRACTION; }
 call        { return (int)Token.T_CALL; }
 
 {Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }

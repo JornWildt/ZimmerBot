@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 23-03-2016 22:20:49>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-03-2016 21:21:07>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 24-03-2016 09:16:07
+//  DateTime: 24-03-2016 21:21:10
 //  UserName: Jorn
 // ==========================================================================
 
@@ -30,7 +30,7 @@
 
 %start main
 
-%token T_AGGREGATE
+%token T_ABSTRACTION
 %token T_CALL
 %token T_GT
 %token T_COLON
@@ -69,7 +69,7 @@ statement
   ;
 
 configuration
-  : T_EXCL T_AGGREGATE wordSeq T_IMPLIES wordSeq { RegisterAggregates($3.stringList, $5.stringList); }
+  : T_EXCL T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($3.stringList, $5.stringList); }
   ;
 
 rule

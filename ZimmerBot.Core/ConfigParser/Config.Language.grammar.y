@@ -19,7 +19,7 @@
 
 %start main
 
-%token T_AGGREGATE
+%token T_ABSTRACTION
 %token T_CALL
 %token T_GT
 %token T_COLON
@@ -55,7 +55,7 @@ statement
   ;
 
 configuration
-  : T_EXCL T_AGGREGATE wordSeq T_IMPLIES wordSeq { RegisterAggregates($3.stringList, $5.stringList); }
+  : T_EXCL T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($3.stringList, $5.stringList); }
   ;
 
 rule

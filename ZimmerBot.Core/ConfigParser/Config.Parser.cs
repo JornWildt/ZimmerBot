@@ -37,7 +37,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterAggregates(List<string> words, List<string> keys)
+    protected void RegisterAbstractions(List<string> words, List<string> keys)
     {
       WordDefinition wd = Domain.DefineWords(words);
       foreach (string k in keys)
