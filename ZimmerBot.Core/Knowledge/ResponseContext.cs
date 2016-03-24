@@ -29,15 +29,6 @@ namespace ZimmerBot.Core.Knowledge
 
       // Register core bot state in variables
       Variables = new ChainedDictionary<string, object>(State.State);
-
-      // Push new set of variables for matches
-      Variables.Push(new Dictionary<string, object>());
-
-      foreach (var m in match.Matches)
-      {
-        State[m.Key] = m.Value;
-        State["$" + m.Key] = m.Value;
-      }
     }
   }
 }

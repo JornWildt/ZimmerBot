@@ -122,37 +122,54 @@ namespace ZimmerBot.Core.Knowledge
 
     public string Invoke(ResponseContext context)
     {
-      OutputExecutionContect ox_context = new OutputExecutionContect(context);
-
-      foreach (OutputStatement output in OutputStatements)
+      try
       {
-        output.Execute(ox_context);
+        // Push new set of variables for matches $1...$N
+        context.Variables.Push(new Dictionary<string, object>());
+
+        foreach (var m in context.Match.Matches)
+        {
+          context.Variables[m.Key] = m.Value;
+          context.Variables["$" + m.Key] = m.Value;
+        }
+
+        OutputExecutionContect ox_context = new OutputExecutionContect(context);
+
+        foreach (OutputStatement output in OutputStatements)
+        {
+          output.Execute(ox_context);
+        }
+
+        string templateName = "default";
+        if (ox_context.LastValue != null)
+          templateName = ox_context.LastValue.TemplateName;
+
+        string result = "";
+        if (ox_context.OutputTemplates.ContainsKey(templateName))
+        {
+          IList<string> templates = ox_context.OutputTemplates[templateName];
+
+          string selectedTemplate = templates[Randomizer.Next(templates.Count)];
+          result = TextMerge.MergeTemplate(selectedTemplate, context.Variables);
+        }
+
+        foreach (var ea in ExpectedAnswers)
+        {
+          Rule r = ea(Domain);
+          r.TimeToLive = 1;
+          if (r.ScoreModifier != null)
+            r.ScoreModifier *= 2;
+          else
+            r.ScoreModifier = 2;
+        }
+
+        return result;
       }
-
-      string templateName = "default";
-      if (ox_context.LastValue != null)
-        templateName = ox_context.LastValue.TemplateName;
-
-      string result = "";
-      if (ox_context.OutputTemplates.ContainsKey(templateName))
+      finally
       {
-        IList<string> templates = ox_context.OutputTemplates[templateName];
-
-        string selectedTemplate = templates[Randomizer.Next(templates.Count)];
-        result = TextMerge.MergeTemplate(selectedTemplate, context.Variables);
+        // Remove variables containing matches $1...$N for this rule invocation
+        context.Variables.Pop();
       }
-
-      foreach (var ea in ExpectedAnswers)
-      {
-        Rule r = ea(Domain);
-        r.TimeToLive = 1;
-        if (r.ScoreModifier != null)
-          r.ScoreModifier *= 2;
-        else
-          r.ScoreModifier = 2;
-      }
-
-      return result;
     }
   }
 }

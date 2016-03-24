@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 24-03-2016 21:21:10
+// DateTime: 24-03-2016 21:40:32
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 24-03-2016 21:21:07>
+// Input file <ConfigParser\Config.Language.grammar.y - 24-03-2016 21:40:31>
 
 // options: no-lines gplex
 
@@ -218,7 +218,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.regex = new RepetitionWRegex(new WildcardWRegex()); }
         break;
       case 19: // inputPattern -> T_PLUS
-{ CurrentSemanticValue.regex =  new SequenceWRegex().Add(new WildcardWRegex()).Add(new RepetitionWRegex(new WildcardWRegex())); }
+{ CurrentSemanticValue.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
         break;
       case 20: // outputSeq -> outputSeq, output
 { ValueStack[ValueStack.Depth-2].outputList.Add(ValueStack[ValueStack.Depth-1].output); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }

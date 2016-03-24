@@ -8,7 +8,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
   public class Unicode_tests : TestHelper
   {
     [Test]
-    public void CanLoadAndMatchUnicodeCharacters1()
+    public void CanLoadAndMatchUnicodeCharacters()
     {
       KnowledgeBase kb = KnowledgeBase.LoadFromFiles("ConfigParser", "UnicodeTest.zbot");
       EvaluationContext context = BuildEvaluationContextFromInput("Über Åsen");

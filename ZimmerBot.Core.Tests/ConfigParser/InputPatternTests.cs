@@ -85,6 +85,24 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
+    public void CanParseOneOrMoreRepetition()
+    {
+      SequenceWRegex seq = ParseRuleAndGetRootWRegex<SequenceWRegex>(@"
+> aaa + bbb
+: ok
+");
+
+      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[1]);
+      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
+
+      VerifyMatch(seq, "aaa oiqw bbb");
+      VerifyNoMatch(seq, "aaa bbb");
+      VerifyNoMatch(seq, "aaa oiqw bbbx");
+    }
+
+
+    [Test]
     public void CanParseGroup()
     {
       ChoiceWRegex ch = ParseRuleAndGetRootWRegex<ChoiceWRegex>(@"

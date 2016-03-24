@@ -12,18 +12,36 @@ namespace ZimmerBot.Core.WordRegex
   {
     public WRegex A { get; protected set; }
 
+    public int MinCount { get; protected set; }
+
+    public int MaxCount { get; protected set; }
+
 
     public RepetitionWRegex(WRegex a)
-      : this(a, null)
+      : this(a, 0, 9999, null)
+    {
+    }
+
+
+    public RepetitionWRegex(WRegex a, int min, int max)
+      : this(a, min, max, null)
     {
     }
 
 
     public RepetitionWRegex(WRegex a, string matchName)
+      : this(a, 0, 9999, matchName)
+    {
+    }
+
+
+    public RepetitionWRegex(WRegex a, int min, int max, string matchName)
     {
       Condition.Requires(a, "a").IsNotNull();
       A = a;
       MatchName = matchName;
+      MinCount = min;
+      MaxCount = max;
     }
 
 
@@ -41,9 +59,14 @@ namespace ZimmerBot.Core.WordRegex
 
     public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
-      // Empty sequnce is a match
       if (context.CurrentTokenIndex >= context.Input.Count)
-        return new MatchResult(1, "").RegisterMatch(MatchName, "");
+      {
+        // Empty sequence is a match if no minimum count is specified
+        if (MinCount == 0)
+          return new MatchResult(1, "").RegisterMatch(MatchName, "");
+        else
+          return new MatchResult(0, "").RegisterMatch(MatchName, "");
+      }
 
       string matchedText = "";
       int startIndex = context.CurrentTokenIndex;
@@ -77,6 +100,16 @@ namespace ZimmerBot.Core.WordRegex
           context.CurrentTokenIndex = index;
           break;
         }
+      }
+
+      if (context.CurrentTokenIndex - startIndex < MinCount || context.CurrentTokenIndex - startIndex > MaxCount)
+      {
+        // Did not match the correct number of inputs => reset as no words were matched and return empty result
+        context.CurrentTokenIndex = startIndex;
+
+        return new MatchResult(0, "")
+          .RegisterMatch((context.CurrentRepetitionIndex++).ToString(), "")
+          .RegisterMatch(MatchName, "");
       }
 
       if (lastResult == null)

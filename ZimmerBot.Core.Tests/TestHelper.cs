@@ -23,6 +23,8 @@ namespace ZimmerBot.Core.Tests
     protected string GetResponseFrom(Rule r, string text)
     {
       Reaction reaction = CalculateReaction(r, text);
+      if (reaction == null)
+        return null;
       string result = reaction.GenerateResponse();
       return result;
     }

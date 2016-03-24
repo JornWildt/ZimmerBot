@@ -97,7 +97,7 @@ inputPattern
   | T_STAR
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
-      { $$.regex =  new SequenceWRegex().Add(new WildcardWRegex()).Add(new RepetitionWRegex(new WildcardWRegex())); }
+      { $$.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
   ;
 
 

@@ -78,6 +78,45 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
+    public void CanUse_SequenceOneOrMore_MatchInOutputTemplate()
+    {
+      Rule r = ParseRule(@"
+> aaa + bbb
+: ccc <1>
+");
+
+      string result = GetResponseFrom(r, "aaa xxx bbb");
+      StringAssert.IsMatch("ccc xxx", result);
+
+      result = GetResponseFrom(r, "aaa bbb");
+      Assert.IsNull(result);
+    }
+
+
+    [Test]
+    public void CanUse_SequenceOneOrMore_MatchInOutputTemplate2()
+    {
+      Domain d = ParseDomain(@"
+> are you +
+: would you like me to be <1>
+
+> *
+: Duh?
+");
+
+      EvaluationContext context = BuildEvaluationContextFromInput("are you a computer");
+      ReactionSet reactions = new ReactionSet();
+      d.FindMatchingReactions(context, reactions);
+
+      Assert.AreEqual(1, reactions.Count);
+
+      string result = reactions[0].GenerateResponse();
+
+      StringAssert.IsMatch("would you like me to be a computer", result);
+    }
+
+
+    [Test]
     public void CanMakeMultiLineOutput()
     {
       Rule r = ParseRule(@"
