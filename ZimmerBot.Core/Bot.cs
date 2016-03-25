@@ -140,8 +140,14 @@ namespace ZimmerBot.Core
             ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
 
             if (reactions.Count > 0)
+            {
               foreach (Reaction r in reactions)
-                output.Add(r.GenerateResponse());
+              {
+                string response = r.GenerateResponse();
+                foreach (string line in response.Split('\n'))
+                  output.Add(line);
+              }
+            }
             else
               output.Add("???");
           }
