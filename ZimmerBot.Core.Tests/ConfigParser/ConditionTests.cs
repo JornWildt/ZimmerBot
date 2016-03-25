@@ -12,7 +12,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       Rule r = ParseRule(@"
 > aaa
-& (state.conversation.entries.Count = 0)
+& state.conversation.entries.Count = 0
 : bbb");
 
       Assert.IsNotNull(r.Trigger.Condition);
@@ -38,6 +38,19 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.IsInstanceOf<ConstantValueExpr>(b.Right);
       ConstantValueExpr i = (ConstantValueExpr)b.Right;
       Assert.AreEqual("a", i.Value);
+    }
+
+
+    [Test]
+    public void CanCheckScoreModifier()
+    {
+      Rule r = ParseRule(@"
+> aaa
+* 0.5
+: bbb");
+
+      Reaction reaction = CalculateReaction(r, "aaa");
+      Assert.AreEqual(0.5, reaction.Score);
     }
   }
 }

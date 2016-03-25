@@ -15,6 +15,7 @@
   public List<Expression> exprList;
   public List<string> stringList;
   public string s;
+  public double n;
 }
 
 %start main
@@ -35,6 +36,7 @@
 %token T_WORD
 %token T_STRING
 %token T_NUMBER
+%token T_EOL
 
 %left T_EQU
 %left T_PLUS, T_STAR
@@ -57,18 +59,20 @@ statementSeq
 statement
   : configuration
   | rule
+  | T_EOL
   ;
 
 configuration
-  : T_EXCL T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($3.stringList, $5.stringList); }
+  : T_EXCL T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($3.stringList, $5.stringList); }
   ;
 
 rule
-  : input condition outputSeq
+  : input ruleModifier outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
       if ($2.expr != null)
         r.WithCondition($2.expr);
+      r.WithWeight($2.n);
       if ($3.outputList != null)
         r.WithOutputStatements($3.outputList);
     }
@@ -79,8 +83,9 @@ rule
 ******************************************************************************/
 
 input
-  : T_GT inputPattern { $$.regex = $2.regex; }
-  | T_GT              { $$.regex = null; }
+  : T_GT inputPattern T_EOL { $$.regex = $2.regex; }
+  | T_GT T_EOL              { $$.regex = null; }
+  | T_EOL                   { $$.regex = null; }
   ;
 
 inputPattern
@@ -100,14 +105,25 @@ inputPattern
 
 
 /******************************************************************************
-  CONDITION
+  MODIFIERS
 ******************************************************************************/
 
-condition
-  : T_AMP T_LPAR expr T_RPAR { $$.expr = $3.expr; }
-  | /* empty */              { $$.expr = null; }
+/* Cheating slightly - should return some sort of typed Condition and Weight, but so far the general expr and n suffices */
+
+ruleModifier
+  : condition weight { $$.expr = $1.expr; $$.n = $2.n; }
+  | weight condition { $$.expr = $2.expr; $$.n = $1.n; }
   ;
 
+condition
+  : T_AMP expr T_EOL { $$.expr = $2.expr; }
+  | /* empty */      { $$.expr = null; }
+  ;
+
+weight
+  : T_STAR T_NUMBER T_EOL { $$.n = $2.n; }
+  | /* empty */           { $$.n = 1.0; }
+  ;
 
 /******************************************************************************
   OUTPUT
@@ -135,7 +151,7 @@ outputPattern
   ;
 
 call
-  : T_EXCL T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($3.s, $5.exprList); }
+  : T_EXCL T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($3.s, $5.exprList); }
   ;
 
 
@@ -163,14 +179,15 @@ exprBinary
   ;
 
 exprUnary
-  : exprIdentifier { $$ = $1; }
-  | T_STRING       { $$.expr = new ConstantValueExpr(((ConfigScanner)Scanner).StringInput.ToString()); }
-  | T_NUMBER       { $$.expr = new ConstantValueExpr(TryParseDouble($1.s)); }
+  : T_LPAR expr T_RPAR { $$ = $2; }
+  | exprIdentifier     { $$ = $1; }
+  | T_STRING           { $$.expr = new ConstantValueExpr(((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_NUMBER           { $$.expr = new ConstantValueExpr($1.n); }
   ;
 
 exprIdentifier
   : exprReference     { $$.expr = new IdentifierExpr($1.s); }
-  | T_DOLLAR T_NUMBER { $$.expr = new IdentifierExpr("$"+$2.s); }
+  | T_DOLLAR T_NUMBER { $$.expr = new IdentifierExpr("$"+$2.n); }
   ;
 
 exprReference

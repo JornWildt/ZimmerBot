@@ -48,7 +48,9 @@ $           { return (int)Token.T_DOLLAR; }
 abstraction { return (int)Token.T_ABSTRACTION; }
 call        { return (int)Token.T_CALL; }
 
-{Number}    { yylval.s = yytext; return (int)Token.T_NUMBER; }
+(\r\n?|\n)+ { return (int)Token.T_EOL; }
+
+{Number}    { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 
 {Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }
 

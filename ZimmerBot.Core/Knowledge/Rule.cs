@@ -21,7 +21,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Trigger Trigger { get; protected set; }
 
-    public double? ScoreModifier { get; protected set; }
+    public double? Weight { get; protected set; }
 
     public List<OutputStatement> OutputStatements { get; protected set; }
 
@@ -62,9 +62,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule WithScoreModifier(double m)
+    public Rule WithWeight(double w)
     {
-      ScoreModifier = m;
+      Weight = w;
       return this;
     }
 
@@ -106,8 +106,8 @@ namespace ZimmerBot.Core.Knowledge
 
       WRegex.MatchResult result = Trigger.CalculateTriggerScore(context);
 
-      if (ScoreModifier != null)
-        result.Score = result.Score * ScoreModifier.Value;
+      if (Weight != null)
+        result.Score = result.Score * Weight.Value;
 
       if (result.Score < 0.5)
         return null;
@@ -157,10 +157,10 @@ namespace ZimmerBot.Core.Knowledge
         {
           Rule r = ea(Domain);
           r.TimeToLive = 1;
-          if (r.ScoreModifier != null)
-            r.ScoreModifier *= 2;
+          if (r.Weight != null)
+            r.Weight *= 2;
           else
-            r.ScoreModifier = 2;
+            r.Weight = 2;
         }
 
         return result;

@@ -71,23 +71,5 @@ namespace ZimmerBot.Core.ConfigParser
         return left;
       }
     }
-
-
-    protected int TryParseInt(string s)
-    {
-      int result;
-      if (!int.TryParse(s, out result))
-        Scanner.yyerror("The value '{0}' is not a valid integer", s);
-      return result;
-    }
-
-
-    protected double TryParseDouble(string s)
-    {
-      double result;
-      if (!double.TryParse(s, out result))
-        Scanner.yyerror("The value '{0}' is not a valid number", s);
-      return result;
-    }
   }
 }
