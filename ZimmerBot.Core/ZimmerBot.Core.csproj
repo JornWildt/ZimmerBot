@@ -86,6 +86,7 @@
     <Compile Include="ConfigParser\ConfigurationParser.cs" />
     <Compile Include="ConfigParser\OutputExecutionContect.cs" />
     <Compile Include="ConfigParser\OutputStatement.cs" />
+    <Compile Include="ConfigParser\RuleModifier.cs" />
     <Compile Include="ConfigParser\TemplateOutputStatement.cs" />
     <Compile Include="ConsoleBotEnvironment.cs" />
     <Compile Include="BotHandle.cs" />

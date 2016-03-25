@@ -13,6 +13,8 @@
   public Expression expr;
   public KeyValuePair<string,string> template;
   public List<Expression> exprList;
+  public RuleModifier ruleModifier;
+  public List<RuleModifier> ruleModifierList;
   public List<string> stringList;
   public string s;
   public double n;
@@ -20,10 +22,9 @@
 
 %start main
 
-%token T_EXCL, T_GT, T_COLON
+%token T_GT, T_COLON
 
-%token T_ABSTRACTION
-%token T_CALL
+%token T_ABSTRACTION, T_CALL, T_EVERY
 
 %token T_IMPLIES
 %token T_COMMA
@@ -63,16 +64,16 @@ statement
   ;
 
 configuration
-  : T_EXCL T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($3.stringList, $5.stringList); }
+  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($2.stringList, $4.stringList); }
   ;
 
 rule
-  : input ruleModifier outputSeq
+  : input ruleModifierSeq outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.expr != null)
-        r.WithCondition($2.expr);
-      r.WithWeight($2.n);
+      if ($2.ruleModifierList != null)
+        foreach (var m in $2.ruleModifierList)
+          m.Invoke(r);
       if ($3.outputList != null)
         r.WithOutputStatements($3.outputList);
     }
@@ -83,17 +84,18 @@ rule
 ******************************************************************************/
 
 input
-  : T_GT inputPattern T_EOL { $$.regex = $2.regex; }
-  | T_GT T_EOL              { $$.regex = null; }
-  | T_EOL                   { $$.regex = null; }
+  : T_GT inputPatternSeq T_EOL { $$.regex = $2.regex; }
+  ;
+
+inputPatternSeq
+  : inputPatternSeq inputPattern  { $$.regex = CombineSequence($1.regex, $2.regex); }
+  | /* empty */                   { $$.regex = null; }
   ;
 
 inputPattern
-  : inputPattern inputPattern 
-      { $$.regex = CombineSequence($1.regex, $2.regex); }
-  | inputPattern T_PIPE inputPattern
+  : inputPattern T_PIPE inputPattern
       { $$.regex = new ChoiceWRegex($1.regex, $3.regex); }
-  | T_LPAR inputPattern T_RPAR
+  | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD     
       { $$.regex = new WordWRegex($1.s); }
@@ -108,21 +110,27 @@ inputPattern
   MODIFIERS
 ******************************************************************************/
 
-/* Cheating slightly - should return some sort of typed Condition and Weight, but so far the general expr and n suffices */
+ruleModifierSeq
+  : ruleModifierSeq ruleModifier  { $$.ruleModifierList.Add($2.ruleModifier); }
+  | /* empty */                   { $$.ruleModifierList = new List<RuleModifier>(); }
+  ;
 
 ruleModifier
-  : condition weight { $$.expr = $1.expr; $$.n = $2.n; }
-  | weight condition { $$.expr = $2.expr; $$.n = $1.n; }
+  : condition { $$ = $1; }
+  | weight    { $$ = $1; }
+  | schedule  { $$ = $1; }
   ;
 
 condition
-  : T_AMP expr T_EOL { $$.expr = $2.expr; }
-  | /* empty */      { $$.expr = null; }
+  : T_AMP expr T_EOL { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
   ;
 
 weight
-  : T_STAR T_NUMBER T_EOL { $$.n = $2.n; }
-  | /* empty */           { $$.n = 1.0; }
+  : T_STAR T_NUMBER T_EOL { $$.ruleModifier = new WeightRuleModifier($2.n); }
+  ;
+
+schedule
+  : T_EVERY T_NUMBER T_EOL { $$.ruleModifier = new ScheduleRuleModifier((int)$2.n); }
   ;
 
 /******************************************************************************
@@ -151,7 +159,7 @@ outputPattern
   ;
 
 call
-  : T_EXCL T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($3.s, $5.exprList); }
+  : T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
   ;
 
 

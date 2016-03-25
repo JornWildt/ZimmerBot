@@ -1,11 +1,12 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Tests.ConfigParser
 {
   [TestFixture]
-  public class ConditionTests : TestHelper
+  public class ModifierTests : TestHelper
   {
     [Test]
     public void CanCheckConditionWithNumber()
@@ -42,7 +43,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
-    public void CanCheckScoreModifier()
+    public void CanIncludeWeight()
     {
       Rule r = ParseRule(@"
 > aaa
@@ -51,6 +52,18 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
       Reaction reaction = CalculateReaction(r, "aaa");
       Assert.AreEqual(0.5, reaction.Score);
+    }
+
+
+    [Test]
+    public void CanIncludeSchedule()
+    {
+      Rule r = ParseRule(@"
+> aaa
+! every 30");
+
+      Assert.IsNotNull(r.Trigger.Schedule);
+      Assert.AreEqual(TimeSpan.FromSeconds(30), r.Trigger.Schedule.Value);
     }
   }
 }

@@ -28,7 +28,6 @@ Space      [ \t]
 
 >           { return (int)Token.T_GT; }
 :           { return (int)Token.T_COLON; }
-!           { return (int)Token.T_EXCL; }
 =>          { return (int)Token.T_IMPLIES; }
 ,           { return (int)Token.T_COMMA; }
 \.          { return (int)Token.T_DOT; }
@@ -45,8 +44,9 @@ $           { return (int)Token.T_DOLLAR; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-abstraction { return (int)Token.T_ABSTRACTION; }
-call        { return (int)Token.T_CALL; }
+![ ]*abstraction { return (int)Token.T_ABSTRACTION; }
+![ ]*call        { return (int)Token.T_CALL; }
+![ ]*every       { return (int)Token.T_EVERY; }
 
 (\r\n?|\n)+ { return (int)Token.T_EOL; }
 

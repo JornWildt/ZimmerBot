@@ -24,6 +24,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual(1, d.Rules.Count);
       Assert.IsInstanceOf<WordWRegex>(d.Rules[0].Trigger.Regex);
       WordWRegex seq = (WordWRegex)d.Rules[0].Trigger.Regex;
+
+      //Assert.IsInstanceOf<SequenceWRegex>(d.Rules[0].Trigger.Regex);
+      //Assert.IsInstanceOf<WordWRegex>(((SequenceWRegex)d.Rules[0].Trigger.Regex).Sequence[0]);
     }
 
     [Test]

@@ -47,6 +47,9 @@ namespace ZimmerBot.Core.ConfigParser
 
     protected WRegex CombineSequence(WRegex left, WRegex right)
     {
+      if (left == null && right != null)
+        return right;
+
       if (left is SequenceWRegex && !(right is SequenceWRegex))
       {
         ((SequenceWRegex)left).Add(right);

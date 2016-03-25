@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 25-03-2016 07:34:47>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 25-03-2016 22:01:00>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 25-03-2016 07:34:48
+//  DateTime: 25-03-2016 22:01:01
 //  UserName: Jorn
 // ==========================================================================
 
@@ -31,10 +31,9 @@
 
 %start main
 
-%token T_EXCL, T_GT, T_COLON
+%token T_GT, T_COLON
 
-%token T_ABSTRACTION
-%token T_CALL
+%token T_ABSTRACTION, T_CALL, T_EVERY
 
 %token T_IMPLIES
 %token T_COMMA
@@ -74,15 +73,16 @@ statement
   ;
 
 configuration
-  : T_EXCL T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($3.stringList, $5.stringList); }
+  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($2.stringList, $4.stringList); }
   ;
 
 rule
-  : input ruleModifier outputSeq
+  : input ruleModifierSeq outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.expr != null)
-        r.WithCondition($2.expr);
+      /*if ($1.expr != null)
+        r.WithCondition($1.expr);*/
+      /*r.WithWeight($1.n);*/
       if ($3.outputList != null)
         r.WithOutputStatements($3.outputList);
     }
@@ -93,17 +93,18 @@ rule
 ******************************************************************************/
 
 input
-  : T_GT inputPattern T_EOL { $$.regex = $2.regex; }
-  | T_GT T_EOL              { $$.regex = null; }
-  | T_EOL                   { $$.regex = null; }
+  : T_GT inputPatternSeq T_EOL { $$.regex = $2.regex; }
+  ;
+
+inputPatternSeq
+  : inputPatternSeq inputPattern  { $$.regex = CombineSequence($1.regex, $2.regex); }
+  | /* empty */                   { $$.regex = null; }
   ;
 
 inputPattern
-  : inputPattern inputPattern 
-      { $$.regex = CombineSequence($1.regex, $2.regex); }
-  | inputPattern T_PIPE inputPattern
+  : inputPattern T_PIPE inputPattern
       { $$.regex = new ChoiceWRegex($1.regex, $3.regex); }
-  | T_LPAR inputPattern T_RPAR
+  | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD     
       { $$.regex = new WordWRegex($1.s); }
@@ -118,19 +119,30 @@ inputPattern
   MODIFIERS
 ******************************************************************************/
 
+ruleModifierSeq
+  : ruleModifierSeq ruleModifier  { }
+  | /* empty */                   { $$.n = 99; }
+  ;
+
 ruleModifier
-  : condition weight
-  | weight condition
+  : condition 
+  | weight 
+  | schedule
   ;
 
 condition
-  : T_AMP expr T_EOL { $$.expr = $3.expr; }
-  | /* empty */                    { $$.expr = null; }
+  : T_AMP expr T_EOL { $$.expr = $2.expr; }
   ;
 
 weight
   : T_STAR T_NUMBER T_EOL { $$.n = $2.n; }
-  | /* empty */
+  ;
+
+schedule
+  : T_EVERY T_NUMBER T_EOL { Console.WriteLine("N: " + $-1.n); }
+//---------------------------------------------------^^^
+// Error: Unknown special marker in semantic action
+// ------------------------------------------------
   ;
 
 /******************************************************************************
@@ -159,7 +171,7 @@ outputPattern
   ;
 
 call
-  : T_EXCL T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($3.s, $5.exprList); }
+  : T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
   ;
 
 
@@ -188,9 +200,7 @@ exprBinary
 
 exprUnary
   : T_LPAR expr T_RPAR { $$ = $2; }
-  : exprIdentifier     { $$ = $1; }
-// Error: Syntax error, unexpected ':'
-// -----------------------------------
+  | exprIdentifier     { $$ = $1; }
   | T_STRING           { $$.expr = new ConstantValueExpr(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_NUMBER           { $$.expr = new ConstantValueExpr($1.n); }
   ;
