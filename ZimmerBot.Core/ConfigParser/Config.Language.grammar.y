@@ -24,7 +24,7 @@
 
 %token T_GT, T_COLON
 
-%token T_ABSTRACTION, T_CALL, T_EVERY
+%token T_ABSTRACTION, T_CALL, T_EVERY, T_ANSWER
 
 %token T_IMPLIES
 %token T_COMMA
@@ -65,6 +65,11 @@ statement
 
 configuration
   : T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($2.stringList, $4.stringList); }
+  ;
+
+ruleSeq
+  : ruleSeq rule
+  | /* empty */
   ;
 
 rule
@@ -145,6 +150,7 @@ outputSeq
 output
   : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
   | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
+  | answer
   ;
 
 outputPattern
@@ -162,6 +168,9 @@ call
   : T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
   ;
 
+answer
+  : T_ANSWER T_EOL T_LBRACE T_EOL ruleSeq T_RBRACE T_EOL
+  ;
 
 /******************************************************************************
   EXPRESSION

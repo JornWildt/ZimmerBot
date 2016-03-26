@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 23-03-2016 21:47:21
+//  DateTime: 26-03-2016 08:07:12
 //  UserName: Jorn
 // ==========================================================================
 
@@ -17,11 +17,10 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [a-zA-Z_æøåÆØÅ]+
+Word       [[:IsLetter:]]+
+Number     [0-9]+(\.[0-9]+)?
 Comment    #
 Space      [ \t]
-eol        (\r\n?|\n)
-Other      .
 
 
 /* No. 1-3 */
@@ -30,7 +29,7 @@ Other      .
 %x comment
 
 %{
- StringBuilder StringInput = null;
+ internal StringBuilder StringInput = null;
 %}
 
 
@@ -40,54 +39,55 @@ Other      .
 
 >           { return (int)Token.T_GT; }
 :           { return (int)Token.T_COLON; }
-!           { return (int)Token.T_EXCL; }
 =>          { return (int)Token.T_IMPLIES; }
 ,           { return (int)Token.T_COMMA; }
 \.          { return (int)Token.T_DOT; }
 \|          { return (int)Token.T_PIPE; }
 \(          { return (int)Token.T_LPAR; }
 \)          { return (int)Token.T_RPAR; }
-{          { return (int)Token.T_LBRACE; }
-//---------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// Error: Invalid production rule
-// Error: Invalid production rule
-// Error: Parser error <Syntax error, unexpected {> 
-// Error: Expected end-of-line here
-// -------------------------------------------------
-}          { return (int)Token.T_RBRACE; }
-//---------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// Error: Invalid production rule
-// Error: Expected end-of-line here
-// --------------------------------
+\{          { return (int)Token.T_LBRACE; }
+\}          { return (int)Token.T_RBRACE; }
 \*          { return (int)Token.T_STAR; }
 \+          { return (int)Token.T_PLUS; }
+&           { return (int)Token.T_AMP; }
+=           { return (int)Token.T_EQU; }
+$           { return (int)Token.T_DOLLAR; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-$[0-9]+     { yylval.s = yytext; return (int)Token.T_WORD; } /* FIXME - not a word */
+![ ]*abstraction { return (int)Token.T_ABSTRACTION; }
+![ ]*call        { return (int)Token.T_CALL; }
+![ ]*every       { return (int)Token.T_EVERY; }
+![ ]*answer      { return (int)Token.T_ANSWER; }
 
-aggregate   { return (int)Token.T_AGGREGATE; }
-call        { return (int)Token.T_CALL; }
+((\r\n?|\n)*[ \t]*)+ { return (int)Token.T_EOL; }
+//^^^^^^^^^^^^^^^^^^
+// Warning: This pattern always overrides "{Space}+" 
+// --------------------------------------------------
+
+{Number}    { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 
 {Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }
 
 {Comment}   { BEGIN(comment); }
 
 {Space}+		/* skip */
+//^^^^^^
+// Warning: This pattern always overridden by "((\r\n?|\n)*[ \t]*)+" 
+// ------------------------------------------------------------------
 
 
 <str>[^\n\"]* { StringInput.Append(yytext); }
-<str>\"       { 
-                BEGIN(INITIAL); 
-                /*yylval.t = new ZToken(StringInput.ToString(), ZToken.TokenType.Word); */
-                return (int)Token.T_STRING; 
-              }
+<str>\"       { BEGIN(INITIAL); return (int)Token.T_STRING; }
 
 <comment>[^\r\n]* /* skip */
 <comment>\r|\n    { BEGIN(INITIAL); }
 
-<output>[^\r\n]*    { yylval.s = yytext; }
-<output>\r\n?|\n    { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
+
+<output>[^\r\n\\]*    { StringInput.Append(yytext); }
+<output>\\(\r\n?|\n)  { StringInput.Append(yytext.Substring(1)); }
+<output>\\[^\r\n]     { StringInput.Append(yytext.Substring(1)); }
+<output>\r\n?|\n      { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
 
 %%// ==========================================================================
 

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigParser\AnswerTests.cs" />
     <Compile Include="ConfigParser\BasicConfigParserTests.cs" />
     <Compile Include="ConfigParser\ModifierTests.cs" />
     <Compile Include="ConfigParser\EmptyInputTests.cs" />

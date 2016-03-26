@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 25-03-2016 22:01:00>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 26-03-2016 08:01:59>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 25-03-2016 22:01:01
+//  DateTime: 26-03-2016 08:02:01
 //  UserName: Jorn
 // ==========================================================================
 
@@ -24,6 +24,8 @@
   public Expression expr;
   public KeyValuePair<string,string> template;
   public List<Expression> exprList;
+  public RuleModifier ruleModifier;
+  public List<RuleModifier> ruleModifierList;
   public List<string> stringList;
   public string s;
   public double n;
@@ -56,6 +58,12 @@
 %token T_DOLLAR
 
 %%
+// Error: NonTerminal symbol "T_ANSWER" has no productions
+// Warning: Terminating T_ANSWER fixes the following size-2 NonTerminal set
+   // {answer, T_ANSWER}
+// Error: There are 2 non-terminating NonTerminal Symbols
+   //  {answer, T_ANSWER}
+// ------------------------------------------------------------------------
 
 main
   : statementSeq
@@ -76,13 +84,18 @@ configuration
   : T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($2.stringList, $4.stringList); }
   ;
 
+ruleSeq
+  : ruleSeq rule
+  | /* empty */
+  ;
+
 rule
   : input ruleModifierSeq outputSeq
     { 
       Knowledge.Rule r = Domain.AddRule($1.regex);
-      /*if ($1.expr != null)
-        r.WithCondition($1.expr);*/
-      /*r.WithWeight($1.n);*/
+      if ($2.ruleModifierList != null)
+        foreach (var m in $2.ruleModifierList)
+          m.Invoke(r);
       if ($3.outputList != null)
         r.WithOutputStatements($3.outputList);
     }
@@ -120,29 +133,26 @@ inputPattern
 ******************************************************************************/
 
 ruleModifierSeq
-  : ruleModifierSeq ruleModifier  { }
-  | /* empty */                   { $$.n = 99; }
+  : ruleModifierSeq ruleModifier  { $$.ruleModifierList.Add($2.ruleModifier); }
+  | /* empty */                   { $$.ruleModifierList = new List<RuleModifier>(); }
   ;
 
 ruleModifier
-  : condition 
-  | weight 
-  | schedule
+  : condition { $$ = $1; }
+  | weight    { $$ = $1; }
+  | schedule  { $$ = $1; }
   ;
 
 condition
-  : T_AMP expr T_EOL { $$.expr = $2.expr; }
+  : T_AMP expr T_EOL { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
   ;
 
 weight
-  : T_STAR T_NUMBER T_EOL { $$.n = $2.n; }
+  : T_STAR T_NUMBER T_EOL { $$.ruleModifier = new WeightRuleModifier($2.n); }
   ;
 
 schedule
-  : T_EVERY T_NUMBER T_EOL { Console.WriteLine("N: " + $-1.n); }
-//---------------------------------------------------^^^
-// Error: Unknown special marker in semantic action
-// ------------------------------------------------
+  : T_EVERY T_NUMBER T_EOL { $$.ruleModifier = new ScheduleRuleModifier((int)$2.n); }
   ;
 
 /******************************************************************************
@@ -157,6 +167,7 @@ outputSeq
 output
   : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
   | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
+  | answer
   ;
 
 outputPattern
@@ -174,6 +185,9 @@ call
   : T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
   ;
 
+answer
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE
+  ;
 
 /******************************************************************************
   EXPRESSION
