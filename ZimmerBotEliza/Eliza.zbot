@@ -75,7 +75,7 @@ Fortæl mig noget mere om din <2> ...
 : Hvorfor spørger du om jeg kan <1>?
 
 > *
-* 0.5
+! weight 0.5
 : Hmmm, fortæl mig noget mere om det?
 : Okay. Lad os skifte fokus lidt ... fortæl mig om din familie?
 : Kan du uddybe det?
@@ -96,7 +96,7 @@ Jeg er en chatbot med speciale i psykiatri. Hvad kan jeg hjælpe dig med?
 # It would be better if we could monitor activity instead: after 15 seconds of inactivity do ...
 
 > 
-! every 3
+! every 30
 & (state.conversation.entries.Count = 1)
 : Nåh... ?
 : Hmmm ...

@@ -47,7 +47,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       Rule r = ParseRule(@"
 > aaa
-* 0.5
+! weight 0.5
 : bbb");
 
       Reaction reaction = CalculateReaction(r, "aaa");

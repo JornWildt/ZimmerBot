@@ -24,7 +24,7 @@
 
 %token T_GT, T_COLON
 
-%token T_ABSTRACTION, T_CALL, T_EVERY, T_ANSWER
+%token T_ABSTRACTION, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER
 
 %token T_IMPLIES
 %token T_COMMA
@@ -37,7 +37,6 @@
 %token T_WORD
 %token T_STRING
 %token T_NUMBER
-%token T_EOL
 
 %left T_EQU
 %left T_PLUS, T_STAR
@@ -60,11 +59,10 @@ statementSeq
 statement
   : configuration
   | rule
-  | T_EOL
   ;
 
 configuration
-  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($2.stringList, $4.stringList); }
+  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($2.stringList, $4.stringList); }
   ;
 
 ruleSeq
@@ -89,7 +87,7 @@ rule
 ******************************************************************************/
 
 input
-  : T_GT inputPatternSeq T_EOL { $$.regex = $2.regex; }
+  : T_GT inputPatternSeq { $$.regex = $2.regex; }
   ;
 
 inputPatternSeq
@@ -127,15 +125,15 @@ ruleModifier
   ;
 
 condition
-  : T_AMP expr T_EOL { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
+  : T_AMP expr { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
   ;
 
 weight
-  : T_STAR T_NUMBER T_EOL { $$.ruleModifier = new WeightRuleModifier($2.n); }
+  : T_WEIGHT T_NUMBER { $$.ruleModifier = new WeightRuleModifier($2.n); }
   ;
 
 schedule
-  : T_EVERY T_NUMBER T_EOL { $$.ruleModifier = new ScheduleRuleModifier((int)$2.n); }
+  : T_EVERY T_NUMBER { $$.ruleModifier = new ScheduleRuleModifier((int)$2.n); }
   ;
 
 /******************************************************************************
@@ -165,11 +163,11 @@ outputPattern
   ;
 
 call
-  : T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
+  : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
   ;
 
 answer
-  : T_ANSWER T_EOL T_LBRACE T_EOL ruleSeq T_RBRACE T_EOL
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE
   ;
 
 /******************************************************************************
