@@ -1,8 +1,24 @@
 ﻿! abstraction station, holdeplads => stoppested
 ! abstraction kører => afgår
 
-> find stoppested *
+> find stoppested +
 ! call Rejseplanen.FindStoppested($1)
 : Fandt '<stopName>'
 {empty}: Der var ikke nogen station ved det navn
 {error}: Kludder i maskineriet!
+
+# Slightly difficult - how can we remember that "stoppested" can be a alias for something else?
+> find (stoppested)
+: Hvilken <1>?
+! answer
+{
+  > månen
+  : Hop i havet!
+
+  > +
+  ! weight 0.25
+  ! call Rejseplanen.FindStoppested($1)
+  : Fandt '<stopName>'
+  {empty}: Der var ikke nogen station ved det navn
+  {error}: Kludder i maskineriet!
+}

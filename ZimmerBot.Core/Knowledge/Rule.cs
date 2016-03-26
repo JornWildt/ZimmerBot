@@ -25,8 +25,6 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<OutputStatement> OutputStatements { get; protected set; }
 
-    public List<Func<Domain,Rule>> ExpectedAnswers { get; protected set; }
-
     public int? TimeToLive { get; protected set; }
 
 
@@ -37,7 +35,6 @@ namespace ZimmerBot.Core.Knowledge
       Id = Guid.NewGuid().ToString();
       Domain = d;
       Trigger = new Trigger(topics);
-      ExpectedAnswers = new List<Func<Domain,Rule>>();
     }
 
 
@@ -76,9 +73,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule ExpectAnswer(Func<Domain,Rule> answerSetup)
+    public Rule AsAnswer()
     {
-      ExpectedAnswers.Add(answerSetup);
+      TimeToLive = 1;
+      if (Weight != null)
+        Weight *= 4;
+      else
+        Weight = 4;
       return this;
     }
 
@@ -151,16 +152,6 @@ namespace ZimmerBot.Core.Knowledge
 
           string selectedTemplate = templates[Randomizer.Next(templates.Count)];
           result = TextMerge.MergeTemplate(selectedTemplate, context.Variables);
-        }
-
-        foreach (var ea in ExpectedAnswers)
-        {
-          Rule r = ea(Domain);
-          r.TimeToLive = 1;
-          if (r.Weight != null)
-            r.Weight *= 2;
-          else
-            r.Weight = 2;
         }
 
         return result;

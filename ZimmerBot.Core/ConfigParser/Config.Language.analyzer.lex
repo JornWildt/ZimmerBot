@@ -48,6 +48,7 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*call        { return (int)Token.T_CALL; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
 ![ ]*every       { return (int)Token.T_EVERY; }
+![ ]*answer      { return (int)Token.T_ANSWER; }
 
 {Number}    { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 

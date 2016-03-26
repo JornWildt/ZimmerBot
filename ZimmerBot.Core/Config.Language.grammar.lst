@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 26-03-2016 08:01:59>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 26-03-2016 16:29:22>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 26-03-2016 08:02:01
+//  DateTime: 26-03-2016 16:29:23
 //  UserName: Jorn
 // ==========================================================================
 
@@ -12,6 +12,11 @@
 %namespace ZimmerBot.Core.ConfigParser
 %using ZimmerBot.Core.WordRegex
 %using ZimmerBot.Core.Expressions
+%using Domain = ZimmerBot.Core.Knowledge.Domain
+//-----------^^^^^^^^^^^^
+// Error: This character is invalid in this context
+// Error: Syntax error, unexpected ident
+// ------------------------------------------------
 %partial
 %parsertype ConfigParser
 %visibility internal
@@ -26,6 +31,8 @@
   public List<Expression> exprList;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
+  public Func<Domain,Rule> ruleGenerator;
+  public List<Func<Domain,Rule>> ruleGeneratorList;
   public List<string> stringList;
   public string s;
   public double n;
@@ -35,7 +42,7 @@
 
 %token T_GT, T_COLON
 
-%token T_ABSTRACTION, T_CALL, T_EVERY
+%token T_ABSTRACTION, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER
 
 %token T_IMPLIES
 %token T_COMMA
@@ -48,7 +55,6 @@
 %token T_WORD
 %token T_STRING
 %token T_NUMBER
-%token T_EOL
 
 %left T_EQU
 %left T_PLUS, T_STAR
@@ -58,12 +64,6 @@
 %token T_DOLLAR
 
 %%
-// Error: NonTerminal symbol "T_ANSWER" has no productions
-// Warning: Terminating T_ANSWER fixes the following size-2 NonTerminal set
-   // {answer, T_ANSWER}
-// Error: There are 2 non-terminating NonTerminal Symbols
-   //  {answer, T_ANSWER}
-// ------------------------------------------------------------------------
 
 main
   : statementSeq
@@ -76,28 +76,22 @@ statementSeq
 
 statement
   : configuration
-  | rule
-  | T_EOL
+  | rule          { $1.ruleGenerator(Domain); }
   ;
 
 configuration
-  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq T_EOL { RegisterAbstractions($2.stringList, $4.stringList); }
+  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($2.stringList, $4.stringList); }
   ;
 
 ruleSeq
-  : ruleSeq rule
-  | /* empty */
+  : ruleSeq rule  { $1.ruleGeneratorList.Add($2.ruleGenerator); $$.ruleGeneratorList = $1.ruleGeneratorList; }
+  | /* empty */   { $$.ruleGeneratorList = new List<Func<Domain,Rule>>(); }
   ;
 
 rule
   : input ruleModifierSeq outputSeq
     { 
-      Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.ruleModifierList != null)
-        foreach (var m in $2.ruleModifierList)
-          m.Invoke(r);
-      if ($3.outputList != null)
-        r.WithOutputStatements($3.outputList);
+      $$.ruleGenerator = RuleGenerator($1.regex, $2.ruleModifierList, $3.outputList);
     }
   ;
 
@@ -106,7 +100,7 @@ rule
 ******************************************************************************/
 
 input
-  : T_GT inputPatternSeq T_EOL { $$.regex = $2.regex; }
+  : T_GT inputPatternSeq { $$.regex = $2.regex; }
   ;
 
 inputPatternSeq
@@ -144,15 +138,15 @@ ruleModifier
   ;
 
 condition
-  : T_AMP expr T_EOL { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
+  : T_AMP expr { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
   ;
 
 weight
-  : T_STAR T_NUMBER T_EOL { $$.ruleModifier = new WeightRuleModifier($2.n); }
+  : T_WEIGHT T_NUMBER { $$.ruleModifier = new WeightRuleModifier($2.n); }
   ;
 
 schedule
-  : T_EVERY T_NUMBER T_EOL { $$.ruleModifier = new ScheduleRuleModifier((int)$2.n); }
+  : T_EVERY T_NUMBER { $$.ruleModifier = new ScheduleRuleModifier((int)$2.n); }
   ;
 
 /******************************************************************************
@@ -182,11 +176,11 @@ outputPattern
   ;
 
 call
-  : T_CALL exprReference T_LPAR exprSeq T_RPAR T_EOL { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
+  : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
   ;
 
 answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement($3.ruleGeneratorList); }
   ;
 
 /******************************************************************************

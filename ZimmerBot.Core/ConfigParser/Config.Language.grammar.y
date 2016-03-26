@@ -15,6 +15,8 @@
   public List<Expression> exprList;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
+  public Func<Knowledge.Domain,Knowledge.Rule> ruleGenerator;
+  public List<Func<Knowledge.Domain,Knowledge.Rule>> ruleGeneratorList;
   public List<string> stringList;
   public string s;
   public double n;
@@ -58,7 +60,7 @@ statementSeq
 
 statement
   : configuration
-  | rule
+  | rule          { $1.ruleGenerator(Domain); } /* Instantiate rule */
   ;
 
 configuration
@@ -66,19 +68,14 @@ configuration
   ;
 
 ruleSeq
-  : ruleSeq rule
-  | /* empty */
+  : ruleSeq rule  { $1.ruleGeneratorList.Add($2.ruleGenerator); $$.ruleGeneratorList = $1.ruleGeneratorList; }
+  | /* empty */   { $$.ruleGeneratorList = new List<Func<Knowledge.Domain,Knowledge.Rule>>(); }
   ;
 
 rule
   : input ruleModifierSeq outputSeq
     { 
-      Knowledge.Rule r = Domain.AddRule($1.regex);
-      if ($2.ruleModifierList != null)
-        foreach (var m in $2.ruleModifierList)
-          m.Invoke(r);
-      if ($3.outputList != null)
-        r.WithOutputStatements($3.outputList);
+      $$.ruleGenerator = RuleGenerator($1.regex, $2.ruleModifierList, $3.outputList);
     }
   ;
 
@@ -148,7 +145,7 @@ outputSeq
 output
   : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
   | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
-  | answer
+  | answer        { $$.output = $1.output;}
   ;
 
 outputPattern
@@ -167,7 +164,7 @@ call
   ;
 
 answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(Domain, $3.ruleGeneratorList); }
   ;
 
 /******************************************************************************

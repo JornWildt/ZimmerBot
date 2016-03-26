@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Tests.ConfigParser
@@ -9,7 +10,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanParseSingleAnswer()
     {
-      Rule r = ParseRule(@"
+      Domain d = ParseDomain(@"
 > aa bb
 ! answer
 {
@@ -21,6 +22,11 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 }
 ");
 
+      Assert.AreEqual(1, d.Rules.Count);
+      Assert.AreEqual(1, d.Rules[0].OutputStatements.Count);
+      Assert.IsInstanceOf<AnswerOutputStatement>(d.Rules[0].OutputStatements[0]);
+      AnswerOutputStatement os = (AnswerOutputStatement)d.Rules[0].OutputStatements[0];
+      Assert.AreEqual(2, os.RuleGenerators.Count);
     }
   }
 }

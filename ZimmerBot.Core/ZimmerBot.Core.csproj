@@ -82,6 +82,7 @@
     <Compile Include="AddOnHandling\AddOnLoader.cs" />
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="Bot.cs" />
+    <Compile Include="ConfigParser\AnswerOutputStatement.cs" />
     <Compile Include="ConfigParser\CallOutputStatment.cs" />
     <Compile Include="ConfigParser\ConfigurationParser.cs" />
     <Compile Include="ConfigParser\OutputExecutionContect.cs" />

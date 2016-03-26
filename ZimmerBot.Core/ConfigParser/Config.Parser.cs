@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using CuttingEdge.Conditions;
@@ -42,6 +43,21 @@ namespace ZimmerBot.Core.ConfigParser
       WordDefinition wd = Domain.DefineWords(words);
       foreach (string k in keys)
         wd.Is(k);
+    }
+
+
+    protected Func<Domain, Rule> RuleGenerator(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
+    {
+      return d =>
+      {
+        Rule r = d.AddRule(pattern);
+        if (modifiers != null)
+          foreach (var m in modifiers)
+            m.Invoke(r);
+        if (outputs != null)
+          r.WithOutputStatements(outputs);
+        return r;
+      };
     }
 
 
