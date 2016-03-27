@@ -44,7 +44,8 @@ namespace ZimmerBot.Core.TemplateParser
 
     public override string Instantiate(TemplateContext context)
     {
-      return Text;
+      string s = context.Expander.ExpandPlaceholdes(Text);
+      return s;
     }
   }
 
@@ -63,7 +64,6 @@ namespace ZimmerBot.Core.TemplateParser
     public override string Instantiate(TemplateContext context)
     {
       string s = Tokens.Instantiate(context);
-      s = context.Expander.ExpandPlaceholdes(s);
       s = context.Expander.Invoke(s);
       return s;
     }

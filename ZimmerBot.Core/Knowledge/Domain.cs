@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 using Quartz;
 using ZimmerBot.Core.Parser;
-using ZimmerBot.Core.WordRegex;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -15,9 +14,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<Rule> Rules { get; protected set; }
 
+    public KnowledgeBase KnowledgeBase { get; protected set; }
 
-    internal Domain(string name)
+
+    internal Domain(KnowledgeBase kb, string name)
     {
+      Condition.Requires(kb, nameof(kb)).IsNotNull();
+      Condition.Requires(name, nameof(name)).IsNotNull();
+
+      KnowledgeBase = kb;
       WordDefinitions = new List<WordDefinition>();
       Rules = new List<Rule>();
       Name = name;

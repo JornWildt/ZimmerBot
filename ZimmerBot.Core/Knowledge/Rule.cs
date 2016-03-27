@@ -4,7 +4,7 @@ using CuttingEdge.Conditions;
 using Quartz;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Expressions;
-using ZimmerBot.Core.Processors;
+using ZimmerBot.Core.TemplateParser;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
@@ -151,7 +151,7 @@ namespace ZimmerBot.Core.Knowledge
           IList<string> templates = ox_context.OutputTemplates[templateName];
 
           string selectedTemplate = templates[Randomizer.Next(templates.Count)];
-          result = TextMerge.MergeTemplate(selectedTemplate, context.Variables);
+          result = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(Domain.KnowledgeBase, context.State, context.Variables));
         }
 
         return result;

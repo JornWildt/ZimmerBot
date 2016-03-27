@@ -122,64 +122,13 @@ namespace ZimmerBot.Core
     {
       lock (StateLock)
       {
-        List<string> output = new List<string>();
+        Response response = BotUtility.Invoke(KnowledgeBase, State, req, executeScheduledRules);
 
-        if (req.Input != null)
-        {
-          ZTokenizer tokenizer = new ZTokenizer();
-          ZStatementSequence statements = tokenizer.Tokenize(req.Input);
-
-          // Always evaluate at least one empty statement in order to invoke triggers without regex
-          if (statements.Statements.Count == 0)
-            statements.Statements.Add(new ZTokenSequence());
-
-          foreach (ZTokenSequence input in statements.Statements)
-          {
-            KnowledgeBase.ExpandTokens(input);
-            EvaluationContext context = new EvaluationContext(State, input, req.RuleId, executeScheduledRules);
-            ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
-
-            if (reactions.Count > 0)
-            {
-              foreach (Reaction r in reactions)
-              {
-                string response = r.GenerateResponse();
-                foreach (string line in response.Split('\n'))
-                  output.Add(line);
-              }
-            }
-            else
-              output.Add("???");
-          }
-        }
-        else
-        {
-          EvaluationContext context = new EvaluationContext(State, null, req.RuleId, executeScheduledRules);
-          ReactionSet reactions = KnowledgeBase.FindMatchingReactions(context);
-
-          if (reactions.Count > 0)
-            foreach (Reaction r in reactions)
-              output.Add(r.GenerateResponse());
-        }
-
-        if (output.Count > 0)
-        {
-          State["state.conversation.entries.Count"] = (double)State["state.conversation.entries.Count"] + 1;
-
-          Response response = new Response
-          {
-            Output = output.ToArray()
-          };
-
+        if (callbackToEnvironment)
           if (callbackToEnvironment)
             Environment.HandleResponse(response);
 
-          return response;
-        }
-        else
-        {
-          return new Response { Output = output.ToArray() };
-        }
+        return response;
       }
     }
   }

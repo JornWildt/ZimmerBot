@@ -19,7 +19,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Domain NewDomain(string name)
     {
-      Domain d = new Domain(name);
+      Domain d = new Domain(this, name);
       Domains.Add(d);
       return d;
     }

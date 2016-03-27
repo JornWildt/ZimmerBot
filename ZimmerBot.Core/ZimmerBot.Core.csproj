@@ -102,8 +102,10 @@
     <Compile Include="Expressions\IdentifierExpr.cs" />
     <Compile Include="IBotEnvironment.cs" />
     <Compile Include="Knowledge\BotRepository.cs" />
+    <Compile Include="Knowledge\BotUtility.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
+    <Compile Include="Knowledge\TemplateExpander.cs" />
     <Compile Include="Processors\ProcessorOutput.cs" />
     <Compile Include="StandardProcessors\GeneralProcessor.cs" />
     <Compile Include="Processors\ProcessorInput.cs" />
