@@ -55,7 +55,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
     public static ProcessorOutput FindNextDepartures(ProcessorInput input)
     {
       string station = input.GetParameter<string>(0);
-      string types = input.GetOptionalParameter<string>(1, "TBM");
+      string types = input.GetOptionalParameter<string>(1, "toget bussen metro");
 
       var parameters = new Dictionary<string, object>();
 
@@ -70,18 +70,21 @@ namespace Rejseplanen.ZimmerBot.AddOn
         if (location != null)
         {
           DepartureBoard departures = api.GetDepartureBoard(location.id, types);
-          var result = departures.Departure.Select(d =>
-            new
-            {
-              date = d.date,
-              time = d.time,
-              direction = d.direction,
-              line = d.name
-            }).Take(5).ToList();
+          if (departures != null && departures.Departure != null)
+          {
+            var result = departures.Departure.Select(d =>
+              new
+              {
+                date = d.date,
+                time = d.time,
+                direction = d.direction,
+                line = d.name
+              }).Take(5).ToList();
 
-          parameters["stop"] = location.name;
-          parameters["result"] = result;
-          return new ProcessorOutput(parameters);
+            parameters["stop"] = location.name;
+            parameters["result"] = result;
+            return new ProcessorOutput(parameters);
+          }
         }
 
         return new ProcessorOutput("empty", new object());

@@ -59,9 +59,11 @@ namespace Rejseplanen.ZimmerBot.AddOn
       DateTime now = DateTime.Now;
       string date = now.ToString("dd.MM.yy");
       string time = now.ToString("hh:mm");
-      int useTog = (types.Contains("T") ? 1 : 0);
-      int useBus = (types.Contains("B") ? 1 : 0);
-      int useMetro = (types.Contains("M") ? 1 : 0);
+
+      types = types.ToLower();
+      int useTog = (types.Contains("tog") ? 1 : 0);
+      int useBus = (types.Contains("bus") ? 1 : 0);
+      int useMetro = (types.Contains("metro") ? 1 : 0);
 
       WebRequest request = session.Bind("departureBoard?id={id}&date={date}&time={time}&useTog={useTog}&useBus={useBus}&useMetro={useMetro}", 
         new { id = locationId, date = date, time = time, useTog = useTog, useBus = useBus, useMetro = useMetro });
