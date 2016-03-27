@@ -1,6 +1,6 @@
 ﻿! abstraction station, holdeplads => stoppested
 ! abstraction tog, toget, bus, bussen, metro, metroen => transportform
-! abstraction kører => afgår
+! abstraction kører, går => afgår
 
 ### Debugging rules
 #> hkt +
