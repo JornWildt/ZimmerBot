@@ -42,6 +42,11 @@ namespace ZimmerBot.Core.TemplateParser
     }
 
 
+    public void AppendText(string text)
+    {
+      Text = Text + text;
+    }
+
     public override string Instantiate(TemplateContext context)
     {
       string s = context.Expander.ExpandPlaceholdes(Text);

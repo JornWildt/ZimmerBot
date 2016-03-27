@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 26-03-2016 21:44:46
+//  DateTime: 27-03-2016 21:18:25
 //  UserName: Jorn
 // ==========================================================================
 
@@ -21,13 +21,16 @@
 
 %%
 
-\{@    { return (int)Token.T_TEXT; }
-// Warning: This pattern always overrides "\{@" 
-// ---------------------------------------------
-\{@    { return (int)Token.T_LTAG; }
-// Warning: This pattern always overridden by "\{@" 
-// -------------------------------------------------
-\}     { return (int)Token.T_RTAG; }
+\{@[ \t]*  { return (int)Token.T_LTAG; }
+[ \t]*\}   { return (int)Token.T_RTAG; }
+//^^^^^^
+// Warning: This pattern always overrides "\}" 
+// --------------------------------------------
+[^{}@]+    { yylval.s = yytext; return (int)Token.T_TEXT; }
+\{         { yylval.s = yytext; return (int)Token.T_TEXT; }
+\}         { yylval.s = yytext; return (int)Token.T_TEXT; }
+// Warning: This pattern always overridden by "[ \t]*\}" 
+// ------------------------------------------------------
 
 
 %%// ==========================================================================

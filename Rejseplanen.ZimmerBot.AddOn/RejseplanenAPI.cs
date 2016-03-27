@@ -9,6 +9,9 @@ using WebRequest = Ramone.Request;
 
 namespace Rejseplanen.ZimmerBot.AddOn
 {
+  /// <summary>
+  /// Implementation of Rejseplanen API.
+  /// </summary>
   public class RejseplanenAPI
   {
     protected static ILog Logger = LogManager.GetLogger(typeof(RejseplanenAPI));
@@ -43,6 +46,27 @@ namespace Rejseplanen.ZimmerBot.AddOn
       WebRequest request = session.Bind("location?input={i}", new { i = input });
 
       using (var response = request.AcceptXml().Get<LocationList>())
+      {
+        return response.Body;
+      }
+    }
+
+
+    public DepartureBoard GetDepartureBoard(string locationId, string types)
+    {
+      ISession session = NewSession();
+
+      DateTime now = DateTime.Now;
+      string date = now.ToString("dd.MM.yy");
+      string time = now.ToString("hh:mm");
+      int useTog = (types.Contains("T") ? 1 : 0);
+      int useBus = (types.Contains("B") ? 1 : 0);
+      int useMetro = (types.Contains("M") ? 1 : 0);
+
+      WebRequest request = session.Bind("departureBoard?id={id}&date={date}&time={time}&useTog={useTog}&useBus={useBus}&useMetro={useMetro}", 
+        new { id = locationId, date = date, time = time, useTog = useTog, useBus = useBus, useMetro = useMetro });
+
+      using (var response = request.AcceptXml().Get<DepartureBoard>())
       {
         return response.Body;
       }

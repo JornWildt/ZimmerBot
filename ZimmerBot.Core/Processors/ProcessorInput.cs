@@ -22,10 +22,21 @@ namespace ZimmerBot.Core.Processors
     }
 
 
-    public T GetParameter<T>(int i)
+    public T GetOptionalParameter<T>(int i, T defaultValue)
+    {
+      return GetParameter<T>(i, defaultValue: defaultValue, optional: true);
+    }
+
+
+    public T GetParameter<T>(int i, T defaultValue = default(T), bool optional = false)
     {
       if (i >= Inputs.Count)
-        throw new ArgumentOutOfRangeException($"Input parameter {i} out of range. Got only {Inputs.Count} parameters.");
+      {
+        if (optional)
+          return defaultValue;
+        else
+          throw new ArgumentOutOfRangeException($"Input parameter {i} out of range. Got only {Inputs.Count} parameters.");
+      }
 
       object input = Inputs[i];
 

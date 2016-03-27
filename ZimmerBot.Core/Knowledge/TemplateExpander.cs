@@ -40,7 +40,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       Request request = new Request { Input = s };
       Response response = BotUtility.Invoke(KnowledgeBase, State, request);
-      return response.Output.Aggregate((a, b) => a + " " + b);
+      return response.Output.Aggregate((a, b) => a + "\n" + b);
     }
   }
 }

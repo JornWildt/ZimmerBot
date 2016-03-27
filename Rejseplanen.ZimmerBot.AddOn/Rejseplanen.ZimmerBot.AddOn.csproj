@@ -69,8 +69,10 @@
     <Compile Include="RejseplanenAPI.cs" />
     <Compile Include="RejseplanenApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RejseplanenDemoDomainDK.cs" />
     <Compile Include="RejseplanenProcessor.cs" />
+    <Compile Include="Schemas\hafasRestDepartureBoard.cs">
+      <DependentUpon>hafasRestDepartureBoard.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Schemas\hafasRestLocation.cs">
       <DependentUpon>hafasRestLocation.xsd</DependentUpon>
     </Compile>
@@ -84,12 +86,17 @@
   <ItemGroup>
     <None Include="Examples\da-DK\rejseplanen.zbot" />
     <None Include="packages.config" />
+    <None Include="Schemas\hafasRestDepartureBoard.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Schemas\hafasRestLocation.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Schemas\xsd.bat" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="README.TXT" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -13,6 +13,8 @@
 \{@[ \t]*  { return (int)Token.T_LTAG; }
 [ \t]*\}   { return (int)Token.T_RTAG; }
 [^{}@]+    { yylval.s = yytext; return (int)Token.T_TEXT; }
+\{         { yylval.s = yytext; return (int)Token.T_TEXT; }
+
 
 
 %%

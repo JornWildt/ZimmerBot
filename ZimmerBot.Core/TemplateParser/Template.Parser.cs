@@ -19,5 +19,24 @@ namespace ZimmerBot.Core.TemplateParser
 
 
     public SequenceTemplateToken Result { get; internal set; }
+
+
+    protected SequenceTemplateToken Combine(SequenceTemplateToken sequence, TemplateToken token)
+    {
+      TemplateToken lastToken = sequence.Tokens.Count > 0
+        ? sequence.Tokens[sequence.Tokens.Count-1]
+        : null;
+
+      if (lastToken is TextTemplateToken && token is TextTemplateToken)
+      {
+        ((TextTemplateToken)lastToken).AppendText(((TextTemplateToken)token).Text);
+      }
+      else
+      {
+        sequence.Tokens.Add(token);
+      }
+
+      return sequence;
+    }
   }
 }

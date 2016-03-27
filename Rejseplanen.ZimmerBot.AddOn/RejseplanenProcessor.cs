@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using Rejseplanen.ZimmerBot.AddOn.Schemas;
 using ZimmerBot.Core.Processors;
@@ -8,22 +9,19 @@ using ZimmerBot.Core.Utilities;
 
 namespace Rejseplanen.ZimmerBot.AddOn
 {
+  /// <summary>
+  /// This class exposes various Rejseplanen functions to be used in ZimmerBot.
+  /// </summary>
   public static class RejseplanenProcessor
   {
     static ILog Logger = LogManager.GetLogger(typeof(RejseplanenProcessor));
 
-    public class FindStopResponse
-    {
-      public string stopName { get; set; }
-    }
 
     public static ProcessorOutput FindStop(ProcessorInput input)
     {
       string name = input.GetParameter<string>(0);
 
       var parameters = new Dictionary<string, object>();
-      foreach (var item in input.Context.Match.Matches)
-        parameters[item.Key] = item.Value;
 
       Logger.Debug($"Looking for station '{name}' in Rejseplanen");
 
@@ -42,6 +40,48 @@ namespace Rejseplanen.ZimmerBot.AddOn
             parameters["stopName"] = stop.name;
             return new ProcessorOutput(parameters);
           }
+        }
+
+        return new ProcessorOutput("empty", new object());
+      }
+      catch (Exception ex)
+      {
+        Logger.Error("Failed to access Rejseplanen", ex);
+        return new ProcessorOutput("error", new object());
+      }
+    }
+
+
+    public static ProcessorOutput FindNextDepartures(ProcessorInput input)
+    {
+      string station = input.GetParameter<string>(0);
+      string types = input.GetOptionalParameter<string>(1, "TBM");
+
+      var parameters = new Dictionary<string, object>();
+
+      Logger.Debug($"Looking for departures from '{station}' in Rejseplanen");
+
+      try
+      {
+        RejseplanenAPI api = new RejseplanenAPI();
+        LocationList locations = api.GetLocations(station);
+
+        StopLocation location = locations.Items.OfType<StopLocation>().FirstOrDefault();
+        if (location != null)
+        {
+          DepartureBoard departures = api.GetDepartureBoard(location.id, types);
+          var result = departures.Departure.Select(d =>
+            new
+            {
+              date = d.date,
+              time = d.time,
+              direction = d.direction,
+              line = d.name
+            }).Take(5).ToList();
+
+          parameters["stop"] = location.name;
+          parameters["result"] = result;
+          return new ProcessorOutput(parameters);
         }
 
         return new ProcessorOutput("empty", new object());

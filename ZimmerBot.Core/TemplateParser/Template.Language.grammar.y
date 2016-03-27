@@ -24,12 +24,13 @@ main
   ;
 
 tokenSeq
-  : tokenSeq token { $1.tokenSequence.Tokens.Add($2.token); $$.tokenSequence = $1.tokenSequence; }
+  : tokenSeq token { $$.tokenSequence = Combine($1.tokenSequence, $2.token); }
   | /* empty */    { $$.tokenSequence = new SequenceTemplateToken(); }
   ;
 
 token
   : T_TEXT                  { $$.token = new TextTemplateToken($1.s); }
+  | T_RTAG                  { $$.token = new TextTemplateToken("}"); }
   | T_LTAG tokenSeq T_RTAG  { $$.token = new RedirectTemplateToken($2.tokenSequence); }
   ;
 

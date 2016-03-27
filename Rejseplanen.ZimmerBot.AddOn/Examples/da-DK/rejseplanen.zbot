@@ -1,20 +1,37 @@
 ﻿! abstraction station, holdeplads => stoppested
 ! abstraction kører => afgår
 
+### Debugging rules
+> hkt +
+: {@ hvornår kører toget fra <1>}
 
-> find stoppested +
-! call Rejseplanen.FindStoppested($1)
-: Fandt '<stopName>'
-{empty}: Der var ikke nogen station ved det navn
+> hkt
+: {@ hvornår kører toget fra Nordhavn}
+
+
+### ---------------------------------------------------------------------------
+### Lookup departures from location
+### ---------------------------------------------------------------------------
+
+### Default rule: assume departure from Nordhavn station (my daily station)
+> hvornår kører toget
+: {@ hvornår kører toget fra Nordhavn}
+
+> hvornår kører toget fra +
+! call Rejseplanen.FindNextDepartures($1,"T")
+: Næste afgange fra <stop> er <result:{r |\
+  <r.time> : <r.line> mod <r.direction>}>
+{empty}: jeg kunne desværre ikke finde nogen afgange.\
+Måske findes stoppestedet ikke?
 {error}: Kludder i maskineriet!
 
-> find (stoppested)
-: Hvilken <1>?
-! answer
-{
-  > månen
-  : Hop i havet!
+> hvornår kører bussen
+: {@ hvornår kører bussen fra Nordhavn}
 
-  > +
-  : {@ find station <1> }
-}
+> hvornår kører bussen fra +
+! call Rejseplanen.FindNextDepartures($1,"B")
+: Næste afgange fra <stop> er <result:{r |\
+  <r.time> : <r.line> mod <r.direction>}>
+{empty}: jeg kunne desværre ikke finde nogen afgange.\
+Måske findes stoppestedet ikke?
+{error}: Kludder i maskineriet!

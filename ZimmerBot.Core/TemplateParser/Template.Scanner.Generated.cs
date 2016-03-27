@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 27-03-2016 09:08:02
+//  DateTime: 27-03-2016 21:18:51
 //  UserName: Jorn
-//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 27-03-2016 08:54:19>
+//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 27-03-2016 21:18:50>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: verbose, parser, stack, minimize
@@ -125,8 +125,8 @@ namespace ZimmerBot.Core.TemplateParser
         
         enum Result {accept, noMatch, contextFound};
 
-        const int maxAccept = 4;
-        const int initial = 5;
+        const int maxAccept = 5;
+        const int initial = 6;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
@@ -163,7 +163,7 @@ namespace ZimmerBot.Core.TemplateParser
         }
     };
 
-    static int[] startState = new int[] {5, 0};
+    static int[] startState = new int[] {6, 0};
 
     static Table[] NxS = new Table[7] {
 /* NxS[   0] */ new Table(0, 0, 0, null), // Shortest string ""
@@ -181,13 +181,15 @@ namespace ZimmerBot.Core.TemplateParser
           1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 3}),
-/* NxS[   3] */ new Table(0, 0, -1, null), // Shortest string "}"
-/* NxS[   4] */ // Shortest string "{@"
-      new Table(9, 24, -1, new sbyte[] {4, -1, -1, -1, -1, -1, 
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 4}),
+/* NxS[   3] */ // Shortest string "{"
+      new Table(64, 1, -1, new sbyte[] {5}),
+/* NxS[   4] */ new Table(0, 0, -1, null), // Shortest string "}"
+/* NxS[   5] */ // Shortest string "{@"
+      new Table(9, 24, -1, new sbyte[] {5, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-          -1, 4}),
-/* NxS[   5] */ // Shortest string ""
+          -1, 5}),
+/* NxS[   6] */ // Shortest string ""
       new Table(9, 117, 1, new sbyte[] {2, 1, 1, 1, 1, 1, 
           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
@@ -195,9 +197,7 @@ namespace ZimmerBot.Core.TemplateParser
           1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 3}),
-/* NxS[   6] */ // Shortest string "{"
-      new Table(64, 1, -1, new sbyte[] {4}),
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4}),
     };
 
 int NextState() {
@@ -629,10 +629,13 @@ int NextState() {
         case 2: // Recognized '[^{}@]+',	Shortest string "\t"
 yylval.s = yytext; return (int)Token.T_TEXT;
             break;
-        case 3: // Recognized '[ \t]*\}',	Shortest string "}"
+        case 3: // Recognized '\{',	Shortest string "{"
+yylval.s = yytext; return (int)Token.T_TEXT;
+            break;
+        case 4: // Recognized '[ \t]*\}',	Shortest string "}"
 return (int)Token.T_RTAG;
             break;
-        case 4: // Recognized '\{@[ \t]*',	Shortest string "{@"
+        case 5: // Recognized '\{@[ \t]*',	Shortest string "{@"
 return (int)Token.T_LTAG;
             break;
         default:

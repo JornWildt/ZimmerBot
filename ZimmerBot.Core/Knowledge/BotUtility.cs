@@ -33,7 +33,7 @@ namespace ZimmerBot.Core.Knowledge
             foreach (Reaction r in reactions)
             {
               string response = r.GenerateResponse();
-              foreach (string line in response.Split('\n'))
+              foreach (string line in response.Replace("\r","").Split('\n'))
                 output.Add(line);
             }
           }

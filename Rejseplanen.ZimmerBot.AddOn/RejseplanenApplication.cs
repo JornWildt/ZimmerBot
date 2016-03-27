@@ -17,6 +17,9 @@ namespace Rejseplanen.ZimmerBot.AddOn
         .WithRequiredTemplate("default")
         .WithRequiredTemplate("empty")
         .WithRequiredTemplate("error");
+
+      ProcessorRegistry
+        .RegisterProcessor("Rejseplanen.FindNextDepartures", RejseplanenProcessor.FindNextDepartures);
     }
 
 
