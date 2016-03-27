@@ -1,6 +1,8 @@
 ﻿! abstraction station, holdeplads => stoppested
 ! abstraction kører => afgår
 
+
+
 > find stoppested +
 ! call Rejseplanen.FindStoppested($1)
 : Fandt '<stopName>'
@@ -17,8 +19,10 @@
 
   > +
   ! weight 0.25
-  ! call Rejseplanen.FindStoppested($1)
-  : Fandt '<stopName>'
-  {empty}: Der var ikke nogen station ved det navn
-  {error}: Kludder i maskineriet!
+  : {@ <1> }
+
+#  ! call Rejseplanen.FindStoppested($1)
+#  : Fandt '<stopName>'
+#  {empty}: Der var ikke nogen station ved det navn
+#  {error}: Kludder i maskineriet!
 }

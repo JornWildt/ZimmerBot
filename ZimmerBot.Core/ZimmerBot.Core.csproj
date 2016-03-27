@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Label="YltParsers">
-    <Names>Chat-ZimmerBot-Core-Parser;Config-ZimmerBot-Core-ConfigParser</Names>
+    <Names>Chat-ZimmerBot-Core-Parser;Config-ZimmerBot-Core-ConfigParser;Template-ZimmerBot-Core-TemplateParser</Names>
   </PropertyGroup>
   <PropertyGroup Label="YltProperties">
     <YltTools>$(SolutionDir)packages\YaccLexTools.0.2.2\tools\</YltTools>
@@ -43,6 +43,9 @@
   </PropertyGroup>
   <PropertyGroup Label="GenerateConfig-ZimmerBot-Core-ConfigParserProperties">
     <Config-ZimmerBot-Core-ConfigParserParser>$(ProjectDir)ConfigParser\Config</Config-ZimmerBot-Core-ConfigParserParser>
+  </PropertyGroup>
+  <PropertyGroup Label="GenerateTemplate-ZimmerBot-Core-TemplateParserProperties">
+    <Template-ZimmerBot-Core-TemplateParserParser>$(ProjectDir)TemplateParser\Template</Template-ZimmerBot-Core-TemplateParserParser>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr4.StringTemplate, Version=4.0.6.9004, Culture=neutral, processorArchitecture=MSIL">
@@ -107,6 +110,9 @@
     <Compile Include="Processors\ProcessorRegistration.cs" />
     <Compile Include="Processors\ProcessorRegistry.cs" />
     <Compile Include="Knowledge\ResponseContext.cs" />
+    <Compile Include="TemplateParser\TemplateContext.cs" />
+    <Compile Include="TemplateParser\TemplateToken.cs" />
+    <Compile Include="TemplateParser\TemplateUtility.cs" />
     <Compile Include="Utilities\ChainedDictionary.cs" />
     <Compile Include="Utilities\ErrorCollection.cs" />
     <Compile Include="Utilities\ParserException.cs" />
@@ -141,9 +147,6 @@
     <Compile Include="ZimmerBotConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="job_scheduling_data_2_0.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup Label="Chat-ZimmerBot-Core-ParserFiles">
@@ -197,9 +200,34 @@
     </None>
     <None Include="ConfigParser\Config.parser" />
   </ItemGroup>
+  <ItemGroup Label="Template-ZimmerBot-Core-TemplateParserFiles">
+    <Compile Include="TemplateParser\Template.Parser.cs">
+      <DependentUpon>Template.parser</DependentUpon>
+    </Compile>
+    <Compile Include="TemplateParser\Template.Parser.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Template.Language.grammar.y</DependentUpon>
+    </Compile>
+    <Compile Include="TemplateParser\Template.Scanner.cs">
+      <DependentUpon>Template.parser</DependentUpon>
+    </Compile>
+    <Compile Include="TemplateParser\Template.Scanner.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Template.Language.analyzer.lex</DependentUpon>
+    </Compile>
+    <None Include="TemplateParser\Template.Language.analyzer.lex">
+      <DependentUpon>Template.parser</DependentUpon>
+    </None>
+    <None Include="TemplateParser\Template.Language.grammar.y">
+      <DependentUpon>Template.parser</DependentUpon>
+    </None>
+    <None Include="TemplateParser\Template.parser" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild" DependsOnTargets="YltBuildGen" />
-  <Target Name="YltBuildGen" DependsOnTargets="GenerateChat-ZimmerBot-Core-Parser;GenerateConfig-ZimmerBot-Core-ConfigParser" />
+  <Target Name="YltBuildGen" DependsOnTargets="GenerateChat-ZimmerBot-Core-Parser;GenerateConfig-ZimmerBot-Core-ConfigParser;GenerateTemplate-ZimmerBot-Core-TemplateParser" />
   <Target Name="GenerateChat-ZimmerBot-Core-Parser" Inputs="$(Chat-ZimmerBot-Core-ParserParser).Language.analyzer.lex;$(Chat-ZimmerBot-Core-ParserParser).Language.grammar.y" Outputs="$(Chat-ZimmerBot-Core-ParserParser).Scanner.Generated.cs;$(Chat-ZimmerBot-Core-ParserParser).Parser.Generated.cs">
     <Message Text="Generating scanner for $(Chat-ZimmerBot-Core-ParserParser) ..." />
     <Exec Command="$(GplexTool) /unicode &quot;/out:$(Chat-ZimmerBot-Core-ParserParser).Scanner.Generated.cs&quot; &quot;$(Chat-ZimmerBot-Core-ParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
@@ -218,6 +246,16 @@
     <Message Text="Generating parser for $(Config-ZimmerBot-Core-ConfigParserParser) ..." />
     <Exec Command="$(GppgTool) /no-lines /conflicts /gplex &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Language.grammar.y&quot; &gt; &quot;$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Config-ZimmerBot-Core-ConfigParserParser).Parser.Generated.cs">
       <Output TaskParameter="Outputs" ItemName="Config" />
+    </Exec>
+  </Target>
+  <Target Name="GenerateTemplate-ZimmerBot-Core-TemplateParser" Inputs="$(Template-ZimmerBot-Core-TemplateParserParser).Language.analyzer.lex;$(Template-ZimmerBot-Core-TemplateParserParser).Language.grammar.y" Outputs="$(Template-ZimmerBot-Core-TemplateParserParser).Scanner.Generated.cs;$(Template-ZimmerBot-Core-TemplateParserParser).Parser.Generated.cs">
+    <Message Text="Generating scanner for $(Template-ZimmerBot-Core-TemplateParserParser) ..." />
+    <Exec Command="$(GplexTool) &quot;/out:$(Template-ZimmerBot-Core-TemplateParserParser).Scanner.Generated.cs&quot; &quot;$(Template-ZimmerBot-Core-TemplateParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
+      <Output TaskParameter="Outputs" ItemName="TemplateScanner" />
+    </Exec>
+    <Message Text="Generating parser for $(Template-ZimmerBot-Core-TemplateParserParser) ..." />
+    <Exec Command="$(GppgTool) /no-lines /gplex &quot;$(Template-ZimmerBot-Core-TemplateParserParser).Language.grammar.y&quot; &gt; &quot;$(Template-ZimmerBot-Core-TemplateParserParser).Parser.Generated.cs&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(Template-ZimmerBot-Core-TemplateParserParser).Parser.Generated.cs">
+      <Output TaskParameter="Outputs" ItemName="Template" />
     </Exec>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

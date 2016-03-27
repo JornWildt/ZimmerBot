@@ -1,0 +1,34 @@
+
+// ==========================================================================
+//  GPLEX error listing for lex source file <Template.Language.analyzer.lex>
+// ==========================================================================
+//  Version:  1.2.2
+//  Machine:  JORN-PC
+//  DateTime: 26-03-2016 21:44:46
+//  UserName: Jorn
+// ==========================================================================
+
+
+%namespace ZimmerBot.Core.TemplateParser
+%scannertype TemplateScanner
+%visibility internal
+%tokentype Token
+
+%option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
+
+%{
+%}
+
+%%
+
+\{@    { return (int)Token.T_TEXT; }
+// Warning: This pattern always overrides "\{@" 
+// ---------------------------------------------
+\{@    { return (int)Token.T_LTAG; }
+// Warning: This pattern always overridden by "\{@" 
+// -------------------------------------------------
+\}     { return (int)Token.T_RTAG; }
+
+
+%%// ==========================================================================
+

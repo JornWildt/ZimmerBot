@@ -55,6 +55,8 @@
     <Compile Include="ConfigParser\Unicode tests.cs" />
     <Compile Include="ConfigParser\WordAbstractionTests.cs" />
     <Compile Include="SetupFixture.cs" />
+    <Compile Include="TemplateParser\BasicTemplateParserTests.cs" />
+    <Compile Include="TemplateParser\TestHelper.cs" />
     <Compile Include="TestHelperBase.cs" />
     <Compile Include="WRegexEvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
