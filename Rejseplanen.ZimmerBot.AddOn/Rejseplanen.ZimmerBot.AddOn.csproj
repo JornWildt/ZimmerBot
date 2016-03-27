@@ -82,6 +82,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Examples\da-DK\rejseplanen.zbot" />
     <None Include="packages.config" />
     <None Include="Schemas\hafasRestLocation.xsd">
       <SubType>Designer</SubType>

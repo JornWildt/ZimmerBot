@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using log4net;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
 
@@ -8,6 +9,8 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class KnowledgeBase
   {
+    static ILog Logger = LogManager.GetLogger(typeof(KnowledgeBase));
+
     protected List<Domain> Domains { get; set; }
 
 
@@ -51,17 +54,23 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public static KnowledgeBase LoadFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.AllDirectories)
+    public void LoadFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.AllDirectories)
     {
       ConfigurationParser cfg = new ConfigurationParser();
-      KnowledgeBase kb = new KnowledgeBase();
 
       foreach (string filename in Directory.EnumerateFiles(path, pattern, option))
       {
-        Domain d = kb.NewDomain(Path.GetFileName(filename));
+        Logger.InfoFormat("Loading zbot file: {0}", filename);
+        Domain d = NewDomain(Path.GetFileName(filename));
         cfg.ParseConfigurationFromFile(d, filename);
       }
+    }
 
+
+    public static KnowledgeBase CreateFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.AllDirectories)
+    {
+      KnowledgeBase kb = new KnowledgeBase();
+      kb.LoadFromFiles(path, pattern, option);
       return kb;
     }
   }
