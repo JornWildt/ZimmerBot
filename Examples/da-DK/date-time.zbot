@@ -8,16 +8,16 @@
 : <if(answer)>Ja, for fanden!<else>Næh, desværre.<endif>
 
 > hvilken dag er det *
-! call DateTime.ThisDay()
-: Det er <answer>.
+! call DateTime.Time()
+: Det er <answer; format="dddd">.
 
 > er det (måned)
 ! call DateTime.IsItMonth($1)
 : <if(answer)>Ja, det er <answer>.<else>Næh, desværre.<endif>
 
 > hvilken måned er det *
-! call DateTime.ThisMonth()
-: Det er <answer>.
+! call DateTime.Time()
+: Det er <answer; format="MMMM">.
 
 > hvad er klokken
 ! call DateTime.Time()

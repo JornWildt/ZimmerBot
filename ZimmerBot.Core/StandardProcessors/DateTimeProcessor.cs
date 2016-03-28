@@ -11,8 +11,6 @@ namespace ZimmerBot.Core.StandardProcessors
     public static void Initialize()
     {
       ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekDay", IsItWeekDay);
-      ProcessorRegistry.RegisterProcessor("DateTime.ThisDay", ThisDay);
-      ProcessorRegistry.RegisterProcessor("DateTime.ThisMonth", ThisMonth);
       ProcessorRegistry.RegisterProcessor("DateTime.IsItMonth", IsItMonth);
       ProcessorRegistry.RegisterProcessor("DateTime.Time", Time);
     }
@@ -27,16 +25,6 @@ namespace ZimmerBot.Core.StandardProcessors
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["day"] = day;
-      result["answer"] = answer;
-      return new ProcessorOutput(result);
-    }
-
-
-    public static ProcessorOutput ThisDay(ProcessorInput input)
-    {
-      var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
-
-      Dictionary<string, object> result = new Dictionary<string, object>();
       result["answer"] = answer;
       return new ProcessorOutput(result);
     }
@@ -61,16 +49,6 @@ namespace ZimmerBot.Core.StandardProcessors
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["month"] = month;
-      result["answer"] = answer;
-      return new ProcessorOutput(result);
-    }
-
-
-    public static ProcessorOutput ThisMonth(ProcessorInput input)
-    {
-      var answer = Thread.CurrentThread.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
-
-      Dictionary<string, object> result = new Dictionary<string, object>();
       result["answer"] = answer;
       return new ProcessorOutput(result);
     }
