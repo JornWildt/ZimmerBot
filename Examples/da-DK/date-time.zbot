@@ -21,10 +21,10 @@
 
 > hvad er klokken
 ! call DateTime.Time()
-: Klokken er <answer>.
+: Klokken er <answer; format="time:short">.
 
 > hvilken dato er det
 ! call DateTime.Time()
-: Ifølge mit indre ur burde det være <answer>.
-: Tjah, <answer>.
+: Ifølge mit indre ur burde det være <answer; format="D">.
+: Tjah, <answer; format="D">.
 

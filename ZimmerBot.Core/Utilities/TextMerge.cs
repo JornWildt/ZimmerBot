@@ -24,7 +24,9 @@ namespace ZimmerBot.Core.Utilities
 
     public static string MergeTemplate(string template, IDictionary source)
     {
-      Template t = new Template(template);
+      TemplateGroup group = new TemplateGroup();
+      group.RegisterRenderer(typeof(DateTime), new DateRenderer());
+      Template t = new Template(group, template);
 
       if (source != null)
       {

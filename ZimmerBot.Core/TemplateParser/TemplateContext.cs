@@ -4,7 +4,18 @@ namespace ZimmerBot.Core.TemplateParser
 {
   public interface ITemplateExpander
   {
+    /// <summary>
+    /// Expand StringTemplate placeholdes using StringTemplate.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
     string ExpandPlaceholdes(string s);
+
+    /// <summary>
+    /// Re-invoke bot on supplied string.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
     string Invoke(string s);
   }
 

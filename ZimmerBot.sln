@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Core", "ZimmerBot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Console", "ZimmerBot.Console\ZimmerBot.Console.csproj", "{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.cBrain.F2.Domain", "ZimmerBot.cBrain.F2.Domain\ZimmerBot.cBrain.F2.Domain.csproj", "{01A5BB46-8256-4A46-AFC3-6F8A94CCBB4B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Core.Tests", "ZimmerBot.Core.Tests\ZimmerBot.Core.Tests.csproj", "{98006B05-07ED-4664-84EC-D1B3E3F99274}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBotEliza", "ZimmerBotEliza\ZimmerBotEliza.csproj", "{7696547A-B1FC-4237-9F74-FFE3641A2F46}"
@@ -19,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AddOns", "AddOns", "{DA18A7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{9C0A35DA-0017-418B-BFEA-8BFCAAA1ABEF}"
 	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -44,10 +43,6 @@ Global
 		{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A617D74-1F64-4CDB-B72F-3ACA0934B09C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{01A5BB46-8256-4A46-AFC3-6F8A94CCBB4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01A5BB46-8256-4A46-AFC3-6F8A94CCBB4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{01A5BB46-8256-4A46-AFC3-6F8A94CCBB4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{01A5BB46-8256-4A46-AFC3-6F8A94CCBB4B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98006B05-07ED-4664-84EC-D1B3E3F99274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98006B05-07ED-4664-84EC-D1B3E3F99274}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98006B05-07ED-4664-84EC-D1B3E3F99274}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,7 +60,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{01A5BB46-8256-4A46-AFC3-6F8A94CCBB4B} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
 		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
 		{2BEB86D2-57E2-4DC9-9C0C-E71223688FE6} = {0013B72B-EC79-47AD-B8E9-4E2A60D899DE}
 	EndGlobalSection

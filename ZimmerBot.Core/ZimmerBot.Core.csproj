@@ -116,6 +116,7 @@
     <Compile Include="TemplateParser\TemplateToken.cs" />
     <Compile Include="TemplateParser\TemplateUtility.cs" />
     <Compile Include="Utilities\ChainedDictionary.cs" />
+    <Compile Include="Utilities\DateRender.cs" />
     <Compile Include="Utilities\ErrorCollection.cs" />
     <Compile Include="Utilities\ParserException.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
