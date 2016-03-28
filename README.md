@@ -8,6 +8,12 @@ the author for any problems you may run into.
 
 License: MIT (see LICENSE)
 
+## Trying it out
+
+Load the solution, set startup project as either ZimmerBot.Console or ZimmerBotEliza, build, build, run and start chatting. 
+
+The Eliza clone should be the easiest to get something funny out of.
+
 ## Credits
 
 The ZimmerBot language is heavily inspired by both https://www.rivescript.com/ 
