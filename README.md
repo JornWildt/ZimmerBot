@@ -6,11 +6,11 @@ as a personal assistant (see the ZimmerBot.Console project).
 The program is given to the public domain "AS IS", so have fun and do not blame
 the author for any problems you may run into.
 
-License: MIT (see LICENSE)
+License: MIT (see the file "LICENSE").
 
 ## Trying it out
 
-Load the solution, set startup project as either ZimmerBot.Console or ZimmerBotEliza, build, build, run and start chatting. 
+Load the solution, set startup project as either ZimmerBot.Console or ZimmerBotEliza, build, run and start chatting. 
 
 The Eliza clone should be the easiest to get something funny out of.
 
