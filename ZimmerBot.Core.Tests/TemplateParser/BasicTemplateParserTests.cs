@@ -98,5 +98,15 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       string output = tokens.Instantiate(context);
       Assert.AreEqual("aaa (INV: (OK: say (INV: (OK: bbb)) ok)) ccc", output);
     }
+
+
+    [Test]
+    public void CanUseStringTemplateBraces()
+    {
+      SequenceTemplateToken tokens = ParseTemplate(@"Loop: <items:{i | <i.x>}>.");
+      TemplateContext context = new TemplateContext(new TX());
+      string output = tokens.Instantiate(context);
+      Assert.AreEqual("(OK: Loop: <items:{i | <i.x>}>.)", output);
+    }
   }
 }
