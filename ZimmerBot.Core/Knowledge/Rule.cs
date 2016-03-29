@@ -113,7 +113,7 @@ namespace ZimmerBot.Core.Knowledge
       if (result.Score < 0.5)
         return null;
 
-      ResponseContext rc = new ResponseContext(context.State, context.Input, result);
+      ResponseContext rc = new ResponseContext(Domain.KnowledgeBase, context.State, context.Input, result);
       return new Reaction(rc, this);
     }
 

@@ -15,8 +15,7 @@ namespace ZimmerBot.Core.StandardProcessors
     {
       string query = input.GetParameter<string>(0);
 
-      //input.Context.State.
-      object output = "HEJ";
+      object output = input.Context.KnowledgeBase.MemoryStore.Query(query);
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["result"] = output;

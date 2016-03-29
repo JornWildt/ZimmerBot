@@ -23,10 +23,10 @@ PREFIX pers: <http://wellknown-persons.fake#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 SELECT * WHERE
 {
-  ?pers foaf:knows pers:D .
+  ?pers foaf:knows pers:A .
   ?pers foaf:name ?name
 }"")
-: <result>
+: Det er '<result:{r | <r.name>}>'
 ");
       Assert.AreEqual(1, d.Rules.Count);
       Rule r = d.Rules[0];
@@ -35,7 +35,7 @@ SELECT * WHERE
       Assert.IsNotNull(reaction);
 
       string response = reaction.GenerateResponse();
-      Assert.AreEqual("Det er Lisa Nilson", response);
+      Assert.AreEqual("Det er 'Lisa Nilson'", response);
     }
   }
 }

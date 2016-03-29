@@ -36,11 +36,24 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public object Query(string s)
+    public RDFResultSet Query(string s)
     {
       SparqlQuery query = SparqlParser.ParseFromString(s);
       object result = Processor.ProcessQuery(query);
-      return result;
+      return ConvertQueryResult(result);
+    }
+
+
+    private RDFResultSet ConvertQueryResult(object result)
+    {
+      if (result is SparqlResultSet)
+      {
+        SparqlResultSet rs = (SparqlResultSet)result;
+        var output = new RDFResultSet(rs.Select(r => r.ToDictionary(v => v.Key, v => v.Value.ToString())));
+        return output;
+      }
+      else
+        throw new InvalidOperationException($"Could not convert '{result.GetType()}' to RDFResult");
     }
   }
 }
