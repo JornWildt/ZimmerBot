@@ -3,18 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Knowledge
 {
   public static class BotUtility
   {
+    static ILog DiaLogger = LogManager.GetLogger("DialogLogger");
+
+
     public static Response Invoke(KnowledgeBase kb, BotState state, Request req, bool executeScheduledRules = false)
     {
       List<string> output = new List<string>();
+      ReactionSet reactions = null;
 
       if (req.Input != null)
       {
+        DiaLogger.InfoFormat("Invoke: {0}", req.Input);
         ZTokenizer tokenizer = new ZTokenizer();
         ZStatementSequence statements = tokenizer.Tokenize(req.Input);
 
@@ -26,29 +32,34 @@ namespace ZimmerBot.Core.Knowledge
         {
           kb.ExpandTokens(input);
           EvaluationContext context = new EvaluationContext(state, input, req.RuleId, executeScheduledRules);
-          ReactionSet reactions = kb.FindMatchingReactions(context);
 
-          if (reactions.Count > 0)
-          {
-            foreach (Reaction r in reactions)
-            {
-              string response = r.GenerateResponse();
-              foreach (string line in response.Replace("\r","").Split('\n'))
-                output.Add(line);
-            }
-          }
-          else
-            output.Add("???");
+          // FIXME: only use the last statement? Makes some sense though, but maybe all would be better?
+          reactions = kb.FindMatchingReactions(context);
         }
       }
       else
       {
+        DiaLogger.InfoFormat("Invoke without input");
         EvaluationContext context = new EvaluationContext(state, null, req.RuleId, executeScheduledRules);
-        ReactionSet reactions = kb.FindMatchingReactions(context);
+        reactions = kb.FindMatchingReactions(context);
+      }
 
-        if (reactions.Count > 0)
-          foreach (Reaction r in reactions)
-            output.Add(r.GenerateResponse());
+      if (reactions != null && reactions.Count > 0)
+      {
+        foreach (Reaction r in reactions)
+        {
+          string response = r.GenerateResponse();
+          DiaLogger.InfoFormat("Response: " + response);
+
+          foreach (string line in response.Replace("\r", "").Split('\n'))
+            output.Add(line);
+        }
+      }
+      else
+      {
+        DiaLogger.InfoFormat("No suitable response found");
+        if (req.Input != null)
+          output.Add("???");
       }
 
       if (output.Count > 0)

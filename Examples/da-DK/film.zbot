@@ -1,19 +1,20 @@
-! rdf_import "C:\Temp\linkedmdb.nt";
+### ! rdf_import "C:\Temp\linkedmdb.nt";
 
-> hvem spillede + i +
-! call Rdf.Query "
-PREFIX movie: <http://data.linkedmdb.org/resource/movie/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-SELECT *
-WHERE
-{
-  ?perf movie:performance_character ""Stuart"" .
-  ?film movie:performance ?perf .
-  ?film rdf:type movie:film .
-  ?film rdfs:label ?fname .
-  ?actor movie:performance ?perf .
-  ?actor rdf:type movie:actor .
-  ?actor rdfs:label ?aname .
-}
-LIMIT 10"
+# > hvem spillede + i +
+#! call Rdf.Query ("
+#PREFIX movie: <http://data.linkedmdb.org/resource/movie/>
+#PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+#PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+#SELECT *
+#WHERE
+#{
+#  ?perf movie:performance_character ""Stuart"" .
+#  ?film movie:performance ?perf .
+#  ?film rdf:type movie:film .
+#  ?film rdfs:label ?fname .
+#  ?actor movie:performance ?perf .
+#  ?actor rdf:type movie:actor .
+#  ?actor rdfs:label ?aname .
+#}
+#LIMIT 10")
+

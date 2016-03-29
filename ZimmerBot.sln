@@ -26,7 +26,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{2BEB86D2-57E2-4DC9-9C0C-E71223688FE6}"
 	ProjectSection(SolutionItems) = preProject
 		Examples\da-DK\date-time.zbot = Examples\da-DK\date-time.zbot
-		film.zbot = film.zbot
 		Examples\da-DK\film.zbot = Examples\da-DK\film.zbot
 	EndProjectSection
 EndProject
