@@ -25,7 +25,8 @@ SELECT * WHERE
 {
   ?pers foaf:knows pers:A .
   ?pers foaf:name ?name
-}"")
+}
+ORDER BY RAND()"")
 : Det er '<result:{r | <r.name>}>'
 ");
       Assert.AreEqual(1, d.Rules.Count);

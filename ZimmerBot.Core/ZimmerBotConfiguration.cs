@@ -18,6 +18,7 @@ namespace ZimmerBot.Core
           AddOnHandling.AddOnLoader.InitializeAddOns();
           GeneralProcessor.Initialize();
           DateTimeProcessor.Initialize();
+          RDFProcessor.Initialize();
           StdSchedulerFactory.GetDefaultScheduler().Start();
           IsInitialized = true;
         }

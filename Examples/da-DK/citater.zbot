@@ -1,0 +1,41 @@
+! rdf_import "..\..\..\Examples\da-DK\citater.ttl"
+
+> c
+: {@ Giv et citat}
+
+> Giv et citat
+! call RDF.Query("
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+SELECT ?content ?aname
+WHERE
+{
+  ?citat rdf:type bibo:Quote .
+  ?citat rdf:value ?content .
+  OPTIONAL { ?citat dcterms:contributor ?author } .
+  OPTIONAL { ?author rdf:value ?aname }
+}
+ORDER BY RAND()
+LIMIT 1
+")
+: Yep: <result:{r | <r.content> [<r.aname>]}>
+
+
+> Hvad sagde +
+! call RDF.Query("
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+SELECT ?content
+WHERE
+{
+  ?citat rdf:type bibo:Quote .
+  ?citat rdf:value ?content .
+  ?citat dcterms:contributor ?author .
+  ?author rdf:value 'Dalai Lama' .
+}
+LIMIT 1
+")
+: <1> har engang sagt : "<result:{r | <r.content>}>"
+
