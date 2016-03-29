@@ -11,7 +11,6 @@ License: MIT (see the file "LICENSE").
 ## Trying it out
 
 Load the solution, set startup project as either ZimmerBot.Console or ZimmerBotEliza, build, run and start chatting. 
-
 The Eliza clone should be the easiest to get something funny out of.
 
 ## Credits

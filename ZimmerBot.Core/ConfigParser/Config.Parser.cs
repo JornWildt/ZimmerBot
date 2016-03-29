@@ -46,6 +46,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RDFImport(string filename)
+    {
+      Domain.KnowledgeBase.MemoryStore.LoadFromFile(filename);
+    }
+
+
     protected Func<Domain, Rule> RuleGenerator(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
     {
       return d =>

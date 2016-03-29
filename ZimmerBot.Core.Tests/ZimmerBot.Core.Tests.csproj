@@ -52,6 +52,7 @@
     <Compile Include="ConfigParser\ErrorHandlingTests.cs" />
     <Compile Include="ConfigParser\InputPatternTests.cs" />
     <Compile Include="ConfigParser\OutputTests.cs" />
+    <Compile Include="ConfigParser\RDFTests.cs" />
     <Compile Include="ConfigParser\Unicode tests.cs" />
     <Compile Include="ConfigParser\WordAbstractionTests.cs" />
     <Compile Include="SetupFixture.cs" />
@@ -70,6 +71,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ConfigParser\Friends.ttl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="ConfigParser\UnicodeTest.zbot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

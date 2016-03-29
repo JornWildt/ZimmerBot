@@ -4,6 +4,7 @@ obj/
 *.suo
 TestResult.xml
 *.VisualState.xml
+*.grammar.conflicts
 UNUSED*
 UNUSED*/
 Logs/

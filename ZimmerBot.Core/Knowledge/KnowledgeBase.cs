@@ -13,10 +13,13 @@ namespace ZimmerBot.Core.Knowledge
 
     protected List<Domain> Domains { get; set; }
 
+    public RDFStore MemoryStore { get; protected set; }
+
 
     public KnowledgeBase()
     {
       Domains = new List<Domain>();
+      MemoryStore = new RDFStore();
     }
 
 

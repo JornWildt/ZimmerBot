@@ -17,6 +17,7 @@ namespace ZimmerBot.Core.Tests
 
       GeneralProcessor.Initialize();
       DateTimeProcessor.Initialize();
+      RDFProcessor.Initialize();
 
       Initialized = true;
     }
