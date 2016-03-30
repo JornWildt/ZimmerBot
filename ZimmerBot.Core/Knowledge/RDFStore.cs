@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +38,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public void LoadFromFile(string filename)
     {
+      if (ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"] != null)
+        filename = Path.Combine(ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"], filename);
+
       Store.LoadFromFile(filename);
     }
 

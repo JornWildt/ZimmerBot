@@ -1,4 +1,4 @@
-! rdf_import "..\..\..\Examples\da-DK\citater.ttl"
+! rdf_import "Examples\da-DK\citater.ttl"
 
 > c
 : {@ Giv et citat}

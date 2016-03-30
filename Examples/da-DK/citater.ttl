@@ -1,4 +1,4 @@
-@base <http://zimmerbot/quotes/> .
+ï»¿@base <http://zimmerbot/quotes/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -19,12 +19,12 @@
 
 <q3>
   a bibo:Quote ;
-  rdf:value "Kend reglerne vel, så du kan bryde dem effektivt" ;
+  rdf:value "Kend reglerne vel, sÃ¥ du kan bryde dem effektivt" ;
   dcterms:contributor author:Dalai_Lama .
 
 <q4>
   a bibo:Quote ;
-  rdf:value "Vores primære formål her i livet er at hjælpe andre. Og hvis du ikke kan hjælpe dem, så lad i det mindste være med at skade dem" ;
+  rdf:value "Vores primÃ¦re formÃ¥l her i livet er at hjÃ¦lpe andre. Og hvis du ikke kan hjÃ¦lpe dem, sÃ¥ lad i det mindste vÃ¦re med at skade dem" ;
   dcterms:contributor author:Dalai_Lama .
 
 
