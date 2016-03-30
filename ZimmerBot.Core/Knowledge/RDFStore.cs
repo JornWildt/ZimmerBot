@@ -21,6 +21,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected SparqlQueryParser SparqlParser { get; set; }
 
+    protected NodeFactory NodeFactory { get; set; }
+
 
     public RDFStore()
     {
@@ -28,6 +30,7 @@ namespace ZimmerBot.Core.Knowledge
       Dataset = new InMemoryDataset(Store, true);
       Processor = new LeviathanQueryProcessor(Dataset);
       SparqlParser = new SparqlQueryParser();
+      NodeFactory = new NodeFactory();
     }
 
 
@@ -37,18 +40,29 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public RDFResultSet Query(string s, Dictionary<string, object> matches)
+    public RDFResultSet Query(string s, Dictionary<string, object> matches, IList<object> parameters)
     {
       Condition.Requires(s, nameof(s)).IsNotNull();
-      Condition.Requires(matches, nameof(matches)).IsNotNull();
 
       SparqlParameterizedString queryString = new SparqlParameterizedString();
       // queryString.Namespaces.AddNamespace("ex", new Uri("http://example.org/ns#"));
       queryString.CommandText = s;
 
-      foreach (var match in matches)
+      if (matches != null)
       {
-        queryString.SetParameter(match.Key, new NodeFactory().CreateLiteralNode(match.Value.ToString()));
+        foreach (var match in matches)
+        {
+          queryString.SetParameter(match.Key, NodeFactory.CreateLiteralNode(match.Value.ToString()));
+        }
+      }
+
+      if (parameters != null)
+      {
+        for (int i = 0; i < parameters.Count; ++i)
+        {
+          if (parameters[i] != null)
+            queryString.SetParameter("p"+(i+1), NodeFactory.CreateLiteralNode(parameters[i].ToString()));
+        }
       }
 
       SparqlQuery query = SparqlParser.ParseFromString(queryString);
