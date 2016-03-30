@@ -1,0 +1,20 @@
+﻿@base <http://zimmerbot/persons/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix rel: <http://www.perceive.net/schemas/relationship/>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix bibo: <http://purl.org/ontology/bibo/>.
+
+
+<Dalai_Lama>
+  rdfs:label "Dalai Lama";
+  a foaf:Person;
+  foaf:name "Dalai Lama";
+  dcterms:abstract "Dalai Lama er tibetanernes religiøse overhoved.".
+
+<Samuel_Pepys>
+  rdfs:label "Samuel Pepys";
+  foaf:name "Samuel Pepys";
+  a foaf:Person;
+  dcterms:abstract "Samuel Pepys var en engelsk embedsmand som blev kendt for sine dagbøger med øjenvidneberetninger fra store begivenheder i 1600-tallet.".

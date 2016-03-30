@@ -5,32 +5,26 @@
 @prefix rel: <http://www.perceive.net/schemas/relationship/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix bibo: <http://purl.org/ontology/bibo/> .
-@prefix author: <http://zimmerbot/authors/> .
+@prefix persons: <http://zimmerbot/persons/> .
+
 
 <q1>
   a bibo:Quote ;
   rdf:value "Stilhed er nogle gange det bedste svar" ;
-  dcterms:contributor author:Dalai_Lama .
+  dcterms:contributor persons:Dalai_Lama .
 
 <q2>
   a bibo:Quote ;
   rdf:value "Der findes ingen fremmede, kun venner vi ikke kender" ;
-  dcterms:contributor author:Samuel_Pepys .
+  dcterms:contributor persons:Samuel_Pepys .
 
 <q3>
   a bibo:Quote ;
   rdf:value "Kend reglerne vel, så du kan bryde dem effektivt" ;
-  dcterms:contributor author:Dalai_Lama .
+  dcterms:contributor persons:Dalai_Lama .
 
 <q4>
   a bibo:Quote ;
   rdf:value "Vores primære formål her i livet er at hjælpe andre. Og hvis du ikke kan hjælpe dem, så lad i det mindste være med at skade dem" ;
-  dcterms:contributor author:Dalai_Lama .
+  dcterms:contributor persons:Dalai_Lama .
 
-
-<http://zimmerbot/authors/Dalai_Lama>
-  rdf:value "Dalai Lama" .
-
-
-<http://zimmerbot/authors/Samuel_Pepys>
-  rdf:value "Samuel Pepys" .

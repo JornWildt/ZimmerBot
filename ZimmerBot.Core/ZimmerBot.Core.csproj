@@ -122,8 +122,6 @@
     <Compile Include="Knowledge\BotUtility.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
-    <Compile Include="Knowledge\RDFManager.cs" />
-    <Compile Include="Knowledge\RDFTriple.cs" />
     <Compile Include="Knowledge\RDFResultSet.cs" />
     <Compile Include="Knowledge\RDFStore.cs" />
     <Compile Include="Knowledge\TemplateExpander.cs" />

@@ -29,6 +29,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected NodeFactory NodeFactory { get; set; }
 
+    protected HashSet<string> LoadedFiles { get; set; }
+
 
     public RDFStore()
     {
@@ -37,6 +39,7 @@ namespace ZimmerBot.Core.Knowledge
       Processor = new LeviathanQueryProcessor(Dataset);
       SparqlParser = new SparqlQueryParser();
       NodeFactory = new NodeFactory();
+      LoadedFiles = new HashSet<string>();
     }
 
 
@@ -45,8 +48,14 @@ namespace ZimmerBot.Core.Knowledge
       if (ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"] != null)
         filename = Path.Combine(ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"], filename);
 
-      Logger.InfoFormat("Loading RDF file '{0}'", filename);
-      Store.LoadFromFile(filename);
+      if (!LoadedFiles.Contains(filename))
+      {
+        Logger.InfoFormat("Loading RDF file '{0}'", filename);
+        Store.LoadFromFile(filename);
+        LoadedFiles.Add(filename);
+      }
+      else
+        Logger.InfoFormat("Skipping RDF file '{0}' - it has already been loaded", filename);
     }
 
 

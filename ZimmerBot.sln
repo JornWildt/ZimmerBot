@@ -21,13 +21,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{0013B72B-EC79-47AD-B8E9-4E2A60D899DE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{F07C2A81-66BD-49CE-B605-42D78B85AB9F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{2BEB86D2-57E2-4DC9-9C0C-E71223688FE6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{EF8EBC4A-F8D7-4FD1-B690-B8E37A197033}"
 	ProjectSection(SolutionItems) = preProject
 		Examples\da-DK\citater.ttl = Examples\da-DK\citater.ttl
 		Examples\da-DK\citater.zbot = Examples\da-DK\citater.zbot
 		Examples\da-DK\dato-tid.zbot = Examples\da-DK\dato-tid.zbot
+		Examples\da-DK\personer.ttl = Examples\da-DK\personer.ttl
+		Examples\da-DK\personer.zbot = Examples\da-DK\personer.zbot
 	EndProjectSection
 EndProject
 Global
@@ -62,6 +64,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
-		{2BEB86D2-57E2-4DC9-9C0C-E71223688FE6} = {0013B72B-EC79-47AD-B8E9-4E2A60D899DE}
+		{EF8EBC4A-F8D7-4FD1-B690-B8E37A197033} = {F07C2A81-66BD-49CE-B605-42D78B85AB9F}
 	EndGlobalSection
 EndGlobal

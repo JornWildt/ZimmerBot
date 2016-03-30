@@ -1,4 +1,5 @@
-! rdf_import "Examples\da-DK\citater.ttl"
+! rdf_import "da-DK\citater.ttl"
+! rdf_import "da-DK\personer.ttl"
 
 > c
 : {@ Giv et citat}
@@ -7,6 +8,7 @@
 ! call RDF.Query("
 PREFIX bibo: <http://purl.org/ontology/bibo/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX dcterms: <http://purl.org/dc/terms/>
 SELECT ?content ?aname
 WHERE
@@ -14,7 +16,7 @@ WHERE
   ?citat rdf:type bibo:Quote .
   ?citat rdf:value ?content .
   OPTIONAL { ?citat dcterms:contributor ?author } .
-  OPTIONAL { ?author rdf:value ?aname }
+  OPTIONAL { ?author rdfs:label ?aname }
 }
 ORDER BY RAND()
 LIMIT 1
@@ -26,6 +28,7 @@ LIMIT 1
 ! call RDF.Query("
 PREFIX bibo: <http://purl.org/ontology/bibo/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX dcterms: <http://purl.org/dc/terms/>
 SELECT ?content
 WHERE
@@ -33,7 +36,7 @@ WHERE
   ?citat rdf:type bibo:Quote .
   ?citat rdf:value ?content .
   ?citat dcterms:contributor ?author .
-  ?author rdf:value ?aname .
+  ?author rdfs:label ?aname .
   FILTER (lcase(str(?aname)) = lcase(str(@1))) .
 }
 ORDER BY RAND()
