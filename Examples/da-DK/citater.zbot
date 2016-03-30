@@ -33,11 +33,12 @@ WHERE
   ?citat rdf:type bibo:Quote .
   ?citat rdf:value ?content .
   ?citat dcterms:contributor ?author .
-  ?author rdf:value @p1 .
+  ?author rdf:value ?aname
+  FILTER (lcase(str(?aname)) = lcase(str(@1))) .
 }
 ORDER BY RAND()
 LIMIT 1
-", $1)
+")
 : Okay, det ved jeg! <1> har engang sagt : "<result:{r | <r.content>}>"
 : Hvad? <1> har fandme aldrig sagt noget fornuftigt!
 
