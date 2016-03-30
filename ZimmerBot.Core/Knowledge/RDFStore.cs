@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
+using log4net;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query;
@@ -15,6 +16,9 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class RDFStore
   {
+    static ILog Logger = LogManager.GetLogger(typeof(RDFStore));
+
+
     protected TripleStore Store { get; set; }
 
     protected InMemoryDataset Dataset { get; set; }
@@ -41,6 +45,7 @@ namespace ZimmerBot.Core.Knowledge
       if (ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"] != null)
         filename = Path.Combine(ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"], filename);
 
+      Logger.InfoFormat("Loading RDF file '{0}'", filename);
       Store.LoadFromFile(filename);
     }
 
