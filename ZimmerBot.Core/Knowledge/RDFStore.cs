@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CuttingEdge.Conditions;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query;
@@ -36,9 +37,22 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public RDFResultSet Query(string s)
+    public RDFResultSet Query(string s, Dictionary<string, object> matches)
     {
-      SparqlQuery query = SparqlParser.ParseFromString(s);
+      Condition.Requires(s, nameof(s)).IsNotNull();
+      Condition.Requires(matches, nameof(matches)).IsNotNull();
+
+      SparqlParameterizedString queryString = new SparqlParameterizedString();
+      // queryString.Namespaces.AddNamespace("ex", new Uri("http://example.org/ns#"));
+      queryString.CommandText = s;
+
+      foreach (var match in matches)
+      {
+        queryString.SetParameter(match.Key, new NodeFactory().CreateLiteralNode(match.Value.ToString()));
+      }
+
+      SparqlQuery query = SparqlParser.ParseFromString(queryString);
+
       object result = Processor.ProcessQuery(query);
       return ConvertQueryResult(result);
     }
