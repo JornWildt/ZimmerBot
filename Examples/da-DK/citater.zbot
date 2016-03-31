@@ -1,9 +1,6 @@
 ! rdf_import "da-DK\citater.ttl"
 ! rdf_import "da-DK\personer.ttl"
 
-> c
-: << Giv et citat>>
-
 > Giv et citat
 ! call RDF.Query("
 PREFIX bibo: <http://purl.org/ontology/bibo/>

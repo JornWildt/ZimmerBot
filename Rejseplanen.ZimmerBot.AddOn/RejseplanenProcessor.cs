@@ -54,6 +54,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
     public static ProcessorOutput FindNextDepartures(ProcessorInput input)
     {
+      System.Threading.Thread.Sleep(3000);
       string station = input.GetParameter<string>(0);
       string types = input.GetOptionalParameter<string>(1, "toget bussen metro");
 

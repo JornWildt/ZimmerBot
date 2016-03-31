@@ -1,8 +1,5 @@
 ! rdf_import "da-DK\personer.ttl"
 
-> h
-: << hvem er dalai lama>>
-
 > Hvem er +
 ! call RDF.Query("
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>

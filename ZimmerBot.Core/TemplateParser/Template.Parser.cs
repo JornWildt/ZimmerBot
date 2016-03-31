@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.TemplateParser
 {
@@ -15,6 +16,10 @@ namespace ZimmerBot.Core.TemplateParser
       MemoryStream stream = new MemoryStream(inputBuffer);
       this.Scanner = new TemplateScanner(stream);
       this.Parse();
+
+      string reference = "Template error in: " + s.Substring(0, Math.Min(s.Length,50));
+      if (((TemplateScanner)Scanner).Errors != null && ((TemplateScanner)Scanner).Errors.Count > 0)
+        throw new ParserException(reference, ((TemplateScanner)Scanner).Errors);
     }
 
 

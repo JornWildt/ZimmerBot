@@ -28,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{EF8EBC4A
 		Examples\da-DK\citater.ttl = Examples\da-DK\citater.ttl
 		Examples\da-DK\citater.zbot = Examples\da-DK\citater.zbot
 		Examples\da-DK\dato-tid.zbot = Examples\da-DK\dato-tid.zbot
+		Examples\da-DK\genveje-til-debug.zbot = Examples\da-DK\genveje-til-debug.zbot
 		Examples\da-DK\personer.ttl = Examples\da-DK\personer.ttl
 		Examples\da-DK\personer.zbot = Examples\da-DK\personer.zbot
 	EndProjectSection

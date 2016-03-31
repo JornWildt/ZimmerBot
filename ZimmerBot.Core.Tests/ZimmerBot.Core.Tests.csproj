@@ -57,6 +57,7 @@
     <Compile Include="ConfigParser\WordAbstractionTests.cs" />
     <Compile Include="SetupFixture.cs" />
     <Compile Include="TemplateParser\BasicTemplateParserTests.cs" />
+    <Compile Include="TemplateParser\ErrorHandlingTests.cs" />
     <Compile Include="TemplateParser\TestHelper.cs" />
     <Compile Include="TestHelperBase.cs" />
     <Compile Include="WRegexEvaluationTests.cs" />

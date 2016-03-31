@@ -51,8 +51,16 @@ namespace ZimmerBot.Core.Knowledge
       if (!LoadedFiles.Contains(filename))
       {
         Logger.InfoFormat("Loading RDF file '{0}'", filename);
-        Store.LoadFromFile(filename);
-        LoadedFiles.Add(filename);
+        try
+        {
+          Store.LoadFromFile(filename);
+          LoadedFiles.Add(filename);
+        }
+        catch (Exception ex)
+        {
+          Logger.Error(ex);
+          throw new ApplicationException($"Failed to load RDF file '{filename}': {ex.Message}");
+        }
       }
       else
         Logger.InfoFormat("Skipping RDF file '{0}' - it has already been loaded", filename);
