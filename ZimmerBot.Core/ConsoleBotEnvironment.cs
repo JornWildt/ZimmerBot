@@ -10,7 +10,7 @@ namespace ZimmerBot.Core
   /// </summary>
   public class ConsoleBotEnvironment : IBotEnvironment
   {
-    static ILog Logger = LogManager.GetLogger(typeof(Bot));
+    static ILog Logger = LogManager.GetLogger(typeof(ConsoleBotEnvironment));
 
 
     public string Prompt { get; set; }
