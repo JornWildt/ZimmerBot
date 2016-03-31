@@ -4,10 +4,10 @@
 
 ### Debugging rules
 #> hkt +
-#: {@ hvornår kører toget fra <1>}
+#: << hvornår kører toget fra <1>>>
 
 #> hkt
-#: {@ hvornår kører toget fra Nordhavn}
+#: << hvornår kører toget fra Nordhavn>>
 
 
 ### ---------------------------------------------------------------------------
@@ -16,7 +16,7 @@
 
 ### Default rule: assume departure from Nordhavn station (my daily station), but might as well have asked for it.
 > hvornår afgår * (transportform)
-: {@ hvornår kører <2> fra Nordhavn}
+: << hvornår kører <2> fra Nordhavn>>
 
 ### Lookup train/bus/metro departure from stop
 > hvornår afgår * (transportform) fra +
@@ -28,8 +28,8 @@ Måske findes stoppestedet ikke?
 {error}: Kludder i maskineriet!
 
 > hvornår afgår * (transportform) (mod|til) +
-: {@ hvornår kører <2> fra Nordhavn}
+: << hvornår kører <2> fra Nordhavn>>
 
 > hvornår afgår * (transportform) fra + (mod|til) +
-: {@ hvornår kører <2> fra <3>}
+: << hvornår kører <2> fra <3>>>
 

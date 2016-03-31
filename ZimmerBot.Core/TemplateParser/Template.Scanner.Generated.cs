@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 31-03-2016 06:44:23
+//  DateTime: 31-03-2016 08:23:11
 //  UserName: Jorn
-//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 31-03-2016 06:36:47>
+//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 31-03-2016 08:23:10>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: verbose, parser, stack, minimize
@@ -20,6 +20,7 @@
 // Version 1.2.1 of 24-June-2013
 //
 //
+#define BACKUP
 #define STACK
 #define PERSIST
 #define BYTEMODE
@@ -125,8 +126,8 @@ namespace ZimmerBot.Core.TemplateParser
         
         enum Result {accept, noMatch, contextFound};
 
-        const int maxAccept = 5;
-        const int initial = 6;
+        const int maxAccept = 6;
+        const int initial = 7;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
@@ -163,41 +164,33 @@ namespace ZimmerBot.Core.TemplateParser
         }
     };
 
-    static int[] startState = new int[] {6, 0};
+    static int[] startState = new int[] {7, 0};
 
-    static Table[] NxS = new Table[7] {
+    static Table[] NxS = new Table[9] {
 /* NxS[   0] */ new Table(0, 0, 0, null), // Shortest string ""
 /* NxS[   1] */ // Shortest string "\x01"
-      new Table(64, 62, 1, new sbyte[] {-1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, -1, 1, -1}),
+      new Table(60, 3, 1, new sbyte[] {-1, 1, -1}),
 /* NxS[   2] */ // Shortest string "\t"
-      new Table(9, 117, 1, new sbyte[] {2, 1, 1, 1, 1, 1, 
+      new Table(9, 54, 1, new sbyte[] {2, 1, 1, 1, 1, 1, 
           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 4}),
-/* NxS[   3] */ // Shortest string "{"
-      new Table(64, 1, -1, new sbyte[] {5}),
-/* NxS[   4] */ new Table(0, 0, -1, null), // Shortest string "}"
-/* NxS[   5] */ // Shortest string "{@"
-      new Table(9, 24, -1, new sbyte[] {5, -1, -1, -1, -1, -1, 
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 8}),
+/* NxS[   3] */ // Shortest string "<"
+      new Table(60, 1, -1, new sbyte[] {6}),
+/* NxS[   4] */ // Shortest string ">"
+      new Table(62, 1, -1, new sbyte[] {5}),
+/* NxS[   5] */ new Table(0, 0, -1, null), // Shortest string ">>"
+/* NxS[   6] */ // Shortest string "<<"
+      new Table(9, 24, -1, new sbyte[] {6, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-          -1, 5}),
-/* NxS[   6] */ // Shortest string ""
-      new Table(9, 117, 1, new sbyte[] {2, 1, 1, 1, 1, 1, 
+          -1, 6}),
+/* NxS[   7] */ // Shortest string ""
+      new Table(9, 54, 1, new sbyte[] {2, 1, 1, 1, 1, 1, 
           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4}),
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4}),
+/* NxS[   8] */ // Shortest string "\t>"
+      new Table(62, 1, -1, new sbyte[] {5}),
     };
 
 int NextState() {
@@ -625,18 +618,21 @@ int NextState() {
             if (yywrap())
                 return (int)Token.EOF;
             break;
-        case 1: // Recognized '[^{}@]+',	Shortest string "\x01"
-        case 2: // Recognized '[^{}@]+',	Shortest string "\t"
-Console.WriteLine("T1: " + yytext); yylval.s = yytext; return (int)Token.T_TEXT;
+        case 1: // Recognized '[^<>]+',	Shortest string "\x01"
+        case 2: // Recognized '[^<>]+',	Shortest string "\t"
+yylval.s = yytext; return (int)Token.T_TEXT;
             break;
-        case 3: // Recognized '\{',	Shortest string "{"
-Console.WriteLine("T2: " + yytext); yylval.s = yytext; return (int)Token.T_TEXT;
+        case 3: // Recognized '\<',	Shortest string "<"
+yylval.s = yytext; return (int)Token.T_TEXT;
             break;
-        case 4: // Recognized '[ \t]*\}',	Shortest string "}"
-Console.WriteLine("R: " + yytext); return (int)Token.T_RTAG;
+        case 4: // Recognized '\>',	Shortest string ">"
+yylval.s = yytext; return (int)Token.T_TEXT;
             break;
-        case 5: // Recognized '\{@[ \t]*',	Shortest string "{@"
-Console.WriteLine("L: " + yytext); return (int)Token.T_LTAG;
+        case 5: // Recognized '[ \t]*\>\>',	Shortest string ">>"
+return (int)Token.T_RTAG;
+            break;
+        case 6: // Recognized '\<\<[ \t]*',	Shortest string "<<"
+return (int)Token.T_LTAG;
             break;
         default:
             break;

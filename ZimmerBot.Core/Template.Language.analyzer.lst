@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 27-03-2016 21:18:25
+//  DateTime: 31-03-2016 08:23:00
 //  UserName: Jorn
 // ==========================================================================
 
@@ -21,17 +21,18 @@
 
 %%
 
-\{@[ \t]*  { return (int)Token.T_LTAG; }
-[ \t]*\}   { return (int)Token.T_RTAG; }
-//^^^^^^
-// Warning: This pattern always overrides "\}" 
-// --------------------------------------------
-[^{}@]+    { yylval.s = yytext; return (int)Token.T_TEXT; }
-\{         { yylval.s = yytext; return (int)Token.T_TEXT; }
-\}         { yylval.s = yytext; return (int)Token.T_TEXT; }
-// Warning: This pattern always overridden by "[ \t]*\}" 
-// ------------------------------------------------------
-
+\<\<[ \t]*   { return (int)Token.T_LTAG; }
+[ \t]*\>\>   { return (int)Token.T_RTAG; }
+[^<>]+       { yylval.s = yytext; return (int)Token.T_TEXT; }
+\<           { yytext); yylval.s = yytext; return (int)Token.T_TEXT; }
+//-----------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// Error: Invalid action
+// Error: Parser error <Syntax error, unexpected )> 
+// -------------------------------------------------
+\>           { yytext); yylval.s = yytext; return (int)Token.T_TEXT; }
+//-----------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// Error: Invalid action
+// ---------------------
 
 %%// ==========================================================================
 

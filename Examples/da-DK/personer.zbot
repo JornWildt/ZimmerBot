@@ -1,7 +1,7 @@
 ! rdf_import "da-DK\personer.ttl"
 
 > h
-: {@ hvem er dalai lama}
+: << hvem er dalai lama>>
 
 > Hvem er +
 ! call RDF.Query("

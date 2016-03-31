@@ -2,7 +2,7 @@
 ! rdf_import "da-DK\personer.ttl"
 
 > c
-: {@ Giv et citat}
+: << Giv et citat>>
 
 > Giv et citat
 ! call RDF.Query("

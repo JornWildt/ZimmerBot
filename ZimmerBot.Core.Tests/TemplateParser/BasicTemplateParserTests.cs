@@ -25,7 +25,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
     [Test]
     public void CanParseEmptyRedirect()
     {
-      SequenceTemplateToken tokens = ParseTemplate(@"aaa {@} ccc ");
+      SequenceTemplateToken tokens = ParseTemplate(@"aaa <<>> ccc ");
       Assert.AreEqual(3, tokens.Tokens.Count);
       Assert.IsInstanceOf<RedirectTemplateToken>(tokens.Tokens[1]);
       RedirectTemplateToken rt = (RedirectTemplateToken)tokens.Tokens[1];
@@ -36,7 +36,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
     [Test]
     public void CanParseNonEmptyRedirect()
     {
-      SequenceTemplateToken tokens = ParseTemplate(@"aaa {@ bbb} ccc ");
+      SequenceTemplateToken tokens = ParseTemplate(@"aaa << bbb>> ccc ");
       Assert.AreEqual(3, tokens.Tokens.Count);
       Assert.IsInstanceOf<RedirectTemplateToken>(tokens.Tokens[1]);
       RedirectTemplateToken rt = (RedirectTemplateToken)tokens.Tokens[1];
@@ -73,7 +73,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
     [Test]
     public void CanInstantiateEmptyRedirectTemplate()
     {
-      SequenceTemplateToken tokens = ParseTemplate(@"aaa {@} ccc");
+      SequenceTemplateToken tokens = ParseTemplate(@"aaa <<>> ccc");
       TemplateContext context = new TemplateContext(new TX());
       string output = tokens.Instantiate(context);
       Assert.AreEqual("(OK: aaa )(INV: )(OK:  ccc)", output);
@@ -83,7 +83,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
     [Test]
     public void CanInstantiateNonEmptyRedirectTemplate()
     {
-      SequenceTemplateToken tokens = ParseTemplate(@"aaa {@ bbb} ccc");
+      SequenceTemplateToken tokens = ParseTemplate(@"aaa << bbb>> ccc");
       TemplateContext context = new TemplateContext(new TX());
       string output = tokens.Instantiate(context);
       Assert.AreEqual("(OK: aaa )(INV: (OK: bbb))(OK:  ccc)", output);
@@ -93,7 +93,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
     [Test]
     public void CanInstantiateNestedRedirectTemplates()
     {
-      SequenceTemplateToken tokens = ParseTemplate(@"aaa {@ say {@ bbb} ok} ccc");
+      SequenceTemplateToken tokens = ParseTemplate(@"aaa << say << bbb>> ok>> ccc");
       TemplateContext context = new TemplateContext(new TX());
       string output = tokens.Instantiate(context);
       Assert.AreEqual("(OK: aaa )(INV: (OK: say )(INV: (OK: bbb))(OK:  ok))(OK:  ccc)", output);
