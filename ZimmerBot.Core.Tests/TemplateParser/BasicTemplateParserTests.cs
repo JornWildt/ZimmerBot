@@ -76,7 +76,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       SequenceTemplateToken tokens = ParseTemplate(@"aaa {@} ccc");
       TemplateContext context = new TemplateContext(new TX());
       string output = tokens.Instantiate(context);
-      Assert.AreEqual("aaa (INV: (OK: )) ccc", output);
+      Assert.AreEqual("(OK: aaa )(INV: )(OK:  ccc)", output);
     }
 
 
@@ -86,7 +86,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       SequenceTemplateToken tokens = ParseTemplate(@"aaa {@ bbb} ccc");
       TemplateContext context = new TemplateContext(new TX());
       string output = tokens.Instantiate(context);
-      Assert.AreEqual("aaa (INV: (OK: bbb)) ccc", output);
+      Assert.AreEqual("(OK: aaa )(INV: (OK: bbb))(OK:  ccc)", output);
     }
 
 
@@ -96,7 +96,7 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       SequenceTemplateToken tokens = ParseTemplate(@"aaa {@ say {@ bbb} ok} ccc");
       TemplateContext context = new TemplateContext(new TX());
       string output = tokens.Instantiate(context);
-      Assert.AreEqual("aaa (INV: (OK: say (INV: (OK: bbb)) ok)) ccc", output);
+      Assert.AreEqual("(OK: aaa )(INV: (OK: say )(INV: (OK: bbb))(OK:  ok))(OK:  ccc)", output);
     }
 
 

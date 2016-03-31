@@ -30,7 +30,7 @@ tokenSeq
 
 token
   : T_TEXT                  { $$.token = new TextTemplateToken($1.s); }
-  | T_RTAG                  { $$.token = new TextTemplateToken("}"); }
+  /*| T_RTAG                  { $$.token = new TextTemplateToken("}"); }*/
   | T_LTAG tokenSeq T_RTAG  { $$.token = new RedirectTemplateToken($2.tokenSequence); }
   ;
 

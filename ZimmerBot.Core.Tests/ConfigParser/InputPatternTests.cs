@@ -121,5 +121,59 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       VerifyMatch(ch, "ccc");
       VerifyNoMatch(ch, "aaa ddd");
     }
+
+
+    [Test]
+    public void CanParseZeroOrOne()
+    {
+      SequenceWRegex seq = ParseRuleAndGetRootWRegex<SequenceWRegex>(@"
+> aaa (bbb|ccc)? ddd
+: ok
+");
+
+      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[1]);
+      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
+
+      RepetitionWRegex r = (RepetitionWRegex)seq.Sequence[1];
+      Assert.AreEqual(0, r.MinCount);
+      Assert.AreEqual(1, r.MaxCount);
+
+      VerifyMatch(seq, "aaa ddd");
+      VerifyMatch(seq, "aaa bbb ddd");
+      VerifyMatch(seq, "aaa ccc ddd");
+      VerifyNoMatch(seq, "aaa bbb ccc ddd");
+      VerifyNoMatch(seq, "aaa ccc ccc ddd");
+      VerifyNoMatch(seq, "aaa bbb");
+      VerifyNoMatch(seq, "aaa xxx ddd");
+    }
+
+
+    [Test]
+    public void CanParseZeroOrOneWithOneOrMore()
+    {
+      SequenceWRegex seq = ParseRuleAndGetRootWRegex<SequenceWRegex>(@"
+> aaa + bbb?
+: ok
+");
+
+      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[1]);
+      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[2]);
+
+      RepetitionWRegex r = (RepetitionWRegex)seq.Sequence[2];
+      Assert.IsInstanceOf<WordWRegex>(r.A);
+
+      VerifyMatch(seq, "aaa x");
+      VerifyMatch(seq, "aaa x y");
+      VerifyMatch(seq, "aaa y bbb");
+      VerifyMatch(seq, "aaa yyy zzz bbb");
+      VerifyNoMatch(seq, "qqq o");
+      VerifyNoMatch(seq, "aaa");
+      //VerifyNoMatch(seq, "aaa ooo bbb xxxx");
+
+      // Not sure about what should be right here ...
+      VerifyNoMatch(seq, "aaa bbb bbb");
+    }
   }
 }

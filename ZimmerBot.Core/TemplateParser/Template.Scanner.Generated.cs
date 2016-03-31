@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 27-03-2016 21:18:51
+//  DateTime: 31-03-2016 06:44:23
 //  UserName: Jorn
-//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 27-03-2016 21:18:50>
+//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 31-03-2016 06:36:47>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: verbose, parser, stack, minimize
@@ -627,16 +627,16 @@ int NextState() {
             break;
         case 1: // Recognized '[^{}@]+',	Shortest string "\x01"
         case 2: // Recognized '[^{}@]+',	Shortest string "\t"
-yylval.s = yytext; return (int)Token.T_TEXT;
+Console.WriteLine("T1: " + yytext); yylval.s = yytext; return (int)Token.T_TEXT;
             break;
         case 3: // Recognized '\{',	Shortest string "{"
-yylval.s = yytext; return (int)Token.T_TEXT;
+Console.WriteLine("T2: " + yytext); yylval.s = yytext; return (int)Token.T_TEXT;
             break;
         case 4: // Recognized '[ \t]*\}',	Shortest string "}"
-return (int)Token.T_RTAG;
+Console.WriteLine("R: " + yytext); return (int)Token.T_RTAG;
             break;
         case 5: // Recognized '\{@[ \t]*',	Shortest string "{@"
-return (int)Token.T_LTAG;
+Console.WriteLine("L: " + yytext); return (int)Token.T_LTAG;
             break;
         default:
             break;

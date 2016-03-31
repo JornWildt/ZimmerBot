@@ -10,10 +10,10 @@
 
 %%
 
-\{@[ \t]*  { return (int)Token.T_LTAG; }
-[ \t]*\}   { return (int)Token.T_RTAG; }
-[^{}@]+    { yylval.s = yytext; return (int)Token.T_TEXT; }
-\{         { yylval.s = yytext; return (int)Token.T_TEXT; }
+\{@[ \t]*  { Console.WriteLine("L: " + yytext); return (int)Token.T_LTAG; }
+[ \t]*\}   { Console.WriteLine("R: " + yytext); return (int)Token.T_RTAG; }
+[^{}@]+    { Console.WriteLine("T1: " + yytext); yylval.s = yytext; return (int)Token.T_TEXT; }
+\{         { Console.WriteLine("T2: " + yytext); yylval.s = yytext; return (int)Token.T_TEXT; }
 
 
 

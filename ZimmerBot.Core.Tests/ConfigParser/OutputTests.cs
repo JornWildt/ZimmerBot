@@ -49,7 +49,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       Rule r = ParseRule(@"
 > aaa
-! call DateTime.ThisDay()
+! call DateTime.Time()
 : ccc <answer>
 ");
 

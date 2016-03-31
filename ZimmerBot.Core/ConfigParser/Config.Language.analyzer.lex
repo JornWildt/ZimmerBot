@@ -41,6 +41,7 @@ Space      [ \t]
 &           { return (int)Token.T_AMP; }
 =           { return (int)Token.T_EQU; }
 $           { return (int)Token.T_DOLLAR; }
+\?          { return (int)Token.T_QUESTION; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 

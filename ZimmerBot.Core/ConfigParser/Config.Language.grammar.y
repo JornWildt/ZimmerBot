@@ -40,6 +40,7 @@
 %token T_STRING
 %token T_NUMBER
 
+%left T_QUESTION
 %left T_EQU
 %left T_PLUS, T_STAR
 %left T_PIPE
@@ -96,6 +97,8 @@ inputPatternSeq
 inputPattern
   : inputPattern T_PIPE inputPattern
       { $$.regex = new ChoiceWRegex($1.regex, $3.regex); }
+  | inputPattern T_QUESTION
+      { $$.regex =  new RepetitionWRegex($1.regex, 0, 1); }
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD     
