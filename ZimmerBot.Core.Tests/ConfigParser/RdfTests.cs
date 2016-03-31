@@ -38,5 +38,34 @@ ORDER BY RAND()"")
       string response = reaction.GenerateResponse();
       Assert.AreEqual("Det er 'Lisa Nilson'", response);
     }
+
+
+    [Test]
+    public void CanDeclareCommonPrefixes()
+    {
+      Domain d = ParseDomain(@"
+! rdf_import ""ConfigParser/Friends.ttl""
+! rdf_prefix foaf ""http://xmlns.com/foaf/0.1/""
+
+> Who is friend with +
+! call RDF.Query(""
+PREFIX pers: <http://wellknown-persons.fake#>
+SELECT * WHERE
+{
+  ?pers foaf:knows pers:A .
+  ?pers foaf:name ?name
+}
+ORDER BY RAND()"")
+: '<result:{r | <r.name>}>' is a friend
+");
+      Assert.AreEqual(1, d.Rules.Count);
+      Rule r = d.Rules[0];
+
+      Reaction reaction = CalculateReaction(r, "who is friend with \"Peter Parker\"");
+      Assert.IsNotNull(reaction);
+
+      string response = reaction.GenerateResponse();
+      Assert.AreEqual("'Lisa Nilson' is a friend", response);
+    }
   }
 }

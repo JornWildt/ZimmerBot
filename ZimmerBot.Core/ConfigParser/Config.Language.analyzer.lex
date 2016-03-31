@@ -26,7 +26,8 @@ Space      [ \t]
 
 /* Scanner body */
 
->           { return (int)Token.T_GT; }
+\>          { return (int)Token.T_GT; }
+\<          { return (int)Token.T_LT; }
 :           { return (int)Token.T_COLON; }
 =>          { return (int)Token.T_IMPLIES; }
 ,           { return (int)Token.T_COMMA; }
@@ -51,6 +52,7 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*every       { return (int)Token.T_EVERY; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*rdf_import  { return (int)Token.T_RDF_IMPORT; }
+![ ]*rdf_prefix  { return (int)Token.T_RDF_PREFIX; }
 
 {Number}    { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 

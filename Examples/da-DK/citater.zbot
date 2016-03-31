@@ -4,9 +4,6 @@
 > Giv et citat
 ! call RDF.Query("
 PREFIX bibo: <http://purl.org/ontology/bibo/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX dcterms: <http://purl.org/dc/terms/>
 SELECT ?content ?aname
 WHERE
 {
@@ -24,9 +21,6 @@ LIMIT 1
 > Hvad sagde +
 ! call RDF.Query("
 PREFIX bibo: <http://purl.org/ontology/bibo/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX dcterms: <http://purl.org/dc/terms/>
 SELECT ?content
 WHERE
 {

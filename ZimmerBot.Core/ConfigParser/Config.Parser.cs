@@ -52,6 +52,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RDFPrefix(string prefix, string url)
+    {
+      Domain.KnowledgeBase.MemoryStore.DeclarePrefix(prefix, url);
+    }
+
+
     protected Func<Domain, Rule> RuleGenerator(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
     {
       return d =>

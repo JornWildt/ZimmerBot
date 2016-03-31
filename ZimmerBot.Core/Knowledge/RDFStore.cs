@@ -29,6 +29,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected NodeFactory NodeFactory { get; set; }
 
+    protected Dictionary<string,string> Prefixes { get; set; }
+
     protected HashSet<string> LoadedFiles { get; set; }
 
 
@@ -39,6 +41,7 @@ namespace ZimmerBot.Core.Knowledge
       Processor = new LeviathanQueryProcessor(Dataset);
       SparqlParser = new SparqlQueryParser();
       NodeFactory = new NodeFactory();
+      Prefixes = new Dictionary<string, string>();
       LoadedFiles = new HashSet<string>();
     }
 
@@ -67,12 +70,22 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public void DeclarePrefix(string prefix, string url)
+    {
+      Condition.Requires(prefix, nameof(prefix)).IsNotNull();
+      Condition.Requires(url, nameof(url)).IsNotNull();
+
+      Prefixes[prefix] = url;
+    }
+
+
     public RDFResultSet Query(string s, Dictionary<string, object> matches, IList<object> parameters)
     {
       Condition.Requires(s, nameof(s)).IsNotNull();
 
       SparqlParameterizedString queryString = new SparqlParameterizedString();
-      // queryString.Namespaces.AddNamespace("ex", new Uri("http://example.org/ns#"));
+      foreach (var prefix in Prefixes)
+        queryString.Namespaces.AddNamespace(prefix.Key, new Uri(prefix.Value));
       queryString.CommandText = s;
 
       if (matches != null)

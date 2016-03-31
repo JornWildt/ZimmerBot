@@ -57,7 +57,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void LoadFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.AllDirectories)
+    public void LoadFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.TopDirectoryOnly)
     {
       ConfigurationParser cfg = new ConfigurationParser();
 
@@ -70,7 +70,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public static KnowledgeBase CreateFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.AllDirectories)
+    public static KnowledgeBase CreateFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.TopDirectoryOnly)
     {
       KnowledgeBase kb = new KnowledgeBase();
       kb.LoadFromFiles(path, pattern, option);
