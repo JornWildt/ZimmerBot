@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="AddOnHandling\AddOnLoader.cs" />
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
+    <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="ConfigParser\AnswerOutputStatement.cs" />
     <Compile Include="ConfigParser\CallOutputStatment.cs" />
@@ -135,10 +136,12 @@
     <Compile Include="TemplateParser\TemplateContext.cs" />
     <Compile Include="TemplateParser\TemplateToken.cs" />
     <Compile Include="TemplateParser\TemplateUtility.cs" />
+    <Compile Include="Utilities\AppSetting.cs" />
     <Compile Include="Utilities\ChainedDictionary.cs" />
     <Compile Include="Utilities\DateRender.cs" />
     <Compile Include="Utilities\ErrorCollection.cs" />
     <Compile Include="Utilities\ParserException.cs" />
+    <Compile Include="Utilities\TimeSpanUtility.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />

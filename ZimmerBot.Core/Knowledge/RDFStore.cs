@@ -45,8 +45,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public void LoadFromFile(string filename)
     {
-      if (ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"] != null)
-        filename = Path.Combine(ConfigurationManager.AppSettings["ZimmerBot.RDF.DataDirectory"], filename);
+      if (AppSettings.RDF_DataDirectory.Value != null)
+        filename = Path.Combine(AppSettings.RDF_DataDirectory.Value, filename);
 
       if (!LoadedFiles.Contains(filename))
       {
