@@ -26,7 +26,7 @@
 
 %token T_COLON
 
-%token T_ABSTRACTION, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
+%token T_CONCEPT, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
 
 %token T_IMPLIES
 %token T_COMMA
@@ -65,9 +65,9 @@ statement
   ;
 
 configuration
-  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($2.stringList, $4.stringList); }
-  | T_RDF_IMPORT T_STRING                   { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
-  | T_RDF_PREFIX T_WORD T_STRING            { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  : T_CONCEPT T_WORD T_EQU wordSeq   { RegisterConcept($2.s, $4.stringList); }
+  | T_RDF_IMPORT T_STRING            { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_RDF_PREFIX T_WORD T_STRING     { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
   ;
 
 ruleSeq

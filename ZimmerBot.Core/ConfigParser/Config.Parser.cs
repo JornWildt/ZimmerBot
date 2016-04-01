@@ -38,11 +38,9 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterAbstractions(List<string> words, List<string> keys)
+    protected void RegisterConcept(string name, List<string> words)
     {
-      WordDefinition wd = Domain.DefineWords(words);
-      foreach (string k in keys)
-        wd.Is(k);
+      Concept c = Domain.AddConcept(name, words);
     }
 
 

@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 
@@ -21,6 +22,8 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
     #region Output
 
+    public HashSet<string> SentenceTags { get; protected set; }
+
     public ReactionSet Reactions { get; protected set; }
 
     #endregion
@@ -37,6 +40,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       Request = req;
       Input = input;
 
+      SentenceTags = new HashSet<string>();
       Reactions = new ReactionSet();
     }
   }

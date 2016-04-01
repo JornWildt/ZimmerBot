@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 01-04-2016 08:43:56
+// DateTime: 01-04-2016 22:15:18
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 31-03-2016 16:33:39>
+// Input file <ConfigParser\Config.Language.grammar.y - 01-04-2016 22:15:06>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -21,7 +21,7 @@ using ZimmerBot.Core.Expressions;
 
 namespace ZimmerBot.Core.ConfigParser
 {
-internal enum Token {error=2,EOF=3,T_COLON=4,T_ABSTRACTION=5,T_WEIGHT=6,
+internal enum Token {error=2,EOF=3,T_COLON=4,T_CONCEPT=5,T_WEIGHT=6,
     T_CALL=7,T_EVERY=8,T_ANSWER=9,T_RDF_IMPORT=10,T_RDF_PREFIX=11,T_IMPLIES=12,
     T_COMMA=13,T_LPAR=14,T_RPAR=15,T_LBRACE=16,T_RBRACE=17,T_AMP=18,
     T_OUTPUT=19,T_WORD=20,T_STRING=21,T_NUMBER=22,T_QUESTION=23,T_EQU=24,
@@ -85,8 +85,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[3] = new State(new int[]{5,6,10,13,11,15,26,65,3,-2},new int[]{-4,4,-5,5,-6,18,-9,19});
     states[4] = new State(-3);
     states[5] = new State(-5);
-    states[6] = new State(new int[]{20,12},new int[]{-7,7});
-    states[7] = new State(new int[]{12,8,13,10});
+    states[6] = new State(new int[]{20,7});
+    states[7] = new State(new int[]{24,8});
     states[8] = new State(new int[]{20,12},new int[]{-7,9});
     states[9] = new State(new int[]{13,10,5,-7,10,-7,11,-7,26,-7,3,-7});
     states[10] = new State(new int[]{20,11});
@@ -175,7 +175,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     rules[4] = new Rule(-3, new int[]{});
     rules[5] = new Rule(-4, new int[]{-5});
     rules[6] = new Rule(-4, new int[]{-6});
-    rules[7] = new Rule(-5, new int[]{5,-7,12,-7});
+    rules[7] = new Rule(-5, new int[]{5,20,24,-7});
     rules[8] = new Rule(-5, new int[]{10,21});
     rules[9] = new Rule(-5, new int[]{11,20,21});
     rules[10] = new Rule(-8, new int[]{-8,-6});
@@ -243,8 +243,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 6: // statement -> rule
 { ValueStack[ValueStack.Depth-1].ruleGenerator(Domain); }
         break;
-      case 7: // configuration -> T_ABSTRACTION, wordSeq, T_IMPLIES, wordSeq
-{ RegisterAbstractions(ValueStack[ValueStack.Depth-3].stringList, ValueStack[ValueStack.Depth-1].stringList); }
+      case 7: // configuration -> T_CONCEPT, T_WORD, T_EQU, wordSeq
+{ RegisterConcept(ValueStack[ValueStack.Depth-3].s, ValueStack[ValueStack.Depth-1].stringList); }
         break;
       case 8: // configuration -> T_RDF_IMPORT, T_STRING
 { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }

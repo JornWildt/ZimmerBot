@@ -1,7 +1,7 @@
 ﻿### Various rules for understanding dates and time
 
-! abstraction mandag, tirsdag, onsdag, torsdag, fredag, lørdag, søndag => dag, ugedag
-! abstraction januar, februar, marts, april, maj, juni, juli, august, september, oktober, november, december => måned
+! concept ugedag = mandag, tirsdag, onsdag, torsdag, fredag, lørdag, søndag
+! concept måned = januar, februar, marts, april, maj, juni, juli, august, september, oktober, november, december
 
 > er det (ugedag)
 ! call DateTime.IsItWeekDay($1)

@@ -46,7 +46,7 @@ $           { return (int)Token.T_DOLLAR; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-![ ]*abstraction { return (int)Token.T_ABSTRACTION; }
+![ ]*concept     { return (int)Token.T_CONCEPT; }
 ![ ]*call        { return (int)Token.T_CALL; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
 ![ ]*every       { return (int)Token.T_EVERY; }

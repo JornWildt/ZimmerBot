@@ -10,7 +10,7 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Name { get; protected set; }
 
-    public List<WordDefinition> WordDefinitions { get; protected set; }
+    public List<Concept> Concepts { get; protected set; }
 
     public List<Rule> Rules { get; protected set; }
 
@@ -23,24 +23,16 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(name, nameof(name)).IsNotNull();
 
       KnowledgeBase = kb;
-      WordDefinitions = new List<WordDefinition>();
+      Concepts = new List<Concept>();
       Rules = new List<Rule>();
       Name = name;
     }
 
 
-    public WordDefinition DefineWord(string word)
+    public Concept AddConcept(string name, IEnumerable<string> words)
     {
-      WordDefinition w = new WordDefinition(word);
-      WordDefinitions.Add(w);
-      return w;
-    }
-
-
-    public WordDefinition DefineWords(IEnumerable<string> words)
-    {
-      WordDefinition w = new WordDefinition(words);
-      WordDefinitions.Add(w);
+      Concept w = new Concept(name, words);
+      Concepts.Add(w);
       return w;
     }
 
@@ -72,7 +64,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       foreach (ZToken t in input)
       {
-        foreach (WordDefinition w in WordDefinitions)
+        foreach (Concept w in Concepts)
         {
           w.ExpandToken(t);
         }

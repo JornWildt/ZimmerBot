@@ -166,7 +166,7 @@
     <Compile Include="Knowledge\Rule.cs" />
     <Compile Include="Knowledge\Reaction.cs" />
     <Compile Include="Knowledge\Trigger.cs" />
-    <Compile Include="Knowledge\WordDefinition.cs" />
+    <Compile Include="Knowledge\Concept.cs" />
     <Compile Include="Parser\ZToken.cs" />
     <Compile Include="Parser\ZTokenSequence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

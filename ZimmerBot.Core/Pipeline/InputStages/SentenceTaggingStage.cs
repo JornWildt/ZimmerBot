@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 
 namespace ZimmerBot.Core.Pipeline.InputStages
 {
@@ -6,7 +6,11 @@ namespace ZimmerBot.Core.Pipeline.InputStages
   {
     public void Handle(InputPipelineItem item)
     {
-      // Nothing yet
+      if (item.Input == null)
+        return;
+
+      if (item.Input.Any(inp => inp.OriginalText == "hej"))
+        item.SentenceTags.Add("hilsen");
     }
   }
 }
