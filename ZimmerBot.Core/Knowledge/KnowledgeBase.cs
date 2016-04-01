@@ -53,10 +53,15 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void FindMatchingReactions(EvaluationContext context, ReactionSet reactions)
+    public ReactionSet FindMatchingReactions(EvaluationContext context, ReactionSet reactions)
     {
+      if (reactions == null)
+        reactions = new ReactionSet();
+
       foreach (Domain d in Domains)
         d.FindMatchingReactions(context, reactions);
+
+      return reactions;
     }
 
 

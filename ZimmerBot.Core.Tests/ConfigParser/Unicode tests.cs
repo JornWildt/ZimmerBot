@@ -12,7 +12,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       KnowledgeBase kb = KnowledgeBase.CreateFromFiles("ConfigParser", "UnicodeTest.zbot");
       EvaluationContext context = BuildEvaluationContextFromInput("Über Åsen");
-      ReactionSet reactions = kb.FindMatchingReactions(context);
+      ReactionSet reactions = kb.FindMatchingReactions(context, null);
 
       Assert.AreEqual(1, reactions.Count);
       string response = reactions[0].GenerateResponse();
@@ -25,7 +25,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       KnowledgeBase kb = KnowledgeBase.CreateFromFiles("ConfigParser", "UnicodeTest.zbot");
       EvaluationContext context = BuildEvaluationContextFromInput("ÆØÅ");
-      ReactionSet reactions = kb.FindMatchingReactions(context);
+      ReactionSet reactions = kb.FindMatchingReactions(context, null);
 
       Assert.AreEqual(1, reactions.Count);
       string response = reactions[0].GenerateResponse();
