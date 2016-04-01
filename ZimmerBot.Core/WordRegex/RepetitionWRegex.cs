@@ -113,11 +113,11 @@ namespace ZimmerBot.Core.WordRegex
       }
 
       if (lastResult == null)
-        return new MatchResult(0.9, matchedText) // 0.9 => slightly worse than an exact match
+        return new MatchResult(1, matchedText)
           .RegisterMatch((context.CurrentRepetitionIndex++).ToString(), matchedText)
           .RegisterMatch(MatchName, matchedText);
       else
-        return new MatchResult(0.9 * lastResult.Score, lastResult.MatchedText) // 0.9 => slightly worse than an exact match
+        return lastResult
           .RegisterMatch((context.CurrentRepetitionIndex++).ToString(), matchedText)
           .RegisterMatch(MatchName, matchedText);
     }
