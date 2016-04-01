@@ -3,7 +3,8 @@ using System.IO;
 using log4net;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
-
+using ZimmerBot.Core.Pipeline;
+using ZimmerBot.Core.Pipeline.InputStages;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -15,11 +16,17 @@ namespace ZimmerBot.Core.Knowledge
 
     public RDFStore MemoryStore { get; protected set; }
 
+    public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
+
 
     public KnowledgeBase()
     {
       Domains = new List<Domain>();
       MemoryStore = new RDFStore();
+      InputPipeline = new Pipeline<InputPipelineItem>();
+      InputPipeline.AddHandler(new WordTaggingStage());
+      InputPipeline.AddHandler(new SentenceTaggingStage());
+      InputPipeline.AddHandler(new ReactionGeneratorStage());
     }
 
 
@@ -46,14 +53,10 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public ReactionSet FindMatchingReactions(EvaluationContext context)
+    public void FindMatchingReactions(EvaluationContext context, ReactionSet reactions)
     {
-      ReactionSet reactions = new ReactionSet();
-
       foreach (Domain d in Domains)
         d.FindMatchingReactions(context, reactions);
-
-      return reactions;
     }
 
 

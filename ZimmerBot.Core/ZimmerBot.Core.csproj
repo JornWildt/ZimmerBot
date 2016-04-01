@@ -119,10 +119,15 @@
     <Compile Include="Expressions\FunctionCallExpr.cs" />
     <Compile Include="Expressions\IdentifierExpr.cs" />
     <Compile Include="IBotEnvironment.cs" />
+    <Compile Include="Pipeline\InputStages\InputPipelineItem.cs" />
+    <Compile Include="Pipeline\InputStages\ReactionGeneratorStage.cs" />
+    <Compile Include="Pipeline\InputStages\SentenceTaggingStage.cs" />
+    <Compile Include="Pipeline\InputStages\WordTaggingStage.cs" />
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\BotUtility.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
     <Compile Include="Knowledge\BotState.cs" />
+    <Compile Include="Pipeline\Pipeline.cs" />
     <Compile Include="Knowledge\RDFResultSet.cs" />
     <Compile Include="Knowledge\RDFStore.cs" />
     <Compile Include="Knowledge\TemplateExpander.cs" />
