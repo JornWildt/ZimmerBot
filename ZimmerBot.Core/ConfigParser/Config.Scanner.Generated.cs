@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 31-03-2016 16:38:05
+//  DateTime: 01-04-2016 08:43:55
 //  UserName: Jorn
-//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 31-03-2016 16:38:04>
+//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 01-04-2016 08:43:50>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: unicode, verbose, parser, stack, minimize
@@ -1196,7 +1196,7 @@ internal StringBuilder StringInput = null;
 /* NxS[  19] */ // Shortest string "a"
       new Table(20, 24, -1, new sbyte[] {19, 19, 19, 19, 19, 19, 
           19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, -1, 19, 19, 19, 
-          -1, 19}),
+          19, 19}),
 /* NxS[  20] */ // Shortest string "0"
       new Table(42, 14, -1, new sbyte[] {20, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, 46}),

@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 24-03-2016 09:19:13
+//  DateTime: 01-04-2016 08:44:37
 //  UserName: Jorn
-//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 24-03-2016 09:19:12>
+//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 01-04-2016 08:44:35>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: unicode, verbose, parser, stack, minimize
@@ -1171,7 +1171,7 @@ StringBuilder StringInput = null;
 /* NxS[   1] */ new Table(0, 0, -1, null), // Shortest string "!"
 /* NxS[   2] */ new Table(0, 0, -1, null), // Shortest string "\""
 /* NxS[   3] */ // Shortest string "\xAA"
-      new Table(2, 15, -1, new sbyte[] {3, -1, -1, -1, 3, -1, 
+      new Table(2, 15, -1, new sbyte[] {3, 3, -1, -1, 3, -1, 
           -1, 3, 3, 3, 3, 3, -1, -1, 3}),
 /* NxS[   4] */ // Shortest string "0"
       new Table(17, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
@@ -1184,13 +1184,13 @@ StringBuilder StringInput = null;
           30, -1, -1, -1, -1, 30, 30, 30, 30, 31}),
 /* NxS[   7] */ // Shortest string "A"
       new Table(14, 20, 7, new sbyte[] {30, 30, 7, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 30, 30, 30, 7, 31, 30}),
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 30}),
 /* NxS[   8] */ // Shortest string "h"
-      new Table(6, 22, 30, new sbyte[] {7, 31, 30, 7, 7, 21, 
-          7, 7, 30, 30, 7, -1, 30, 30, -1, -1, 30, 30, -1, -1, -1, 3}),
+      new Table(2, 22, -1, new sbyte[] {3, 7, 30, 30, 7, 31, 
+          30, 7, 7, 21, 7, 7, 30, 30, 7, -1, 30, 30, -1, -1, 30, 30}),
 /* NxS[   9] */ // Shortest string "w"
       new Table(14, 20, 7, new sbyte[] {30, 30, 14, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 30, 30, 30, 7, 31, 30}),
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 30}),
 /* NxS[  10] */ // Shortest string "\r"
       new Table(21, 1, -1, new sbyte[] {11}),
 /* NxS[  11] */ new Table(0, 0, -1, null), // Shortest string "\n"
@@ -1201,10 +1201,10 @@ StringBuilder StringInput = null;
           -1, -1, 30, 30, -1, -1, -1, -1, 13, 33, 30, 32, 31, 35}),
 /* NxS[  14] */ // Shortest string "ww"
       new Table(14, 20, 7, new sbyte[] {30, 30, 15, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 30, 30, 30, 7, 31, 30}),
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 30}),
 /* NxS[  15] */ // Shortest string "www"
       new Table(14, 20, 7, new sbyte[] {30, 30, 7, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 30, 36, 30, 7, 31, 30}),
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 36, 30, 7, 31, 30}),
 /* NxS[  16] */ // Shortest string "www.A"
       new Table(17, 17, 16, new sbyte[] {18, 36, 16, -1, -1, 16, 
           16, -1, -1, -1, -1, 30, 36, 30, 16, 17, 30}),
@@ -1221,17 +1221,17 @@ StringBuilder StringInput = null;
       new Table(14, 20, 20, new sbyte[] {16, 16, 20, 18, 36, 16, 
           -1, -1, 16, 16, -1, -1, -1, -1, 13, 38, 30, 19, 17, 35}),
 /* NxS[  21] */ // Shortest string "ht"
-      new Table(6, 22, 30, new sbyte[] {7, 31, 30, 7, 7, 22, 
-          7, 7, 30, 30, 7, -1, 30, 30, -1, -1, 30, 30, -1, -1, -1, 3}),
+      new Table(2, 22, -1, new sbyte[] {3, 7, 30, 30, 7, 31, 
+          30, 7, 7, 22, 7, 7, 30, 30, 7, -1, 30, 30, -1, -1, 30, 30}),
 /* NxS[  22] */ // Shortest string "htt"
-      new Table(6, 22, 30, new sbyte[] {7, 31, 30, 7, 7, 7, 
-          23, 7, 30, 30, 7, -1, 30, 30, -1, -1, 30, 30, -1, -1, -1, 3}),
+      new Table(12, 22, 7, new sbyte[] {23, 7, 30, 30, 7, -1, 
+          30, 30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 30}),
 /* NxS[  23] */ // Shortest string "http"
       new Table(13, 21, 7, new sbyte[] {24, 39, 30, 7, -1, 30, 
-          30, -1, -1, 30, 30, -1, -1, -1, 3, 30, 30, 30, 7, 31, 30}),
+          30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 30}),
 /* NxS[  24] */ // Shortest string "https"
       new Table(14, 20, 7, new sbyte[] {39, 30, 7, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 30, 30, 30, 7, 31, 30}),
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 30}),
 /* NxS[  25] */ // Shortest string "0.0"
       new Table(17, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
           30, -1, -1, -1, -1, 25, 30, 30, 30, 31}),

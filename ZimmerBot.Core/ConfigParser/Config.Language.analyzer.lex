@@ -6,7 +6,7 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [[:IsLetter:]]+
+Word       [[:IsLetter:]]+[[:IsLetter:]0-9]*
 Number     [0-9]+(\.[0-9]+)?
 Comment    #
 Space      [ \t]

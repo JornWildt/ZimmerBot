@@ -4,11 +4,11 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 24-03-2016 09:19:13
+// DateTime: 01-04-2016 08:44:37
 // UserName: Jorn
 // Input file <Parser\Chat.Language.grammar.y - 16-03-2016 22:37:45>
 
-// options: no-lines gplex
+// options: conflicts no-lines gplex conflicts
 
 using System;
 using System.Collections.Generic;
