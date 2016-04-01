@@ -58,7 +58,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
       DateTime now = DateTime.Now;
       string date = now.ToString("dd.MM.yy");
-      string time = now.ToString("hh:mm");
+      string time = now.ToString("HH:mm");
 
       types = types.ToLower();
       int useTog = (types.Contains("tog") ? 1 : 0);

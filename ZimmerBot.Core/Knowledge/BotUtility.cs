@@ -68,7 +68,8 @@ namespace ZimmerBot.Core.Knowledge
 
         Response response = new Response
         {
-          Output = output.ToArray()
+          Output = output.ToArray(),
+          State = req.State
         };
 
         return response;
