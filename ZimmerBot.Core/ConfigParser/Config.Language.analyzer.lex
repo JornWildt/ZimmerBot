@@ -43,6 +43,7 @@ Space      [ \t]
 =           { return (int)Token.T_EQU; }
 $           { return (int)Token.T_DOLLAR; }
 \?          { return (int)Token.T_QUESTION; }
+\!          { return (int)Token.T_EXCL; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 

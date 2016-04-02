@@ -44,6 +44,7 @@
 %left T_EQU, T_LT, T_GT
 %left T_PLUS, T_STAR
 %left T_PIPE
+%left T_EXCL
 %left T_DOT
 
 %token T_DOLLAR
@@ -108,6 +109,8 @@ inputPattern
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
       { $$.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
+  | T_EXCL inputPattern
+      { $$.regex =  new NegationWRegex($2.regex); }
   ;
 
 
