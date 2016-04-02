@@ -55,9 +55,10 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*rdf_import  { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix  { return (int)Token.T_RDF_PREFIX; }
 
-{Number}    { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
+{Number} { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 
-{Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }
+\%{Word}  { yylval.s = yytext; return (int)Token.T_CWORD; }
+{Word}    { yylval.s = yytext; return (int)Token.T_WORD; }
 
 {Comment}   { BEGIN(comment); }
 

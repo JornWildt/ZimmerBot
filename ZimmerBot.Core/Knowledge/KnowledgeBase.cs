@@ -16,7 +16,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public RDFStore MemoryStore { get; protected set; }
 
-    public List<Concept> Concepts { get; protected set; }
+    public Dictionary<string, Concept> Concepts { get; protected set; }
 
     public List<Rule> Rules { get; protected set; }
 
@@ -26,7 +26,7 @@ namespace ZimmerBot.Core.Knowledge
     public KnowledgeBase()
     {
       MemoryStore = new RDFStore();
-      Concepts = new List<Concept>();
+      Concepts = new Dictionary<string, Concept>();
       Rules = new List<Rule>();
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
@@ -41,7 +41,8 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(words, nameof(words)).IsNotNull();
 
       Concept w = new Concept(name, words);
-      Concepts.Add(w);
+      w.ConvertToWRegex(this);
+      Concepts.Add(name, w);
       return w;
     }
 
@@ -66,13 +67,13 @@ namespace ZimmerBot.Core.Knowledge
     public void ExpandTokens(ZTokenSequence input)
     {
       // FIXME: move to word tagging stage (or rather, drop it ...)
-      foreach (ZToken t in input)
-      {
-        foreach (Concept w in Concepts)
-        {
-          w.ExpandToken(t);
-        }
-      }
+      //foreach (ZToken t in input)
+      //{
+      //  foreach (Concept w in Concepts)
+      //  {
+      //    w.ExpandToken(t);
+      //  }
+      //}
     }
 
 

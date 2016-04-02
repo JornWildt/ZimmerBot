@@ -1,7 +1,7 @@
 ﻿! concept fruit = bananas, apple, strawberry
-#! concept meat = pork, chicken, beef
-#! concept food = bananas
+! concept meat = pork, chicken, beef
+! concept food = %meat, %fruit
 ! concept like = like, enjoy, prefer
 
-> I %like %fruit
+> I %like %food
 : I <like> <food> too

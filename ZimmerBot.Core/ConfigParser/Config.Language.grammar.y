@@ -37,6 +37,7 @@
 %token T_AMP
 %token T_OUTPUT
 %token T_WORD
+%token T_CWORD
 %token T_STRING
 %token T_NUMBER
 
@@ -66,7 +67,7 @@ statement
   ;
 
 configuration
-  : T_CONCEPT T_WORD T_EQU wordSeq   { RegisterConcept($2.s, $4.stringList); }
+  : T_CONCEPT T_WORD T_EQU cwordSeq  { RegisterConcept($2.s, $4.stringList); }
   | T_RDF_IMPORT T_STRING            { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
   ;
@@ -103,8 +104,10 @@ inputPattern
       { $$.regex =  new RepetitionWRegex($1.regex, 0, 1); }
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
-  | T_WORD     
+  | T_WORD
       { $$.regex = new WordWRegex($1.s); }
+  | T_CWORD
+      { $$.regex = new ConceptWRegex(KnowledgeBase, $1.s); }
   | T_STAR
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
@@ -219,9 +222,21 @@ exprReference
   OTHER
 ******************************************************************************/
 
+/*
 wordSeq
   : wordSeq T_COMMA T_WORD { $$.stringList.Add($3.s); }
   | T_WORD                 { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+*/
+
+cwordSeq
+  : cwordSeq T_COMMA cword { $$.stringList.Add($3.s); }
+  | cword                  { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+cword
+  : T_WORD   { $$.s = $1.s; }
+  | T_CWORD  { $$.s = $1.s; }
   ;
 
 %%

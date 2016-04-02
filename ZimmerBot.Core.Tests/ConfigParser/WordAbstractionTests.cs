@@ -15,9 +15,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.AreEqual(1, kb.Concepts.Count);
-      Assert.AreEqual(1, kb.Concepts[0].Words.Count);
-      Assert.AreEqual("weekday", kb.Concepts[0].Name);
-      Assert.AreEqual("monday", kb.Concepts[0].Words[0]);
+      Assert.AreEqual(1, kb.Concepts["weekday"].OriginalWords.Count);
+      Assert.AreEqual("weekday", kb.Concepts["weekday"].Name);
+      Assert.AreEqual("monday", kb.Concepts["weekday"].OriginalWords[0]);
     }
 
 
@@ -29,10 +29,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.AreEqual(1, kb.Concepts.Count);
-      Assert.AreEqual(2, kb.Concepts[0].Words.Count);
-      Assert.AreEqual("weekday", kb.Concepts[0].Name);
-      Assert.AreEqual("monday", kb.Concepts[0].Words[0]);
-      Assert.AreEqual("tuesday", kb.Concepts[0].Words[1]);
+      Assert.AreEqual(2, kb.Concepts["weekday"].OriginalWords.Count);
+      Assert.AreEqual("weekday", kb.Concepts["weekday"].Name);
+      Assert.AreEqual("monday", kb.Concepts["weekday"].OriginalWords[0]);
+      Assert.AreEqual("tuesday", kb.Concepts["weekday"].OriginalWords[1]);
     }
   }
 }

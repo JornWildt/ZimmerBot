@@ -148,6 +148,7 @@
     <Compile Include="Utilities\ParserException.cs" />
     <Compile Include="Utilities\TimeSpanUtility.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
+    <Compile Include="WordRegex\ConceptWRegex.cs" />
     <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />

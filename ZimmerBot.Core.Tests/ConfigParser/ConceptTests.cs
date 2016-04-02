@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Tests.ConfigParser
@@ -23,6 +18,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [TestCase("I like bananas", "I like bananas too")]
     [TestCase("I enjoy bananas", "I enjoy bananas too")]
     [TestCase("I prefer apple", "I prefer apple too")]
+    [TestCase("I like chicken", "I like chicken too")]
     public void CanMatchConcepts(string input, string expectedAnswer)
     {
       string output = GetResponseFor(input);

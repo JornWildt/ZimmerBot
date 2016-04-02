@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 26-03-2016 16:29:22>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 02-04-2016 21:19:31>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 26-03-2016 16:29:23
+//  DateTime: 02-04-2016 21:19:33
 //  UserName: Jorn
 // ==========================================================================
 
@@ -12,11 +12,6 @@
 %namespace ZimmerBot.Core.ConfigParser
 %using ZimmerBot.Core.WordRegex
 %using ZimmerBot.Core.Expressions
-%using Domain = ZimmerBot.Core.Knowledge.Domain
-//-----------^^^^^^^^^^^^
-// Error: This character is invalid in this context
-// Error: Syntax error, unexpected ident
-// ------------------------------------------------
 %partial
 %parsertype ConfigParser
 %visibility internal
@@ -31,8 +26,8 @@
   public List<Expression> exprList;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Func<Domain,Rule> ruleGenerator;
-  public List<Func<Domain,Rule>> ruleGeneratorList;
+  public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
+  public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
   public List<string> stringList;
   public string s;
   public double n;
@@ -40,9 +35,9 @@
 
 %start main
 
-%token T_GT, T_COLON
+%token T_COLON
 
-%token T_ABSTRACTION, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER
+%token T_CONCEPT, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
 
 %token T_IMPLIES
 %token T_COMMA
@@ -53,17 +48,22 @@
 %token T_AMP
 %token T_OUTPUT
 %token T_WORD
+%token T_CWORD
 %token T_STRING
 %token T_NUMBER
 
-%left T_EQU
+%left T_QUESTION
+%left T_EQU, T_LT, T_GT
 %left T_PLUS, T_STAR
 %left T_PIPE
+%left T_EXCL
 %left T_DOT
 
 %token T_DOLLAR
 
 %%
+// Warning: NonTerminal symbol "wordSeq" is unreachable
+// ----------------------------------------------------
 
 main
   : statementSeq
@@ -76,16 +76,18 @@ statementSeq
 
 statement
   : configuration
-  | rule          { $1.ruleGenerator(Domain); }
+  | rule          { $1.ruleGenerator(KnowledgeBase); } /* Instantiate rule */
   ;
 
 configuration
-  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($2.stringList, $4.stringList); }
+  : T_CONCEPT T_WORD T_EQU cwordSeq  { RegisterConcept($2.s, $4.stringList); }
+  | T_RDF_IMPORT T_STRING            { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_RDF_PREFIX T_WORD T_STRING     { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
   ;
 
 ruleSeq
   : ruleSeq rule  { $1.ruleGeneratorList.Add($2.ruleGenerator); $$.ruleGeneratorList = $1.ruleGeneratorList; }
-  | /* empty */   { $$.ruleGeneratorList = new List<Func<Domain,Rule>>(); }
+  | /* empty */   { $$.ruleGeneratorList = new List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>>(); }
   ;
 
 rule
@@ -111,6 +113,8 @@ inputPatternSeq
 inputPattern
   : inputPattern T_PIPE inputPattern
       { $$.regex = new ChoiceWRegex($1.regex, $3.regex); }
+  | inputPattern T_QUESTION
+      { $$.regex =  new RepetitionWRegex($1.regex, 0, 1); }
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD     
@@ -119,6 +123,8 @@ inputPattern
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
       { $$.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
+  | T_EXCL inputPattern
+      { $$.regex =  new NegationWRegex($2.regex); }
   ;
 
 
@@ -161,7 +167,7 @@ outputSeq
 output
   : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
   | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
-  | answer
+  | answer        { $$.output = $1.output;}
   ;
 
 outputPattern
@@ -180,7 +186,7 @@ call
   ;
 
 answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement($3.ruleGeneratorList); }
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleGeneratorList); }
   ;
 
 /******************************************************************************
@@ -230,6 +236,11 @@ exprReference
 wordSeq
   : wordSeq T_COMMA T_WORD { $$.stringList.Add($3.s); }
   | T_WORD                 { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+cwordSeq
+  : cwordSeq T_COMMA T_CWORD { $$.stringList.Add($3.s); }
+  | T_WORD                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
 %%// ==========================================================================
