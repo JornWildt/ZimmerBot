@@ -53,7 +53,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public ReactionSet FindMatchingReactions(EvaluationContext context, ReactionSet reactions)
+    public ReactionSet FindMatchingReactions(EvaluationContext context, ReactionSet reactions = null)
     {
       if (reactions == null)
         reactions = new ReactionSet();
@@ -69,6 +69,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       ConfigurationParser cfg = new ConfigurationParser();
 
+      Logger.Debug($"Scanning for '{pattern}' files in '{path}'");
       foreach (string filename in Directory.EnumerateFiles(path, pattern, option))
       {
         Logger.InfoFormat("Loading zbot file: {0}", filename);
