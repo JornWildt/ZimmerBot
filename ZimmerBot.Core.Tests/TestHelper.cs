@@ -58,20 +58,19 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected Domain ParseDomain(string s)
+    protected KnowledgeBase ParseKnowledgeBase(string s)
     {
       KnowledgeBase kb = new KnowledgeBase();
-      Domain d = kb.NewDomain("Test");
-      CfgParser.ParseConfigurationString(d, s);
-      return d;
+      CfgParser.ParseConfigurationString(kb, s);
+      return kb;
     }
 
 
     protected Rule ParseRule(string s)
     {
-      Domain d = ParseDomain(s);
-      Assert.AreEqual(1, d.Rules.Count);
-      Rule r = d.Rules[0];
+      KnowledgeBase kb = ParseKnowledgeBase(s);
+      Assert.AreEqual(1, kb.Rules.Count);
+      Rule r = kb.Rules[0];
       return r;
     }
 
@@ -80,8 +79,8 @@ namespace ZimmerBot.Core.Tests
       where T : WRegex
     {
       Rule r = ParseRule(s);
-      Assert.IsInstanceOf<T>(r.Domain.Rules[0].Trigger.Regex);
-      T seq = (T)r.Domain.Rules[0].Trigger.Regex;
+      Assert.IsInstanceOf<T>(r.KnowledgeBase.Rules[0].Trigger.Regex);
+      T seq = (T)r.KnowledgeBase.Rules[0].Trigger.Regex;
 
       return seq;
     }

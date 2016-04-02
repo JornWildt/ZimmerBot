@@ -10,14 +10,14 @@ namespace ZimmerBot.Core.ConfigParser
 {
   internal partial class ConfigParser
   {
-    protected Domain Domain { get; set; }
+    protected KnowledgeBase KnowledgeBase { get; set; }
 
 
-    public ConfigParser(Domain d) 
+    public ConfigParser(KnowledgeBase kb) 
       : base(null)
     {
-      Condition.Requires(d, nameof(d)).IsNotNull();
-      Domain = d;
+      Condition.Requires(kb, nameof(kb)).IsNotNull();
+      KnowledgeBase = kb;
     }
 
 
@@ -40,23 +40,23 @@ namespace ZimmerBot.Core.ConfigParser
 
     protected void RegisterConcept(string name, List<string> words)
     {
-      Concept c = Domain.AddConcept(name, words);
+      Concept c = KnowledgeBase.AddConcept(name, words);
     }
 
 
     protected void RDFImport(string filename)
     {
-      Domain.KnowledgeBase.MemoryStore.LoadFromFile(filename);
+      KnowledgeBase.MemoryStore.LoadFromFile(filename);
     }
 
 
     protected void RDFPrefix(string prefix, string url)
     {
-      Domain.KnowledgeBase.MemoryStore.DeclarePrefix(prefix, url);
+      KnowledgeBase.MemoryStore.DeclarePrefix(prefix, url);
     }
 
 
-    protected Func<Domain, Rule> RuleGenerator(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
+    protected Func<KnowledgeBase, Rule> RuleGenerator(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
     {
       return d =>
       {

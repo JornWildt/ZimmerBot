@@ -15,8 +15,8 @@
   public List<Expression> exprList;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Func<Knowledge.Domain,Knowledge.Rule> ruleGenerator;
-  public List<Func<Knowledge.Domain,Knowledge.Rule>> ruleGeneratorList;
+  public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
+  public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
   public List<string> stringList;
   public string s;
   public double n;
@@ -62,7 +62,7 @@ statementSeq
 
 statement
   : configuration
-  | rule          { $1.ruleGenerator(Domain); } /* Instantiate rule */
+  | rule          { $1.ruleGenerator(KnowledgeBase); } /* Instantiate rule */
   ;
 
 configuration
@@ -73,7 +73,7 @@ configuration
 
 ruleSeq
   : ruleSeq rule  { $1.ruleGeneratorList.Add($2.ruleGenerator); $$.ruleGeneratorList = $1.ruleGeneratorList; }
-  | /* empty */   { $$.ruleGeneratorList = new List<Func<Knowledge.Domain,Knowledge.Rule>>(); }
+  | /* empty */   { $$.ruleGeneratorList = new List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>>(); }
   ;
 
 rule
@@ -172,7 +172,7 @@ call
   ;
 
 answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(Domain, $3.ruleGeneratorList); }
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleGeneratorList); }
   ;
 
 /******************************************************************************

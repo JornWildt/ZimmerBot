@@ -3,5 +3,5 @@
 #! concept food = bananas
 ! concept like = like, enjoy, prefer
 
-> I like fruit
+> I %like %fruit
 : I <like> <food> too

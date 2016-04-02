@@ -160,8 +160,6 @@
     <Compile Include="WordRegex\WordWRegex.cs" />
     <Compile Include="WordRegex\RepetitionWRegex.cs" />
     <Compile Include="StandardProcessors\DateTimeProcessor.cs" />
-    <Compile Include="StandardProcessors\SelfProcessors.cs" />
-    <Compile Include="Knowledge\Domain.cs" />
     <Compile Include="Knowledge\KnowledgeBase.cs" />
     <Compile Include="Knowledge\ReactionSet.cs" />
     <Compile Include="Knowledge\Rule.cs" />

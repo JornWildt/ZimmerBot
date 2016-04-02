@@ -14,16 +14,15 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     public void CanParseSimplestPossibleConfiguration()
     {
       KnowledgeBase kb = new KnowledgeBase();
-      Domain d = kb.NewDomain("Test");
 
-      CfgParser.ParseConfigurationString(d, @"
+      CfgParser.ParseConfigurationString(kb, @"
 > Dav
 : selv hej
 ");
 
-      Assert.AreEqual(1, d.Rules.Count);
-      Assert.IsInstanceOf<WordWRegex>(d.Rules[0].Trigger.Regex);
-      WordWRegex seq = (WordWRegex)d.Rules[0].Trigger.Regex;
+      Assert.AreEqual(1, kb.Rules.Count);
+      Assert.IsInstanceOf<WordWRegex>(kb.Rules[0].Trigger.Regex);
+      WordWRegex seq = (WordWRegex)kb.Rules[0].Trigger.Regex;
 
       //Assert.IsInstanceOf<SequenceWRegex>(d.Rules[0].Trigger.Regex);
       //Assert.IsInstanceOf<WordWRegex>(((SequenceWRegex)d.Rules[0].Trigger.Regex).Sequence[0]);
@@ -33,9 +32,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     public void CanParseMultipleRules()
     {
       KnowledgeBase kb = new KnowledgeBase();
-      Domain d = kb.NewDomain("Test");
 
-      CfgParser.ParseConfigurationString(d, @"
+      CfgParser.ParseConfigurationString(kb, @"
 ### Rule 1
 > Dav
 : selv hej
@@ -50,9 +48,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     public void CanParseMultipleInputs()
     {
       KnowledgeBase kb = new KnowledgeBase();
-      Domain d = kb.NewDomain("Test");
 
-      CfgParser.ParseConfigurationString(d, @"
+      CfgParser.ParseConfigurationString(kb, @"
 ### Flere mønstre til samme regel
 > Hej
 > Dav

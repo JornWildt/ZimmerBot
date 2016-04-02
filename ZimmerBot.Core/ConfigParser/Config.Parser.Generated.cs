@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 02-04-2016 12:29:01
+// DateTime: 02-04-2016 20:28:38
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 02-04-2016 12:20:01>
+// Input file <ConfigParser\Config.Language.grammar.y - 02-04-2016 20:28:34>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -38,8 +38,8 @@ internal partial struct ValueType
   public List<Expression> exprList;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Func<Knowledge.Domain,Knowledge.Rule> ruleGenerator;
-  public List<Func<Knowledge.Domain,Knowledge.Rule>> ruleGeneratorList;
+  public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
+  public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
   public List<string> stringList;
   public string s;
   public double n;
@@ -244,7 +244,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     switch (action)
     {
       case 6: // statement -> rule
-{ ValueStack[ValueStack.Depth-1].ruleGenerator(Domain); }
+{ ValueStack[ValueStack.Depth-1].ruleGenerator(KnowledgeBase); }
         break;
       case 7: // configuration -> T_CONCEPT, T_WORD, T_EQU, wordSeq
 { RegisterConcept(ValueStack[ValueStack.Depth-3].s, ValueStack[ValueStack.Depth-1].stringList); }
@@ -259,7 +259,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { ValueStack[ValueStack.Depth-2].ruleGeneratorList.Add(ValueStack[ValueStack.Depth-1].ruleGenerator); CurrentSemanticValue.ruleGeneratorList = ValueStack[ValueStack.Depth-2].ruleGeneratorList; }
         break;
       case 11: // ruleSeq -> /* empty */
-{ CurrentSemanticValue.ruleGeneratorList = new List<Func<Knowledge.Domain,Knowledge.Rule>>(); }
+{ CurrentSemanticValue.ruleGeneratorList = new List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>>(); }
         break;
       case 12: // rule -> input, ruleModifierSeq, outputSeq
 { 
@@ -351,7 +351,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.expr = new FunctionCallExpr(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-2].exprList); }
         break;
       case 41: // answer -> T_ANSWER, T_LBRACE, ruleSeq, T_RBRACE
-{ CurrentSemanticValue.output = new AnswerOutputStatement(Domain, ValueStack[ValueStack.Depth-2].ruleGeneratorList); }
+{ CurrentSemanticValue.output = new AnswerOutputStatement(KnowledgeBase, ValueStack[ValueStack.Depth-2].ruleGeneratorList); }
         break;
       case 42: // exprSeq -> exprSeq2
 { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }

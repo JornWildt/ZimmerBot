@@ -77,10 +77,7 @@ namespace ZimmerBot.Core
 
     private void InitializeScheduler()
     {
-      foreach (Domain d in KnowledgeBase.GetDomains())
-      {
-        d.RegisterScheduledJobs(StdSchedulerFactory.GetDefaultScheduler(), Id);
-      }
+      KnowledgeBase.RegisterScheduledJobs(StdSchedulerFactory.GetDefaultScheduler(), Id);
     }
 
 

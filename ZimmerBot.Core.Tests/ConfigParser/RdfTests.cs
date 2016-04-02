@@ -14,7 +14,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanLoadRDFFile()
     {
-      Domain d = ParseDomain(@"
+      KnowledgeBase kb = ParseKnowledgeBase(@"
 ! rdf_import ""ConfigParser/Friends.ttl""
 
 > hvem er ven med +
@@ -29,8 +29,8 @@ SELECT * WHERE
 ORDER BY RAND()"")
 : Det er '<result:{r | <r.name>}>'
 ");
-      Assert.AreEqual(1, d.Rules.Count);
-      Rule r = d.Rules[0];
+      Assert.AreEqual(1, kb.Rules.Count);
+      Rule r = kb.Rules[0];
 
       Reaction reaction = CalculateReaction(r, "hvem er ven med \"Peter Parker\"");
       Assert.IsNotNull(reaction);
@@ -43,7 +43,7 @@ ORDER BY RAND()"")
     [Test]
     public void CanDeclareCommonPrefixes()
     {
-      Domain d = ParseDomain(@"
+      KnowledgeBase kb = ParseKnowledgeBase(@"
 ! rdf_import ""ConfigParser/Friends.ttl""
 ! rdf_prefix foaf ""http://xmlns.com/foaf/0.1/""
 
@@ -58,8 +58,8 @@ SELECT * WHERE
 ORDER BY RAND()"")
 : '<result:{r | <r.name>}>' is a friend
 ");
-      Assert.AreEqual(1, d.Rules.Count);
-      Rule r = d.Rules[0];
+      Assert.AreEqual(1, kb.Rules.Count);
+      Rule r = kb.Rules[0];
 
       Reaction reaction = CalculateReaction(r, "who is friend with \"Peter Parker\"");
       Assert.IsNotNull(reaction);
