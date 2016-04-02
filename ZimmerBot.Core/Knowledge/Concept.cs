@@ -51,13 +51,5 @@ namespace ZimmerBot.Core.Knowledge
 
       Choices = new WordChoiceWRegex(choices);
     }
-
-
-    public void ExpandToken(ZToken t)
-    {
-      foreach (string word in OriginalWords)
-        if (t.OriginalText.Equals(word, StringComparison.InvariantCultureIgnoreCase))
-          t.AddMatchingConcept(Name);
-    }
   }
 }

@@ -64,19 +64,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void ExpandTokens(ZTokenSequence input)
-    {
-      // FIXME: move to word tagging stage (or rather, drop it ...)
-      //foreach (ZToken t in input)
-      //{
-      //  foreach (Concept w in Concepts)
-      //  {
-      //    w.ExpandToken(t);
-      //  }
-      //}
-    }
-
-
     public ReactionSet FindMatchingReactions(EvaluationContext context, ReactionSet reactions = null)
     {
       if (reactions == null)

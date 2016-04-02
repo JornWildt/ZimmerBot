@@ -6,8 +6,6 @@ namespace ZimmerBot.Core.Pipeline.InputStages
   {
     public void Handle(InputPipelineItem item)
     {
-      if (item.Input != null)
-        item.KnowledgeBase.ExpandTokens(item.Input);
     }
   }
 }
