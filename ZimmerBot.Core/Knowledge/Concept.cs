@@ -12,7 +12,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<string> OriginalWords { get; protected set; }
 
-    public ChoiceWRegex Choices { get; protected set; }
+    public WordChoiceWRegex Choices { get; protected set; }
 
 
 
@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       Condition.Requires(kb, nameof(kb)).IsNotNull();
 
-      List<WRegex> choices = new List<WRegex>();
+      List<string> choices = new List<string>();
 
       foreach (string word in OriginalWords)
       {
@@ -40,16 +40,16 @@ namespace ZimmerBot.Core.Knowledge
           if (!kb.Concepts.ContainsKey(key))
             throw new InvalidOperationException($"The concept reference '{key}' in concept definition '{Name}' could not be found.");
 
-          foreach (WRegex w in kb.Concepts[key].Choices.Choices)
+          foreach (string w in kb.Concepts[key].Choices.Choices)
             choices.Add(w);
         }
         else
         {
-          choices.Add(new WordWRegex(word));
+          choices.Add(word);
         }
       }
 
-      Choices = new ChoiceWRegex(choices);
+      Choices = new WordChoiceWRegex(choices);
     }
 
 

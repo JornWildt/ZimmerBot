@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
@@ -59,9 +58,6 @@ namespace ZimmerBot.Core.WordRegex
       if (Choices.Count == 0)
         return new MatchResult(0, "");
 
-      MatchResult[] results = new MatchResult[Choices.Count];
-      int[] indexes = new int[Choices.Count];
-
       MatchResult bestResult = null;
       int bestIndex = -1;
 
@@ -70,33 +66,17 @@ namespace ZimmerBot.Core.WordRegex
       for (int i = 0; i < Choices.Count; ++i)
       {
         context.CurrentTokenIndex = initialIndex;
-        results[i] = Choices[i].CalculateMatchResult(context, lookahead);
-        indexes[i] = context.CurrentTokenIndex;
+        MatchResult result = Choices[i].CalculateMatchResult(context, lookahead);
 
-        if (bestResult == null  || results[i].Score >= bestResult.Score)
+        if (bestResult == null  || result.Score >= bestResult.Score)
         {
-          bestResult = results[i];
+          bestResult = result;
           bestIndex = context.CurrentTokenIndex;
         }
       }
 
       context.CurrentTokenIndex = bestIndex;
       return bestResult.RegisterMatch(MatchName, bestResult.MatchedText);
-
-      //MatchResult result1 = Choices.CalculateMatchResult(context, lookahead);
-      //int index1 = context.CurrentTokenIndex;
-
-      //context.CurrentTokenIndex = index;
-      //MatchResult result2 = Right.CalculateMatchResult(context, lookahead);
-
-      //if (result1.Score >= result2.Score)
-      //{
-      //  // Restore token index to what it was after score 1 calculation
-      //  context.CurrentTokenIndex = index1;
-      //  return result1.RegisterMatch(MatchName, result1.MatchedText);
-      //}
-
-      //return result2.RegisterMatch(MatchName, result2.MatchedText);
     }
   }
 }

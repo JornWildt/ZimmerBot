@@ -19,6 +19,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [TestCase("I enjoy bananas", "I enjoy bananas too")]
     [TestCase("I prefer apple", "I prefer apple too")]
     [TestCase("I like chicken", "I like chicken too")]
+    [TestCase("I LIKE chiCKEN", "I LIKE chiCKEN too")] // FIXME: improve casing on match ...
     public void CanMatchConcepts(string input, string expectedAnswer)
     {
       string output = GetResponseFor(input);
