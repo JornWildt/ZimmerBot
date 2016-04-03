@@ -56,18 +56,15 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected Func<KnowledgeBase, Rule> RuleGenerator(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
+    protected Rule AddRule(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
     {
-      return d =>
-      {
-        Rule r = d.AddRule(pattern);
-        if (modifiers != null)
-          foreach (var m in modifiers)
-            m.Invoke(r);
-        if (outputs != null)
-          r.WithOutputStatements(outputs);
-        return r;
-      };
+      Rule r = KnowledgeBase.AddRule(pattern);
+      if (modifiers != null)
+        foreach (var m in modifiers)
+          m.Invoke(r);
+      if (outputs != null)
+        r.WithOutputStatements(outputs);
+      return r;
     }
 
 

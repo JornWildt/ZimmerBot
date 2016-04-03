@@ -9,24 +9,21 @@ namespace ZimmerBot.Core.ConfigParser
   {
     public KnowledgeBase KnowledgeBase { get; protected set; }
 
-    public List<Func<KnowledgeBase, Rule>> RuleGenerators { get; protected set; }
+    public List<Rule> Rules { get; protected set; }
 
 
-    public AnswerOutputStatement(KnowledgeBase kb, List<Func<KnowledgeBase, Rule>> rules)
+    public AnswerOutputStatement(KnowledgeBase kb, List<Rule> rules)
     {
       Condition.Requires(rules, nameof(rules)).IsNotNull();
       Condition.Requires(kb, nameof(kb)).IsNotNull();
       KnowledgeBase = kb;
-      RuleGenerators = rules;
+      Rules = rules;
     }
 
 
     public override void Execute(OutputExecutionContect context)
     {
-      foreach (var generator in RuleGenerators)
-      {
-        Rule r = generator(KnowledgeBase);
-      }
+      // TO BE (RE)DONE
     }
   }
 }

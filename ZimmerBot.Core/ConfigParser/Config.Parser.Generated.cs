@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 03-04-2016 20:51:35
+// DateTime: 03-04-2016 21:11:25
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 03-04-2016 20:51:33>
+// Input file <ConfigParser\Config.Language.grammar.y - 03-04-2016 21:11:19>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -38,8 +38,8 @@ internal partial struct ValueType
   public KeyValuePair<string,string> template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
-  public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
+  public Knowledge.Rule rule;
+  public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> patternList;
   public string s;
@@ -255,9 +255,6 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 162, 1522
     switch (action)
     {
-      case 6: // statement -> rule
-{ ValueStack[ValueStack.Depth-1].ruleGenerator(KnowledgeBase); }
-        break;
       case 7: // configuration -> T_CONCEPT, T_WORD, T_EQU, conceptPatternSeq
 { RegisterConcept(ValueStack[ValueStack.Depth-3].s, ValueStack[ValueStack.Depth-1].patternList); }
         break;
@@ -274,14 +271,14 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.patternList = new List<List<string>>(); CurrentSemanticValue.patternList.Add(ValueStack[ValueStack.Depth-1].stringList); }
         break;
       case 12: // ruleSeq -> ruleSeq, rule
-{ ValueStack[ValueStack.Depth-2].ruleGeneratorList.Add(ValueStack[ValueStack.Depth-1].ruleGenerator); CurrentSemanticValue.ruleGeneratorList = ValueStack[ValueStack.Depth-2].ruleGeneratorList; }
+{ ValueStack[ValueStack.Depth-2].ruleList.Add(ValueStack[ValueStack.Depth-1].rule); CurrentSemanticValue.ruleList = ValueStack[ValueStack.Depth-2].ruleList; }
         break;
       case 13: // ruleSeq -> /* empty */
-{ CurrentSemanticValue.ruleGeneratorList = new List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>>(); }
+{ CurrentSemanticValue.ruleList = new List<Knowledge.Rule>(); }
         break;
       case 14: // rule -> input, ruleModifierSeq, outputSeq
 { 
-      CurrentSemanticValue.ruleGenerator = RuleGenerator(ValueStack[ValueStack.Depth-3].regex, ValueStack[ValueStack.Depth-2].ruleModifierList, ValueStack[ValueStack.Depth-1].outputList);
+      CurrentSemanticValue.rule = AddRule(ValueStack[ValueStack.Depth-3].regex, ValueStack[ValueStack.Depth-2].ruleModifierList, ValueStack[ValueStack.Depth-1].outputList);
     }
         break;
       case 15: // input -> T_GT, inputPatternSeq
@@ -372,7 +369,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.expr = new FunctionCallExpr(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-2].exprList); }
         break;
       case 44: // answer -> T_ANSWER, T_LBRACE, ruleSeq, T_RBRACE
-{ CurrentSemanticValue.output = new AnswerOutputStatement(KnowledgeBase, ValueStack[ValueStack.Depth-2].ruleGeneratorList); }
+{ CurrentSemanticValue.output = new AnswerOutputStatement(KnowledgeBase, ValueStack[ValueStack.Depth-2].ruleList); }
         break;
       case 45: // exprSeq -> exprSeq2
 { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }

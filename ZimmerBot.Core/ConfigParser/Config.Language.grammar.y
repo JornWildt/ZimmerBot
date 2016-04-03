@@ -15,8 +15,8 @@
   public KeyValuePair<string,string> template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
-  public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
+  public Knowledge.Rule rule;
+  public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> patternList;
   public string s;
@@ -64,7 +64,7 @@ statementSeq
 
 statement
   : configuration
-  | rule          { $1.ruleGenerator(KnowledgeBase); } /* Instantiate rule */
+  | rule
   ;
 
 configuration
@@ -82,14 +82,14 @@ conceptPatternSeq
   ;
 
 ruleSeq
-  : ruleSeq rule  { $1.ruleGeneratorList.Add($2.ruleGenerator); $$.ruleGeneratorList = $1.ruleGeneratorList; }
-  | /* empty */   { $$.ruleGeneratorList = new List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>>(); }
+  : ruleSeq rule  { $1.ruleList.Add($2.rule); $$.ruleList = $1.ruleList; }
+  | /* empty */   { $$.ruleList = new List<Knowledge.Rule>(); }
   ;
 
 rule
   : input ruleModifierSeq outputSeq
     { 
-      $$.ruleGenerator = RuleGenerator($1.regex, $2.ruleModifierList, $3.outputList);
+      $$.rule = AddRule($1.regex, $2.ruleModifierList, $3.outputList);
     }
   ;
 
@@ -183,7 +183,7 @@ call
   ;
 
 answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleGeneratorList); }
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleList); }
   ;
 
 /******************************************************************************
