@@ -38,9 +38,9 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterConcept(string name, List<string> words)
+    protected void RegisterConcept(string name, List<List<string>> patterns)
     {
-      Concept c = KnowledgeBase.AddConcept(name, words);
+      Concept c = KnowledgeBase.AddConcept(name, patterns);
     }
 
 

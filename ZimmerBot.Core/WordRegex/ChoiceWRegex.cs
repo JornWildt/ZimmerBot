@@ -22,6 +22,7 @@ namespace ZimmerBot.Core.WordRegex
     {
     }
 
+
     public ChoiceWRegex(WRegex left, WRegex right, string matchName)
     {
       Condition.Requires(left, "left").IsNotNull();
@@ -38,6 +39,12 @@ namespace ZimmerBot.Core.WordRegex
     {
       Condition.Requires(choices, nameof(choices)).IsNotNull();
       Choices = new List<WRegex>(choices);
+    }
+
+
+    public void Add(WRegex choice)
+    {
+      Choices.Add(choice);
     }
 
 

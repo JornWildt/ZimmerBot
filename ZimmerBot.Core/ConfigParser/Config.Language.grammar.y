@@ -11,13 +11,14 @@
   public List<OutputStatement> outputList;
   public WRegex regex;
   public Expression expr;
-  public KeyValuePair<string,string> template;
   public List<Expression> exprList;
+  public KeyValuePair<string,string> template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
   public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
   public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
   public List<string> stringList;
+  public List<List<string>> patternList;
   public string s;
   public double n;
 }
@@ -67,9 +68,17 @@ statement
   ;
 
 configuration
-  : T_CONCEPT T_WORD T_EQU cwordSeq  { RegisterConcept($2.s, $4.stringList); }
-  | T_RDF_IMPORT T_STRING            { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
-  | T_RDF_PREFIX T_WORD T_STRING     { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
+      { RegisterConcept($2.s, $4.patternList); }
+  | T_RDF_IMPORT T_STRING            
+      { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_RDF_PREFIX T_WORD T_STRING     
+      { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  ;
+
+conceptPatternSeq
+  : conceptPatternSeq T_COMMA cwordSeq  { $1.patternList.Add($3.stringList); $$.patternList = $1.patternList; }
+  | cwordSeq                            { $$.patternList = new List<List<string>>(); $$.patternList.Add($1.stringList); }
   ;
 
 ruleSeq
@@ -115,7 +124,6 @@ inputPattern
   | T_EXCL inputPattern
       { $$.regex =  new NegationWRegex($2.regex); }
   ;
-
 
 /******************************************************************************
   MODIFIERS
@@ -222,16 +230,9 @@ exprReference
   OTHER
 ******************************************************************************/
 
-/*
-wordSeq
-  : wordSeq T_COMMA T_WORD { $$.stringList.Add($3.s); }
-  | T_WORD                 { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
-  ;
-*/
-
 cwordSeq
-  : cwordSeq T_COMMA cword { $$.stringList.Add($3.s); }
-  | cword                  { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  : cwordSeq cword { $$.stringList.Add($2.s); }
+  | cword          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
 cword

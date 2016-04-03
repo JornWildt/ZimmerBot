@@ -8,48 +8,66 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class Concept
   {
+    public KnowledgeBase KnowledgeBase { get; protected set; }
+
     public string Name { get; protected set; }
 
-    public List<string> OriginalWords { get; protected set; }
-
-    public WordChoiceWRegex Choices { get; protected set; }
+    public ChoiceWRegex Choices { get; protected set; }
 
 
 
-    public Concept(string name, IEnumerable<string> words)
+    public Concept(KnowledgeBase kb, string name, List<List<string>> patterns)
     {
+      Condition.Requires(kb, nameof(kb)).IsNotNull();
       Condition.Requires(name, nameof(name)).IsNotNull();
-      Condition.Requires(words, nameof(words)).IsNotNull();
+      Condition.Requires(patterns, nameof(patterns)).IsNotNull();
 
+      KnowledgeBase = kb;
       Name = name;
-      OriginalWords = new List<string>(words);
+
+      ConvertToWRegex(patterns);
     }
 
 
-    public void ConvertToWRegex(KnowledgeBase kb)
+    protected void ConvertToWRegex(List<List<string>> patterns)
     {
-      Condition.Requires(kb, nameof(kb)).IsNotNull();
+      Choices = new ChoiceWRegex();
 
-      List<string> choices = new List<string>();
-
-      foreach (string word in OriginalWords)
+      foreach (List<string> pattern in patterns)
       {
-        if (word.StartsWith("%"))
+        if (pattern.Count == 1)
         {
-          string key = word.Substring(1);
-          if (!kb.Concepts.ContainsKey(key))
-            throw new InvalidOperationException($"The concept reference '{key}' in concept definition '{Name}' could not be found.");
-
-          foreach (string w in kb.Concepts[key].Choices.Choices)
-            choices.Add(w);
+          WRegex wordRegex = ConvertWordToWRegex(pattern[0]);
+          Choices.Add(wordRegex);
         }
         else
         {
-          choices.Add(word);
+          SequenceWRegex seqRegex = new SequenceWRegex();
+          foreach (string word in pattern)
+          {
+            WRegex wordRegex = ConvertWordToWRegex(pattern[0]);
+            seqRegex.Add(wordRegex);
+          }
+          Choices.Add(seqRegex);
         }
       }
+    }
 
-      Choices = new WordChoiceWRegex(choices);
+
+    protected WRegex ConvertWordToWRegex(string word)
+    {
+      if (word.StartsWith("%"))
+      {
+        string key = word.Substring(1);
+        if (!KnowledgeBase.Concepts.ContainsKey(key))
+          throw new InvalidOperationException($"The concept reference '{key}' in concept definition '{Name}' could not be found.");
+
+        return KnowledgeBase.Concepts[key].Choices;
+      }
+      else
+      {
+        return new WordWRegex(word);
+      }
     }
   }
 }

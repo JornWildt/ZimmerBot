@@ -1,7 +1,7 @@
 ! concept hilsen = hej, hejsa, goddag, dav, Mojn
 
 
-#> Hej / hilsener
-> hilsen
+#> Hej
+> %hilsen
 : Hej
 : Mojn

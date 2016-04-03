@@ -7,6 +7,7 @@ using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Pipeline;
 using ZimmerBot.Core.Pipeline.InputStages;
+using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -35,13 +36,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Concept AddConcept(string name, IEnumerable<string> words)
+    public Concept AddConcept(string name, List<List<string>> patterns)
     {
       Condition.Requires(name, nameof(name)).IsNotNull();
-      Condition.Requires(words, nameof(words)).IsNotNull();
+      Condition.Requires(patterns, nameof(patterns)).IsNotNull();
 
-      Concept w = new Concept(name, words);
-      w.ConvertToWRegex(this);
+      Concept w = new Concept(this, name, patterns);
       Concepts.Add(name, w);
       return w;
     }

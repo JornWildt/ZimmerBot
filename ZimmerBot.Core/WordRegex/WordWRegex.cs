@@ -38,8 +38,6 @@ namespace ZimmerBot.Core.WordRegex
 
     public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
-      // This calculation is admittingly not perfect - but it makes some sort of sense ...
-
       if (context.CurrentTokenIndex < context.Input.Count)
       {
         if (context.Input[context.CurrentTokenIndex].Matches(Word))
@@ -49,6 +47,9 @@ namespace ZimmerBot.Core.WordRegex
             .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
         }
       }
+
+      // Wondering if this really belongs here, outside of the bot author's reach ...
+#if true
 
       if (context.CurrentTokenIndex + 1 < context.Input.Count)
       {
@@ -89,6 +90,7 @@ namespace ZimmerBot.Core.WordRegex
             .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 3].OriginalText); ;
         }
       }
+#endif
 
       ++context.CurrentTokenIndex;
       return new MatchResult(0.1, "");

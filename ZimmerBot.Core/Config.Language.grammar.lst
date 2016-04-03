@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 02-04-2016 21:19:31>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 03-04-2016 20:31:39>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 02-04-2016 21:19:33
+//  DateTime: 03-04-2016 20:31:44
 //  UserName: Jorn
 // ==========================================================================
 
@@ -21,14 +21,15 @@
   public OutputStatement output;
   public List<OutputStatement> outputList;
   public WRegex regex;
+  public List<WRegex> regexList;
   public Expression expr;
   public KeyValuePair<string,string> template;
-  public List<Expression> exprList;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
   public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
   public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
   public List<string> stringList;
+  public List<List<string>> patternList;
   public string s;
   public double n;
 }
@@ -62,8 +63,6 @@
 %token T_DOLLAR
 
 %%
-// Warning: NonTerminal symbol "wordSeq" is unreachable
-// ----------------------------------------------------
 
 main
   : statementSeq
@@ -80,9 +79,17 @@ statement
   ;
 
 configuration
-  : T_CONCEPT T_WORD T_EQU cwordSeq  { RegisterConcept($2.s, $4.stringList); }
-  | T_RDF_IMPORT T_STRING            { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
-  | T_RDF_PREFIX T_WORD T_STRING     { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
+      { RegisterConcept($2.s, $4.patternList); }
+  | T_RDF_IMPORT T_STRING            
+      { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_RDF_PREFIX T_WORD T_STRING     
+      { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  ;
+
+conceptPatternSeq
+  : conceptPatternSeq T_COMMA cwordSeq  { $1.patternList.Add($3.stringList); $$.patternList = $1.patternList; }
+  | cwordSeq                            { $$.patternList = new List<List<string>>(new string[] { $1.stringList }); }
   ;
 
 ruleSeq
@@ -117,8 +124,10 @@ inputPattern
       { $$.regex =  new RepetitionWRegex($1.regex, 0, 1); }
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
-  | T_WORD     
+  | T_WORD
       { $$.regex = new WordWRegex($1.s); }
+  | T_CWORD
+      { $$.regex = new ConceptWRegex(KnowledgeBase, $1.s); }
   | T_STAR
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
@@ -126,7 +135,6 @@ inputPattern
   | T_EXCL inputPattern
       { $$.regex =  new NegationWRegex($2.regex); }
   ;
-
 
 /******************************************************************************
   MODIFIERS
@@ -233,14 +241,17 @@ exprReference
   OTHER
 ******************************************************************************/
 
-wordSeq
-  : wordSeq T_COMMA T_WORD { $$.stringList.Add($3.s); }
-  | T_WORD                 { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+cwordSeq
+  : cwordSeq cword { $$.stringList.Add($3.s); }
+//-----------------------------------^^^
+// Error: Semantic action index is out of bounds
+// ---------------------------------------------
+  | cword          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
-cwordSeq
-  : cwordSeq T_COMMA T_CWORD { $$.stringList.Add($3.s); }
-  | T_WORD                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+cword
+  : T_WORD   { $$.s = $1.s; }
+  | T_CWORD  { $$.s = $1.s; }
   ;
 
 %%// ==========================================================================
