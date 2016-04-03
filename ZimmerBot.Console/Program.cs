@@ -22,10 +22,21 @@ namespace ZimmerBot.Console
 
       try
       {
-        // Initialize bot from files in example directory
-        KnowledgeBase kb = KnowledgeBase.CreateFromFiles("..\\..\\..\\Examples\\da-DK");
-        kb.LoadFromFiles("..\\..\\..\\Examples");
-        kb.LoadFromFiles("..\\..\\..\\Rejseplanen.ZimmerBot.AddOn\\Examples\\da-DK");
+        KnowledgeBase kb = new KnowledgeBase();
+
+        if (args.Length == 0)
+        {
+          // Initialize bot from files in example directory
+          kb.LoadFromFiles("..\\..\\..\\Examples\\da-DK");
+          kb.LoadFromFiles("..\\..\\..\\Examples");
+          kb.LoadFromFiles("..\\..\\..\\Rejseplanen.ZimmerBot.AddOn\\Examples\\da-DK");
+        }
+        else
+        {
+          foreach (string path in args)
+            kb.LoadFromFiles(path);
+        }
+
         Bot b = new Bot(kb);
 
         // Run bot
