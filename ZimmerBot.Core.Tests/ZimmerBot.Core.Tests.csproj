@@ -59,7 +59,7 @@
     <Compile Include="ConfigParser\OutputTests.cs" />
     <Compile Include="ConfigParser\RDFTests.cs" />
     <Compile Include="ConfigParser\UnicodeTests.cs" />
-    <Compile Include="ConfigParser\WordAbstractionTests.cs" />
+    <Compile Include="ConfigParser\BasicConceptTests.cs" />
     <Compile Include="SetupFixture.cs" />
     <Compile Include="TemplateParser\BasicTemplateParserTests.cs" />
     <Compile Include="TemplateParser\ErrorHandlingTests.cs" />

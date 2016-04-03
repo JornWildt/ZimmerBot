@@ -5,7 +5,7 @@ using ZimmerBot.Core.WordRegex;
 namespace ZimmerBot.Core.Tests.ConfigParser
 {
   [TestFixture]
-  public class WordConceptTests : TestHelper
+  public class BasicConceptTests : TestHelper
   {
     [Test]
     public void CanParseSingleWordConcepts()
