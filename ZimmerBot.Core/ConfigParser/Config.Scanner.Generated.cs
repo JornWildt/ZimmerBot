@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 03-04-2016 21:11:24
+//  DateTime: 03-04-2016 21:40:09
 //  UserName: Jorn
-//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 02-04-2016 21:18:48>
+//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 03-04-2016 21:39:36>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: unicode, verbose, parser, stack, minimize
@@ -1198,7 +1198,7 @@ internal StringBuilder StringInput = null;
           -1, 19}),
 /* NxS[  20] */ // Shortest string "c"
       new Table(20, 24, -1, new sbyte[] {20, 20, 20, 20, 20, 20, 
-          20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, -1, 20, 20, 20, 
+          20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 
           -1, 20}),
 /* NxS[  21] */ // Shortest string "0"
       new Table(41, 15, -1, new sbyte[] {21, -1, -1, -1, -1, -1, 
@@ -1206,7 +1206,7 @@ internal StringBuilder StringInput = null;
 /* NxS[  22] */ new Table(0, 0, -1, null), // Shortest string "#"
 /* NxS[  23] */ // Shortest string "%c"
       new Table(20, 24, -1, new sbyte[] {23, 23, 23, 23, 23, 23, 
-          23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, -1, 23, 23, 23, 
+          23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 
           -1, 23}),
 /* NxS[  24] */ // Shortest string "0.0"
       new Table(41, 1, -1, new sbyte[] {24}),
@@ -1242,12 +1242,12 @@ internal StringBuilder StringInput = null;
 /* NxS[  45] */ // Shortest string ">"
       new Table(46, 4, 45, new sbyte[] {-1, 45, 45, -1}),
 /* NxS[  46] */ // Shortest string ""
-      new Table(38, 31, 20, new sbyte[] {-1, 20, 20, 21, 47, 20, 
-          22, 19, -1, -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
-          11, 12, 13, 14, 15, 16, 17, 18, 19}),
+      new Table(41, 28, 20, new sbyte[] {21, 47, 20, 22, 19, -1, 
+          -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 
+          14, 15, 16, 17, 18, 19}),
 /* NxS[  47] */ // Shortest string "%"
       new Table(20, 24, -1, new sbyte[] {23, 23, 23, 23, 23, 23, 
-          23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, -1, 23, 23, -1, 
+          23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, -1, 
           -1, 23}),
 /* NxS[  48] */ // Shortest string "0."
       new Table(41, 1, -1, new sbyte[] {24}),
