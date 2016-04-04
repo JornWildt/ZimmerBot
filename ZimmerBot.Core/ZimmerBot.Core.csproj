@@ -276,7 +276,7 @@
   </Target>
   <Target Name="GenerateTemplate-ZimmerBot-Core-TemplateParser" Inputs="$(Template-ZimmerBot-Core-TemplateParserParser).Language.analyzer.lex;$(Template-ZimmerBot-Core-TemplateParserParser).Language.grammar.y" Outputs="$(Template-ZimmerBot-Core-TemplateParserParser).Scanner.Generated.cs;$(Template-ZimmerBot-Core-TemplateParserParser).Parser.Generated.cs">
     <Message Text="Generating scanner for $(Template-ZimmerBot-Core-TemplateParserParser) ..." />
-    <Exec Command="$(GplexTool) &quot;/out:$(Template-ZimmerBot-Core-TemplateParserParser).Scanner.Generated.cs&quot; &quot;$(Template-ZimmerBot-Core-TemplateParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
+    <Exec Command="$(GplexTool) /unicode &quot;/out:$(Template-ZimmerBot-Core-TemplateParserParser).Scanner.Generated.cs&quot; &quot;$(Template-ZimmerBot-Core-TemplateParserParser).Language.analyzer.lex&quot;" WorkingDirectory="$(ProjectDir)" Outputs="$(GenDir)Scanner.cs">
       <Output TaskParameter="Outputs" ItemName="TemplateScanner" />
     </Exec>
     <Message Text="Generating parser for $(Template-ZimmerBot-Core-TemplateParserParser) ..." />
