@@ -5,7 +5,6 @@ using Quartz;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.TemplateParser;
-using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
 
@@ -15,7 +14,7 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Id { get; protected set; }
 
-    public Domain Domain { get; set; }
+    public KnowledgeBase KnowledgeBase { get; protected set; }
 
     public string Description { get; protected set; }
 
@@ -25,16 +24,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<OutputStatement> OutputStatements { get; protected set; }
 
-    public int? TimeToLive { get; protected set; }
 
-
-    public Rule(Domain d, params object[] topics)
+    public Rule(KnowledgeBase kb, params object[] pattern)
     {
-      Condition.Requires(d, nameof(d)).IsNotNull();
+      Condition.Requires(kb, nameof(kb)).IsNotNull();
+      Condition.Requires(pattern, nameof(pattern)).IsNotNull();
 
       Id = Guid.NewGuid().ToString();
-      Domain = d;
-      Trigger = new Trigger(topics);
+      KnowledgeBase = kb;
+      Trigger = new Trigger(pattern);
     }
 
 
@@ -73,17 +71,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule AsAnswer()
-    {
-      TimeToLive = 1;
-      if (Weight != null)
-        Weight *= 4;
-      else
-        Weight = 4;
-      return this;
-    }
-
-
     public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
       Trigger.RegisterScheduledJobs(scheduler, botId, Id);
@@ -92,16 +79,6 @@ namespace ZimmerBot.Core.Knowledge
 
     public Reaction CalculateReaction(EvaluationContext context)
     {
-      if (TimeToLive != null)
-      {
-        if (TimeToLive.Value == 0)
-        {
-          Domain.RemoveRule(this);
-          return null;
-        }
-        TimeToLive = TimeToLive.Value - 1;
-      }
-
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
         return null;
 
@@ -113,7 +90,7 @@ namespace ZimmerBot.Core.Knowledge
       if (result.Score < 0.5)
         return null;
 
-      ResponseContext rc = new ResponseContext(Domain.KnowledgeBase, context.State, context.Input, result);
+      ResponseContext rc = new ResponseContext(KnowledgeBase, context.State, context.Input, result);
       return new Reaction(rc, this);
     }
 
@@ -151,7 +128,7 @@ namespace ZimmerBot.Core.Knowledge
           IList<string> templates = ox_context.OutputTemplates[templateName];
 
           string selectedTemplate = templates[Randomizer.Next(templates.Count)];
-          result = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(Domain.KnowledgeBase, context.State, context.Variables));
+          result = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(KnowledgeBase, context.State, context.Variables));
         }
 
         return result;

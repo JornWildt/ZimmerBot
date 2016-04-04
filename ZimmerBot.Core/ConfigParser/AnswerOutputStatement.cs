@@ -7,25 +7,23 @@ namespace ZimmerBot.Core.ConfigParser
 {
   public class AnswerOutputStatement : OutputStatement
   {
-    public Domain Domain { get; protected set; }
-    public List<Func<Domain, Rule>> RuleGenerators { get; protected set; }
+    public KnowledgeBase KnowledgeBase { get; protected set; }
+
+    public List<Rule> Rules { get; protected set; }
 
 
-    public AnswerOutputStatement(Domain domain, List<Func<Domain,Rule>> rules)
+    public AnswerOutputStatement(KnowledgeBase kb, List<Rule> rules)
     {
       Condition.Requires(rules, nameof(rules)).IsNotNull();
-      Condition.Requires(domain, nameof(domain)).IsNotNull();
-      Domain = domain;
-      RuleGenerators = rules;
+      Condition.Requires(kb, nameof(kb)).IsNotNull();
+      KnowledgeBase = kb;
+      Rules = rules;
     }
 
 
     public override void Execute(OutputExecutionContect context)
     {
-      foreach (var generator in RuleGenerators)
-      {
-        Rule r = generator(Domain).AsAnswer();
-      }
+      // TO BE (RE)DONE
     }
   }
 }

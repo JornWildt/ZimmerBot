@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
@@ -7,9 +8,13 @@ namespace ZimmerBot.Core.WordRegex
 {
   public class ChoiceWRegex : WRegex
   {
-    public WRegex Left { get; protected set; }
+    public List<WRegex> Choices { get; protected set; }
 
-    public WRegex Right { get; protected set; }
+
+    public ChoiceWRegex()
+      : this(Enumerable.Empty<WRegex>())
+    {
+    }
 
 
     public ChoiceWRegex(WRegex left, WRegex right)
@@ -17,46 +22,68 @@ namespace ZimmerBot.Core.WordRegex
     {
     }
 
+
     public ChoiceWRegex(WRegex left, WRegex right, string matchName)
     {
       Condition.Requires(left, "left").IsNotNull();
       Condition.Requires(right, "right").IsNotNull();
 
-      Left = left;
-      Right = right;
+      Choices = new List<WRegex>();
+      Choices.Add(left);
+      Choices.Add(right);
       MatchName = matchName;
+    }
+
+
+    public ChoiceWRegex(IEnumerable<WRegex> choices)
+    {
+      Condition.Requires(choices, nameof(choices)).IsNotNull();
+      Choices = new List<WRegex>(choices);
+    }
+
+
+    public void Add(WRegex choice)
+    {
+      Choices.Add(choice);
     }
 
 
     public override double CalculateSize()
     {
-      return Math.Max(Left.CalculateSize(), Right.CalculateSize());
+      return Choices.Max(c => c.CalculateSize());
     }
 
 
     public override WRegex GetLookahead()
     {
-      return new ChoiceWRegex(Left.GetLookahead(), Right.GetLookahead());
+      return new ChoiceWRegex(Choices.Select(c => c.GetLookahead()));
     }
 
 
     public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
     {
-      int index = context.CurrentTokenIndex;
-      MatchResult result1 = Left.CalculateMatchResult(context, lookahead);
-      int index1 = context.CurrentTokenIndex;
+      if (Choices.Count == 0)
+        return new MatchResult(0, "");
 
-      context.CurrentTokenIndex = index;
-      MatchResult result2 = Right.CalculateMatchResult(context, lookahead);
+      MatchResult bestResult = null;
+      int bestIndex = -1;
 
-      if (result1.Score >= result2.Score)
+      int initialIndex = context.CurrentTokenIndex;
+
+      for (int i = 0; i < Choices.Count; ++i)
       {
-        // Restore token index to what it was after score 1 calculation
-        context.CurrentTokenIndex = index1;
-        return result1.RegisterMatch(MatchName, result1.MatchedText);
+        context.CurrentTokenIndex = initialIndex;
+        MatchResult result = Choices[i].CalculateMatchResult(context, lookahead);
+
+        if (bestResult == null  || result.Score >= bestResult.Score)
+        {
+          bestResult = result;
+          bestIndex = context.CurrentTokenIndex;
+        }
       }
 
-      return result2.RegisterMatch(MatchName, result2.MatchedText);
+      context.CurrentTokenIndex = bestIndex;
+      return bestResult.RegisterMatch(MatchName, bestResult.MatchedText);
     }
   }
 }

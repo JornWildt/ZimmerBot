@@ -6,7 +6,7 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [[:IsLetter:]]+[[:IsLetter:]0-9]*
+Word       [[:IsLetter:]_]+[[:IsLetter:]0-9_]*
 Number     [0-9]+(\.[0-9]+)?
 Comment    #
 Space      [ \t]
@@ -43,10 +43,11 @@ Space      [ \t]
 =           { return (int)Token.T_EQU; }
 $           { return (int)Token.T_DOLLAR; }
 \?          { return (int)Token.T_QUESTION; }
+\!          { return (int)Token.T_EXCL; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-![ ]*abstraction { return (int)Token.T_ABSTRACTION; }
+![ ]*concept     { return (int)Token.T_CONCEPT; }
 ![ ]*call        { return (int)Token.T_CALL; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
 ![ ]*every       { return (int)Token.T_EVERY; }
@@ -54,9 +55,10 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*rdf_import  { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix  { return (int)Token.T_RDF_PREFIX; }
 
-{Number}    { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
+{Number} { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 
-{Word}		  { yylval.s = yytext; return (int)Token.T_WORD; }
+\%{Word}  { yylval.s = yytext; return (int)Token.T_CWORD; }
+{Word}    { yylval.s = yytext; return (int)Token.T_WORD; }
 
 {Comment}   { BEGIN(comment); }
 

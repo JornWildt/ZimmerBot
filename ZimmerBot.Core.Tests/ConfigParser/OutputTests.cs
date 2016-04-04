@@ -98,7 +98,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanUse_SequenceOneOrMore_MatchInOutputTemplate2()
     {
-      Domain d = ParseDomain(@"
+      KnowledgeBase kb = ParseKnowledgeBase(@"
 > are you +
 : would you like me to be <1>
 
@@ -108,7 +108,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
       EvaluationContext context = BuildEvaluationContextFromInput("are you a computer");
       ReactionSet reactions = new ReactionSet();
-      d.FindMatchingReactions(context, reactions);
+      kb.FindMatchingReactions(context, reactions);
 
       Assert.AreEqual(1, reactions.Count);
 

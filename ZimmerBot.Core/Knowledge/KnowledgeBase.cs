@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using CuttingEdge.Conditions;
 using log4net;
+using Quartz;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
-
+using ZimmerBot.Core.Pipeline;
+using ZimmerBot.Core.Pipeline.InputStages;
+using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -11,47 +15,66 @@ namespace ZimmerBot.Core.Knowledge
   {
     static ILog Logger = LogManager.GetLogger(typeof(KnowledgeBase));
 
-    protected List<Domain> Domains { get; set; }
-
     public RDFStore MemoryStore { get; protected set; }
+
+    public Dictionary<string, Concept> Concepts { get; protected set; }
+
+    public List<Rule> Rules { get; protected set; }
+
+    public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
 
     public KnowledgeBase()
     {
-      Domains = new List<Domain>();
       MemoryStore = new RDFStore();
+      Concepts = new Dictionary<string, Concept>();
+      Rules = new List<Rule>();
+      InputPipeline = new Pipeline<InputPipelineItem>();
+      InputPipeline.AddHandler(new WordTaggingStage());
+      InputPipeline.AddHandler(new SentenceTaggingStage());
+      InputPipeline.AddHandler(new ReactionGeneratorStage());
     }
 
 
-    public Domain NewDomain(string name)
+    public Concept AddConcept(string name, List<List<string>> patterns)
     {
-      Domain d = new Domain(this, name);
-      Domains.Add(d);
-      return d;
+      Condition.Requires(name, nameof(name)).IsNotNull();
+      Condition.Requires(patterns, nameof(patterns)).IsNotNull();
+
+      Concept w = new Concept(this, name, patterns);
+      Concepts.Add(name, w);
+      return w;
     }
 
 
-    public IEnumerable<Domain> GetDomains()
+    public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
-      return Domains;
-    }
-
-
-    public void ExpandTokens(ZTokenSequence input)
-    {
-      foreach (Domain d in Domains)
+      foreach (Rule r in Rules)
       {
-        d.ExpandTokens(input);
+        r.RegisterScheduledJobs(scheduler, botId);
       }
     }
 
 
-    public ReactionSet FindMatchingReactions(EvaluationContext context)
+    public Rule AddRule(params object[] topics)
     {
-      ReactionSet reactions = new ReactionSet();
+      Rule r = new Rule(this, topics);
+      Rules.Add(r);
+      return r;
+    }
 
-      foreach (Domain d in Domains)
-        d.FindMatchingReactions(context, reactions);
+
+    public ReactionSet FindMatchingReactions(EvaluationContext context, ReactionSet reactions = null)
+    {
+      if (reactions == null)
+        reactions = new ReactionSet();
+
+      foreach (Rule r in Rules)
+      {
+        Reaction reaction = r.CalculateReaction(context);
+        if (reaction != null)
+          reactions.Add(reaction);
+      }
 
       return reactions;
     }
@@ -61,11 +84,11 @@ namespace ZimmerBot.Core.Knowledge
     {
       ConfigurationParser cfg = new ConfigurationParser();
 
+      Logger.Debug($"Scanning for '{pattern}' files in '{path}'");
       foreach (string filename in Directory.EnumerateFiles(path, pattern, option))
       {
         Logger.InfoFormat("Loading zbot file: {0}", filename);
-        Domain d = NewDomain(Path.GetFileName(filename));
-        cfg.ParseConfigurationFromFile(d, filename);
+        cfg.ParseConfigurationFromFile(this, filename);
       }
     }
 

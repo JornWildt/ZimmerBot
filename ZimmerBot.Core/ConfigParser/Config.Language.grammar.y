@@ -11,13 +11,14 @@
   public List<OutputStatement> outputList;
   public WRegex regex;
   public Expression expr;
-  public KeyValuePair<string,string> template;
   public List<Expression> exprList;
+  public KeyValuePair<string,string> template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Func<Knowledge.Domain,Knowledge.Rule> ruleGenerator;
-  public List<Func<Knowledge.Domain,Knowledge.Rule>> ruleGeneratorList;
+  public Knowledge.Rule rule;
+  public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
+  public List<List<string>> patternList;
   public string s;
   public double n;
 }
@@ -26,7 +27,7 @@
 
 %token T_COLON
 
-%token T_ABSTRACTION, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
+%token T_CONCEPT, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
 
 %token T_IMPLIES
 %token T_COMMA
@@ -37,6 +38,7 @@
 %token T_AMP
 %token T_OUTPUT
 %token T_WORD
+%token T_CWORD
 %token T_STRING
 %token T_NUMBER
 
@@ -44,6 +46,7 @@
 %left T_EQU, T_LT, T_GT
 %left T_PLUS, T_STAR
 %left T_PIPE
+%left T_EXCL
 %left T_DOT
 
 %token T_DOLLAR
@@ -61,24 +64,32 @@ statementSeq
 
 statement
   : configuration
-  | rule          { $1.ruleGenerator(Domain); } /* Instantiate rule */
+  | rule
   ;
 
 configuration
-  : T_ABSTRACTION wordSeq T_IMPLIES wordSeq { RegisterAbstractions($2.stringList, $4.stringList); }
-  | T_RDF_IMPORT T_STRING                   { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
-  | T_RDF_PREFIX T_WORD T_STRING            { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
+      { RegisterConcept($2.s, $4.patternList); }
+  | T_RDF_IMPORT T_STRING            
+      { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_RDF_PREFIX T_WORD T_STRING     
+      { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  ;
+
+conceptPatternSeq
+  : conceptPatternSeq T_COMMA cwordSeq  { $1.patternList.Add($3.stringList); $$.patternList = $1.patternList; }
+  | cwordSeq                            { $$.patternList = new List<List<string>>(); $$.patternList.Add($1.stringList); }
   ;
 
 ruleSeq
-  : ruleSeq rule  { $1.ruleGeneratorList.Add($2.ruleGenerator); $$.ruleGeneratorList = $1.ruleGeneratorList; }
-  | /* empty */   { $$.ruleGeneratorList = new List<Func<Knowledge.Domain,Knowledge.Rule>>(); }
+  : ruleSeq rule  { $1.ruleList.Add($2.rule); $$.ruleList = $1.ruleList; }
+  | /* empty */   { $$.ruleList = new List<Knowledge.Rule>(); }
   ;
 
 rule
   : input ruleModifierSeq outputSeq
     { 
-      $$.ruleGenerator = RuleGenerator($1.regex, $2.ruleModifierList, $3.outputList);
+      $$.rule = AddRule($1.regex, $2.ruleModifierList, $3.outputList);
     }
   ;
 
@@ -102,14 +113,17 @@ inputPattern
       { $$.regex =  new RepetitionWRegex($1.regex, 0, 1); }
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
-  | T_WORD     
+  | T_WORD
       { $$.regex = new WordWRegex($1.s); }
+  | T_CWORD
+      { $$.regex = new ConceptWRegex(KnowledgeBase, $1.s); }
   | T_STAR
       { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
   | T_PLUS
       { $$.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
+  | T_EXCL inputPattern
+      { $$.regex =  new NegationWRegex($2.regex); }
   ;
-
 
 /******************************************************************************
   MODIFIERS
@@ -169,7 +183,7 @@ call
   ;
 
 answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(Domain, $3.ruleGeneratorList); }
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleList); }
   ;
 
 /******************************************************************************
@@ -216,9 +230,14 @@ exprReference
   OTHER
 ******************************************************************************/
 
-wordSeq
-  : wordSeq T_COMMA T_WORD { $$.stringList.Add($3.s); }
-  | T_WORD                 { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+cwordSeq
+  : cwordSeq cword { $$.stringList.Add($2.s); }
+  | cword          { $$.stringList = new List<string>(new string[] { $1.s }); }
+  ;
+
+cword
+  : T_WORD   { $$.s = $1.s; }
+  | T_CWORD  { $$.s = $1.s; }
   ;
 
 %%

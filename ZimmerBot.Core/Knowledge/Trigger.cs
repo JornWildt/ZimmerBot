@@ -17,23 +17,23 @@ namespace ZimmerBot.Core.Knowledge
     public TimeSpan? Schedule { get; protected set; }
 
 
-    public Trigger(params object[] topics)
+    public Trigger(params object[] pattern)
     {
-      if (topics == null || topics.Length == 0 || topics[0] == null)
+      if (pattern == null || pattern.Length == 0 || pattern[0] == null)
       {
         Regex = null;
         RegexSize = 0;
       }
-      else if (topics.Length == 1)
+      else if (pattern.Length == 1)
       {
-        Regex = GetRegex(topics[0]);
+        Regex = GetRegex(pattern[0]);
         RegexSize = Regex.CalculateSize();
       }
-      else if (topics.Length > 1)
+      else if (pattern.Length > 1)
       {
         SequenceWRegex p = new SequenceWRegex();
 
-        foreach (object t in topics)
+        foreach (object t in pattern)
         {
           WRegex r = GetRegex(t);
           p.Add(r);

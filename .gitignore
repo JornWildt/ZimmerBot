@@ -8,6 +8,7 @@ TestResult.xml
 UNUSED*
 UNUSED*/
 Logs/
+TestLogs/
 packages/
 Graphs/
 .nuget/

@@ -15,10 +15,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 {{ Invalid line
 ";
       KnowledgeBase kb = new KnowledgeBase();
-      Domain d = kb.NewDomain("Test");
       try
       {
-        CfgParser.ParseConfigurationString(d, s);
+        CfgParser.ParseConfigurationString(kb, s);
         Assert.Fail("Missing exception");
       }
       catch (ParserException ex)
