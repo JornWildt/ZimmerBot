@@ -25,14 +25,32 @@ namespace ZimmerBot.Core.Knowledge
 
 
     public KnowledgeBase()
+      : this("default")
     {
-      MemoryStore = new RDFStore();
+    }
+
+
+    public KnowledgeBase(string memoryId)
+    {
+      MemoryStore = new RDFStore(memoryId);
       Concepts = new Dictionary<string, Concept>();
       Rules = new List<Rule>();
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new SentenceTaggingStage());
       InputPipeline.AddHandler(new ReactionGeneratorStage());
+    }
+
+
+    public void ClearMemory()
+    {
+      MemoryStore.Clear();
+    }
+
+
+    public void RestoreMemory()
+    {
+      MemoryStore.Restore();
     }
 
 
@@ -90,14 +108,6 @@ namespace ZimmerBot.Core.Knowledge
         Logger.InfoFormat("Loading zbot file: {0}", filename);
         cfg.ParseConfigurationFromFile(this, filename);
       }
-    }
-
-
-    public static KnowledgeBase CreateFromFiles(string path, string pattern = "*.zbot", SearchOption option = SearchOption.TopDirectoryOnly)
-    {
-      KnowledgeBase kb = new KnowledgeBase();
-      kb.LoadFromFiles(path, pattern, option);
-      return kb;
     }
   }
 }

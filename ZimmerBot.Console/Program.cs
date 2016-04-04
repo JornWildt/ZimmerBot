@@ -20,9 +20,16 @@ namespace ZimmerBot.Console
       // Initialize bot framework
       ZimmerBotConfiguration.Initialize();
 
+      bool restoreMemoryOnStartup = true;
+
       try
       {
         KnowledgeBase kb = new KnowledgeBase();
+
+        if (restoreMemoryOnStartup)
+          kb.RestoreMemory();
+        else
+          kb.ClearMemory();
 
         if (args.Length == 0)
         {

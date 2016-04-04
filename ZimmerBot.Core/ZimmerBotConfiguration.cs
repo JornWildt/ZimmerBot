@@ -1,4 +1,5 @@
 ﻿using Quartz.Impl;
+using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.StandardProcessors;
 
 namespace ZimmerBot.Core
@@ -34,6 +35,8 @@ namespace ZimmerBot.Core
         {
           StdSchedulerFactory.GetDefaultScheduler().Shutdown();
           AddOnHandling.AddOnLoader.ShutdownAddOns();
+          foreach (RDFStore store in RDFStoreRepository.GetStores())
+            store.Shutdown();
           IsInitialized = false;
         }
       }

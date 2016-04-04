@@ -11,7 +11,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     protected override void TestFixtureSetUp()
     {
       base.TestFixtureSetUp();
-      KB = KnowledgeBase.CreateFromFiles("ConfigParser", "ConceptTests.zbot");
+      KB = new KnowledgeBase();
+      KB.LoadFromFiles("ConfigParser", "ConceptTests.zbot");
     }
 
 

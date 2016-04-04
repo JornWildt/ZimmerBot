@@ -84,6 +84,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Examples\da-DK\rejseplanen.zbot" />
     <None Include="packages.config" />
     <None Include="Schemas\hafasRestDepartureBoard.xsd">

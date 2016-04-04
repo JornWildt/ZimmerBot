@@ -119,6 +119,7 @@
     <Compile Include="Expressions\FunctionCallExpr.cs" />
     <Compile Include="Expressions\IdentifierExpr.cs" />
     <Compile Include="IBotEnvironment.cs" />
+    <Compile Include="Knowledge\RDFStoreRepository.cs" />
     <Compile Include="Pipeline\InputStages\InputPipelineItem.cs" />
     <Compile Include="Pipeline\InputStages\ReactionGeneratorStage.cs" />
     <Compile Include="Pipeline\InputStages\SentenceTaggingStage.cs" />
@@ -179,7 +180,10 @@
     <Compile Include="ZimmerBotConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup Label="Chat-ZimmerBot-Core-ParserFiles">
     <Compile Include="Parser\Chat.Parser.cs">
@@ -206,7 +210,6 @@
     </None>
     <None Include="Parser\Chat.parser" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup Label="Config-ZimmerBot-Core-ConfigParserFiles">
     <Compile Include="ConfigParser\Config.Parser.cs">
       <DependentUpon>Config.parser</DependentUpon>

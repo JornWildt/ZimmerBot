@@ -10,7 +10,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanLoadAndMatchUnicodeCharacters()
     {
-      KnowledgeBase kb = KnowledgeBase.CreateFromFiles("ConfigParser", "UnicodeTests.zbot");
+      KnowledgeBase kb = new KnowledgeBase();
+      kb.LoadFromFiles("ConfigParser", "UnicodeTests.zbot");
       EvaluationContext context = BuildEvaluationContextFromInput("Über Åsen");
       ReactionSet reactions = kb.FindMatchingReactions(context);
 
@@ -23,7 +24,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanUseUnicodeInFunctions()
     {
-      KnowledgeBase kb = KnowledgeBase.CreateFromFiles("ConfigParser", "UnicodeTests.zbot");
+      KnowledgeBase kb = new KnowledgeBase();
+      kb.LoadFromFiles("ConfigParser", "UnicodeTests.zbot");
       EvaluationContext context = BuildEvaluationContextFromInput("ÆØÅ");
       ReactionSet reactions = kb.FindMatchingReactions(context);
 

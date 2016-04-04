@@ -11,6 +11,8 @@ using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query;
 using VDS.RDF.Query.Datasets;
+using VDS.RDF.Storage;
+using VDS.RDF.Writing;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -18,6 +20,12 @@ namespace ZimmerBot.Core.Knowledge
   {
     static ILog Logger = LogManager.GetLogger(typeof(RDFStore));
 
+
+    protected bool LoadFilesEnabled { get; set; }
+
+    //protected List<string> InitialFilenames { get; set; }
+
+    protected string ID { get; set; }
 
     protected TripleStore Store { get; set; }
 
@@ -34,8 +42,13 @@ namespace ZimmerBot.Core.Knowledge
     protected HashSet<string> LoadedFiles { get; set; }
 
 
-    public RDFStore()
+    public RDFStore(string id)
     {
+      Condition.Requires(id, nameof(id)).IsNotNull();
+
+      ID = id;
+
+      LoadFilesEnabled = true;
       Store = new TripleStore();
       Dataset = new InMemoryDataset(Store, true);
       Processor = new LeviathanQueryProcessor(Dataset);
@@ -43,30 +56,66 @@ namespace ZimmerBot.Core.Knowledge
       NodeFactory = new NodeFactory();
       Prefixes = new Dictionary<string, string>();
       LoadedFiles = new HashSet<string>();
+
+      RDFStoreRepository.Add(this);
+    }
+
+
+    public void Clear()
+    {
+      string dbFilename = GetDatabaseFilename();
+      File.Delete(dbFilename);
+    }
+
+
+    public void Restore()
+    {
+      string dbFilename = GetDatabaseFilename();
+      TriGParser trigparser = new TriGParser();
+      trigparser.Load(Store, dbFilename);
+      LoadFilesEnabled = false;
+    }
+
+
+    protected string GetDatabaseFilename()
+    {
+      string filename = "C:\\Temp\\ZimmerBot\\DB\\" + ID + ".trig";
+      return filename;
+    }
+
+
+    public void Shutdown()
+    {
+      string dbFilename = GetDatabaseFilename();
+      TriGWriter trigwriter = new TriGWriter();
+      trigwriter.Save(Store, dbFilename);
     }
 
 
     public void LoadFromFile(string filename)
     {
-      if (AppSettings.RDF_DataDirectory.Value != null)
-        filename = Path.Combine(AppSettings.RDF_DataDirectory.Value, filename);
-
-      if (!LoadedFiles.Contains(filename))
+      if (LoadFilesEnabled)
       {
-        Logger.InfoFormat("Loading RDF file '{0}'", filename);
-        try
+        if (AppSettings.RDF_DataDirectory.Value != null)
+          filename = Path.Combine(AppSettings.RDF_DataDirectory.Value, filename);
+
+        if (!LoadedFiles.Contains(filename))
         {
-          Store.LoadFromFile(filename);
-          LoadedFiles.Add(filename);
+          Logger.InfoFormat("Loading RDF file '{0}'", filename);
+          try
+          {
+            Store.LoadFromFile(filename);
+            LoadedFiles.Add(filename);
+          }
+          catch (Exception ex)
+          {
+            Logger.Error(ex);
+            throw new ApplicationException($"Failed to load RDF file '{filename}': {ex.Message}");
+          }
         }
-        catch (Exception ex)
-        {
-          Logger.Error(ex);
-          throw new ApplicationException($"Failed to load RDF file '{filename}': {ex.Message}");
-        }
+        else
+          Logger.InfoFormat("Skipping RDF file '{0}' - it has already been loaded", filename);
       }
-      else
-        Logger.InfoFormat("Skipping RDF file '{0}' - it has already been loaded", filename);
     }
 
 
