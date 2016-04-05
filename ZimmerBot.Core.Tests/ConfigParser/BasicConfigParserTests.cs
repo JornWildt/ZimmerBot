@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.WordRegex;
 
@@ -23,9 +22,6 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual(1, kb.Rules.Count);
       Assert.IsInstanceOf<WordWRegex>(kb.Rules[0].Trigger.Regex);
       WordWRegex seq = (WordWRegex)kb.Rules[0].Trigger.Regex;
-
-      //Assert.IsInstanceOf<SequenceWRegex>(d.Rules[0].Trigger.Regex);
-      //Assert.IsInstanceOf<WordWRegex>(((SequenceWRegex)d.Rules[0].Trigger.Regex).Sequence[0]);
     }
 
     [Test]

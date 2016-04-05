@@ -61,14 +61,25 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Clear()
+    public void Initialize(KnowledgeBase.InitializationMode mode)
+    {
+      if (mode == KnowledgeBase.InitializationMode.Clear)
+        Clear();
+      else if (mode == KnowledgeBase.InitializationMode.Restore)
+        Restore();
+      else if (mode == KnowledgeBase.InitializationMode.RestoreIfExists)
+        RestoreIfExists();
+    }
+
+
+    protected void Clear()
     {
       string dbFilename = GetDatabaseFilename();
       File.Delete(dbFilename);
     }
 
 
-    public void Restore()
+    protected void Restore()
     {
       string dbFilename = GetDatabaseFilename();
       TriGParser trigparser = new TriGParser();
@@ -77,9 +88,19 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    protected void RestoreIfExists()
+    {
+      string dbFilename = GetDatabaseFilename();
+      if (File.Exists(dbFilename))
+        Restore();
+      else
+        Clear();
+    }
+
+
     protected string GetDatabaseFilename()
     {
-      string filename = "C:\\Temp\\ZimmerBot\\DB\\" + ID + ".trig";
+      string filename = Path.Combine(AppSettings.RDF_DataDirectory, ID + ".trig");
       return filename;
     }
 
@@ -96,8 +117,8 @@ namespace ZimmerBot.Core.Knowledge
     {
       if (LoadFilesEnabled)
       {
-        if (AppSettings.RDF_DataDirectory.Value != null)
-          filename = Path.Combine(AppSettings.RDF_DataDirectory.Value, filename);
+        if (AppSettings.RDF_ImportDirectory.Value != null)
+          filename = Path.Combine(AppSettings.RDF_ImportDirectory.Value, filename);
 
         if (!LoadedFiles.Contains(filename))
         {

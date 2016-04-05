@@ -15,6 +15,9 @@ namespace ZimmerBot.Core.Knowledge
   {
     static ILog Logger = LogManager.GetLogger(typeof(KnowledgeBase));
 
+
+    public enum InitializationMode { Clear, Restore, RestoreIfExists }
+
     public RDFStore MemoryStore { get; protected set; }
 
     public Dictionary<string, Concept> Concepts { get; protected set; }
@@ -42,15 +45,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void ClearMemory()
+    public void Initialize(InitializationMode mode)
     {
-      MemoryStore.Clear();
-    }
-
-
-    public void RestoreMemory()
-    {
-      MemoryStore.Restore();
+      MemoryStore.Initialize(mode);
     }
 
 
