@@ -10,8 +10,11 @@ namespace ZimmerBot.Core.Knowledge
     static ILog DiaLogger = LogManager.GetLogger("DialogLogger");
 
 
-    public static Response Invoke(KnowledgeBase kb, BotState state, Request req, bool executeScheduledRules = false)
+    public static Response Invoke(KnowledgeBase kb, Request req, bool executeScheduledRules = false)
     {
+      Session session = SessionManager.GetOrCreateSession(req.SessionId);
+      SessionState state = session.State;
+
       List<ReactionSet> reactionList = new List<ReactionSet>();
 
       if (req.Input != null)
@@ -64,7 +67,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (output.Count > 0)
       {
-        state["state.conversation.entries.Count"] = (double)state["state.conversation.entries.Count"] + 1;
+        state[Constants.SessionStore][Constants.LineCount] = state[Constants.SessionStore][Constants.LineCount] + 1;
 
         Response response = new Response
         {

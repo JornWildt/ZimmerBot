@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
     public ZTokenSequence Input{ get; protected set; }
 
-    public BotState State { get; protected set; }
+    public SessionState State { get; protected set; }
 
     #endregion
 
@@ -29,7 +29,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
     #endregion
 
 
-    public InputPipelineItem(KnowledgeBase kb, BotState state, Request req, ZTokenSequence input)
+    public InputPipelineItem(KnowledgeBase kb, SessionState state, Request req, ZTokenSequence input)
     {
       Condition.Requires(kb, nameof(kb)).IsNotNull();
       Condition.Requires(state, nameof(state)).IsNotNull();

@@ -6,7 +6,9 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class EvaluationContext
   {
-    public BotState State { get; protected set; }
+    public SessionState State { get; protected set; }
+
+    public Request OriginalRequest { get; protected set; }
 
     public ZTokenSequence Input { get; protected set; }
 
@@ -19,11 +21,13 @@ namespace ZimmerBot.Core.Knowledge
     public int CurrentRepetitionIndex { get; set; }
 
 
-    public EvaluationContext(BotState state, ZTokenSequence input, string ruleId, bool executeScheduledRules)
+    public EvaluationContext(SessionState state, Request originalRequest, ZTokenSequence input, string ruleId, bool executeScheduledRules)
     {
       Condition.Requires(state, "state").IsNotNull();
+      Condition.Requires(originalRequest, nameof(originalRequest)).IsNotNull();
 
       State = state;
+      OriginalRequest = originalRequest;
       Input = input;
       RestrictToRuleId = ruleId;
       ExecuteScheduledRules = executeScheduledRules;

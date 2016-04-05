@@ -10,7 +10,9 @@ namespace ZimmerBot.Core.Tests
 {
   public class TestHelper : TestHelperBase
   {
-    protected ConfigurationParser CfgParser = new ConfigurationParser();
+    protected ConfigurationParser CfgParser { get; set; } = new ConfigurationParser();
+
+    protected Bot B { get; set; }
 
 
     protected Reaction CalculateReaction(Rule r, string text)
@@ -36,8 +38,8 @@ namespace ZimmerBot.Core.Tests
       ZStatementSequence sequence = tokenizer.Tokenize(text);
       ZTokenSequence input = sequence.Statements[0];
 
-      BotState state = new BotState();
-      EvaluationContext context = new EvaluationContext(state, input, null, executeScheduledRules: false);
+      SessionState state = new SessionState();
+      EvaluationContext context = new EvaluationContext(state, new Request(), input, null, executeScheduledRules: false);
       return context;
     }
 
@@ -102,13 +104,41 @@ namespace ZimmerBot.Core.Tests
 
     protected WRegex.MatchResult CalculateMatch(WRegex x, string s)
     {
-      BotState state = new BotState();
+      SessionState state = new SessionState();
       ZTokenizer tokenizer = new ZTokenizer();
       ZStatementSequence stm = tokenizer.Tokenize(s);
       ZTokenSequence input = stm.Statements[0];
-      EvaluationContext context = new EvaluationContext(state, input, null, false);
+      EvaluationContext context = new EvaluationContext(state, new Request(), input, null, false);
       WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
       return result;
+    }
+
+
+    protected Bot BuildBot(string cfg)
+    {
+      KnowledgeBase kb = ParseKnowledgeBase(cfg);
+      B = new Bot(kb);
+      return B;
+    }
+
+
+    protected string Invoke(string s)
+    {
+      return Invoke(B, s);
+    }
+
+
+    protected string Invoke(Bot b, string s)
+    {
+      Request request = new Request { Input = s };
+      return Invoke(b, request);
+    }
+
+
+    protected string Invoke(Bot b, Request request)
+    {
+      Response response = b.Invoke(request);
+      return response.Output[0];
     }
   }
 }

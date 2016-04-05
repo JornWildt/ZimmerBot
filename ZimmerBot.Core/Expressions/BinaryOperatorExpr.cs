@@ -53,6 +53,27 @@ namespace ZimmerBot.Core.Expressions
 
       return a.Equals(b);
     }
+
+
+    public override void AssignValue(ExpressionEvaluationContext context, object value)
+    {
+      throw new ApplicationException("It is not possible to assign to a binary expression.");
+    }
+
+
+    public override string ToString()
+    {
+      string op = "???";
+      switch (Operator)
+      {
+        case OperatorType.Equals:
+          op = "=";
+          break;
+        case OperatorType.NotEquals:
+          op = "!=";
+          break;
+      }
+      return Left.ToString() + op + Right.ToString();
+    }
   }
 }
-

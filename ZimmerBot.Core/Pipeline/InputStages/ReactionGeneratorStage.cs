@@ -7,7 +7,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
     public void Handle(InputPipelineItem item)
     {
       // FIXME: what about "executeScheduledRules"
-      EvaluationContext context = new EvaluationContext(item.State, item.Input, item.Request.RuleId, executeScheduledRules: false);
+      EvaluationContext context = new EvaluationContext(item.State, item.Request, item.Input, item.Request.RuleId, executeScheduledRules: false);
 
       item.KnowledgeBase.FindMatchingReactions(context, item.Reactions);
     }

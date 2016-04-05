@@ -1,4 +1,5 @@
-﻿using ZimmerBot.Core.Knowledge;
+﻿using System;
+using ZimmerBot.Core.Knowledge;
 
 
 namespace ZimmerBot.Core.Expressions
@@ -17,6 +18,18 @@ namespace ZimmerBot.Core.Expressions
     public override object Evaluate(ExpressionEvaluationContext context)
     {
       return Value;
+    }
+
+
+    public override void AssignValue(ExpressionEvaluationContext context, object value)
+    {
+      throw new ApplicationException("It is not possible to assign to constant value.");
+    }
+
+
+    public override string ToString()
+    {
+      return Value.ToString();
     }
   }
 }

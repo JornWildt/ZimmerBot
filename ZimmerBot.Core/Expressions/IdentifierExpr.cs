@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -20,6 +21,12 @@ namespace ZimmerBot.Core.Expressions
     public override object Evaluate(ExpressionEvaluationContext context)
     {
       return context.Variables[Identifier];
+    }
+
+
+    public override void AssignValue(ExpressionEvaluationContext context, object value)
+    {
+      throw new NotImplementedException(); // FIXME
     }
   }
 }

@@ -109,10 +109,13 @@
     <Compile Include="ConfigParser\OutputExecutionContect.cs" />
     <Compile Include="ConfigParser\OutputStatement.cs" />
     <Compile Include="ConfigParser\RuleModifier.cs" />
+    <Compile Include="ConfigParser\SetOutputStatement.cs" />
     <Compile Include="ConfigParser\TemplateOutputStatement.cs" />
     <Compile Include="ConsoleBotEnvironment.cs" />
     <Compile Include="BotHandle.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Expressions\BinaryOperatorExpr.cs" />
+    <Compile Include="Expressions\DotExpression.cs" />
     <Compile Include="Expressions\ExpressionEvaluationContext.cs" />
     <Compile Include="Expressions\ConstantValueExpr.cs" />
     <Compile Include="Expressions\Expression.cs" />
@@ -120,6 +123,8 @@
     <Compile Include="Expressions\IdentifierExpr.cs" />
     <Compile Include="IBotEnvironment.cs" />
     <Compile Include="Knowledge\RDFStoreRepository.cs" />
+    <Compile Include="Knowledge\Session.cs" />
+    <Compile Include="Knowledge\SessionManager.cs" />
     <Compile Include="Pipeline\InputStages\InputPipelineItem.cs" />
     <Compile Include="Pipeline\InputStages\ReactionGeneratorStage.cs" />
     <Compile Include="Pipeline\InputStages\SentenceTaggingStage.cs" />
@@ -127,7 +132,7 @@
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\BotUtility.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
-    <Compile Include="Knowledge\BotState.cs" />
+    <Compile Include="Knowledge\SessionState.cs" />
     <Compile Include="Pipeline\Pipeline.cs" />
     <Compile Include="Knowledge\RDFResultSet.cs" />
     <Compile Include="Knowledge\RDFStore.cs" />

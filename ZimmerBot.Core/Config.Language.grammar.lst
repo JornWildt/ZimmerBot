@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 03-04-2016 20:31:39>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 05-04-2016 02:40:23>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 03-04-2016 20:31:44
+//  DateTime: 05-04-2016 02:42:58
 //  UserName: Jorn
 // ==========================================================================
 
@@ -21,13 +21,13 @@
   public OutputStatement output;
   public List<OutputStatement> outputList;
   public WRegex regex;
-  public List<WRegex> regexList;
   public Expression expr;
+  public List<Expression> exprList;
   public KeyValuePair<string,string> template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Func<Knowledge.KnowledgeBase,Knowledge.Rule> ruleGenerator;
-  public List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>> ruleGeneratorList;
+  public Knowledge.Rule rule;
+  public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> patternList;
   public string s;
@@ -38,7 +38,7 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
 
 %token T_IMPLIES
 %token T_COMMA
@@ -63,6 +63,8 @@
 %token T_DOLLAR
 
 %%
+// Warning: NonTerminal symbol "o_set" is unreachable
+// --------------------------------------------------
 
 main
   : statementSeq
@@ -75,7 +77,7 @@ statementSeq
 
 statement
   : configuration
-  | rule          { $1.ruleGenerator(KnowledgeBase); } /* Instantiate rule */
+  | rule
   ;
 
 configuration
@@ -89,18 +91,18 @@ configuration
 
 conceptPatternSeq
   : conceptPatternSeq T_COMMA cwordSeq  { $1.patternList.Add($3.stringList); $$.patternList = $1.patternList; }
-  | cwordSeq                            { $$.patternList = new List<List<string>>(new string[] { $1.stringList }); }
+  | cwordSeq                            { $$.patternList = new List<List<string>>(); $$.patternList.Add($1.stringList); }
   ;
 
 ruleSeq
-  : ruleSeq rule  { $1.ruleGeneratorList.Add($2.ruleGenerator); $$.ruleGeneratorList = $1.ruleGeneratorList; }
-  | /* empty */   { $$.ruleGeneratorList = new List<Func<Knowledge.KnowledgeBase,Knowledge.Rule>>(); }
+  : ruleSeq rule  { $1.ruleList.Add($2.rule); $$.ruleList = $1.ruleList; }
+  | /* empty */   { $$.ruleList = new List<Knowledge.Rule>(); }
   ;
 
 rule
   : input ruleModifierSeq outputSeq
     { 
-      $$.ruleGenerator = RuleGenerator($1.regex, $2.ruleModifierList, $3.outputList);
+      $$.rule = AddRule($1.regex, $2.ruleModifierList, $3.outputList);
     }
   ;
 
@@ -174,8 +176,8 @@ outputSeq
 
 output
   : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
-  | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
-  | answer        { $$.output = $1.output;}
+  | o_call        { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
+  | o_answer      { $$.output = $1.output;}
   ;
 
 outputPattern
@@ -189,12 +191,16 @@ outputPattern
       { $$.template = new KeyValuePair<string,string>($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
   ;
 
-call
+o_call
   : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
   ;
 
-answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleGeneratorList); }
+o_set
+  : T_CALL exprReference T_EQU expr { $$.output = new SetOutputStatement($2.s, $4.expr); }
+  ;
+
+o_answer
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleList); }
   ;
 
 /******************************************************************************
@@ -242,10 +248,7 @@ exprReference
 ******************************************************************************/
 
 cwordSeq
-  : cwordSeq cword { $$.stringList.Add($3.s); }
-//-----------------------------------^^^
-// Error: Semantic action index is out of bounds
-// ---------------------------------------------
+  : cwordSeq cword { $$.stringList.Add($2.s); }
   | cword          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 

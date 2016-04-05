@@ -27,7 +27,7 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_WEIGHT, T_CALL, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
 
 %token T_IMPLIES
 %token T_COMMA
@@ -163,8 +163,9 @@ outputSeq
 
 output
   : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
-  | call          { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
-  | answer        { $$.output = $1.output;}
+  | o_call        { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
+  | o_set         { $$.output = $1.output;}
+  | o_answer      { $$.output = $1.output;}
   ;
 
 outputPattern
@@ -178,11 +179,15 @@ outputPattern
       { $$.template = new KeyValuePair<string,string>($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
   ;
 
-call
-  : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
+o_call
+  : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.expr, $4.exprList); }
   ;
 
-answer
+o_set
+  : T_SET exprReference T_EQU expr { $$.output = new SetOutputStatement($2.expr, $4.expr); }
+  ;
+
+o_answer
   : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleList); }
   ;
 
@@ -217,13 +222,14 @@ exprUnary
   ;
 
 exprIdentifier
-  : exprReference     { $$.expr = new IdentifierExpr($1.s); }
+  : exprReference     { $$.expr = $1.expr; }
   | T_DOLLAR T_NUMBER { $$.expr = new IdentifierExpr("$"+$2.n); }
+  | T_DOLLAR T_WORD   { $$.expr = new IdentifierExpr("$"+$2.s); }
   ;
 
 exprReference
-  : exprReference T_DOT T_WORD { $$.s = $1.s + "." + $3.s; }
-  | T_WORD                     { $$.s = $1.s; }
+  : exprReference T_DOT T_WORD { $$.expr = new DotExpression($1.expr, $3.s); }
+  | T_WORD                     { $$.expr = new DotExpression($1.s); }
   ;
 
 /******************************************************************************

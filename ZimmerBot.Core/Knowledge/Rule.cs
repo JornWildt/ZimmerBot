@@ -90,7 +90,7 @@ namespace ZimmerBot.Core.Knowledge
       if (result.Score < 0.5)
         return null;
 
-      ResponseContext rc = new ResponseContext(KnowledgeBase, context.State, context.Input, result);
+      ResponseContext rc = new ResponseContext(KnowledgeBase, context.State, context.OriginalRequest, context.Input, result);
       return new Reaction(rc, this);
     }
 
@@ -128,7 +128,7 @@ namespace ZimmerBot.Core.Knowledge
           IList<string> templates = ox_context.OutputTemplates[templateName];
 
           string selectedTemplate = templates[Randomizer.Next(templates.Count)];
-          result = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(KnowledgeBase, context.State, context.Variables));
+          result = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(KnowledgeBase, context.OriginalRequest, context.Variables));
         }
 
         return result;

@@ -19,8 +19,6 @@ namespace ZimmerBot.Core
 
     protected KnowledgeBase KnowledgeBase { get; set; }
 
-    protected BotState State { get; set; }
-
     protected IBotEnvironment Environment { get; set; }
 
     protected WorkQueue<Request> WorkQueue { get; set; }
@@ -34,9 +32,6 @@ namespace ZimmerBot.Core
 
       Id = Guid.NewGuid().ToString();
       KnowledgeBase = kb;
-      State = new BotState();
-
-      State["state.conversation.entries.Count"] = 0d; // FIXME: use string constants
     }
 
 
@@ -119,11 +114,10 @@ namespace ZimmerBot.Core
     {
       lock (StateLock)
       {
-        Response response = BotUtility.Invoke(KnowledgeBase, State, req, executeScheduledRules);
+        Response response = BotUtility.Invoke(KnowledgeBase, req, executeScheduledRules);
 
         if (callbackToEnvironment)
-          if (callbackToEnvironment)
-            Environment.HandleResponse(response);
+          Environment.HandleResponse(response);
 
         return response;
       }

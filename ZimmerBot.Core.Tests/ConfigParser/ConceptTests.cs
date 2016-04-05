@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Tests.ConfigParser
@@ -32,10 +33,13 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     protected string GetResponseFor(string s)
     {
       EvaluationContext context = BuildEvaluationContextFromInput(s);
-      BotState state = new BotState();
-      state["state.conversation.entries.Count"] = 0d; // FIXME: use common code
+      SessionState state = new SessionState();
+      var sessionState = new Dictionary<string, dynamic>();// FIXME: use common code
+      sessionState[Constants.LineCount] = 0d;
+      state[Constants.SessionStore] = sessionState;
 
-      Response response = BotUtility.Invoke(KB, state, new Request { Input = s });
+
+      Response response = BotUtility.Invoke(KB, new Request { Input = s });
       Assert.AreEqual(1, response.Output.Length);
       return response.Output[0];
     }

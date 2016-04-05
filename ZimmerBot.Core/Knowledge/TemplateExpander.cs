@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.TemplateParser;
 using ZimmerBot.Core.Utilities;
@@ -13,18 +10,18 @@ namespace ZimmerBot.Core.Knowledge
   {
     KnowledgeBase KnowledgeBase { get; set; }
 
-    BotState State { get; set; }
+    Request OriginalRequest { get; set; }
 
     IDictionary<string, object> Variables { get; set; }
 
 
-    public TemplateExpander(KnowledgeBase kb, BotState state, IDictionary<string, object> variables)
+    public TemplateExpander(KnowledgeBase kb, Request originalRequest, IDictionary<string, object> variables)
     {
       Condition.Requires(kb, nameof(kb)).IsNotNull();
-      Condition.Requires(state, nameof(state)).IsNotNull();
+      Condition.Requires(originalRequest, nameof(originalRequest)).IsNotNull();
       Condition.Requires(variables, nameof(variables)).IsNotNull();
       KnowledgeBase = kb;
-      State = state;
+      OriginalRequest = originalRequest;
       Variables = variables;
     }
 
@@ -38,8 +35,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public string Invoke(string s)
     {
-      Request request = new Request { Input = s };
-      Response response = BotUtility.Invoke(KnowledgeBase, State, request);
+      Request request = new Request(OriginalRequest, s);
+      Response response = BotUtility.Invoke(KnowledgeBase, request);
       return response.Output.Aggregate((a, b) => a + "\n" + b);
     }
   }

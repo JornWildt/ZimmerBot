@@ -13,18 +13,12 @@ namespace ZimmerBot.Core.Expressions
     public List<Expression> Parameters { get; protected set; }
 
 
-    public FunctionCallExpr(string functionName, params Expression[] parameters)
-      : this(functionName, parameters.ToList())
+    public FunctionCallExpr(Expression functionReference, List<Expression> parameters)
     {
-    }
-
-
-    public FunctionCallExpr(string functionName, List<Expression> parameters)
-    {
-      Condition.Requires(functionName, nameof(functionName)).IsNotNullOrEmpty();
+      Condition.Requires(functionReference, nameof(functionReference)).IsNotNull().IsOfType(typeof(DotExpression));
       Condition.Requires(parameters, nameof(parameters)).IsNotNull();
 
-      FunctionName = functionName;
+      FunctionName = functionReference.ToString();
       Parameters = parameters;
     }
 
@@ -39,6 +33,12 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
+    public override void AssignValue(ExpressionEvaluationContext context, object value)
+    {
+      throw new ApplicationException("It is not possible to assign to function calls.");
+    }
+
+
     private object Invoke1(ExpressionEvaluationContext context, Type[] types, Func<object,object> f, string name)
     {
       List<object> inputValues = CalculateInputValues(context);
@@ -50,6 +50,12 @@ namespace ZimmerBot.Core.Expressions
     public List<object> CalculateInputValues(ExpressionEvaluationContext context)
     {
       return Parameters.Select(p => p.Evaluate(context)).ToList();
+    }
+
+
+    public override string ToString()
+    {
+      return FunctionName + "(" + (Parameters.Select(p=>p.ToString()).Aggregate((a,b) => a+","+b)) + ")";
     }
 
 
