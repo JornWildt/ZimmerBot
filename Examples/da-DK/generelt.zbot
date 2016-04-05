@@ -3,5 +3,9 @@
 
 #> Hej
 > %hilsen
-: Hej
+: Hej. Fortæl mig hvad du hedder (<user.name>)
 : Mojn
+
+> Jeg hedder +
+! set user.name = $1
+: Hej <user.name>

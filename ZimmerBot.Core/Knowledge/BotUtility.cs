@@ -13,7 +13,11 @@ namespace ZimmerBot.Core.Knowledge
     public static Response Invoke(KnowledgeBase kb, Request req, bool executeScheduledRules = false)
     {
       Session session = SessionManager.GetOrCreateSession(req.SessionId);
+
       SessionState state = session.State;
+
+      var userStore = new RDFDictionaryWrapper(kb.MemoryStore, "http://zimmerbot.org/users/" + req.UserId, "http://zimmerbot.org/uservalues/");
+      state[Constants.UserStore] = userStore;
 
       List<ReactionSet> reactionList = new List<ReactionSet>();
 

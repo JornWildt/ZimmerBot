@@ -23,8 +23,6 @@ namespace ZimmerBot.Core.Knowledge
 
     protected bool LoadFilesEnabled { get; set; }
 
-    //protected List<string> InitialFilenames { get; set; }
-
     protected string ID { get; set; }
 
     protected TripleStore Store { get; set; }
@@ -56,6 +54,8 @@ namespace ZimmerBot.Core.Knowledge
       NodeFactory = new NodeFactory();
       Prefixes = new Dictionary<string, string>();
       LoadedFiles = new HashSet<string>();
+
+      Dataset.SetActiveGraph((Uri)null);
 
       RDFStoreRepository.Add(this);
     }
@@ -179,6 +179,29 @@ namespace ZimmerBot.Core.Knowledge
 
       object result = Processor.ProcessQuery(query);
       return ConvertQueryResult(result);
+    }
+
+
+    public void Assert(INode s, INode p, INode o)
+    {
+      IGraph g = Dataset.GetModifiableGraph(null);
+      g.Assert(s, p, o);
+    }
+
+
+    public Triple GetTripple(INode s, INode p)
+    {
+      IGraph g = Dataset.GetModifiableGraph(null);
+      IEnumerable<Triple> tripples = g.GetTriplesWithSubjectPredicate(s, p);
+      return tripples.FirstOrDefault();
+    }
+
+
+    public void Retract(INode s, INode p)
+    {
+      IGraph g = Dataset.GetModifiableGraph(null);
+      IEnumerable<Triple> tripples = g.GetTriplesWithSubjectPredicate(s, p).ToList();
+      g.Retract(tripples);
     }
 
 

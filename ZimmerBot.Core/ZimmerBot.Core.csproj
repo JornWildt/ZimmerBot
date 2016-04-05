@@ -122,6 +122,7 @@
     <Compile Include="Expressions\FunctionCallExpr.cs" />
     <Compile Include="Expressions\IdentifierExpr.cs" />
     <Compile Include="IBotEnvironment.cs" />
+    <Compile Include="Knowledge\RDFDictionaryWrapper.cs" />
     <Compile Include="Knowledge\RDFStoreRepository.cs" />
     <Compile Include="Knowledge\Session.cs" />
     <Compile Include="Knowledge\SessionManager.cs" />

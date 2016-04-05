@@ -15,11 +15,11 @@
 ### ---------------------------------------------------------------------------
 
 ### Default rule: assume departure from Nordhavn station (my daily station), but might as well have asked for it.
-> hvornår afgår * (transportform)
+> hvornår %afgår * (%transportform)
 : << hvornår kører <2> fra Nordhavn>>
 
 ### Lookup train/bus/metro departure from stop
-> hvornår afgår * (transportform) fra +
+> hvornår %afgår * (%transportform) fra +
 ! call Rejseplanen.FindNextDepartures($3,$2)
 : Næste afgange fra <stop> er <result:{r |\
   <r.time> : <r.line> mod <r.direction>}>
@@ -27,9 +27,9 @@
 Måske findes stoppestedet ikke?
 {error}: Kludder i maskineriet!
 
-> hvornår afgår * (transportform) (mod|til) +
+> hvornår %afgår * (%transportform) (mod|til) +
 : << hvornår kører <2> fra Nordhavn>>
 
-> hvornår afgår * (transportform) fra + (mod|til) +
+> hvornår %afgår * (%transportform) fra + (mod|til) +
 : << hvornår kører <2> fra <3>>>
 
