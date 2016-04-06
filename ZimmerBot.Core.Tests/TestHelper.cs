@@ -12,9 +12,6 @@ namespace ZimmerBot.Core.Tests
   {
     protected ConfigurationParser CfgParser { get; set; } = new ConfigurationParser();
 
-    protected Bot B { get; set; }
-
-
     protected Reaction CalculateReaction(Rule r, string text)
     {
       EvaluationContext context = BuildEvaluationContextFromInput(text);
@@ -111,34 +108,6 @@ namespace ZimmerBot.Core.Tests
       EvaluationContext context = new EvaluationContext(state, new Request(), input, null, false);
       WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
       return result;
-    }
-
-
-    protected Bot BuildBot(string cfg)
-    {
-      KnowledgeBase kb = ParseKnowledgeBase(cfg);
-      B = new Bot(kb);
-      return B;
-    }
-
-
-    protected string Invoke(string s)
-    {
-      return Invoke(B, s);
-    }
-
-
-    protected string Invoke(Bot b, string s)
-    {
-      Request request = new Request { Input = s };
-      return Invoke(b, request);
-    }
-
-
-    protected string Invoke(Bot b, Request request)
-    {
-      Response response = b.Invoke(request);
-      return response.Output[0];
     }
   }
 }

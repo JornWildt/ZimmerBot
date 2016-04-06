@@ -25,6 +25,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    public override void Initialize(OutputInitializationContext context)
+    {
+      // Do nothing
+    }
+
+
     public override void Execute(OutputExecutionContect context)
     {
       ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);

@@ -7,23 +7,27 @@ namespace ZimmerBot.Core.ConfigParser
 {
   public class AnswerOutputStatement : OutputStatement
   {
-    public KnowledgeBase KnowledgeBase { get; protected set; }
-
     public List<Rule> Rules { get; protected set; }
 
 
-    public AnswerOutputStatement(KnowledgeBase kb, List<Rule> rules)
+    public AnswerOutputStatement(List<Rule> rules)
     {
       Condition.Requires(rules, nameof(rules)).IsNotNull();
-      Condition.Requires(kb, nameof(kb)).IsNotNull();
-      KnowledgeBase = kb;
       Rules = rules;
+    }
+
+
+    public override void Initialize(OutputInitializationContext context)
+    {
+      foreach (Rule r in Rules)
+        r.RegisterParentRule(context.ParentRule);
     }
 
 
     public override void Execute(OutputExecutionContect context)
     {
-      // TO BE (RE)DONE
+      // Nothing here
     }
   }
 }
+

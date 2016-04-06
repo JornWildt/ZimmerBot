@@ -13,6 +13,9 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    public abstract void Initialize(OutputInitializationContext context);
+
+
     public abstract void Execute(OutputExecutionContect context);
   }
 }

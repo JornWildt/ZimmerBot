@@ -15,6 +15,13 @@ namespace ZimmerBot.Core.ConfigParser
       Template = template;
     }
 
+
+    public override void Initialize(OutputInitializationContext context)
+    {
+      // Do nothing
+    }
+
+
     public override void Execute(OutputExecutionContect context)
     {
       context.AddOutputTemplate(Template);

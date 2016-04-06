@@ -2,8 +2,9 @@
 {
   public static class Constants
   {
-    public const string UserStore = "user";
-    public const string SessionStore = "session";
-    public const string LineCount = "lineCount";
+    public const string UserStoreKey = "user";
+    public const string SessionStoreKey = "session";
+    public const string LastRuleIdKey = "lastRuleId";
+    public const string LineCountKey = "lineCount";
   }
 }

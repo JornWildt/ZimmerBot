@@ -61,4 +61,18 @@ namespace ZimmerBot.Core.ConfigParser
       r.WithSchedule(TimeSpan.FromSeconds(Seconds));
     }
   }
+
+
+#if false
+  public class AnswerRuleModifier : RuleModifier
+  {
+    public AnswerRuleModifier(List<Rule> answerRules)
+    {
+    }
+
+    public override void Invoke(Rule r)
+    {
+    }
+  }
+#endif
 }

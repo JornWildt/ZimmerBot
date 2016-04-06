@@ -16,6 +16,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public TimeSpan? Schedule { get; protected set; }
 
+    public string RequiredPriorRuleId { get; protected set; }
+
 
     public Trigger(params object[] pattern)
     {
@@ -93,6 +95,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public void RegisterParentRule(Rule parentRule)
+    {
+      RequiredPriorRuleId = parentRule.Id;
+    }
+
+
     public WRegex.MatchResult CalculateTriggerScore(EvaluationContext context)
     {
       if (!context.ExecuteScheduledRules && Schedule != null)
@@ -101,7 +109,6 @@ namespace ZimmerBot.Core.Knowledge
       // FIXME: some mixing of concerns here - should be wrapped differently
       context.CurrentTokenIndex = 0;
       context.CurrentRepetitionIndex = 1;
-
 
       double conditionModifier = 1;
 
@@ -112,6 +119,15 @@ namespace ZimmerBot.Core.Knowledge
         object value = Condition.Evaluate(eec);
         if (value is bool)
           conditionModifier = ((bool)value) ? 1 : 0;
+      }
+
+      if (RequiredPriorRuleId != null)
+      {
+        // FIXME: contains key or nullable values!
+        if (context.State[Constants.SessionStoreKey][Constants.LastRuleIdKey] is string)
+        {
+          string lastRuleId = (string)context.State[Constants.LastRuleIdKey];
+        }
       }
 
       WRegex.MatchResult result;

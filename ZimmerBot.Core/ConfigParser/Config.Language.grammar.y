@@ -188,7 +188,7 @@ o_set
   ;
 
 o_answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleList); }
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement($3.ruleList); }
   ;
 
 /******************************************************************************

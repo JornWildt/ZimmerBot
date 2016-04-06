@@ -8,9 +8,9 @@ namespace ZimmerBot.Core.Knowledge
   {
     public double Score { get; protected set; }
 
-    protected ResponseContext Context { get; set; }
+    public ResponseContext Context { get; protected set; }
 
-    protected Rule Rule { get; set; } // FIXME - better name
+    public Rule Rule { get; protected set; }
 
 
     public Reaction(ResponseContext context, Rule rule)

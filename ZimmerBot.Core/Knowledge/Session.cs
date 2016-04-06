@@ -12,8 +12,8 @@ namespace ZimmerBot.Core.Knowledge
       State = new SessionState();
 
       var sessionStore = new Dictionary<string, object>();
-      sessionStore[Constants.LineCount] = 0d;
-      State[Constants.SessionStore] = sessionStore;
+      sessionStore[Constants.LineCountKey] = 0d;
+      State[Constants.SessionStoreKey] = sessionStore;
     }
   }
 }

@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 05-04-2016 02:40:23>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 06-04-2016 08:32:54>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 05-04-2016 02:42:58
+//  DateTime: 06-04-2016 08:32:55
 //  UserName: Jorn
 // ==========================================================================
 
@@ -63,8 +63,12 @@
 %token T_DOLLAR
 
 %%
-// Warning: NonTerminal symbol "o_set" is unreachable
-// --------------------------------------------------
+// Error: NonTerminal symbol "answer" has no productions
+// Warning: Terminating answer fixes the following size-1 NonTerminal set
+   // {answer}
+// Error: There are 1 non-terminating NonTerminal Symbols
+   //  {answer}
+// ----------------------------------------------------------------------
 
 main
   : statementSeq
@@ -151,6 +155,7 @@ ruleModifier
   : condition { $$ = $1; }
   | weight    { $$ = $1; }
   | schedule  { $$ = $1; }
+  | answer    { $$ = $1; }
   ;
 
 condition
@@ -177,6 +182,7 @@ outputSeq
 output
   : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
   | o_call        { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
+  | o_set         { $$.output = $1.output;}
   | o_answer      { $$.output = $1.output;}
   ;
 
@@ -192,15 +198,15 @@ outputPattern
   ;
 
 o_call
-  : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.s, $4.exprList); }
+  : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.expr, $4.exprList); }
   ;
 
 o_set
-  : T_CALL exprReference T_EQU expr { $$.output = new SetOutputStatement($2.s, $4.expr); }
+  : T_SET exprReference T_EQU expr { $$.output = new SetOutputStatement($2.expr, $4.expr); }
   ;
 
 o_answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement(KnowledgeBase, $3.ruleList); }
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement($3.ruleList); }
   ;
 
 /******************************************************************************
@@ -234,13 +240,14 @@ exprUnary
   ;
 
 exprIdentifier
-  : exprReference     { $$.expr = new IdentifierExpr($1.s); }
+  : exprReference     { $$.expr = $1.expr; }
   | T_DOLLAR T_NUMBER { $$.expr = new IdentifierExpr("$"+$2.n); }
+  | T_DOLLAR T_WORD   { $$.expr = new IdentifierExpr("$"+$2.s); }
   ;
 
 exprReference
-  : exprReference T_DOT T_WORD { $$.s = $1.s + "." + $3.s; }
-  | T_WORD                     { $$.s = $1.s; }
+  : exprReference T_DOT T_WORD { $$.expr = new DotExpression($1.expr, $3.s); }
+  | T_WORD                     { $$.expr = new DotExpression($1.s); }
   ;
 
 /******************************************************************************

@@ -67,6 +67,9 @@ namespace ZimmerBot.Core.Knowledge
     public Rule WithOutputStatements(IEnumerable<OutputStatement> output)
     {
       OutputStatements = new List<OutputStatement>(output);
+      OutputInitializationContext context = new OutputInitializationContext(this);
+      foreach (OutputStatement o in OutputStatements)
+        o.Initialize(context);
       return this;
     }
 
@@ -74,6 +77,12 @@ namespace ZimmerBot.Core.Knowledge
     public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
       Trigger.RegisterScheduledJobs(scheduler, botId, Id);
+    }
+
+
+    public void RegisterParentRule(Rule parentRule)
+    {
+      Trigger.RegisterParentRule(parentRule);
     }
 
 

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 05-04-2016 21:09:02
+// DateTime: 06-04-2016 08:33:23
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 05-04-2016 21:09:00>
+// Input file <ConfigParser\Config.Language.grammar.y - 06-04-2016 08:33:22>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -384,7 +384,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.output = new SetOutputStatement(ValueStack[ValueStack.Depth-3].expr, ValueStack[ValueStack.Depth-1].expr); }
         break;
       case 46: // o_answer -> T_ANSWER, T_LBRACE, ruleSeq, T_RBRACE
-{ CurrentSemanticValue.output = new AnswerOutputStatement(KnowledgeBase, ValueStack[ValueStack.Depth-2].ruleList); }
+{ CurrentSemanticValue.output = new AnswerOutputStatement(ValueStack[ValueStack.Depth-2].ruleList); }
         break;
       case 47: // exprSeq -> exprSeq2
 { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }

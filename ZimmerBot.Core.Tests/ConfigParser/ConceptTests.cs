@@ -35,8 +35,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       EvaluationContext context = BuildEvaluationContextFromInput(s);
       SessionState state = new SessionState();
       var sessionState = new Dictionary<string, dynamic>();// FIXME: use common code
-      sessionState[Constants.LineCount] = 0d;
-      state[Constants.SessionStore] = sessionState;
+      sessionState[Constants.LineCountKey] = 0d;
+      state[Constants.SessionStoreKey] = sessionState;
 
 
       Response response = BotUtility.Invoke(KB, new Request { Input = s });

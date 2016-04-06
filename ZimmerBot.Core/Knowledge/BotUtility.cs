@@ -17,7 +17,7 @@ namespace ZimmerBot.Core.Knowledge
       SessionState state = session.State;
 
       var userStore = new RDFDictionaryWrapper(kb.MemoryStore, "http://zimmerbot.org/users/" + req.UserId, "http://zimmerbot.org/uservalues/");
-      state[Constants.UserStore] = userStore;
+      state[Constants.UserStoreKey] = userStore;
 
       List<ReactionSet> reactionList = new List<ReactionSet>();
 
@@ -59,6 +59,8 @@ namespace ZimmerBot.Core.Knowledge
 
             foreach (string line in response.Replace("\r", "").Split('\n'))
               output.Add(line);
+
+            session.State[Constants.LastRuleIdKey] = r.Rule.Id;
           }
         }
         else
@@ -71,7 +73,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (output.Count > 0)
       {
-        state[Constants.SessionStore][Constants.LineCount] = state[Constants.SessionStore][Constants.LineCount] + 1;
+        state[Constants.SessionStoreKey][Constants.LineCountKey] = state[Constants.SessionStoreKey][Constants.LineCountKey] + 1;
 
         Response response = new Response
         {
