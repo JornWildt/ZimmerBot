@@ -33,6 +33,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("no", "why not");
       AssertDialog("let us play", "are you ready?");
       AssertDialog("yes", "cool");
+      AssertDialog("let us play", "are you ready?");
       AssertDialog("no", "okay, sorry");
     }
   }

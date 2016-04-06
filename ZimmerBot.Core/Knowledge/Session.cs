@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -11,7 +12,8 @@ namespace ZimmerBot.Core.Knowledge
     {
       State = new SessionState();
 
-      var sessionStore = new Dictionary<string, object>();
+      // HybridDictionary => return null on missing keys instead of throwing exceptions
+      var sessionStore = new HybridDictionary();
       sessionStore[Constants.LineCountKey] = 0d;
       State[Constants.SessionStoreKey] = sessionStore;
     }

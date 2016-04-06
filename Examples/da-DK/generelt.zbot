@@ -3,8 +3,27 @@
 
 #> Hej
 > %hilsen
-: Hej. Fortæl mig hvad du hedder (<user.name>)
-: Mojn
+: Hej. Hvad hedder du? Jeg gætter på '<user.name>'.
+! answer
+{
+  > (næh|forkert|nej)
+  ! weight 1.1
+  : Hvad hedder du så?
+  ! answer
+  {
+    > +
+    ! set user.name = $1
+    : Ok så er det, <1>
+  }
+
+  > (yep|yes|ok|ja|nemlig)
+  ! weight 1.1
+  : Godt :-)
+
+  > +
+  ! set user.name = $1
+  : Ok, <1>
+}
 
 > Jeg hedder +
 ! set user.name = $1

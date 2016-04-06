@@ -114,7 +114,6 @@ namespace ZimmerBot.Core.Knowledge
 
       if (Condition != null)
       {
-        // FIXME: make bot state available
         ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.State.State);
         object value = Condition.Evaluate(eec);
         if (value is bool)
@@ -123,11 +122,16 @@ namespace ZimmerBot.Core.Knowledge
 
       if (RequiredPriorRuleId != null)
       {
-        // FIXME: contains key or nullable values!
         if (context.State[Constants.SessionStoreKey][Constants.LastRuleIdKey] is string)
         {
-          string lastRuleId = (string)context.State[Constants.LastRuleIdKey];
+          string lastRuleId = (string)context.State[Constants.SessionStoreKey][Constants.LastRuleIdKey];
+          if (RequiredPriorRuleId == lastRuleId)
+            conditionModifier *= 4;
+          else
+            conditionModifier /= 4;
         }
+        else
+          conditionModifier /= 4;
       }
 
       WRegex.MatchResult result;

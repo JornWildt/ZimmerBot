@@ -60,7 +60,7 @@ namespace ZimmerBot.Core.Knowledge
             foreach (string line in response.Replace("\r", "").Split('\n'))
               output.Add(line);
 
-            session.State[Constants.LastRuleIdKey] = r.Rule.Id;
+            session.State[Constants.SessionStoreKey][Constants.LastRuleIdKey] = r.Rule.Id;
           }
         }
         else
