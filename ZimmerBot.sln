@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Core", "ZimmerBot.Core\ZimmerBot.Core.csproj", "{8EC30AE6-170E-4621-AE14-4A3985E3D062}"
 EndProject
@@ -32,6 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{EF8EBC4A
 		Examples\da-DK\citater.ttl = Examples\da-DK\citater.ttl
 		Examples\da-DK\citater.zbot = Examples\da-DK\citater.zbot
 		Examples\da-DK\dato-tid.zbot = Examples\da-DK\dato-tid.zbot
+		Examples\da-DK\farver.zbot = Examples\da-DK\farver.zbot
 		Examples\da-DK\generelt.zbot = Examples\da-DK\generelt.zbot
 		Examples\da-DK\genveje-til-debug.zbot = Examples\da-DK\genveje-til-debug.zbot
 		Examples\da-DK\personer.ttl = Examples\da-DK\personer.ttl

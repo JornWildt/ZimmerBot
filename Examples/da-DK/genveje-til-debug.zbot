@@ -4,9 +4,9 @@
 > h
 : << hvem er dalai lama>>
 
-> månen er (rød|blå)
+> månen er (%farve)
 ! set user.moonColor = $1
-: OK: <1>
+: OK, så er månen <1>
 
 > hvad er månen
 : Månen er <user.moonColor>

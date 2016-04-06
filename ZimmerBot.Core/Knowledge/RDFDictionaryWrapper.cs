@@ -59,7 +59,7 @@ namespace ZimmerBot.Core.Knowledge
 
         INode s = NodeFactory.CreateUriNode(Subject);
         INode p = NodeFactory.CreateUriNode(new Uri(PredicateBase, key));
-        INode o = NodeFactory.CreateLiteralNode(value.ToString());
+        INode o = NodeFactory.CreateLiteralNode(value != null ? value.ToString() : "");
         Store.Retract(s, p);
         Store.Assert(s, p, o);
       }
