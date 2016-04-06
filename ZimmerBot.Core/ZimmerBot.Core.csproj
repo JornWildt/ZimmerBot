@@ -151,6 +151,7 @@
     <Compile Include="TemplateParser\TemplateUtility.cs" />
     <Compile Include="Utilities\AppSetting.cs" />
     <Compile Include="Utilities\ChainedDictionary.cs" />
+    <Compile Include="Utilities\NullValueDictionary.cs" />
     <Compile Include="Utilities\DateRender.cs" />
     <Compile Include="Utilities\ErrorCollection.cs" />
     <Compile Include="Utilities\ParserException.cs" />
