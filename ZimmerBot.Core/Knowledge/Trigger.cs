@@ -116,8 +116,11 @@ namespace ZimmerBot.Core.Knowledge
       {
         ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.State.State);
         object value = Condition.Evaluate(eec);
-        if (value is bool)
-          conditionModifier = ((bool)value) ? 1 : 0;
+        bool b;
+        if (Expression.TryConvertToBool(value, out b))
+          conditionModifier = (b ? 1 : 0);
+        else
+          throw new InvalidCastException($"Could not convert value '{value}' to bool in condition.");
       }
 
       if (RequiredPriorRuleId != null)

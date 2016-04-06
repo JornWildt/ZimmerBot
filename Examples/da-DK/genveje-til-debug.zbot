@@ -10,3 +10,15 @@
 
 > hvad er månen
 : Månen er <user.moonColor>
+
+> hd
+! when (user.pet)
+: Hi, I remeber you have a <user.pet>
+
+> Hd
+! when (!user.pet)
+: Hi
+
+> I have a (dog|cat)
+! set user.pet = $1
+: Nice

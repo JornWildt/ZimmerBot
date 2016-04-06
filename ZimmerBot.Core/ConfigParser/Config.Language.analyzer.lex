@@ -51,6 +51,7 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*set         { return (int)Token.T_SET; }
 ![ ]*call        { return (int)Token.T_CALL; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
+![ ]*when        { return (int)Token.T_WHEN; }
 ![ ]*every       { return (int)Token.T_EVERY; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*rdf_import  { return (int)Token.T_RDF_IMPORT; }

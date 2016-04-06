@@ -45,8 +45,8 @@ namespace ZimmerBot.Core.Expressions
         left = (IDictionary<string, object>)value;
       }
 
-      if (!left.ContainsKey(Right))
-        return null;
+      //if (!left.ContainsKey(Right))
+      //  return null;
       return left[Right];
     }
 

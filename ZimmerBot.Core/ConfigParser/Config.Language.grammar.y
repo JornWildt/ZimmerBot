@@ -28,7 +28,7 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
 
 %token T_IMPLIES
 %token T_COMMA
@@ -53,6 +53,8 @@
 %token T_DOLLAR
 
 %%
+
+/* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
 main
   : itemSeq
@@ -142,7 +144,7 @@ ruleModifier
   ;
 
 condition
-  : T_AMP expr { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
+  : T_WHEN expr { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
   ;
 
 weight
@@ -216,8 +218,9 @@ exprBinary
   ;
 
 exprUnary
-  : T_LPAR expr T_RPAR { $$ = $2; }
-  | exprIdentifier     { $$ = $1; }
+  : T_LPAR expr T_RPAR { $$.expr = $2.expr; }
+  | T_EXCL expr        { $$.expr = new UnaryOperatorExpr($2.expr, UnaryOperatorExpr.OperatorType.Negation); }
+  | exprIdentifier     { $$.expr = $1.expr; }
   | T_STRING           { $$.expr = new ConstantValueExpr(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_NUMBER           { $$.expr = new ConstantValueExpr($1.n); }
   ;

@@ -103,6 +103,7 @@
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
+    <Compile Include="Expressions\UnaryOperatorExpr.cs" />
     <Compile Include="Statements\AnswerStatement.cs" />
     <Compile Include="Statements\CallStatment.cs" />
     <Compile Include="ConfigParser\ConfigurationParser.cs" />
