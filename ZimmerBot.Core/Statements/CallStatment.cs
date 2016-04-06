@@ -1,31 +1,30 @@
 ﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Expressions;
-using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Processors;
 
 
-namespace ZimmerBot.Core.ConfigParser
+namespace ZimmerBot.Core.Statements
 {
-  public class CallOutputStatment : OutputStatement
+  public class CallStatment : Statement
   {
     public FunctionCallExpr Function { get; set; }
 
 
-    public CallOutputStatment(FunctionCallExpr function)
+    public CallStatment(FunctionCallExpr function)
     {
       Condition.Requires(function, nameof(function)).IsNotNull();
       Function = function;
     }
 
 
-    public override void Initialize(OutputInitializationContext context)
+    public override void Initialize(StatementInitializationContext context)
     {
       // Do nothing
     }
 
 
-    public override void Execute(OutputExecutionContect context)
+    public override void Execute(StatementExecutionContect context)
     {
       ProcessorRegistration processor = ProcessorRegistry.GetProcessor(Function.FunctionName);
       ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);

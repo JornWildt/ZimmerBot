@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
-using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.WordRegex;
+using ZimmerBot.Core.Statements;
 
 
 namespace ZimmerBot.Core.Tests.ConfigParser
@@ -18,7 +17,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : yyy
 ");
 
-      Assert.AreEqual(2, r.OutputStatements.Count);
+      Assert.AreEqual(2, r.Statements.Count);
     }
 
 
@@ -31,10 +30,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ccc <result>
 ");
 
-      Assert.IsNotNull(r.OutputStatements);
-      Assert.AreEqual(2, r.OutputStatements.Count);
-      Assert.IsInstanceOf<CallOutputStatment>(r.OutputStatements[0]);
-      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[1]);
+      Assert.IsNotNull(r.Statements);
+      Assert.AreEqual(2, r.Statements.Count);
+      Assert.IsInstanceOf<CallStatment>(r.Statements[0]);
+      Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[1]);
 
       Reaction reaction = CalculateReaction(r, "aaa bbb");
       Assert.IsNotNull(reaction);
@@ -53,10 +52,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ccc <answer>
 ");
 
-      Assert.IsNotNull(r.OutputStatements);
-      Assert.AreEqual(2, r.OutputStatements.Count);
-      Assert.IsInstanceOf<CallOutputStatment>(r.OutputStatements[0]);
-      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[1]);
+      Assert.IsNotNull(r.Statements);
+      Assert.AreEqual(2, r.Statements.Count);
+      Assert.IsInstanceOf<CallStatment>(r.Statements[0]);
+      Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[1]);
 
       Reaction reaction = CalculateReaction(r, "aaa");
       Assert.IsNotNull(reaction);
@@ -140,14 +139,14 @@ ddd");
 {xxx}: ccc
 ");
 
-      Assert.AreEqual(2, r.OutputStatements.Count);
-      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[0]);
-      Assert.IsInstanceOf<TemplateOutputStatement>(r.OutputStatements[1]);
-      TemplateOutputStatement ts = (TemplateOutputStatement)r.OutputStatements[0];
+      Assert.AreEqual(2, r.Statements.Count);
+      Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[0]);
+      Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[1]);
+      OutputTemplateStatement ts = (OutputTemplateStatement)r.Statements[0];
       Assert.AreEqual("default", ts.Template.Key);
       Assert.AreEqual("bbb", ts.Template.Value);
 
-      ts = (TemplateOutputStatement)r.OutputStatements[1];
+      ts = (OutputTemplateStatement)r.Statements[1];
       Assert.AreEqual("xxx", ts.Template.Key);
       Assert.AreEqual("ccc", ts.Template.Value);
 

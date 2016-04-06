@@ -4,9 +4,9 @@ using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Processors;
 
 
-namespace ZimmerBot.Core.ConfigParser
+namespace ZimmerBot.Core.Statements
 {
-  public class OutputExecutionContect
+  public class StatementExecutionContect
   {
     public ResponseContext ResponseContext { get; set; }
 
@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.ConfigParser
     public ProcessorOutput LastValue { get; set; }
 
 
-    public OutputExecutionContect(ResponseContext context)
+    public StatementExecutionContect(ResponseContext context)
     {
       Condition.Requires(context, nameof(context)).IsNotNull();
 

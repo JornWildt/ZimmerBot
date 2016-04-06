@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using Quartz;
-using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Expressions;
+using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.TemplateParser;
 using ZimmerBot.Core.WordRegex;
 
@@ -22,7 +22,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public double? Weight { get; protected set; }
 
-    public List<OutputStatement> OutputStatements { get; protected set; }
+    public List<Statement> Statements { get; protected set; }
 
 
     public Rule(KnowledgeBase kb, params object[] pattern)
@@ -64,11 +64,11 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule WithOutputStatements(IEnumerable<OutputStatement> output)
+    public Rule WithOutputStatements(IEnumerable<Statement> output)
     {
-      OutputStatements = new List<OutputStatement>(output);
-      OutputInitializationContext context = new OutputInitializationContext(this);
-      foreach (OutputStatement o in OutputStatements)
+      Statements = new List<Statement>(output);
+      StatementInitializationContext context = new StatementInitializationContext(this);
+      foreach (Statement o in Statements)
         o.Initialize(context);
       return this;
     }
@@ -120,9 +120,9 @@ namespace ZimmerBot.Core.Knowledge
           context.Variables["$" + m.Key] = m.Value;
         }
 
-        OutputExecutionContect ox_context = new OutputExecutionContect(context);
+        StatementExecutionContect ox_context = new StatementExecutionContect(context);
 
-        foreach (OutputStatement output in OutputStatements)
+        foreach (Statement output in Statements)
         {
           output.Execute(ox_context);
         }

@@ -2,13 +2,13 @@
 using CuttingEdge.Conditions;
 
 
-namespace ZimmerBot.Core.ConfigParser
+namespace ZimmerBot.Core.Statements
 {
-  public class TemplateOutputStatement : OutputStatement
+  public class OutputTemplateStatement : Statement
   {
     public KeyValuePair<string, string> Template { get; set; }
 
-    public TemplateOutputStatement(KeyValuePair<string, string> template)
+    public OutputTemplateStatement(KeyValuePair<string, string> template)
     {
       Condition.Requires(template.Key, nameof(template.Key)).IsNotNull();
       Condition.Requires(template.Value, nameof(template.Value)).IsNotNull();
@@ -16,13 +16,13 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    public override void Initialize(OutputInitializationContext context)
+    public override void Initialize(StatementInitializationContext context)
     {
       // Do nothing
     }
 
 
-    public override void Execute(OutputExecutionContect context)
+    public override void Execute(StatementExecutionContect context)
     {
       context.AddOutputTemplate(Template);
     }

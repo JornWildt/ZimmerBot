@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
@@ -56,7 +56,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected Rule AddRule(WRegex pattern, List<RuleModifier> modifiers, List<OutputStatement> outputs)
+    protected Rule AddRule(WRegex pattern, List<RuleModifier> modifiers, List<Statement> outputs)
     {
       Rule r = KnowledgeBase.AddRule(pattern);
       if (modifiers != null)

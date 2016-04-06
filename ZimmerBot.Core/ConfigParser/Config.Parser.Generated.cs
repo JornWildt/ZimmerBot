@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 06-04-2016 08:33:23
+// DateTime: 06-04-2016 20:58:57
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 06-04-2016 08:33:22>
+// Input file <ConfigParser\Config.Language.grammar.y - 06-04-2016 20:58:53>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -18,6 +18,7 @@ using System.Text;
 using QUT.Gppg;
 using ZimmerBot.Core.WordRegex;
 using ZimmerBot.Core.Expressions;
+using ZimmerBot.Core.Statements;
 
 namespace ZimmerBot.Core.ConfigParser
 {
@@ -30,8 +31,8 @@ internal enum Token {error=2,EOF=3,T_COLON=4,T_CONCEPT=5,T_CALL=6,
 
 internal partial struct ValueType
 { 
-  public OutputStatement output;
-  public List<OutputStatement> outputList;
+  public Statement statement;
+  public List<Statement> statementList;
   public WRegex regex;
   public Expression expr;
   public List<Expression> exprList;
@@ -73,12 +74,12 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
   private static Rule[] rules = new Rule[67];
   private static State[] states = new State[100];
   private static string[] nonTerms = new string[] {
-      "main", "$accept", "statementSeq", "statement", "configuration", "rule", 
-      "conceptPatternSeq", "cwordSeq", "ruleSeq", "input", "ruleModifierSeq", 
-      "outputSeq", "inputPatternSeq", "inputPattern", "ruleModifier", "condition", 
-      "weight", "schedule", "expr", "output", "outputPattern", "o_call", "o_set", 
-      "o_answer", "Anon@1", "Anon@2", "exprReference", "exprSeq", "exprSeq2", 
-      "exprBinary", "exprUnary", "exprIdentifier", "cword", };
+      "main", "$accept", "itemSeq", "item", "configuration", "rule", "conceptPatternSeq", 
+      "cwordSeq", "ruleSeq", "input", "ruleModifierSeq", "statementSeq", "inputPatternSeq", 
+      "inputPattern", "ruleModifier", "condition", "weight", "schedule", "expr", 
+      "statement", "outputTemplate", "stmtCall", "stmtSet", "stmtAnswer", "Anon@1", 
+      "Anon@2", "exprReference", "exprSeq", "exprSeq2", "exprBinary", "exprUnary", 
+      "exprIdentifier", "cword", };
 
   static ConfigParser() {
     states[0] = new State(-4,new int[]{-1,1,-3,3});
@@ -285,9 +286,9 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 13: // ruleSeq -> /* empty */
 { CurrentSemanticValue.ruleList = new List<Knowledge.Rule>(); }
         break;
-      case 14: // rule -> input, ruleModifierSeq, outputSeq
+      case 14: // rule -> input, ruleModifierSeq, statementSeq
 { 
-      CurrentSemanticValue.rule = AddRule(ValueStack[ValueStack.Depth-3].regex, ValueStack[ValueStack.Depth-2].ruleModifierList, ValueStack[ValueStack.Depth-1].outputList);
+      CurrentSemanticValue.rule = AddRule(ValueStack[ValueStack.Depth-3].regex, ValueStack[ValueStack.Depth-2].ruleModifierList, ValueStack[ValueStack.Depth-1].statementList);
     }
         break;
       case 15: // input -> T_GT, inputPatternSeq
@@ -347,44 +348,44 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 33: // schedule -> T_EVERY, T_NUMBER
 { CurrentSemanticValue.ruleModifier = new ScheduleRuleModifier((int)ValueStack[ValueStack.Depth-1].n); }
         break;
-      case 34: // outputSeq -> outputSeq, output
-{ ValueStack[ValueStack.Depth-2].outputList.Add(ValueStack[ValueStack.Depth-1].output); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+      case 34: // statementSeq -> statementSeq, statement
+{ ValueStack[ValueStack.Depth-2].statementList.Add(ValueStack[ValueStack.Depth-1].statement); CurrentSemanticValue.statementList = ValueStack[ValueStack.Depth-2].statementList; }
         break;
-      case 35: // outputSeq -> /* empty */
-{ CurrentSemanticValue.outputList = new List<OutputStatement>(); }
+      case 35: // statementSeq -> /* empty */
+{ CurrentSemanticValue.statementList = new List<Statement>(); }
         break;
-      case 36: // output -> outputPattern
-{ CurrentSemanticValue.output = new TemplateOutputStatement(ValueStack[ValueStack.Depth-1].template); }
+      case 36: // statement -> outputTemplate
+{ CurrentSemanticValue.statement = new OutputTemplateStatement(ValueStack[ValueStack.Depth-1].template); }
         break;
-      case 37: // output -> o_call
-{ CurrentSemanticValue.output = new CallOutputStatment(ValueStack[ValueStack.Depth-1].expr as FunctionCallExpr); }
+      case 37: // statement -> stmtCall
+{ CurrentSemanticValue.statement = new CallStatment(ValueStack[ValueStack.Depth-1].expr as FunctionCallExpr); }
         break;
-      case 38: // output -> o_set
-{ CurrentSemanticValue.output = ValueStack[ValueStack.Depth-1].output;}
+      case 38: // statement -> stmtSet
+{ CurrentSemanticValue.statement = ValueStack[ValueStack.Depth-1].statement;}
         break;
-      case 39: // output -> o_answer
-{ CurrentSemanticValue.output = ValueStack[ValueStack.Depth-1].output;}
+      case 39: // statement -> stmtAnswer
+{ CurrentSemanticValue.statement = ValueStack[ValueStack.Depth-1].statement;}
         break;
       case 40: // Anon@1 -> /* empty */
 { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); }
         break;
-      case 41: // outputPattern -> T_COLON, Anon@1, T_OUTPUT
+      case 41: // outputTemplate -> T_COLON, Anon@1, T_OUTPUT
 { CurrentSemanticValue.template = new KeyValuePair<string,string>("default", ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
         break;
       case 42: // Anon@2 -> /* empty */
 { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); }
         break;
-      case 43: // outputPattern -> T_LBRACE, T_WORD, T_RBRACE, T_COLON, Anon@2, T_OUTPUT
+      case 43: // outputTemplate -> T_LBRACE, T_WORD, T_RBRACE, T_COLON, Anon@2, T_OUTPUT
 { CurrentSemanticValue.template = new KeyValuePair<string,string>(ValueStack[ValueStack.Depth-5].s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
         break;
-      case 44: // o_call -> T_CALL, exprReference, T_LPAR, exprSeq, T_RPAR
+      case 44: // stmtCall -> T_CALL, exprReference, T_LPAR, exprSeq, T_RPAR
 { CurrentSemanticValue.expr = new FunctionCallExpr(ValueStack[ValueStack.Depth-4].expr, ValueStack[ValueStack.Depth-2].exprList); }
         break;
-      case 45: // o_set -> T_SET, exprReference, T_EQU, expr
-{ CurrentSemanticValue.output = new SetOutputStatement(ValueStack[ValueStack.Depth-3].expr, ValueStack[ValueStack.Depth-1].expr); }
+      case 45: // stmtSet -> T_SET, exprReference, T_EQU, expr
+{ CurrentSemanticValue.statement = new SetStatement(ValueStack[ValueStack.Depth-3].expr, ValueStack[ValueStack.Depth-1].expr); }
         break;
-      case 46: // o_answer -> T_ANSWER, T_LBRACE, ruleSeq, T_RBRACE
-{ CurrentSemanticValue.output = new AnswerOutputStatement(ValueStack[ValueStack.Depth-2].ruleList); }
+      case 46: // stmtAnswer -> T_ANSWER, T_LBRACE, ruleSeq, T_RBRACE
+{ CurrentSemanticValue.statement = new AnswerStatement(ValueStack[ValueStack.Depth-2].ruleList); }
         break;
       case 47: // exprSeq -> exprSeq2
 { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }

@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CuttingEdge.Conditions;
+﻿using CuttingEdge.Conditions;
 using ZimmerBot.Core.Expressions;
 
-namespace ZimmerBot.Core.ConfigParser
+namespace ZimmerBot.Core.Statements
 {
-  public class SetOutputStatement : OutputStatement
+  public class SetStatement : Statement
   {
     public Expression Reference { get; protected set; }
 
     public Expression ValueExpr { get; protected set; }
 
 
-    public SetOutputStatement(Expression reference, Expression expr)
+    public SetStatement(Expression reference, Expression expr)
     {
       Condition.Requires(reference, nameof(reference)).IsNotNull().IsOfType(typeof(DotExpression));
       Condition.Requires(expr, nameof(expr)).IsNotNull();
@@ -25,13 +20,13 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    public override void Initialize(OutputInitializationContext context)
+    public override void Initialize(StatementInitializationContext context)
     {
       // Do nothing
     }
 
 
-    public override void Execute(OutputExecutionContect context)
+    public override void Execute(StatementExecutionContect context)
     {
       ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);
       object value = ValueExpr.Evaluate(ec);

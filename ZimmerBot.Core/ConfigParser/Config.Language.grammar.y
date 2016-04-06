@@ -1,14 +1,15 @@
 %namespace ZimmerBot.Core.ConfigParser
 %using ZimmerBot.Core.WordRegex
 %using ZimmerBot.Core.Expressions
+%using ZimmerBot.Core.Statements
 %partial
 %parsertype ConfigParser
 %visibility internal
 %tokentype Token
 
 %union { 
-  public OutputStatement output;
-  public List<OutputStatement> outputList;
+  public Statement statement;
+  public List<Statement> statementList;
   public WRegex regex;
   public Expression expr;
   public List<Expression> exprList;
@@ -54,15 +55,15 @@
 %%
 
 main
-  : statementSeq
+  : itemSeq
   ;
 
-statementSeq
-  : statementSeq statement
+itemSeq
+  : itemSeq item
   | /* empty */
   ;
 
-statement
+item
   : configuration
   | rule
   ;
@@ -87,9 +88,9 @@ ruleSeq
   ;
 
 rule
-  : input ruleModifierSeq outputSeq
+  : input ruleModifierSeq statementSeq
     { 
-      $$.rule = AddRule($1.regex, $2.ruleModifierList, $3.outputList);
+      $$.rule = AddRule($1.regex, $2.ruleModifierList, $3.statementList);
     }
   ;
 
@@ -153,22 +154,22 @@ schedule
   ;
 
 /******************************************************************************
-  OUTPUT
+  STATEMENT
 ******************************************************************************/
 
-outputSeq
-  : outputSeq output  { $1.outputList.Add($2.output); $$ = $1; }
-  | /* empty */       { $$.outputList = new List<OutputStatement>(); }
+statementSeq
+  : statementSeq statement  { $1.statementList.Add($2.statement); $$.statementList = $1.statementList; }
+  | /* empty */             { $$.statementList = new List<Statement>(); }
   ;
 
-output
-  : outputPattern { $$.output = new TemplateOutputStatement($1.template); }
-  | o_call        { $$.output = new CallOutputStatment($1.expr as FunctionCallExpr); }
-  | o_set         { $$.output = $1.output;}
-  | o_answer      { $$.output = $1.output;}
+statement
+  : outputTemplate  { $$.statement = new OutputTemplateStatement($1.template); }
+  | stmtCall        { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
+  | stmtSet         { $$.statement = $1.statement;}
+  | stmtAnswer      { $$.statement = $1.statement;}
   ;
 
-outputPattern
+outputTemplate
   : T_COLON  
       { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
@@ -179,16 +180,16 @@ outputPattern
       { $$.template = new KeyValuePair<string,string>($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
   ;
 
-o_call
+stmtCall
   : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.expr, $4.exprList); }
   ;
 
-o_set
-  : T_SET exprReference T_EQU expr { $$.output = new SetOutputStatement($2.expr, $4.expr); }
+stmtSet
+  : T_SET exprReference T_EQU expr { $$.statement = new SetStatement($2.expr, $4.expr); }
   ;
 
-o_answer
-  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.output = new AnswerOutputStatement($3.ruleList); }
+stmtAnswer
+  : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.statement = new AnswerStatement($3.ruleList); }
   ;
 
 /******************************************************************************
