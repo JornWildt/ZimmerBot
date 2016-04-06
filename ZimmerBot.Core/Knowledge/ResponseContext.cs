@@ -11,7 +11,7 @@ namespace ZimmerBot.Core.Knowledge
   {
     public KnowledgeBase KnowledgeBase { get; protected set; }
 
-    public SessionState State { get; protected set; }
+    public RequestState State { get; protected set; }
 
     public Request OriginalRequest { get; protected set; }
 
@@ -22,7 +22,7 @@ namespace ZimmerBot.Core.Knowledge
     public ChainedDictionary<string, object> Variables { get; protected set; }
 
 
-    public ResponseContext(KnowledgeBase kb, SessionState state, Request originalRequest, ZTokenSequence input, WRegex.MatchResult match)
+    public ResponseContext(KnowledgeBase kb, RequestState state, Request originalRequest, ZTokenSequence input, WRegex.MatchResult match)
     {
       // Both input and match can be null for scheduled, non-input based, responses
       Condition.Requires(kb, nameof(kb)).IsNotNull();

@@ -50,11 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotTests\AnswerTests.cs" />
+    <Compile Include="BotTests\ConceptTests.cs" />
     <Compile Include="BotTests\TestHelper.cs" />
     <Compile Include="BotTests\UserMemoryTests.cs" />
     <Compile Include="BotTests\SessionMemoryTests.cs" />
     <Compile Include="ConfigParser\BasicConfigParserTests.cs" />
-    <Compile Include="ConfigParser\ConceptTests.cs" />
     <Compile Include="ConfigParser\ModifierTests.cs" />
     <Compile Include="ConfigParser\EmptyInputTests.cs" />
     <Compile Include="ConfigParser\ErrorHandlingTests.cs" />

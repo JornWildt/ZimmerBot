@@ -134,7 +134,7 @@
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\BotUtility.cs" />
     <Compile Include="Knowledge\EvaluationContext.cs" />
-    <Compile Include="Knowledge\SessionState.cs" />
+    <Compile Include="Knowledge\RequestState.cs" />
     <Compile Include="Pipeline\Pipeline.cs" />
     <Compile Include="Knowledge\RDFResultSet.cs" />
     <Compile Include="Knowledge\RDFStore.cs" />

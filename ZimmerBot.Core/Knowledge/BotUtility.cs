@@ -12,9 +12,10 @@ namespace ZimmerBot.Core.Knowledge
 
     public static Response Invoke(KnowledgeBase kb, Request req, bool executeScheduledRules = false)
     {
-      Session session = SessionManager.GetOrCreateSession(req.SessionId);
+      RequestState state = new RequestState();
 
-      SessionState state = session.State;
+      Session session = SessionManager.GetOrCreateSession(req.SessionId);
+      state[Constants.SessionStoreKey] = session.Store;
 
       var userStore = new RDFDictionaryWrapper(kb.MemoryStore, "http://zimmerbot.org/users/" + req.UserId, "http://zimmerbot.org/uservalues/");
       state[Constants.UserStoreKey] = userStore;
@@ -60,7 +61,7 @@ namespace ZimmerBot.Core.Knowledge
             foreach (string line in response.Replace("\r", "").Split('\n'))
               output.Add(line);
 
-            session.State[Constants.SessionStoreKey][Constants.LastRuleIdKey] = r.Rule.Id;
+            state[Constants.SessionStoreKey][Constants.LastRuleIdKey] = r.Rule.Id;
           }
         }
         else

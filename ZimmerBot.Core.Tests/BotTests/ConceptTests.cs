@@ -2,18 +2,17 @@
 using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 
-namespace ZimmerBot.Core.Tests.ConfigParser
+namespace ZimmerBot.Core.Tests.BotTests
 {
   [TestFixture]
   public class ConceptTests : TestHelper
   {
-    KnowledgeBase KB;
-
     protected override void TestFixtureSetUp()
     {
       base.TestFixtureSetUp();
-      KB = new KnowledgeBase();
-      KB.LoadFromFiles("ConfigParser", "ConceptTests.zbot");
+      KnowledgeBase kb = new KnowledgeBase();
+      kb.LoadFromFiles("ConfigParser", "ConceptTests.zbot");
+      B = new Bot(kb);
     }
 
 
@@ -25,23 +24,23 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [TestCase("I LIKE chiCKEN", "I LIKE chiCKEN too")] // FIXME: improve casing on match ...
     public void CanMatchConcepts(string input, string expectedAnswer)
     {
-      string output = GetResponseFor(input);
+      string output = Invoke(input);
       Assert.AreEqual(expectedAnswer, output);
     }
 
 
-    protected string GetResponseFor(string s)
-    {
-      EvaluationContext context = BuildEvaluationContextFromInput(s);
-      SessionState state = new SessionState();
-      var sessionState = new Dictionary<string, dynamic>();// FIXME: use common code
-      sessionState[Constants.LineCountKey] = 0d;
-      state[Constants.SessionStoreKey] = sessionState;
+    //protected string GetResponseFor(string s)
+    //{
+    //  EvaluationContext context = BuildEvaluationContextFromInput(s);
+    //  RequestState state = new RequestState();
+    //  var sessionState = new Dictionary<string, dynamic>();// FIXME: use common code
+    //  sessionState[Constants.LineCountKey] = 0d;
+    //  state[Constants.SessionStoreKey] = sessionState;
 
 
-      Response response = BotUtility.Invoke(KB, new Request { Input = s });
-      Assert.AreEqual(1, response.Output.Length);
-      return response.Output[0];
-    }
+    //  Response response = BotUtility.Invoke(KB, new Request { Input = s });
+    //  Assert.AreEqual(1, response.Output.Length);
+    //  return response.Output[0];
+    //}
   }
 }

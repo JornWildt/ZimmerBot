@@ -3,12 +3,12 @@
 
 namespace ZimmerBot.Core.Knowledge
 {
-  public class SessionState
+  public class RequestState
   {
     public Dictionary<string, dynamic> State { get; protected set; }
 
 
-    public SessionState()
+    public RequestState()
     {
       State = new Dictionary<string, dynamic>();
     }
