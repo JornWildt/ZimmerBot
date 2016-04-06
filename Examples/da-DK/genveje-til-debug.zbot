@@ -13,12 +13,12 @@
 
 > hd
 ! when (user.pet)
-: Hi, I remeber you have a <user.pet>
+: Hej, du har da en <user.pet>
 
-> Hd
+> hd
 ! when (!user.pet)
-: Hi
+: Hej
 
-> I have a (dog|cat)
-! set user.pet = $1
-: Nice
+> Jeg har (en|et) (%kæledyr)
+! set user.pet = $2
+: Sejt
