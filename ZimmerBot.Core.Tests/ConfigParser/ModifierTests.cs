@@ -13,7 +13,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       Rule r = ParseRule(@"
 > aaa
-& session.lineCount = 0
+! when session.lineCount = 0
 : bbb");
 
       Assert.IsNotNull(r.Trigger.Condition);
@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       Rule r = ParseRule(@"
 > aaa
-& (xxx.yyy = ""a"")
+! when (xxx.yyy = ""a"")
 : bbb");
 
       Assert.IsNotNull(r.Trigger.Condition);

@@ -22,3 +22,10 @@
 > Jeg har (en|et) (%kæledyr)
 ! set user.pet = $kæledyr
 : Sejt
+
+
+> xxx
+: a
+
+> xxx
+: b

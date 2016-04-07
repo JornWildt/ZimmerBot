@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿#define USERANDOMREACTION
+
+using System;
+using System.Collections.Generic;
 using log4net;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Pipeline.InputStages;
@@ -8,6 +11,8 @@ namespace ZimmerBot.Core.Knowledge
   public static class BotUtility
   {
     static ILog DiaLogger = LogManager.GetLogger("DialogLogger");
+
+    static Random Randomizer = new Random();
 
 
     public static Response Invoke(KnowledgeBase kb, Request req, bool executeScheduledRules = false)
@@ -53,8 +58,14 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (reactions != null && reactions.Count > 0)
         {
+#if USERANDOMREACTION
+          // Select a random reaction
+          Reaction r = reactions[Randomizer.Next(reactions.Count)];
+#else
+          // Use all reactions
           foreach (Reaction r in reactions)
           {
+#endif
             string response = r.GenerateResponse();
             DiaLogger.InfoFormat("Response: " + response);
 
@@ -62,7 +73,9 @@ namespace ZimmerBot.Core.Knowledge
               output.Add(line);
 
             state[Constants.SessionStoreKey][Constants.LastRuleIdKey] = r.Rule.Id;
+#if !USERANDOMREACTION
           }
+#endif
         }
         else
         {
