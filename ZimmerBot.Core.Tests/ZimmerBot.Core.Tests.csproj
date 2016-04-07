@@ -52,6 +52,7 @@
     <Compile Include="BotTests\AnswerTests.cs" />
     <Compile Include="BotTests\ConceptTests.cs" />
     <Compile Include="BotTests\ConditionTests.cs" />
+    <Compile Include="BotTests\OutputTests.cs" />
     <Compile Include="BotTests\TestHelper.cs" />
     <Compile Include="BotTests\UserMemoryTests.cs" />
     <Compile Include="BotTests\SessionMemoryTests.cs" />
