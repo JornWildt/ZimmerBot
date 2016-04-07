@@ -2,7 +2,7 @@
 
 namespace ZimmerBot.Core.Utilities
 {
-  public class NullValueDictionary<TKey,TValue> : Dictionary<TKey, TValue>
+  public class NullValueDictionary<TKey,TValue> : Dictionary<TKey, TValue>, IDictionary<TKey, TValue>
     where TValue : new()
   {
     public new TValue this[TKey key]
@@ -16,6 +16,18 @@ namespace ZimmerBot.Core.Utilities
       set
       {
         base[key] = value;
+      }
+    }
+
+    TValue IDictionary<TKey, TValue>.this[TKey key]
+    {
+      get
+      {
+        return this[key];
+      }
+      set
+      {
+        this[key] = value;
       }
     }
   }

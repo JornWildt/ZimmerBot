@@ -10,6 +10,8 @@ namespace ZimmerBot.Core.Knowledge
     public Session()
     {
       Store = new NullValueDictionary<string, object>();
+
+      Store[Constants.LineCountKey] = 0;
     }
   }
 }
