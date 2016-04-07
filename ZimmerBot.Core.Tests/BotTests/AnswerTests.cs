@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using ZimmerBot.Core.ConfigParser;
-using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Tests.BotTests
 {
