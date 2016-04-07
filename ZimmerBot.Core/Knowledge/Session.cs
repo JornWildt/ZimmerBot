@@ -1,17 +1,23 @@
-﻿using ZimmerBot.Core.Utilities;
+﻿using CuttingEdge.Conditions;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Knowledge
 {
   public class Session
   {
+    public string SessionId { get; protected set; }
+
     public NullValueDictionary<string,dynamic> Store { get; protected set; }
 
 
-    public Session()
+    public Session(string id)
     {
+      Condition.Requires(id, nameof(id)).IsNotNullOrEmpty();
+
+      SessionId = id;
       Store = new NullValueDictionary<string, object>();
 
-      Store[Constants.ResponseCountKey] = 0;
+      Store[StateKeys.ResponseCount] = 0;
     }
   }
 }

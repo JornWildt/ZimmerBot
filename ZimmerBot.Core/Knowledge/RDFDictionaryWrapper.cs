@@ -22,15 +22,15 @@ namespace ZimmerBot.Core.Knowledge
     protected Uri PredicateBase { get; set; }
 
 
-    public RDFDictionaryWrapper(RDFStore store, string subject, string predicateBase)
+    public RDFDictionaryWrapper(RDFStore store, Uri subject, Uri predicateBase)
     {
       Condition.Requires(store, nameof(store)).IsNotNull();
       Condition.Requires(subject, nameof(subject)).IsNotNull();
       Condition.Requires(predicateBase, nameof(predicateBase)).IsNotNull();
 
       Store = store;
-      Subject = new Uri(subject);
-      PredicateBase = new Uri(predicateBase);
+      Subject = subject;
+      PredicateBase = predicateBase;
       NodeFactory = new NodeFactory();
     }
 
@@ -61,7 +61,7 @@ namespace ZimmerBot.Core.Knowledge
         INode p = NodeFactory.CreateUriNode(new Uri(PredicateBase, key));
         INode o = NodeFactory.CreateLiteralNode(value != null ? value.ToString() : "");
         Store.Retract(s, p);
-        Store.Assert(s, p, o);
+        Store.Insert(s, p, o);
       }
     }
 

@@ -125,7 +125,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (RequiredPriorRuleId != null)
       {
-        string lastRuleId = context.State[Constants.SessionStoreKey][Constants.LastRuleIdKey] as string;
+        string lastRuleId = context.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
         if (lastRuleId is string)
         {
           if (RequiredPriorRuleId == lastRuleId)

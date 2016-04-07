@@ -43,6 +43,7 @@ namespace ZimmerBot.Core.Knowledge
       InputPipeline.AddHandler(new SentenceTaggingStage());
       InputPipeline.AddHandler(new ReactionGeneratorStage());
       InputPipeline.AddHandler(new OutputGeneratorStage());
+      InputPipeline.AddHandler(new ChatLoggerStage());
     }
 
 

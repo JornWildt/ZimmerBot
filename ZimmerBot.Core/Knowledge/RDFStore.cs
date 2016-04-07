@@ -182,8 +182,16 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Assert(INode s, INode p, INode o)
+    public void Insert(INode s, INode p, INode o)
     {
+      IGraph g = Dataset.GetModifiableGraph(null);
+      g.Assert(s, p, o);
+    }
+
+
+    public void Update(INode s, INode p, INode o)
+    {
+      Retract(s, p);
       IGraph g = Dataset.GetModifiableGraph(null);
       g.Assert(s, p, o);
     }

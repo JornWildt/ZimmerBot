@@ -1,0 +1,29 @@
+
+> hvem har du (snakket|chattet) med
+! call RDF.Query("
+PREFIX ztype: <http://zimmerbot.org/types/>
+SELECT ?pers
+WHERE
+{
+  ?pers rdf:type ztype:user.
+}
+LIMIT 5
+")
+: Lad mig see ... \
+<result:{r | <r.pers>}>
+
+> hvad har du sidst? sagt
+! call RDF.Query("
+PREFIX ztype: <http://zimmerbot.org/types/>
+SELECT ?output
+WHERE
+{
+  ?entry rdf:type ztype:chatentry.
+  ?entry <http://output> ?output.
+  ?entry <http://timestamp> ?ts.
+}
+ORDER BY DESC(?ts)
+LIMIT 5
+")
+: Lad mig see ... \
+<result:{r | <r.output>}>

@@ -30,6 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{EF8EBC4A-F8D7-4FD1-B690-B8E37A197033}"
 	ProjectSection(SolutionItems) = preProject
 		Examples\da-DK\a_kæledyr.zbot = Examples\da-DK\a_kæledyr.zbot
+		Examples\da-DK\chatinfo.zbot = Examples\da-DK\chatinfo.zbot
 		Examples\da-DK\citater.ttl = Examples\da-DK\citater.ttl
 		Examples\da-DK\citater.zbot = Examples\da-DK\citater.zbot
 		Examples\da-DK\dato-tid.zbot = Examples\da-DK\dato-tid.zbot

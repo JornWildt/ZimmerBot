@@ -104,6 +104,7 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="Expressions\UnaryOperatorExpr.cs" />
+    <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />
     <Compile Include="Statements\AnswerStatement.cs" />
     <Compile Include="Statements\CallStatment.cs" />
@@ -116,7 +117,7 @@
     <Compile Include="Statements\OutputTemplateStatement.cs" />
     <Compile Include="ConsoleBotEnvironment.cs" />
     <Compile Include="BotHandle.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="StateKeys.cs" />
     <Compile Include="Expressions\BinaryOperatorExpr.cs" />
     <Compile Include="Expressions\DotExpression.cs" />
     <Compile Include="Expressions\ExpressionEvaluationContext.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="TemplateParser\TemplateContext.cs" />
     <Compile Include="TemplateParser\TemplateToken.cs" />
     <Compile Include="TemplateParser\TemplateUtility.cs" />
+    <Compile Include="UrlConstants.cs" />
     <Compile Include="Utilities\AppSetting.cs" />
     <Compile Include="Utilities\ChainedDictionary.cs" />
     <Compile Include="Utilities\NullValueDictionary.cs" />

@@ -1,7 +1,9 @@
 ﻿#define USERANDOMREACTION
 
+using System;
 using System.Collections.Generic;
 using log4net;
+using VDS.RDF;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Pipeline.InputStages;
 
@@ -11,22 +13,42 @@ namespace ZimmerBot.Core.Knowledge
   {
     static ILog DiaLogger = LogManager.GetLogger("DialogLogger");
 
+    static INodeFactory NodeFactory = new NodeFactory();
+
 
     public static Response Invoke(KnowledgeBase kb, Request req, bool executeScheduledRules = false)
+    {
+      return InvokeInternal(kb, req, executeScheduledRules, false);
+    }
+
+
+    internal static Response InvokeInternal(KnowledgeBase kb, Request req, bool executeScheduledRules, bool fromTemplate)
     {
       RequestState state = new RequestState();
 
       // Add session store
       Session session = SessionManager.GetOrCreateSession(req.SessionId);
-      state[Constants.SessionStoreKey] = session.Store;
+      state[StateKeys.SessionStore] = session.Store;
 
       // Add user store
-      var userStore = new RDFDictionaryWrapper(kb.MemoryStore, AppSettings.RDF_BaseUrl + "users/" + req.UserId, AppSettings.RDF_BaseUrl + "uservalues/");
-      state[Constants.UserStoreKey] = userStore;
+      var userStore = new RDFDictionaryWrapper(kb.MemoryStore, UrlConstants.UsersUrl(req.UserId), UrlConstants.UserValuesUrl);
+      state[StateKeys.UserStore] = userStore;
 
       // Add bot store
-      var botStore = new RDFDictionaryWrapper(kb.MemoryStore, AppSettings.RDF_BaseUrl + "bot/" + req.UserId, AppSettings.RDF_BaseUrl + "botvalues/");
-      state[Constants.BotStoreKey] = botStore;
+      var botStore = new RDFDictionaryWrapper(kb.MemoryStore, UrlConstants.BotUrl, UrlConstants.BotValuesUrl);
+      state[StateKeys.BotStore] = botStore;
+
+      // Register <user, is-a, user>
+      kb.MemoryStore.Update(
+        NodeFactory.CreateUriNode(UrlConstants.UsersUrl(req.UserId)),
+        NodeFactory.CreateUriNode(UrlConstants.Rdf("type")),
+        NodeFactory.CreateUriNode(UrlConstants.UserTypeUrl));
+
+      // Register <chat, is-a, chat>
+      kb.MemoryStore.Update(
+        NodeFactory.CreateUriNode(UrlConstants.ChatsUrl(req.SessionId)),
+        NodeFactory.CreateUriNode(UrlConstants.Rdf("type")),
+        NodeFactory.CreateUriNode(UrlConstants.ChatTypeUrl));
 
       List<string> output = new List<string>();
 
@@ -42,7 +64,7 @@ namespace ZimmerBot.Core.Knowledge
 
         foreach (ZTokenSequence input in statements.Statements)
         {
-          var pipelineItem = new InputPipelineItem(kb, state, req, input);
+          var pipelineItem = new InputPipelineItem(kb, session, state, req, input, fromTemplate);
           kb.InputPipeline.Invoke(pipelineItem);
           output.AddRange(pipelineItem.Output);
         }
@@ -50,14 +72,14 @@ namespace ZimmerBot.Core.Knowledge
       else
       {
         DiaLogger.InfoFormat("Invoke without input");
-        var pipelineItem = new InputPipelineItem(kb, state, req, null);
+        var pipelineItem = new InputPipelineItem(kb, session, state, req, null, fromTemplate);
         kb.InputPipeline.Invoke(pipelineItem);
         output.AddRange(pipelineItem.Output);
       }
 
       if (output.Count > 0)
       {
-        state[Constants.SessionStoreKey][Constants.ResponseCountKey] = state[Constants.SessionStoreKey][Constants.ResponseCountKey] + 1;
+        state[StateKeys.SessionStore][StateKeys.ResponseCount] = state[StateKeys.SessionStore][StateKeys.ResponseCount] + 1;
 
         return new Response
         {

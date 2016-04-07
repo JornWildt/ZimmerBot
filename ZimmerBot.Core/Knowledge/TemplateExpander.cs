@@ -36,7 +36,7 @@ namespace ZimmerBot.Core.Knowledge
     public string Invoke(string s)
     {
       Request request = new Request(OriginalRequest, s);
-      Response response = BotUtility.Invoke(KnowledgeBase, request);
+      Response response = BotUtility.InvokeInternal(KnowledgeBase, request, false, true);
       return response.Output.Aggregate((a, b) => a + "\n" + b);
     }
   }

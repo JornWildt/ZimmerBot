@@ -27,7 +27,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
           output.Add(line);
 
         // Remember last used rule for handling of answers
-        state[Constants.SessionStoreKey][Constants.LastRuleIdKey] = r.Rule.Id;
+        state[StateKeys.SessionStore][StateKeys.LastRuleId] = r.Rule.Id;
 
         DiaLogger.InfoFormat("Response: " + response);
       }
