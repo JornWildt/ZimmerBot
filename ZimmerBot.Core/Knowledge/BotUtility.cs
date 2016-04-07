@@ -22,8 +22,11 @@ namespace ZimmerBot.Core.Knowledge
       Session session = SessionManager.GetOrCreateSession(req.SessionId);
       state[Constants.SessionStoreKey] = session.Store;
 
-      var userStore = new RDFDictionaryWrapper(kb.MemoryStore, "http://zimmerbot.org/users/" + req.UserId, "http://zimmerbot.org/uservalues/");
+      var userStore = new RDFDictionaryWrapper(kb.MemoryStore, AppSettings.RDF_BaseUrl + "users/" + req.UserId, AppSettings.RDF_BaseUrl + "uservalues/");
       state[Constants.UserStoreKey] = userStore;
+
+      var botStore = new RDFDictionaryWrapper(kb.MemoryStore, AppSettings.RDF_BaseUrl + "bot/" + req.UserId, AppSettings.RDF_BaseUrl + "botvalues/");
+      state[Constants.BotStoreKey] = botStore;
 
       List<ReactionSet> reactionList = new List<ReactionSet>();
 

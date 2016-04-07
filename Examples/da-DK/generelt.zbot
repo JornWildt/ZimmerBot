@@ -1,7 +1,15 @@
 ! concept hilsen = hej, hejsa, goddag, dav, Mojn
 
+>
+! when (!bot.name)
+! set bot.name = "Pete"
 
-#> Hej
+
+# Hej
+> %hilsen
+: Hej. Jeg hedder <bot.name>
+
+# Hej
 > %hilsen
 : Hej. Hvad hedder du? Jeg gætter på '<user.name>'.
 ! answer

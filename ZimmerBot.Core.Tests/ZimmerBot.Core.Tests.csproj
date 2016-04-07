@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotTests\AnswerTests.cs" />
+    <Compile Include="BotTests\BotMemoryTests.cs" />
     <Compile Include="BotTests\ConceptTests.cs" />
     <Compile Include="BotTests\ConditionTests.cs" />
     <Compile Include="BotTests\OutputTests.cs" />
