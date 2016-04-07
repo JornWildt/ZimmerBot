@@ -10,9 +10,22 @@ namespace ZimmerBot.Core.Tests.BotTests
     protected override void TestFixtureSetUp()
     {
       base.TestFixtureSetUp();
-      KnowledgeBase kb = new KnowledgeBase();
-      kb.LoadFromFiles("ConfigParser", "ConceptTests.zbot");
-      B = new Bot(kb);
+      BuildBot(@"
+! concept fruit = bananas, apple, strawberry
+! concept meat = pork, chicken, beef
+! concept fruit_and_meat = %meat, %fruit
+! concept like = like, enjoy, prefer
+
+> I %like %fruit_and_meat
+: I <like> <fruit_and_meat> too
+
+> You %like %fruit_and_meat
+! set session.like = $fruit_and_meat
+: Okay, I <like> <fruit_and_meat> too
+
+> What do you like
+: I like <session.like>
+");
     }
 
 
@@ -29,18 +42,14 @@ namespace ZimmerBot.Core.Tests.BotTests
     }
 
 
-    //protected string GetResponseFor(string s)
-    //{
-    //  EvaluationContext context = BuildEvaluationContextFromInput(s);
-    //  RequestState state = new RequestState();
-    //  var sessionState = new Dictionary<string, dynamic>();// FIXME: use common code
-    //  sessionState[Constants.LineCountKey] = 0d;
-    //  state[Constants.SessionStoreKey] = sessionState;
+    [Test]
+    public void CanReferenceConceptsInExpression()
+    {
+      string r1 = Invoke("You prefer beef");
+      Assert.AreEqual("Okay, I prefer beef too", r1);
 
-
-    //  Response response = BotUtility.Invoke(KB, new Request { Input = s });
-    //  Assert.AreEqual(1, response.Output.Length);
-    //  return response.Output[0];
-    //}
+      string r2 = Invoke("What do you like?");
+      Assert.AreEqual("I like beef", r2);
+    }
   }
 }

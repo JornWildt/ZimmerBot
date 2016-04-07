@@ -20,5 +20,5 @@
 : Hej
 
 > Jeg har (en|et) (%kæledyr)
-! set user.pet = $2
+! set user.pet = $kæledyr
 : Sejt
