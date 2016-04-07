@@ -13,7 +13,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
     public Request Request { get; protected set; }
 
-    public ZTokenSequence Input{ get; protected set; }
+    public ZTokenSequence Input { get; protected set; }
 
     public RequestState State { get; protected set; }
 
@@ -25,6 +25,8 @@ namespace ZimmerBot.Core.Pipeline.InputStages
     public HashSet<string> SentenceTags { get; protected set; }
 
     public ReactionSet Reactions { get; protected set; }
+
+    public List<string> Output { get; protected set; }
 
     #endregion
 
@@ -42,6 +44,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
       SentenceTags = new HashSet<string>();
       Reactions = new ReactionSet();
+      Output = new List<string>();
     }
   }
 }

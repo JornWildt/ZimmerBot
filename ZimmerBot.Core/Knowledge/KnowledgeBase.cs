@@ -42,6 +42,7 @@ namespace ZimmerBot.Core.Knowledge
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new SentenceTaggingStage());
       InputPipeline.AddHandler(new ReactionGeneratorStage());
+      InputPipeline.AddHandler(new OutputGeneratorStage());
     }
 
 

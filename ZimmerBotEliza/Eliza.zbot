@@ -88,7 +88,7 @@ Fortæl mig noget mere om din <2> ...
 : Hvilke følelser mærker du når du siger det?
 
 >
-& (session.lineCount = 0)
+& (session.responseCount = 0)
 : Hej. Mit navn er Eliza.\
 Jeg er en chatbot med speciale i psykiatri. Hvad kan jeg hjælpe dig med?
 
@@ -97,7 +97,7 @@ Jeg er en chatbot med speciale i psykiatri. Hvad kan jeg hjælpe dig med?
 
 > 
 ! every 30
-& (session.lineCount = 1)
+& (session.responseCount = 1)
 : Nåh... ?
 : Hmmm ...
 : Er du der?

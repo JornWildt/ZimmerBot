@@ -11,7 +11,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       Store = new NullValueDictionary<string, object>();
 
-      Store[Constants.LineCountKey] = 0;
+      Store[Constants.ResponseCountKey] = 0;
     }
   }
 }
