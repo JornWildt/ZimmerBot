@@ -105,14 +105,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Shutdown()
-    {
-      string dbFilename = GetDatabaseFilename();
-      TriGWriter trigwriter = new TriGWriter();
-      trigwriter.Save(Store, dbFilename);
-    }
-
-
     public void LoadFromFile(string filename)
     {
       if (LoadFilesEnabled)
@@ -136,6 +128,23 @@ namespace ZimmerBot.Core.Knowledge
         }
         else
           Logger.InfoFormat("Skipping RDF file '{0}' - it has already been loaded", filename);
+      }
+    }
+
+
+    public void FlushToDisk()
+    {
+      string dbFilename = GetDatabaseFilename();
+      string lockFilename = dbFilename + ".lock";
+
+      using (new FileStream(lockFilename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))
+      {
+        string backupFilename = dbFilename + ".bak";
+
+        TriGWriter trigwriter = new TriGWriter();
+        trigwriter.Save(Store, backupFilename);
+        File.Delete(dbFilename);
+        File.Move(backupFilename, dbFilename);
       }
     }
 

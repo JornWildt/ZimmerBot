@@ -35,8 +35,7 @@ namespace ZimmerBot.Core
         {
           StdSchedulerFactory.GetDefaultScheduler().Shutdown();
           AddOnHandling.AddOnLoader.ShutdownAddOns();
-          foreach (RDFStore store in RDFStoreRepository.GetStores())
-            store.Shutdown();
+          RDFStoreRepository.Shutdown();
           IsInitialized = false;
         }
       }
