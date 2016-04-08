@@ -23,6 +23,10 @@ namespace ZimmerBot.Core
 
     public static Uri Rdf(string key) => new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#" + key);
 
+    public static Uri DcTerms(string key) => new Uri("http://purl.org/dc/terms/" + key);
+
+    public static Uri Foaf(string key) => new Uri("http://xmlns.com/foaf/0.1/" + key);
+
     static Uri CreateUrl(string path) => new Uri(AppSettings.RDF_BaseUrl + path);
   }
 }

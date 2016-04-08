@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using VDS.RDF;
 
 namespace ZimmerBot.Core.Pipeline.InputStages
@@ -11,43 +13,54 @@ namespace ZimmerBot.Core.Pipeline.InputStages
     public void Handle(InputPipelineItem item)
     {
       // Protect against recursive invokes from templates - only register initial invoke
-      if (!item.FromTemplate)
+      if (!item.FromTemplate && AppSettings.RDF_EnableChatLog)
       {
-        INode s = NodeFactory.CreateUriNode(UrlConstants.ChatEntriesUrl(Guid.NewGuid().ToString()));
+        AddEntry(item, item.Request.Input, UrlConstants.UsersUrl(item.Request.UserId));
 
-        INode p = NodeFactory.CreateUriNode(new Uri("http://timestamp"));
-        INode o = DateTime.Now.ToLiteral(NodeFactory);
-        item.KnowledgeBase.MemoryStore.Insert(s, p, o);
-
-        p = NodeFactory.CreateUriNode(new Uri("http://participant"));
-        o = NodeFactory.CreateUriNode(UrlConstants.UsersUrl(item.Request.UserId));
-        item.KnowledgeBase.MemoryStore.Insert(s, p, o);
-
-        p = NodeFactory.CreateUriNode(new Uri("http://chat"));
-        o = NodeFactory.CreateUriNode(UrlConstants.ChatsUrl(item.Session.SessionId));
-        item.KnowledgeBase.MemoryStore.Insert(s, p, o);
-
-        if (item.Request.Input != null)
+        if (item.Output.Count > 0)
         {
-          p = NodeFactory.CreateUriNode(new Uri("http://input"));
-          o = item.Request.Input.ToLiteral(NodeFactory);
-          item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+          string output = item.Output.Aggregate((a, b) => a + "\n" + b);
+          AddEntry(item, output, UrlConstants.BotUrl);
         }
+      }
+    }
 
-        foreach (string output in item.Output)
-        {
-          // Register at most 200 characters
-          string so = output.Substring(0, Math.Min(output.Length, 200));
+    protected void AddEntry(InputPipelineItem item, string text, Uri creator)
+    {
+      INode s = NodeFactory.CreateUriNode(UrlConstants.ChatEntriesUrl(Guid.NewGuid().ToString()));
 
-          p = NodeFactory.CreateUriNode(new Uri("http://output"));
-          o = so.ToLiteral(NodeFactory);
-          item.KnowledgeBase.MemoryStore.Insert(s, p, o);
-        }
+      INode p = NodeFactory.CreateUriNode(UrlConstants.Rdf("type"));
+      INode o = NodeFactory.CreateUriNode(UrlConstants.ChatEntryTypeUrl);
+      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
 
-        p = NodeFactory.CreateUriNode(UrlConstants.Rdf("type"));
-        o = NodeFactory.CreateUriNode(UrlConstants.ChatEntryTypeUrl);
+      p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("created"));
+      o = DateTime.Now.ToLiteral(NodeFactory);
+      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+
+      p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("creator"));
+      o = NodeFactory.CreateUriNode(creator);
+      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+
+      p = NodeFactory.CreateUriNode(new Uri("http://chat"));
+      o = NodeFactory.CreateUriNode(UrlConstants.ChatsUrl(item.Session.SessionId));
+      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+
+      if (text != null)
+      {
+        p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("description"));
+        o = text.ToLiteral(NodeFactory);
         item.KnowledgeBase.MemoryStore.Insert(s, p, o);
       }
+
+      //foreach (string output in item.Output)
+      //{
+      //  // Register at most 200 characters
+      //  string so = output.Substring(0, Math.Min(output.Length, 200));
+
+      //  p = NodeFactory.CreateUriNode(new Uri("http://output"));
+      //  o = so.ToLiteral(NodeFactory);
+      //  item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      //}
     }
   }
 }
