@@ -27,6 +27,9 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
     protected void AddEntry(InputPipelineItem item, string text, Uri creator)
     {
+      if (text != null && text.Length > 200)
+        text = text.Substring(0, 200);
+
       INode s = NodeFactory.CreateUriNode(UrlConstants.ChatEntriesUrl(Guid.NewGuid().ToString()));
 
       INode p = NodeFactory.CreateUriNode(UrlConstants.Rdf("type"));

@@ -218,11 +218,20 @@ namespace ZimmerBot.Core.Knowledge
       if (result is SparqlResultSet)
       {
         SparqlResultSet rs = (SparqlResultSet)result;
-        var output = new RDFResultSet(rs.Select(r => r.ToDictionary(v => v.Key, v => v.Value.ToString())));
+        var output = new RDFResultSet(rs.Select(r => r.ToDictionary(v => v.Key, v => FormatINode(v.Value))));
         return output;
       }
       else
         throw new InvalidOperationException($"Could not convert '{result.GetType()}' to RDFResult");
+    }
+
+
+    private string FormatINode(INode n)
+    {
+      if (n is ILiteralNode)
+        return ((ILiteralNode)n).Value;
+      else
+        return n.ToString();
     }
   }
 }

@@ -15,15 +15,18 @@ LIMIT 5
 > hvad har du sidst? sagt
 ! call RDF.Query("
 PREFIX ztype: <http://zimmerbot.org/types/>
+PREFIX z: <http://zimmerbot.org/>
 SELECT ?output
 WHERE
 {
-  ?entry rdf:type ztype:chatentry.
-  ?entry <http://output> ?output.
-  ?entry <http://timestamp> ?ts.
+  ?entry rdf:type ztype:chatentry .
+  ?entry dcterms:creator z:bot .
+  ?entry dcterms:description ?output .
+  ?entry dcterms:created ?ts .
 }
 ORDER BY DESC(?ts)
-LIMIT 5
+LIMIT 2
 ")
 : Lad mig see ... \
-<result:{r | <r.output>}>
+<result:{r | <r.output>\
+}>
