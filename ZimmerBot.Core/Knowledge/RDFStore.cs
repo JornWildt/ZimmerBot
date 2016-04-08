@@ -39,6 +39,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected HashSet<string> LoadedFiles { get; set; }
 
+    protected bool DataHasChanged { get; set; }
+
 
     public RDFStore(string id)
     {
@@ -57,9 +59,16 @@ namespace ZimmerBot.Core.Knowledge
 
       Dataset.SetActiveGraph((Uri)null);
 
+      IGraph g = Dataset.GetModifiableGraph(null);
+      g.Changed += Data_Changed;
+
       RDFStoreRepository.Add(this);
     }
 
+    private void Data_Changed(object sender, GraphEventArgs args)
+    {
+      DataHasChanged = true;
+    }
 
     public void Initialize(KnowledgeBase.InitializationMode mode)
     {
@@ -134,6 +143,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public void FlushToDisk()
     {
+      if (!DataHasChanged)
+        return;
+
       string dbFilename = GetDatabaseFilename();
       string lockFilename = dbFilename + ".lock";
 
@@ -146,6 +158,8 @@ namespace ZimmerBot.Core.Knowledge
         File.Delete(dbFilename);
         File.Move(backupFilename, dbFilename);
       }
+
+      DataHasChanged = false;
     }
 
 
