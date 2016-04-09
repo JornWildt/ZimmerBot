@@ -29,6 +29,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
+%token T_CONTINUE
 
 %token T_IMPLIES
 %token T_COMMA
@@ -169,6 +170,7 @@ statement
   | stmtCall        { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
   | stmtSet         { $$.statement = $1.statement;}
   | stmtAnswer      { $$.statement = $1.statement;}
+  | stmtContinue    { $$.statement = $1.statement;}
   ;
 
 outputTemplate
@@ -192,6 +194,11 @@ stmtSet
 
 stmtAnswer
   : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.statement = new AnswerStatement($3.ruleList); }
+  ;
+
+stmtContinue
+  : T_CONTINUE                    { $$.statement = new ContinueStatement(); }
+  | T_CONTINUE T_LPAR expr T_RPAR { $$.statement = new ContinueStatement($3.expr); }
   ;
 
 /******************************************************************************

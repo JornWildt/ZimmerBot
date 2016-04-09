@@ -27,7 +27,7 @@ namespace ZimmerBot.Core.Statements
     public override void Execute(StatementExecutionContect context)
     {
       ProcessorRegistration processor = ProcessorRegistry.GetProcessor(Function.FunctionName);
-      ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);
+      ExpressionEvaluationContext ec = context.ResponseContext.BuildExpressionEvaluationContext();
 
       List<object> inputs = Function.CalculateInputValues(ec);
 

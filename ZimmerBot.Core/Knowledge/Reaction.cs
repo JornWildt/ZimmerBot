@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Processors;
 
 
@@ -24,7 +25,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public string GenerateResponse()
+    public List<string> GenerateResponse()
     {
       return Rule.Invoke(Context);
     }

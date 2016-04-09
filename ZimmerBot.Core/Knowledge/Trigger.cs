@@ -148,7 +148,10 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        result = new WRegex.MatchResult(1, "");
+        if (context.Input != null)
+          result = new WRegex.MatchResult(0.1, "");
+        else
+          result = new WRegex.MatchResult(1, "");
       }
 
       double totalScore = conditionModifier * result.Score * Math.Max(RegexSize,1);

@@ -107,7 +107,7 @@ namespace ZimmerBot.Core.Knowledge
     public static Random Randomizer = new Random();
 
 
-    public string Invoke(ResponseContext context)
+    public List<string> Invoke(ResponseContext context)
     {
       try
       {
@@ -127,18 +127,24 @@ namespace ZimmerBot.Core.Knowledge
           output.Execute(ox_context);
         }
 
+        // TODO - the code below could be wrapped up in a statement and make it more script like - with the
+        // possibility to generate output in multiple ways
+
         string templateName = "default";
         if (ox_context.LastValue != null)
           templateName = ox_context.LastValue.TemplateName;
 
-        string result = "";
+        List<string> result = new List<string>();
         if (ox_context.OutputTemplates.ContainsKey(templateName))
         {
           IList<string> templates = ox_context.OutputTemplates[templateName];
 
           string selectedTemplate = templates[Randomizer.Next(templates.Count)];
-          result = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(KnowledgeBase, context.OriginalRequest, context.Variables));
+          string output = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(KnowledgeBase, context.OriginalRequest, context.Variables));
+          result.Add(output);
         }
+
+        result.AddRange(ox_context.AdditionalOutput);
 
         return result;
       }

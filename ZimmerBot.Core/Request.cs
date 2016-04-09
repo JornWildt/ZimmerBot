@@ -37,6 +37,7 @@ namespace ZimmerBot.Core
       State = src.State;
       SessionId = src.SessionId;
       UserId = src.UserId;
+      State = src.State;
     }
   }
 }

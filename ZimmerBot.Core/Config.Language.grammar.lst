@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 06-04-2016 21:56:37>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 09-04-2016 07:32:37>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 06-04-2016 21:56:39
+//  DateTime: 09-04-2016 07:42:41
 //  UserName: Jorn
 // ==========================================================================
 
@@ -39,7 +39,8 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
+%token T_CONTINUE
 
 %token T_IMPLIES
 %token T_COMMA
@@ -64,8 +65,6 @@
 %token T_DOLLAR
 
 %%
-// Warning: NonTerminal symbol "condition" is unreachable
-// ------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -117,11 +116,6 @@ input
   : T_GT inputPatternSeq { $$.regex = $2.regex; }
   ;
 
-condition
-  : expr T_IMPLIES
-  | /* empty */
-  ;
-
 inputPatternSeq
   : inputPatternSeq inputPattern  { $$.regex = CombineSequence($1.regex, $2.regex); }
   | /* empty */                   { $$.regex = null; }
@@ -156,13 +150,13 @@ ruleModifierSeq
   ;
 
 ruleModifier
-  : xxcondition { $$ = $1; }
+  : condition { $$ = $1; }
   | weight    { $$ = $1; }
   | schedule  { $$ = $1; }
   ;
 
-xxcondition
-  : T_AMP expr { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
+condition
+  : T_WHEN expr { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
   ;
 
 weight
@@ -187,6 +181,7 @@ statement
   | stmtCall        { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
   | stmtSet         { $$.statement = $1.statement;}
   | stmtAnswer      { $$.statement = $1.statement;}
+  | stmtContinue    { $$.statement = $1.statement;}
   ;
 
 outputTemplate
@@ -212,11 +207,17 @@ stmtAnswer
   : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.statement = new AnswerStatement($3.ruleList); }
   ;
 
+stmtContinue
+  : T_CONTINUE { $$.statement = new ContinueStatement(); }
+
 /******************************************************************************
   EXPRESSION
 ******************************************************************************/
 
 exprSeq
+//^^^^^
+// Error: Syntax error, unexpected anchoredSymbol
+// ----------------------------------------------
   : exprSeq2    { $$ = $1; }
   | /* empty */ { $$.exprList = new List<Expression>(); }
   ;
@@ -236,8 +237,9 @@ exprBinary
   ;
 
 exprUnary
-  : T_LPAR expr T_RPAR { $$ = $2; }
-  | exprIdentifier     { $$ = $1; }
+  : T_LPAR expr T_RPAR { $$.expr = $2.expr; }
+  | T_EXCL expr        { $$.expr = new UnaryOperatorExpr($2.expr, UnaryOperatorExpr.OperatorType.Negation); }
+  | exprIdentifier     { $$.expr = $1.expr; }
   | T_STRING           { $$.expr = new ConstantValueExpr(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_NUMBER           { $$.expr = new ConstantValueExpr($1.n); }
   ;

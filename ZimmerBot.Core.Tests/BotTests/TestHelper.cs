@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Tests.BotTests
@@ -32,7 +33,7 @@ namespace ZimmerBot.Core.Tests.BotTests
     protected string Invoke(Bot b, Request request)
     {
       Response response = b.Invoke(request);
-      return response.Output[0];
+      return response.Output.Aggregate((x,y) => x + "\n" + y);
     }
 
 

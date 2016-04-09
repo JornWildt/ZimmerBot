@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Processors;
@@ -14,6 +15,9 @@ namespace ZimmerBot.Core.Statements
 
     public ProcessorOutput LastValue { get; set; }
 
+    // A place for statements to write output (output template handling could use this later)
+    public List<string> AdditionalOutput { get; set; }
+
 
     public StatementExecutionContect(ResponseContext context)
     {
@@ -22,6 +26,7 @@ namespace ZimmerBot.Core.Statements
       ResponseContext = context;
       OutputTemplates = new Dictionary<string, List<string>>();
       LastValue = null;
+      AdditionalOutput = new List<string>();
     }
 
 

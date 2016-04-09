@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -16,7 +17,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       ReactionSet reactions = kb.FindMatchingReactions(context);
 
       Assert.AreEqual(1, reactions.Count);
-      string response = reactions[0].GenerateResponse();
+      string response = reactions[0].GenerateResponse().Aggregate((a, b) => a + "\n" + b);
       Assert.AreEqual("Østers: Über", response);
     }
 
@@ -30,7 +31,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       ReactionSet reactions = kb.FindMatchingReactions(context);
 
       Assert.AreEqual(1, reactions.Count);
-      string response = reactions[0].GenerateResponse();
+      string response = reactions[0].GenerateResponse().Aggregate((a, b) => a + "\n" + b);
       Assert.AreEqual("Got: 'ÆØÅ'", response);
     }
   }

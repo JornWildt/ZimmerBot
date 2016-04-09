@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
@@ -37,6 +38,18 @@ namespace ZimmerBot.Core.Knowledge
 
       // Register core bot state in variables
       Variables = new ChainedDictionary<string, object>(State.State);
+    }
+
+
+    public EvaluationContext BuildEvaluationContext()
+    {
+      return new EvaluationContext(State, OriginalRequest, Input, null, false);
+    }
+
+
+    public ExpressionEvaluationContext BuildExpressionEvaluationContext()
+    {
+      return new ExpressionEvaluationContext(Variables);
     }
   }
 }

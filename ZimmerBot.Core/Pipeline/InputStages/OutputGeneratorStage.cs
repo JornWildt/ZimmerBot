@@ -21,10 +21,9 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       {
         // Select a random reaction
         Reaction r = item.Reactions[Randomizer.Next(item.Reactions.Count)];
-        string response = r.GenerateResponse();
+        List<string> response = r.GenerateResponse();
 
-        foreach (string line in response.Replace("\r", "").Split('\n'))
-          output.Add(line);
+        output.AddRange(response);
 
         // Remember last used rule for handling of answers
         state[StateKeys.SessionStore][StateKeys.LastRuleId] = r.Rule.Id;

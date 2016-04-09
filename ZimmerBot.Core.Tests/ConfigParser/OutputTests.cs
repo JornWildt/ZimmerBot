@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Statements;
 
@@ -38,7 +39,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Reaction reaction = CalculateReaction(r, "aaa bbb");
       Assert.IsNotNull(reaction);
 
-      string result = reaction.GenerateResponse();
+      string result = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
       Assert.AreEqual("ccc bbb", result);
     }
 
@@ -60,7 +61,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Reaction reaction = CalculateReaction(r, "aaa");
       Assert.IsNotNull(reaction);
 
-      string result = reaction.GenerateResponse();
+      string result = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
       StringAssert.IsMatch("ccc ..+", result);
     }
 
@@ -111,7 +112,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
       Assert.AreEqual(1, reactions.Count);
 
-      string result = reactions[0].GenerateResponse();
+      string result = reactions[0].GenerateResponse().Aggregate((a, b) => a + "\n" + b);
 
       StringAssert.IsMatch("would you like me to be a computer", result);
     }

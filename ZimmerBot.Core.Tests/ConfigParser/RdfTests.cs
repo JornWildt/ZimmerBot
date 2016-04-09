@@ -35,7 +35,7 @@ ORDER BY RAND()"")
       Reaction reaction = CalculateReaction(r, "hvem er ven med \"Peter Parker\"");
       Assert.IsNotNull(reaction);
 
-      string response = reaction.GenerateResponse();
+      string response = reaction.GenerateResponse().Aggregate((a,b) => a + "\n" + b);
       Assert.AreEqual("Det er 'Lisa Nilson'", response);
     }
 
@@ -64,7 +64,7 @@ ORDER BY RAND()"")
       Reaction reaction = CalculateReaction(r, "who is friend with \"Peter Parker\"");
       Assert.IsNotNull(reaction);
 
-      string response = reaction.GenerateResponse();
+      string response = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
       Assert.AreEqual("'Lisa Nilson' is a friend", response);
     }
   }

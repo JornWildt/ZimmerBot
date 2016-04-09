@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
@@ -24,7 +25,7 @@ namespace ZimmerBot.Core.Tests
       Reaction reaction = CalculateReaction(r, text);
       if (reaction == null)
         return null;
-      string result = reaction.GenerateResponse();
+      string result = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
       return result;
     }
 
