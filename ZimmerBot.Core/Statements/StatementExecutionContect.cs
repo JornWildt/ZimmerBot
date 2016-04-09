@@ -36,5 +36,11 @@ namespace ZimmerBot.Core.Statements
         OutputTemplates[template.Key] = new List<string>();
       OutputTemplates[template.Key].Add(template.Value);
     }
+
+
+    public void Continue(string input = null)
+    {
+      ResponseContext.Continue(input);
+    }
   }
 }

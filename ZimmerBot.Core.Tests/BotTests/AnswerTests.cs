@@ -34,5 +34,31 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("let us play", "are you ready?");
       AssertDialog("no", "okay, sorry");
     }
+
+
+    [Test]
+    public void CanAnswerContinuedQuestion()
+    {
+      BuildBot(@"
+> hi
+: welcome
+! continue
+
+>
+: how are you doing?
+! answer
+{
+  > fine
+  : good!
+}
+
+> fine
+: okay
+");
+
+      AssertDialog("fine", "okay");
+      AssertDialog("hi", "welcome\nhow are you doing?");
+      AssertDialog("fine", "good!");
+    }
   }
 }

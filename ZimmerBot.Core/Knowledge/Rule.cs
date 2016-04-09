@@ -99,7 +99,8 @@ namespace ZimmerBot.Core.Knowledge
       if (result.Score < 0.5)
         return null;
 
-      ResponseContext rc = new ResponseContext(KnowledgeBase, context.State, context.OriginalRequest, context.Input, result);
+      // context.State, context.OriginalRequest, context.Input
+      ResponseContext rc = new ResponseContext(KnowledgeBase, context, result);
       return new Reaction(rc, this);
     }
 

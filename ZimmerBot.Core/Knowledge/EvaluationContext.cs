@@ -20,6 +20,10 @@ namespace ZimmerBot.Core.Knowledge
 
     public int CurrentRepetitionIndex { get; set; }
 
+    public bool DoContinueMatchingRules { get; protected set; }
+
+    public string InputForNextRuleMatching { get; protected set; }
+
 
     public EvaluationContext(RequestState state, Request originalRequest, ZTokenSequence input, string ruleId, bool executeScheduledRules)
     {
@@ -31,6 +35,13 @@ namespace ZimmerBot.Core.Knowledge
       Input = input;
       RestrictToRuleId = ruleId;
       ExecuteScheduledRules = executeScheduledRules;
+    }
+
+
+    public void Continue(string input = null)
+    {
+      DoContinueMatchingRules = true;
+      InputForNextRuleMatching = input;
     }
   }
 }

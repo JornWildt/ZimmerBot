@@ -52,30 +52,32 @@ namespace ZimmerBot.Core.Knowledge
 
       List<string> output = new List<string>();
 
-      if (req.Input != null)
-      {
-        DiaLogger.InfoFormat("Invoke: {0}", req.Input);
-        ZTokenizer tokenizer = new ZTokenizer();
-        ZStatementSequence statements = tokenizer.Tokenize(req.Input);
+      InvokeStatements(req, kb, session, state, fromTemplate, output);
 
-        // Always evaluate at least one empty statement in order to invoke triggers without regex
-        if (statements.Statements.Count == 0)
-          statements.Statements.Add(new ZTokenSequence());
+      //if (req.Input != null)
+      //{
+      //  DiaLogger.InfoFormat("Invoke: {0}", req.Input);
+      //  ZTokenizer tokenizer = new ZTokenizer();
+      //  ZStatementSequence statements = tokenizer.Tokenize(req.Input);
 
-        foreach (ZTokenSequence input in statements.Statements)
-        {
-          var pipelineItem = new InputPipelineItem(kb, session, state, req, input, fromTemplate);
-          kb.InputPipeline.Invoke(pipelineItem);
-          output.AddRange(pipelineItem.Output);
-        }
-      }
-      else
-      {
-        DiaLogger.InfoFormat("Invoke without input");
-        var pipelineItem = new InputPipelineItem(kb, session, state, req, null, fromTemplate);
-        kb.InputPipeline.Invoke(pipelineItem);
-        output.AddRange(pipelineItem.Output);
-      }
+      //  // Always evaluate at least one empty statement in order to invoke triggers without regex
+      //  if (statements.Statements.Count == 0)
+      //    statements.Statements.Add(new ZTokenSequence());
+
+      //  foreach (ZTokenSequence input in statements.Statements)
+      //  {
+      //    var pipelineItem = new InputPipelineItem(kb, session, state, req, input, fromTemplate);
+      //    kb.InputPipeline.Invoke(pipelineItem);
+      //    output.AddRange(pipelineItem.Output);
+      //  }
+      //}
+      //else
+      //{
+      //  DiaLogger.InfoFormat("Invoke without input");
+      //  var pipelineItem = new InputPipelineItem(kb, session, state, req, null, fromTemplate);
+      //  kb.InputPipeline.Invoke(pipelineItem);
+      //  output.AddRange(pipelineItem.Output);
+      //}
 
       if (output.Count > 0)
       {
@@ -90,6 +92,63 @@ namespace ZimmerBot.Core.Knowledge
       else
       {
         return new Response { Output = new string[0] };
+      }
+    }
+
+
+    static void InvokeStatements(
+      Request req, 
+      KnowledgeBase kb, 
+      Session session,
+      RequestState state,
+      bool fromTemplate, 
+      List<string> output)
+    {
+      if (req.Input != null)
+      {
+        DiaLogger.InfoFormat("Invoke: {0}", req.Input);
+        ZTokenizer tokenizer = new ZTokenizer();
+        ZStatementSequence statements = tokenizer.Tokenize(req.Input);
+
+        // Always evaluate at least one empty statement in order to invoke triggers without regex
+        if (statements.Statements.Count == 0)
+          statements.Statements.Add(new ZTokenSequence());
+
+        foreach (ZTokenSequence input in statements.Statements)
+        {
+          InvokeWithInput(req, input, kb, session, state, fromTemplate, output);
+        }
+      }
+      else
+      {
+        DiaLogger.InfoFormat("Invoke without input");
+        InvokeWithInput(req, null, kb, session, state, fromTemplate, output);
+      }
+    }
+
+
+    static void InvokeWithInput(
+      Request req,
+      ZTokenSequence input,
+      KnowledgeBase kb,
+      Session session,
+      RequestState state,
+      bool fromTemplate,
+      List<string> output)
+    {
+      var pipelineItem = new InputPipelineItem(kb, session, state, req, input, fromTemplate);
+      kb.InputPipeline.Invoke(pipelineItem);
+      output.AddRange(pipelineItem.Output);
+
+      if (pipelineItem.EvaluationContext.DoContinueMatchingRules)
+      {
+        InvokeStatements(
+          new Request(req, pipelineItem.EvaluationContext.InputForNextRuleMatching),
+          kb,
+          session,
+          state,
+          fromTemplate,
+          output);
       }
     }
   }

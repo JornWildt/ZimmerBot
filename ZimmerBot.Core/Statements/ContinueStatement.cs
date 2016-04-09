@@ -42,10 +42,14 @@ namespace ZimmerBot.Core.Statements
         nextInput = Next.Evaluate(ec) as string;
       }
 
+      /*
       Request request = new Request(context.ResponseContext.OriginalRequest, nextInput);
       Response response = BotUtility.InvokeInternal(context.ResponseContext.KnowledgeBase, request, false, true);
 
       context.AdditionalOutput.AddRange(response.Output);
+      */
+
+      context.Continue(nextInput);
     }
   }
 }

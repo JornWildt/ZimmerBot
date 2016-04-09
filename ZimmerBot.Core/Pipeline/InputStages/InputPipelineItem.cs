@@ -13,11 +13,13 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
     public Session Session { get; protected set; }
 
-    public Request Request { get; protected set; }
+    public EvaluationContext EvaluationContext { get; protected set; }
 
-    public ZTokenSequence Input { get; protected set; }
+    public Request Request { get { return EvaluationContext.OriginalRequest; } }
 
-    public RequestState State { get; protected set; }
+    public ZTokenSequence Input { get { return EvaluationContext.Input; } }
+
+    public RequestState State { get { return EvaluationContext.State; } }
 
     public bool FromTemplate { get; protected set; }
 
@@ -50,9 +52,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
       KnowledgeBase = kb;
       Session = session;
-      State = state;
-      Request = req;
-      Input = input;
+      EvaluationContext = new EvaluationContext(state, req, input, req.RuleId, executeScheduledRules: false);
       FromTemplate = fromTemplate;
 
       SentenceTags = new HashSet<string>();

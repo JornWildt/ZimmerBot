@@ -12,28 +12,27 @@ namespace ZimmerBot.Core.Knowledge
   {
     public KnowledgeBase KnowledgeBase { get; protected set; }
 
-    public RequestState State { get; protected set; }
+    public EvaluationContext EvaluationContext { get; protected set; }
 
-    public Request OriginalRequest { get; protected set; }
+    public RequestState State { get { return EvaluationContext.State; } }
 
-    public ZTokenSequence Input { get; protected set; }
+    public Request OriginalRequest { get { return EvaluationContext.OriginalRequest; } }
+
+    public ZTokenSequence Input { get { return EvaluationContext.Input; } }
 
     public WRegex.MatchResult Match { get; protected set; }
 
     public ChainedDictionary<string, object> Variables { get; protected set; }
 
 
-    public ResponseContext(KnowledgeBase kb, RequestState state, Request originalRequest, ZTokenSequence input, WRegex.MatchResult match)
+    public ResponseContext(KnowledgeBase kb, EvaluationContext context, WRegex.MatchResult match)
     {
       // Both input and match can be null for scheduled, non-input based, responses
       Condition.Requires(kb, nameof(kb)).IsNotNull();
-      Condition.Requires(state, nameof(state)).IsNotNull();
-      Condition.Requires(originalRequest, nameof(originalRequest)).IsNotNull();
+      Condition.Requires(context, nameof(context)).IsNotNull();
 
       KnowledgeBase = kb;
-      State = state;
-      OriginalRequest = originalRequest;
-      Input = input;
+      EvaluationContext = context;
       Match = match;
 
       // Register core bot state in variables
@@ -50,6 +49,12 @@ namespace ZimmerBot.Core.Knowledge
     public ExpressionEvaluationContext BuildExpressionEvaluationContext()
     {
       return new ExpressionEvaluationContext(Variables);
+    }
+
+
+    public void Continue(string input = null)
+    {
+      EvaluationContext.Continue(input);
     }
   }
 }
