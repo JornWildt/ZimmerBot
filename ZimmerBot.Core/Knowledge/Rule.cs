@@ -141,7 +141,7 @@ namespace ZimmerBot.Core.Knowledge
           IList<string> templates = ox_context.OutputTemplates[templateName];
 
           string selectedTemplate = templates[Randomizer.Next(templates.Count)];
-          string output = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(KnowledgeBase, context.OriginalRequest, context.Variables));
+          string output = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(context));
           result.Add(output);
         }
 

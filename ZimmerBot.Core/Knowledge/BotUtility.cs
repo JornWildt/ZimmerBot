@@ -54,31 +54,6 @@ namespace ZimmerBot.Core.Knowledge
 
       InvokeStatements(req, kb, session, state, fromTemplate, output);
 
-      //if (req.Input != null)
-      //{
-      //  DiaLogger.InfoFormat("Invoke: {0}", req.Input);
-      //  ZTokenizer tokenizer = new ZTokenizer();
-      //  ZStatementSequence statements = tokenizer.Tokenize(req.Input);
-
-      //  // Always evaluate at least one empty statement in order to invoke triggers without regex
-      //  if (statements.Statements.Count == 0)
-      //    statements.Statements.Add(new ZTokenSequence());
-
-      //  foreach (ZTokenSequence input in statements.Statements)
-      //  {
-      //    var pipelineItem = new InputPipelineItem(kb, session, state, req, input, fromTemplate);
-      //    kb.InputPipeline.Invoke(pipelineItem);
-      //    output.AddRange(pipelineItem.Output);
-      //  }
-      //}
-      //else
-      //{
-      //  DiaLogger.InfoFormat("Invoke without input");
-      //  var pipelineItem = new InputPipelineItem(kb, session, state, req, null, fromTemplate);
-      //  kb.InputPipeline.Invoke(pipelineItem);
-      //  output.AddRange(pipelineItem.Output);
-      //}
-
       if (output.Count > 0)
       {
         state[StateKeys.SessionStore][StateKeys.ResponseCount] = state[StateKeys.SessionStore][StateKeys.ResponseCount] + 1;
@@ -91,12 +66,12 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        return new Response { Output = new string[0] };
+        return new Response { Output = new string[0], State = req.State };
       }
     }
 
 
-    static void InvokeStatements(
+    static internal void InvokeStatements(
       Request req, 
       KnowledgeBase kb, 
       Session session,
@@ -127,7 +102,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    static void InvokeWithInput(
+    static internal void InvokeWithInput(
       Request req,
       ZTokenSequence input,
       KnowledgeBase kb,
@@ -136,6 +111,9 @@ namespace ZimmerBot.Core.Knowledge
       bool fromTemplate,
       List<string> output)
     {
+      if (++state.RepetitionCount >= 20)
+        throw new RepetitionException($"Stopping repeated evaluation af {state.RepetitionCount} tries.");
+
       var pipelineItem = new InputPipelineItem(kb, session, state, req, input, fromTemplate);
       kb.InputPipeline.Invoke(pipelineItem);
       output.AddRange(pipelineItem.Output);

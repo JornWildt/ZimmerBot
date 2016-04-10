@@ -8,6 +8,8 @@ namespace ZimmerBot.Core.Knowledge
   {
     public RequestState State { get; protected set; }
 
+    public Session Session { get; protected set; }
+
     public Request OriginalRequest { get; protected set; }
 
     public ZTokenSequence Input { get; protected set; }
@@ -25,12 +27,14 @@ namespace ZimmerBot.Core.Knowledge
     public string InputForNextRuleMatching { get; protected set; }
 
 
-    public EvaluationContext(RequestState state, Request originalRequest, ZTokenSequence input, string ruleId, bool executeScheduledRules)
+    public EvaluationContext(RequestState state, Session session, Request originalRequest, ZTokenSequence input, string ruleId, bool executeScheduledRules)
     {
-      Condition.Requires(state, "state").IsNotNull();
+      Condition.Requires(state, nameof(state)).IsNotNull();
+      Condition.Requires(session, nameof(session)).IsNotNull();
       Condition.Requires(originalRequest, nameof(originalRequest)).IsNotNull();
 
       State = state;
+      Session = session;
       OriginalRequest = originalRequest;
       Input = input;
       RestrictToRuleId = ruleId;

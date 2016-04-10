@@ -52,7 +52,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
       KnowledgeBase = kb;
       Session = session;
-      EvaluationContext = new EvaluationContext(state, req, input, req.RuleId, executeScheduledRules: false);
+      EvaluationContext = new EvaluationContext(state, session, req, input, req.RuleId, executeScheduledRules: false);
       FromTemplate = fromTemplate;
 
       SentenceTags = new HashSet<string>();

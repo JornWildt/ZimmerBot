@@ -7,10 +7,13 @@ namespace ZimmerBot.Core.Knowledge
   {
     public Dictionary<string, dynamic> State { get; protected set; }
 
+    public int RepetitionCount { get; set; }
+
 
     public RequestState()
     {
       State = new Dictionary<string, dynamic>();
+      RepetitionCount = 0;
     }
 
 

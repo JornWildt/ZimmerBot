@@ -20,6 +20,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public ZTokenSequence Input { get { return EvaluationContext.Input; } }
 
+    public Session Session { get { return EvaluationContext.Session; } }
+
     public WRegex.MatchResult Match { get; protected set; }
 
     public ChainedDictionary<string, object> Variables { get; protected set; }
@@ -42,7 +44,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public EvaluationContext BuildEvaluationContext()
     {
-      return new EvaluationContext(State, OriginalRequest, Input, null, false);
+      return new EvaluationContext(State, Session, OriginalRequest, Input, null, false);
     }
 
 

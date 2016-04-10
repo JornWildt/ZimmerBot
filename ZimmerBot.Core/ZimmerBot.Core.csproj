@@ -104,6 +104,7 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="Expressions\UnaryOperatorExpr.cs" />
+    <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />
     <Compile Include="Statements\AnswerStatement.cs" />
