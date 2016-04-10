@@ -95,11 +95,11 @@ namespace ZimmerBot.Core.Knowledge
 
     static internal void InvokeWithInput(InputRequestContext inputContext, List<string> output)
     {
-      if (++inputContext.RequestContext.RepetitionCount >= 20)
-        throw new RepetitionException($"Stopping repeated evaluation af {inputContext.RequestContext.RepetitionCount} tries.");
+      if (++inputContext.RepetitionCount >= 20)
+        throw new RepetitionException($"Stopping repeated evaluation af {inputContext.RepetitionCount} tries.");
 
       var pipelineItem = new InputPipelineItem(inputContext);
-      inputContext.RequestContext.KnowledgeBase.InputPipeline.Invoke(pipelineItem);
+      inputContext.KnowledgeBase.InputPipeline.Invoke(pipelineItem);
       output.AddRange(pipelineItem.Output);
 
       if (inputContext.DoContinueMatchingRules)

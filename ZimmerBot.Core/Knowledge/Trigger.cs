@@ -113,7 +113,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (Condition != null)
       {
-        ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.InputContext.RequestContext.State.State);
+        ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.InputContext.State.State);
         object value = Condition.Evaluate(eec);
         bool b;
         if (Expression.TryConvertToBool(value, out b))
@@ -124,7 +124,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (RequiredPriorRuleId != null)
       {
-        string lastRuleId = context.InputContext.RequestContext.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
+        string lastRuleId = context.InputContext.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
         if (lastRuleId is string)
         {
           if (RequiredPriorRuleId == lastRuleId)

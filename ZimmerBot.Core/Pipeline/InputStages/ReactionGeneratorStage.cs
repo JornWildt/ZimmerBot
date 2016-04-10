@@ -6,7 +6,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
   {
     public void Handle(InputPipelineItem item)
     {
-      item.Context.RequestContext.KnowledgeBase.FindMatchingReactions(item.EvaluationContext, item.Reactions);
+      item.Context.KnowledgeBase.FindMatchingReactions(item.EvaluationContext, item.Reactions);
     }
   }
 }

@@ -1,5 +1,6 @@
 ﻿using CuttingEdge.Conditions;
 using ZimmerBot.Core.Expressions;
+using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
 
@@ -8,6 +9,29 @@ namespace ZimmerBot.Core.Knowledge
   public class ResponseGenerationContext
   {
     public InputRequestContext InputContext { get; protected set; }
+
+    public KnowledgeBase KnowledgeBase { get { return InputContext.KnowledgeBase; } }
+
+    public ChainedDictionary<string, object> Variables { get { return InputContext.Variables; } }
+
+    public RequestState State { get { return InputContext.State; } }
+
+    public Session Session { get { return InputContext.Session; } }
+
+    public Request Request { get { return InputContext.Request; } }
+
+    public int RepetitionCount
+    {
+      get
+      {
+        return InputContext.RepetitionCount;
+      }
+      set
+      {
+        InputContext.RepetitionCount = value;
+      }
+    }
+
 
     public WRegex.MatchResult Match { get; protected set; }
 
@@ -24,7 +48,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public ExpressionEvaluationContext BuildExpressionEvaluationContext()
     {
-      return new ExpressionEvaluationContext(InputContext.RequestContext.Variables);
+      return new ExpressionEvaluationContext(InputContext.Variables);
     }
 
 

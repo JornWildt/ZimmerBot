@@ -21,14 +21,14 @@ namespace ZimmerBot.Core.Knowledge
 
     public string ExpandPlaceholdes(string s)
     {
-      string output = TextMerge.MergeTemplate(s, ResponseContext.InputContext.RequestContext.Variables);
+      string output = TextMerge.MergeTemplate(s, ResponseContext.Variables);
       return output;
     }
 
 
     public string Invoke(string s)
     {
-      Request request = new Request(ResponseContext.InputContext.Request, s);
+      Request request = new Request(ResponseContext.Request, s);
       List<string> output = new List<string>();
 
       BotUtility

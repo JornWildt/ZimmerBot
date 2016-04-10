@@ -1,11 +1,32 @@
 ﻿using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Knowledge
 {
   public class InputRequestContext
   {
     public RequestContext RequestContext { get; protected set; }
+
+    public KnowledgeBase KnowledgeBase { get { return RequestContext.KnowledgeBase; } }
+
+    public ChainedDictionary<string, object> Variables { get { return RequestContext.Variables; } }
+
+    public RequestState State { get { return RequestContext.State; } }
+
+    public Session Session { get { return RequestContext.Session; } }
+
+    public int RepetitionCount
+    {
+      get
+      {
+        return RequestContext.RepetitionCount;
+      }
+      set
+      {
+        RequestContext.RepetitionCount = value;
+      } 
+    }
 
     public Request Request { get; protected set; }
 

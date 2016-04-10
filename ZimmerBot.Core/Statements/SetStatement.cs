@@ -28,7 +28,7 @@ namespace ZimmerBot.Core.Statements
 
     public override void Execute(StatementExecutionContect context)
     {
-      ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.InputContext.RequestContext.Variables);
+      ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);
       object value = ValueExpr.Evaluate(ec);
       Reference.AssignValue(ec, value);
     }

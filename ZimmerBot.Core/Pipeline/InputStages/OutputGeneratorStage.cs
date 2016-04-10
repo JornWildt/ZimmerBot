@@ -14,7 +14,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
     public void Handle(InputPipelineItem item)
     {
-      RequestState state = item.Context.RequestContext.State;
+      RequestState state = item.Context.State;
       List<string> output = item.Output;
 
       if (item.Reactions != null && item.Reactions.Count > 0)

@@ -113,12 +113,12 @@ namespace ZimmerBot.Core.Knowledge
       try
       {
         // Push new set of variables for matches $1...$N
-        context.InputContext.RequestContext.Variables.Push(new Dictionary<string, object>());
+        context.Variables.Push(new Dictionary<string, object>());
 
         foreach (var m in context.Match.Matches)
         {
-          context.InputContext.RequestContext.Variables[m.Key] = m.Value;
-          context.InputContext.RequestContext.Variables["$" + m.Key] = m.Value;
+          context.Variables[m.Key] = m.Value;
+          context.Variables["$" + m.Key] = m.Value;
         }
 
         StatementExecutionContect ox_context = new StatementExecutionContect(context);
@@ -152,7 +152,7 @@ namespace ZimmerBot.Core.Knowledge
       finally
       {
         // Remove variables containing matches $1...$N for this rule invocation
-        context.InputContext.RequestContext.Variables.Pop();
+        context.Variables.Pop();
       }
     }
   }
