@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.StandardProcessors
 
       Dictionary<string, object> result = new Dictionary<string, object>();
 
-      RDFResultSet output = input.Context.KnowledgeBase.MemoryStore.Query(
+      RDFResultSet output = input.Context.InputContext.RequestContext.KnowledgeBase.MemoryStore.Query(
         query, 
         input.Context.Match.Matches, 
         input.Inputs.GetRange(1, input.Inputs.Count-1));

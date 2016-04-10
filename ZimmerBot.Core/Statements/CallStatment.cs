@@ -39,7 +39,7 @@ namespace ZimmerBot.Core.Statements
       // Make the output values available to templates
       if (result.Value is IDictionary<string, object>)
       {
-        context.ResponseContext.Variables.Push((IDictionary < string, object > )result.Value);
+        context.ResponseContext.InputContext.RequestContext.Variables.Push((IDictionary < string, object > )result.Value);
       }
     }
   }

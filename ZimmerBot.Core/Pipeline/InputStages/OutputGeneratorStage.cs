@@ -14,7 +14,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
     public void Handle(InputPipelineItem item)
     {
-      RequestState state = item.State;
+      RequestState state = item.Context.RequestContext.State;
       List<string> output = item.Output;
 
       if (item.Reactions != null && item.Reactions.Count > 0)
@@ -33,7 +33,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       else
       {
         // Only add "???" for unrecognized input when there actually is some input
-        if (item.Input != null)
+        if (item.Context.Input != null)
           output.Add("???");
 
         DiaLogger.InfoFormat("No suitable response found");

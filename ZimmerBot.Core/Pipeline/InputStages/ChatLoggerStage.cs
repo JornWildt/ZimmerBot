@@ -13,9 +13,9 @@ namespace ZimmerBot.Core.Pipeline.InputStages
     public void Handle(InputPipelineItem item)
     {
       // Protect against recursive invokes from templates - only register initial invoke
-      if (!item.FromTemplate && AppSettings.RDF_EnableChatLog)
+      if (!item.Context.FromTemplate && AppSettings.RDF_EnableChatLog)
       {
-        AddEntry(item, item.Request.Input, UrlConstants.UsersUrl(item.Request.UserId));
+        AddEntry(item, item.Context.Request.Input, UrlConstants.UsersUrl(item.Context.Request.UserId));
 
         if (item.Output.Count > 0)
         {
@@ -34,36 +34,26 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
       INode p = NodeFactory.CreateUriNode(UrlConstants.Rdf("type"));
       INode o = NodeFactory.CreateUriNode(UrlConstants.ChatEntryTypeUrl);
-      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      item.Context.RequestContext.KnowledgeBase.MemoryStore.Insert(s, p, o);
 
       p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("created"));
       o = DateTime.Now.ToLiteral(NodeFactory);
-      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      item.Context.RequestContext.KnowledgeBase.MemoryStore.Insert(s, p, o);
 
       p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("creator"));
       o = NodeFactory.CreateUriNode(creator);
-      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      item.Context.RequestContext.KnowledgeBase.MemoryStore.Insert(s, p, o);
 
       p = NodeFactory.CreateUriNode(new Uri("http://chat"));
-      o = NodeFactory.CreateUriNode(UrlConstants.ChatsUrl(item.Session.SessionId));
-      item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      o = NodeFactory.CreateUriNode(UrlConstants.ChatsUrl(item.Context.RequestContext.Session.SessionId));
+      item.Context.RequestContext.KnowledgeBase.MemoryStore.Insert(s, p, o);
 
       if (text != null)
       {
         p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("description"));
         o = text.ToLiteral(NodeFactory);
-        item.KnowledgeBase.MemoryStore.Insert(s, p, o);
+        item.Context.RequestContext.KnowledgeBase.MemoryStore.Insert(s, p, o);
       }
-
-      //foreach (string output in item.Output)
-      //{
-      //  // Register at most 200 characters
-      //  string so = output.Substring(0, Math.Min(output.Length, 200));
-
-      //  p = NodeFactory.CreateUriNode(new Uri("http://output"));
-      //  o = so.ToLiteral(NodeFactory);
-      //  item.KnowledgeBase.MemoryStore.Insert(s, p, o);
-      //}
     }
   }
 }
