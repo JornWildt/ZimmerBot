@@ -36,58 +36,58 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead)
     {
-      if (context.CurrentTokenIndex < context.Input.Count)
+      if (context.CurrentTokenIndex < context.InputContext.Input.Count)
       {
-        if (context.Input[context.CurrentTokenIndex].Matches(Word))
+        if (context.InputContext.Input[context.CurrentTokenIndex].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(1, context.Input[context.CurrentTokenIndex - 1].OriginalText)
-            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
+          return new MatchResult(1, context.InputContext.Input[context.CurrentTokenIndex - 1].OriginalText)
+            .RegisterMatch(MatchName, context.InputContext.Input[context.CurrentTokenIndex - 1].OriginalText);
         }
       }
 
       // Wondering if this really belongs here, outside of the bot author's reach ...
 #if true
 
-      if (context.CurrentTokenIndex + 1 < context.Input.Count)
+      if (context.CurrentTokenIndex + 1 < context.InputContext.Input.Count)
       {
-        if (context.Input[context.CurrentTokenIndex + 1].Matches(Word))
+        if (context.InputContext.Input[context.CurrentTokenIndex + 1].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.5, context.Input[context.CurrentTokenIndex].OriginalText)
-            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex].OriginalText); ;
+          return new MatchResult(0.5, context.InputContext.Input[context.CurrentTokenIndex].OriginalText)
+            .RegisterMatch(MatchName, context.InputContext.Input[context.CurrentTokenIndex].OriginalText); ;
         }
       }
 
-      if (context.CurrentTokenIndex - 1 >= 0 && context.CurrentTokenIndex - 1 < context.Input.Count)
+      if (context.CurrentTokenIndex - 1 >= 0 && context.CurrentTokenIndex - 1 < context.InputContext.Input.Count)
       {
-        if (context.Input[context.CurrentTokenIndex - 1].Matches(Word))
+        if (context.InputContext.Input[context.CurrentTokenIndex - 1].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.5, context.Input[context.CurrentTokenIndex - 2].OriginalText)
-            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 2].OriginalText); ;
+          return new MatchResult(0.5, context.InputContext.Input[context.CurrentTokenIndex - 2].OriginalText)
+            .RegisterMatch(MatchName, context.InputContext.Input[context.CurrentTokenIndex - 2].OriginalText); ;
         }
       }
 
-      if (context.CurrentTokenIndex + 2 < context.Input.Count)
+      if (context.CurrentTokenIndex + 2 < context.InputContext.Input.Count)
       {
-        if (context.Input[context.CurrentTokenIndex + 2].Matches(Word))
+        if (context.InputContext.Input[context.CurrentTokenIndex + 2].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.25, context.Input[context.CurrentTokenIndex + 1].OriginalText)
-            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex + 1].OriginalText); ;
+          return new MatchResult(0.25, context.InputContext.Input[context.CurrentTokenIndex + 1].OriginalText)
+            .RegisterMatch(MatchName, context.InputContext.Input[context.CurrentTokenIndex + 1].OriginalText); ;
         }
       }
 
-      if (context.CurrentTokenIndex - 2 >= 0 && context.CurrentTokenIndex - 2 < context.Input.Count)
+      if (context.CurrentTokenIndex - 2 >= 0 && context.CurrentTokenIndex - 2 < context.InputContext.Input.Count)
       {
-        if (context.Input[context.CurrentTokenIndex - 2].Matches(Word))
+        if (context.InputContext.Input[context.CurrentTokenIndex - 2].Matches(Word))
         {
           ++context.CurrentTokenIndex;
-          return new MatchResult(0.25, context.Input[context.CurrentTokenIndex - 3].OriginalText)
-            .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 3].OriginalText); ;
+          return new MatchResult(0.25, context.InputContext.Input[context.CurrentTokenIndex - 3].OriginalText)
+            .RegisterMatch(MatchName, context.InputContext.Input[context.CurrentTokenIndex - 3].OriginalText); ;
         }
       }
 #endif

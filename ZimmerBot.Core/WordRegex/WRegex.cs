@@ -67,6 +67,6 @@ namespace ZimmerBot.Core.WordRegex
 
     public abstract WRegex GetLookahead();
 
-    public abstract MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead);
+    public abstract MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead);
   }
 }

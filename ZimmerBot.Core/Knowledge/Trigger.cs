@@ -101,12 +101,11 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public WRegex.MatchResult CalculateTriggerScore(EvaluationContext context)
+    public WRegex.MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
       if (!context.ExecuteScheduledRules && Schedule != null)
         return new WRegex.MatchResult(0, "");
 
-      // FIXME: some mixing of concerns here - should be wrapped differently
       context.CurrentTokenIndex = 0;
       context.CurrentRepetitionIndex = 1;
 
@@ -114,7 +113,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (Condition != null)
       {
-        ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.State.State);
+        ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.InputContext.RequestContext.State.State);
         object value = Condition.Evaluate(eec);
         bool b;
         if (Expression.TryConvertToBool(value, out b))
@@ -125,7 +124,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (RequiredPriorRuleId != null)
       {
-        string lastRuleId = context.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
+        string lastRuleId = context.InputContext.RequestContext.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
         if (lastRuleId is string)
         {
           if (RequiredPriorRuleId == lastRuleId)
@@ -141,14 +140,14 @@ namespace ZimmerBot.Core.Knowledge
 
       if (Regex != null)
       {
-        if (context.Input != null)
+        if (context.InputContext.Input != null)
           result = Regex.CalculateMatchResult(context, new EndOfSequenceWRegex());
         else
           result = new WRegex.MatchResult(0, "");
       }
       else
       {
-        if (context.Input != null)
+        if (context.InputContext.Input != null)
           result = new WRegex.MatchResult(0.1, "");
         else
           result = new WRegex.MatchResult(1, "");

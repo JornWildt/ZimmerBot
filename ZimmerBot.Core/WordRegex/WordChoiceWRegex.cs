@@ -36,14 +36,14 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead)
     {
       ++context.CurrentTokenIndex;
 
-      if (Choices.Contains(context.Input[context.CurrentTokenIndex - 1].OriginalText))
+      if (Choices.Contains(context.InputContext.Input[context.CurrentTokenIndex - 1].OriginalText))
       {
-        return new MatchResult(1, context.Input[context.CurrentTokenIndex - 1].OriginalText)
-          .RegisterMatch(MatchName, context.Input[context.CurrentTokenIndex - 1].OriginalText);
+        return new MatchResult(1, context.InputContext.Input[context.CurrentTokenIndex - 1].OriginalText)
+          .RegisterMatch(MatchName, context.InputContext.Input[context.CurrentTokenIndex - 1].OriginalText);
       }
 
       return new MatchResult(0.1, "");

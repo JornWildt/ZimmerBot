@@ -86,7 +86,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Reaction CalculateReaction(EvaluationContext context)
+    public Reaction CalculateReaction(TriggerEvaluationContext context)
     {
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
         return null;
@@ -100,7 +100,7 @@ namespace ZimmerBot.Core.Knowledge
         return null;
 
       // context.State, context.OriginalRequest, context.Input
-      ResponseContext rc = new ResponseContext(KnowledgeBase, context, result);
+      ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, result);
       return new Reaction(rc, this);
     }
 
@@ -108,17 +108,17 @@ namespace ZimmerBot.Core.Knowledge
     public static Random Randomizer = new Random();
 
 
-    public List<string> Invoke(ResponseContext context)
+    public List<string> Invoke(ResponseGenerationContext context)
     {
       try
       {
         // Push new set of variables for matches $1...$N
-        context.Variables.Push(new Dictionary<string, object>());
+        context.InputContext.RequestContext.Variables.Push(new Dictionary<string, object>());
 
         foreach (var m in context.Match.Matches)
         {
-          context.Variables[m.Key] = m.Value;
-          context.Variables["$" + m.Key] = m.Value;
+          context.InputContext.RequestContext.Variables[m.Key] = m.Value;
+          context.InputContext.RequestContext.Variables["$" + m.Key] = m.Value;
         }
 
         StatementExecutionContect ox_context = new StatementExecutionContect(context);
@@ -152,7 +152,7 @@ namespace ZimmerBot.Core.Knowledge
       finally
       {
         // Remove variables containing matches $1...$N for this rule invocation
-        context.Variables.Pop();
+        context.InputContext.RequestContext.Variables.Pop();
       }
     }
   }

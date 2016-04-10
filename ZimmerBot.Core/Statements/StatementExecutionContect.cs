@@ -9,7 +9,7 @@ namespace ZimmerBot.Core.Statements
 {
   public class StatementExecutionContect
   {
-    public ResponseContext ResponseContext { get; set; }
+    public ResponseGenerationContext ResponseContext { get; set; }
 
     public Dictionary<string,List<string>> OutputTemplates { get; set; }
 
@@ -19,7 +19,7 @@ namespace ZimmerBot.Core.Statements
     public List<string> AdditionalOutput { get; set; }
 
 
-    public StatementExecutionContect(ResponseContext context)
+    public StatementExecutionContect(ResponseGenerationContext context)
     {
       Condition.Requires(context, nameof(context)).IsNotNull();
 

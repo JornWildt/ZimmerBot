@@ -6,11 +6,8 @@ namespace ZimmerBot.Core.Pipeline.InputStages
   {
     public void Handle(InputPipelineItem item)
     {
-      if (item.Input == null)
+      if (item.Context.Input == null)
         return;
-
-      if (item.Input.Any(inp => inp.OriginalText == "hej"))
-        item.SentenceTags.Add("hilsen");
     }
   }
 }

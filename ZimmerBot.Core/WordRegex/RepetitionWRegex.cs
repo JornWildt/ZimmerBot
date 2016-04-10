@@ -57,9 +57,9 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead)
     {
-      if (context.CurrentTokenIndex >= context.Input.Count)
+      if (context.CurrentTokenIndex >= context.InputContext.Input.Count)
       {
         // Empty sequence is a match if no minimum count is specified
         if (MinCount == 0)
@@ -72,7 +72,7 @@ namespace ZimmerBot.Core.WordRegex
       int startIndex = context.CurrentTokenIndex;
       MatchResult lastResult = null;
 
-      while (context.CurrentTokenIndex < context.Input.Count)
+      while (context.CurrentTokenIndex < context.InputContext.Input.Count)
       {
         int index = context.CurrentTokenIndex;
 

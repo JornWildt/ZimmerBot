@@ -81,7 +81,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public ReactionSet FindMatchingReactions(EvaluationContext context, ReactionSet reactions = null)
+    public ReactionSet FindMatchingReactions(TriggerEvaluationContext context, ReactionSet reactions = null)
     {
       if (reactions == null)
         reactions = new ReactionSet();

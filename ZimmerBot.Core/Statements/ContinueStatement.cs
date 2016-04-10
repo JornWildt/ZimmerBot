@@ -33,7 +33,7 @@ namespace ZimmerBot.Core.Statements
 
     public override void Execute(StatementExecutionContect context)
     {
-      ResponseContext rc = context.ResponseContext;
+      ResponseGenerationContext rc = context.ResponseContext;
 
       string nextInput = null;
       if (Next != null)

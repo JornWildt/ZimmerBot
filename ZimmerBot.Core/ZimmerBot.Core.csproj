@@ -104,7 +104,9 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="Expressions\UnaryOperatorExpr.cs" />
+    <Compile Include="Knowledge\InputRequestContext.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
+    <Compile Include="Knowledge\RequestContext.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />
     <Compile Include="Statements\AnswerStatement.cs" />
@@ -138,7 +140,7 @@
     <Compile Include="Pipeline\InputStages\WordTaggingStage.cs" />
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\BotUtility.cs" />
-    <Compile Include="Knowledge\EvaluationContext.cs" />
+    <Compile Include="Knowledge\TriggerEvaluationContext.cs" />
     <Compile Include="Knowledge\RequestState.cs" />
     <Compile Include="Pipeline\Pipeline.cs" />
     <Compile Include="Knowledge\RDFResultSet.cs" />
@@ -149,7 +151,7 @@
     <Compile Include="Processors\ProcessorInput.cs" />
     <Compile Include="Processors\ProcessorRegistration.cs" />
     <Compile Include="Processors\ProcessorRegistry.cs" />
-    <Compile Include="Knowledge\ResponseContext.cs" />
+    <Compile Include="Knowledge\ResponseGenerationContext.cs" />
     <Compile Include="StandardProcessors\RDFProcessor.cs" />
     <Compile Include="TemplateParser\TemplateContext.cs" />
     <Compile Include="TemplateParser\TemplateToken.cs" />

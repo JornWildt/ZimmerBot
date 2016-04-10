@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override MatchResult CalculateMatchResult(EvaluationContext context, WRegex lookahead)
+    public override MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead)
     {
       MatchResult result = Sub.CalculateMatchResult(context, lookahead);
       return new MatchResult(1 - result.Score, result.MatchedText).RegisterMatch(MatchName, result.MatchedText);

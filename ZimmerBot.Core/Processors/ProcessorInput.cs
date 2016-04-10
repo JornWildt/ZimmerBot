@@ -8,12 +8,12 @@ namespace ZimmerBot.Core.Processors
 {
   public class ProcessorInput
   {
-    public ResponseContext Context { get; protected set; }
+    public ResponseGenerationContext Context { get; protected set; }
 
     public List<object> Inputs { get; protected set; }
 
 
-    public ProcessorInput(ResponseContext context, List<object> inputs)
+    public ProcessorInput(ResponseGenerationContext context, List<object> inputs)
     {
       Condition.Requires(inputs, "inputs").IsNotNull();
 

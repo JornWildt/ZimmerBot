@@ -8,10 +8,10 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class TemplateExpander : ITemplateExpander
   {
-    protected ResponseContext ResponseContext { get; set; }
+    protected ResponseGenerationContext ResponseContext { get; set; }
 
 
-    public TemplateExpander(ResponseContext context)
+    public TemplateExpander(ResponseGenerationContext context)
     {
       Condition.Requires(context, nameof(context)).IsNotNull();
 
@@ -21,24 +21,18 @@ namespace ZimmerBot.Core.Knowledge
 
     public string ExpandPlaceholdes(string s)
     {
-      string output = TextMerge.MergeTemplate(s, ResponseContext.Variables);
+      string output = TextMerge.MergeTemplate(s, ResponseContext.InputContext.RequestContext.Variables);
       return output;
     }
 
 
     public string Invoke(string s)
     {
-      Request request = new Request(ResponseContext.OriginalRequest, s);
+      Request request = new Request(ResponseContext.InputContext.Request, s);
       List<string> output = new List<string>();
 
       BotUtility
-        .InvokeStatements(
-          request,
-          ResponseContext.KnowledgeBase,
-          ResponseContext.Session,
-          ResponseContext.State, 
-          fromTemplate: true, 
-          output: output);
+        .InvokeStatements(ResponseContext.InputContext.RequestContext, request, fromTemplate: true, output: output);
 
       return output.Aggregate((a, b) => a + "\n" + b);
     }

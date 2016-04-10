@@ -106,7 +106,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : Duh?
 ");
 
-      EvaluationContext context = BuildEvaluationContextFromInput("are you a computer");
+      TriggerEvaluationContext context = BuildEvaluationContextFromInput(kb, "are you a computer");
       ReactionSet reactions = new ReactionSet();
       kb.FindMatchingReactions(context, reactions);
 

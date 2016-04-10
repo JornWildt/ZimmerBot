@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Tests
 
     protected Reaction CalculateReaction(Rule r, string text)
     {
-      EvaluationContext context = BuildEvaluationContextFromInput(text);
+      TriggerEvaluationContext context = BuildEvaluationContextFromInput(r.KnowledgeBase, text);
       return r.CalculateReaction(context);
     }
 
@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected EvaluationContext BuildEvaluationContextFromInput(string text)
+    protected TriggerEvaluationContext BuildEvaluationContextFromInput(KnowledgeBase kb, string text)
     {
       ZTokenizer tokenizer = new ZTokenizer();
       ZStatementSequence sequence = tokenizer.Tokenize(text);
@@ -38,14 +38,21 @@ namespace ZimmerBot.Core.Tests
 
       RequestState state = new RequestState();
       Session session = new Session("default");
-      EvaluationContext context = new EvaluationContext(state, session, new Request(), input, null, executeScheduledRules: false);
+      TriggerEvaluationContext context = 
+        new TriggerEvaluationContext(
+          new InputRequestContext(
+            new RequestContext(kb, state, session),
+            new Request(),
+            input),
+          null,
+          executeScheduledRules: false);
       return context;
     }
 
 
     protected WRegex.MatchResult CalculateMatchResult(Trigger t, string text)
     {
-      EvaluationContext context = BuildEvaluationContextFromInput(text);
+      TriggerEvaluationContext context = BuildEvaluationContextFromInput(new KnowledgeBase(), text);
       WRegex.MatchResult result = t.CalculateTriggerScore(context);
       return result;
     }
@@ -108,7 +115,15 @@ namespace ZimmerBot.Core.Tests
       ZTokenizer tokenizer = new ZTokenizer();
       ZStatementSequence stm = tokenizer.Tokenize(s);
       ZTokenSequence input = stm.Statements[0];
-      EvaluationContext context = new EvaluationContext(state, session, new Request(), input, null, false);
+      TriggerEvaluationContext context =
+        new TriggerEvaluationContext(
+          new InputRequestContext(
+            new RequestContext(new KnowledgeBase(), state, session),
+            new Request(),
+            input),
+          null,
+          executeScheduledRules: false);
+
       WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
       return result;
     }

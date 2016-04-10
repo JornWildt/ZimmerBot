@@ -9,12 +9,12 @@ namespace ZimmerBot.Core.Knowledge
   {
     public double Score { get; protected set; }
 
-    public ResponseContext Context { get; protected set; }
+    public ResponseGenerationContext Context { get; protected set; }
 
     public Rule Rule { get; protected set; }
 
 
-    public Reaction(ResponseContext context, Rule rule)
+    public Reaction(ResponseGenerationContext context, Rule rule)
     {
       Condition.Requires(context, nameof(context)).IsNotNull();
       Condition.Requires(rule, nameof(rule)).IsNotNull();
