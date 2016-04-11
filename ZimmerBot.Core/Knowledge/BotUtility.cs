@@ -104,9 +104,13 @@ namespace ZimmerBot.Core.Knowledge
 
       if (inputContext.DoContinueMatchingRules)
       {
+        Request request = (inputContext.TargetForNextRuleMatching != null && inputContext.TargetForNextRuleMatching.StartsWith("@")
+          ? new Request(inputContext.Request, null) { RuleLabel = inputContext.TargetForNextRuleMatching.Substring(1) }
+          : new Request(inputContext.Request, inputContext.TargetForNextRuleMatching));
+
         InvokeStatements(
           inputContext.RequestContext,
-          new Request(inputContext.Request, inputContext.InputForNextRuleMatching),
+          request,
           inputContext.FromTemplate,
           output);
       }

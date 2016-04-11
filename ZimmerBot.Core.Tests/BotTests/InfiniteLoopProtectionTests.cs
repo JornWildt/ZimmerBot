@@ -7,11 +7,40 @@ namespace ZimmerBot.Core.Tests.BotTests
   public class InfiniteLoopProtectionTests : TestHelper
   {
     [Test]
-    public void CanBreakContinue()
+    public void CanBreakContinueWith()
     {
       BuildBot(@"
 > hi
-! continue (""hi"")
+! continue with hi
+");
+      Assert.Throws<RepetitionException>(() => AssertDialog("hi", "x"));
+    }
+
+
+    [Test]
+    public void CanBreakContinueAt()
+    {
+      BuildBot(@"
+> hi
+! continue at aaa
+
+<aaa>
+: iiiii
+! continue at aaa
+");
+      Assert.Throws<RepetitionException>(() => AssertDialog("hi", "x"));
+    }
+
+
+    [Test]
+    public void CanBreakContinueEmpty()
+    {
+      BuildBot(@"
+> hi
+! continue
+
+>
+! continue with hi
 ");
       Assert.Throws<RepetitionException>(() => AssertDialog("hi", "x"));
     }

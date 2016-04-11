@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 09-04-2016 07:32:37>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 10-04-2016 21:55:41>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 09-04-2016 07:42:41
+//  DateTime: 10-04-2016 21:55:42
 //  UserName: Jorn
 // ==========================================================================
 
@@ -40,7 +40,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
-%token T_CONTINUE
+%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH
 
 %token T_IMPLIES
 %token T_COMMA
@@ -102,10 +102,15 @@ ruleSeq
   ;
 
 rule
-  : input ruleModifierSeq statementSeq
+  : ruleId input ruleModifierSeq statementSeq
     { 
-      $$.rule = AddRule($1.regex, $2.ruleModifierList, $3.statementList);
+      $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
     }
+  ;
+
+ruleId
+  : T_LT T_WORD { $$.s = $2.s; }
+  | /* empty */
   ;
 
 /******************************************************************************
@@ -208,16 +213,22 @@ stmtAnswer
   ;
 
 stmtContinue
-  : T_CONTINUE { $$.statement = new ContinueStatement(); }
+  : T_CONTINUE              { $$.statement = new ContinueStatement(); }
+  | T_CONTINUE_AT T_WORD    { $$.statement = new ContinueStatement($3.expr); }
+//---------------------------------------------------------------^^^
+// Error: Semantic action index is out of bounds
+// ---------------------------------------------
+  | T_CONTINUE_WITH T_WORD  { $$.statement = new ContinueStatement($3.expr); }
+//---------------------------------------------------------------^^^
+// Error: Semantic action index is out of bounds
+// ---------------------------------------------
+  ;
 
 /******************************************************************************
   EXPRESSION
 ******************************************************************************/
 
 exprSeq
-//^^^^^
-// Error: Syntax error, unexpected anchoredSymbol
-// ----------------------------------------------
   : exprSeq2    { $$ = $1; }
   | /* empty */ { $$.exprList = new List<Expression>(); }
   ;

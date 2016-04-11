@@ -54,7 +54,9 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*when        { return (int)Token.T_WHEN; }
 ![ ]*every       { return (int)Token.T_EVERY; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
-![ ]*continue    { return (int)Token.T_CONTINUE; }
+![ ]*continue          { return (int)Token.T_CONTINUE; }
+![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }
+![ ]*continue[ ]+with  { return (int)Token.T_CONTINUE_WITH; }
 ![ ]*rdf_import  { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix  { return (int)Token.T_RDF_PREFIX; }
 

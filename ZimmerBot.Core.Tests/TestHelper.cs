@@ -44,7 +44,6 @@ namespace ZimmerBot.Core.Tests
             new RequestContext(kb, state, session),
             new Request(),
             input),
-          null,
           executeScheduledRules: false);
       return context;
     }
@@ -121,7 +120,6 @@ namespace ZimmerBot.Core.Tests
             new RequestContext(new KnowledgeBase(), state, session),
             new Request(),
             input),
-          null,
           executeScheduledRules: false);
 
       WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());

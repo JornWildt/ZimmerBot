@@ -31,7 +31,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       Condition.Requires(context, nameof(context)).IsNotNull();
 
       Context = context;
-      EvaluationContext = new TriggerEvaluationContext(context, context.Request.RuleId, executeScheduledRules: false);
+      EvaluationContext = new TriggerEvaluationContext(context, executeScheduledRules: false);
 
       //SentenceTags = new HashSet<string>();
       Reactions = new ReactionSet();

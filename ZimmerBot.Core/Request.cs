@@ -8,6 +8,8 @@ namespace ZimmerBot.Core
 
     public string RuleId { get; set; }
 
+    public string RuleLabel { get; set; }
+
     public object State { get; set; }
 
     public string SessionId { get; set; }
@@ -38,6 +40,8 @@ namespace ZimmerBot.Core
       SessionId = src.SessionId;
       UserId = src.UserId;
       State = src.State;
+      RuleId = src.RuleId;
+      RuleLabel = src.RuleLabel;
     }
   }
 }

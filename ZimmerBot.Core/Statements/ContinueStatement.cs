@@ -11,17 +11,34 @@ namespace ZimmerBot.Core.Statements
 {
   public class ContinueStatement : Statement
   {
-    public Expression Next { get; protected set; }
+    public enum TargetEnum { None, Label, Input }
+
+    public string Target { get; protected set; }
+
+    public TargetEnum TargetType { get; protected set; }
 
 
     public ContinueStatement()
     {
+      TargetType = TargetEnum.None;
     }
 
 
-    public ContinueStatement(Expression next)
+    public ContinueStatement(string target, TargetEnum targetType)
     {
-      Next = next;
+      Condition.Requires(target, nameof(target)).IsNotNullOrEmpty();
+
+      Target = target;
+      TargetType = targetType;
+    }
+
+
+    public ContinueStatement(List<string> target, TargetEnum targetType)
+    {
+      Condition.Requires(target, nameof(target)).IsNotNull();
+
+      Target = target.Aggregate((a,b) => a + " " + b);
+      TargetType = targetType;
     }
 
 
@@ -35,21 +52,11 @@ namespace ZimmerBot.Core.Statements
     {
       ResponseGenerationContext rc = context.ResponseContext;
 
-      string nextInput = null;
-      if (Next != null)
-      {
-        ExpressionEvaluationContext ec = rc.BuildExpressionEvaluationContext();
-        nextInput = Next.Evaluate(ec) as string;
-      }
+      string target = Target;
+      if (TargetType == TargetEnum.Label && target != null)
+        target = "@" + target;
 
-      /*
-      Request request = new Request(context.ResponseContext.OriginalRequest, nextInput);
-      Response response = BotUtility.InvokeInternal(context.ResponseContext.KnowledgeBase, request, false, true);
-
-      context.AdditionalOutput.AddRange(response.Output);
-      */
-
-      context.Continue(nextInput);
+      context.Continue(target);
     }
   }
 }

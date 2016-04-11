@@ -29,7 +29,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
-%token T_CONTINUE
+%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH
 
 %token T_IMPLIES
 %token T_COMMA
@@ -91,10 +91,15 @@ ruleSeq
   ;
 
 rule
-  : input ruleModifierSeq statementSeq
+  : ruleId input ruleModifierSeq statementSeq
     { 
-      $$.rule = AddRule($1.regex, $2.ruleModifierList, $3.statementList);
+      $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
     }
+  ;
+
+ruleId
+  : T_LT T_WORD { $$.s = $2.s; }
+  | /* empty */
   ;
 
 /******************************************************************************
@@ -197,8 +202,9 @@ stmtAnswer
   ;
 
 stmtContinue
-  : T_CONTINUE                    { $$.statement = new ContinueStatement(); }
-  | T_CONTINUE T_LPAR expr T_RPAR { $$.statement = new ContinueStatement($3.expr); }
+  : T_CONTINUE               { $$.statement = new ContinueStatement(); }
+  | T_CONTINUE_AT T_WORD     { $$.statement = new ContinueStatement($2.s, ContinueStatement.TargetEnum.Label); }
+  | T_CONTINUE_WITH wordSeq  { $$.statement = new ContinueStatement($2.stringList, ContinueStatement.TargetEnum.Input); }
   ;
 
 /******************************************************************************
@@ -247,8 +253,14 @@ exprReference
   OTHER
 ******************************************************************************/
 
+
+wordSeq
+  : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
+  | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
+  ;
+
 cwordSeq
-  : cwordSeq cword { $$.stringList.Add($2.s); }
+  : cwordSeq cword { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | cword          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 

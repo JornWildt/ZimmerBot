@@ -16,7 +16,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public KnowledgeBase KnowledgeBase { get; protected set; }
 
-    public string Description { get; protected set; }
+    public string Label { get; protected set; }
 
     public Trigger Trigger { get; protected set; }
 
@@ -36,9 +36,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule Describe(string description)
+    public Rule WithLabel(string label)
     {
-      Description = description;
+      Label = label;
       return this;
     }
 
@@ -89,6 +89,8 @@ namespace ZimmerBot.Core.Knowledge
     public Reaction CalculateReaction(TriggerEvaluationContext context)
     {
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
+        return null;
+      if (context.RestrictToRuleLabel != null && context.RestrictToRuleLabel != Label)
         return null;
 
       WRegex.MatchResult result = Trigger.CalculateTriggerScore(context);
