@@ -88,6 +88,9 @@ namespace ZimmerBot.Core
     {
       BotHandle bh = b.Run(new ConsoleBotEnvironment(prompt));
 
+      Request welcome = new Request() { EventType = Request.EventEnum.Welcome };
+      bh.Invoke(welcome);
+
       string input;
       Console.Write("> ");
 

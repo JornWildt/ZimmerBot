@@ -26,7 +26,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<Rule> Rules { get; protected set; }
 
-    public Dictionary<Request.EventEnum, Rule> EventHandlers { get; protected set; }
+    public Dictionary<Request.EventEnum, List<Rule>> EventHandlers { get; protected set; }
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
@@ -42,7 +42,7 @@ namespace ZimmerBot.Core.Knowledge
       MemoryStore = new RDFStore(memoryId);
       Concepts = new Dictionary<string, Concept>();
       Rules = new List<Rule>();
-      EventHandlers = new Dictionary<Request.EventEnum, Rule>();
+      EventHandlers = new Dictionary<Request.EventEnum, List<Rule>>();
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new SentenceTaggingStage());
@@ -93,7 +93,9 @@ namespace ZimmerBot.Core.Knowledge
       {
         Rule rule = new Rule(this);
         rule.WithOutputStatements(statements);
-        EventHandlers[etype] = rule;
+        if (!EventHandlers.ContainsKey(etype))
+          EventHandlers[etype] = new List<Rule>();
+        EventHandlers[etype].Add(rule);
       }
       else
         throw new ApplicationException($"Unknown event '{e}'");
@@ -109,10 +111,12 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (EventHandlers.ContainsKey(context.InputContext.Request.EventType.Value))
         {
-          Rule rule = EventHandlers[context.InputContext.Request.EventType.Value];
-          ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new WRegex.MatchResult(1, ""));
-          Reaction reaction = new Reaction(rc, rule);
-          reactions.Add(reaction);
+          foreach (Rule rule in EventHandlers[context.InputContext.Request.EventType.Value])
+          {
+            ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new WRegex.MatchResult(1, ""));
+            Reaction reaction = new Reaction(rc, rule);
+            reactions.Add(reaction);
+          }
         }
       }
       else

@@ -62,9 +62,6 @@ namespace ZimmerBot.Core
 
         BotHandle bh = new BotHandle(this, WorkQueue, botThread);
 
-        // Give the bot a chance to emit a startup message
-        bh.Invoke(new Request { Input = null });
-
         return bh;
       }
     }
