@@ -4,11 +4,9 @@ namespace ZimmerBot.Core
 {
   public class Request
   {
+    public enum EventEnum { Welcome }
+
     public string Input { get; set; }
-
-    public string RuleId { get; set; }
-
-    public string RuleLabel { get; set; }
 
     public object State { get; set; }
 
@@ -16,6 +14,11 @@ namespace ZimmerBot.Core
 
     public string UserId { get; set; }
 
+    public string RuleId { get; set; }
+
+    public string RuleLabel { get; set; }
+
+    public EventEnum? EventType { get; set; }
 
     public Request()
       : this("default", "default")

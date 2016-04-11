@@ -29,7 +29,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
-%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH
+%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON
 
 %token T_IMPLIES
 %token T_COMMA
@@ -74,6 +74,8 @@ item
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.patternList); }
+  | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
+      { RegisterEventHandler($3.s, $6.statementList); }
   | T_RDF_IMPORT T_STRING            
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     

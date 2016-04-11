@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using CuttingEdge.Conditions;
 using log4net;
@@ -7,6 +8,7 @@ using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Pipeline;
 using ZimmerBot.Core.Pipeline.InputStages;
+using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
@@ -24,6 +26,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<Rule> Rules { get; protected set; }
 
+    public Dictionary<Request.EventEnum, Rule> EventHandlers { get; protected set; }
+
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
 
@@ -38,6 +42,7 @@ namespace ZimmerBot.Core.Knowledge
       MemoryStore = new RDFStore(memoryId);
       Concepts = new Dictionary<string, Concept>();
       Rules = new List<Rule>();
+      EventHandlers = new Dictionary<Request.EventEnum, Rule>();
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new SentenceTaggingStage());
@@ -81,16 +86,43 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public void RegisterEventHandler(string e, List<Statement> statements)
+    {
+      Request.EventEnum etype;
+      if (Enum.TryParse(e, true, out etype))
+      {
+        Rule rule = new Rule(this);
+        rule.WithOutputStatements(statements);
+        EventHandlers[etype] = rule;
+      }
+      else
+        throw new ApplicationException($"Unknown event '{e}'");
+    }
+
+
     public ReactionSet FindMatchingReactions(TriggerEvaluationContext context, ReactionSet reactions = null)
     {
       if (reactions == null)
         reactions = new ReactionSet();
 
-      foreach (Rule r in Rules)
+      if (context.InputContext.Request.EventType != null)
       {
-        Reaction reaction = r.CalculateReaction(context);
-        if (reaction != null)
+        if (EventHandlers.ContainsKey(context.InputContext.Request.EventType.Value))
+        {
+          Rule rule = EventHandlers[context.InputContext.Request.EventType.Value];
+          ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new WRegex.MatchResult(1, ""));
+          Reaction reaction = new Reaction(rc, rule);
           reactions.Add(reaction);
+        }
+      }
+      else
+      {
+        foreach (Rule r in Rules)
+        {
+          Reaction reaction = r.CalculateReaction(context);
+          if (reaction != null)
+            reactions.Add(reaction);
+        }
       }
 
       return reactions;

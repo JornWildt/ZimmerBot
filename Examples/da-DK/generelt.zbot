@@ -4,6 +4,10 @@
 ! when (!bot.name)
 ! set bot.name = "Pete"
 
+! on (welcome)
+{
+  : Velkommen :-)
+}
 
 # Hej
 > %hilsen

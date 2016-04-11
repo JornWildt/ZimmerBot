@@ -44,6 +44,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RegisterEventHandler(string e, List<Statement> statements)
+    {
+      KnowledgeBase.RegisterEventHandler(e, statements);
+    }
+
+
     protected void RDFImport(string filename)
     {
       KnowledgeBase.MemoryStore.LoadFromFile(filename);

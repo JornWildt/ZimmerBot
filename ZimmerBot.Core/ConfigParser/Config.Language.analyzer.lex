@@ -53,6 +53,7 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
 ![ ]*when        { return (int)Token.T_WHEN; }
 ![ ]*every       { return (int)Token.T_EVERY; }
+![ ]*on          { return (int)Token.T_ON; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*continue          { return (int)Token.T_CONTINUE; }
 ![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }
