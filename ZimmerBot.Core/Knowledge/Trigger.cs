@@ -130,10 +130,10 @@ namespace ZimmerBot.Core.Knowledge
           if (RequiredPriorRuleId == lastRuleId)
             conditionModifier *= 4;
           else
-            conditionModifier /= 4;
+            conditionModifier = 0;
         }
         else
-          conditionModifier /= 4;
+          conditionModifier = 0;
       }
 
       WRegex.MatchResult result;
