@@ -121,7 +121,7 @@ inputPattern
   : inputPattern T_PIPE inputPattern
       { $$.regex = new ChoiceWRegex($1.regex, $3.regex); }
   | inputPattern T_QUESTION
-      { $$.regex =  new RepetitionWRegex($1.regex, 0, 1); }
+      { $$.regex =  new GroupWRegex(new RepetitionWRegex($1.regex, 0, 1)); }
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD
@@ -129,9 +129,9 @@ inputPattern
   | T_CWORD
       { $$.regex = new ConceptWRegex(KnowledgeBase, $1.s); }
   | T_STAR
-      { $$.regex = new RepetitionWRegex(new WildcardWRegex()); }
+      { $$.regex = new GroupWRegex(new RepetitionWRegex(new WildcardWRegex())); }
   | T_PLUS
-      { $$.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
+      { $$.regex =  new GroupWRegex(new RepetitionWRegex(new WildcardWRegex(), 1, 9999)); }
   | T_EXCL inputPattern
       { $$.regex =  new NegationWRegex($2.regex); }
   ;

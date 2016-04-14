@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using ZimmerBot.Core.ConfigParser;
@@ -93,10 +94,19 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected void VerifyMatch(WRegex x, string s)
+    protected void VerifyMatch(WRegex x, string s, Dictionary<string,string> expectedMatches = null)
     {
       WRegex.MatchResult result = CalculateMatch(x, s);
       Assert.IsTrue(result.Score > 0.9, $"The input '{s}' does not match with the wregex.");
+
+      if (expectedMatches != null)
+      {
+        foreach (var item in expectedMatches)
+        {
+          Assert.IsTrue(result.Matches.ContainsKey(item.Key), $"The key {item.Key} was not found in matches");
+          Assert.AreEqual(expectedMatches[item.Key], result.Matches[item.Key], $"Wrong value for key {item.Key}" );
+        }
+      }
     }
 
 
@@ -122,7 +132,8 @@ namespace ZimmerBot.Core.Tests
             input),
           executeScheduledRules: false);
 
-      WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
+      //WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
+      WRegex.MatchResult result = x.CalculateNFAMatch(context);
       return result;
     }
   }

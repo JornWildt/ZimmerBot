@@ -1,4 +1,6 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections;
+using System.Collections.Generic;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
 
 
@@ -18,6 +20,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public int CurrentRepetitionIndex { get; set; }
 
+    public Stack<string> MatchNames { get; protected set; }
+
 
     // FIXME: ruleId?
     public TriggerEvaluationContext(InputRequestContext inputContext, bool executeScheduledRules)
@@ -26,6 +30,8 @@ namespace ZimmerBot.Core.Knowledge
 
       InputContext = inputContext;
       ExecuteScheduledRules = executeScheduledRules;
+      CurrentRepetitionIndex = 1;
+      MatchNames = new Stack<string>();
     }
   }
 }

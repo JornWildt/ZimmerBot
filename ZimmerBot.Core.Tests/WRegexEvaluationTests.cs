@@ -102,12 +102,12 @@ namespace ZimmerBot.Core.Tests
       Assert.AreEqual(3.0, CalculateScore(t, "she walks today"));
     }
 
-    [Test]
-    public void CanEvaluateNegatedWRegex()
-    {
-      Trigger t = new Trigger(new NegationWRegex(new WordWRegex("aaa")));
-      Assert.AreEqual(0, CalculateScore(t, "aaa"));
-      Assert.AreEqual(0.9, CalculateScore(t, "bbb"));
-    }
+    //[Test]
+    //public void CanEvaluateNegatedWRegex()
+    //{
+    //  Trigger t = new Trigger(new NegationWRegex(new WordWRegex("aaa")));
+    //  Assert.AreEqual(0, CalculateScore(t, "aaa"));
+    //  Assert.AreEqual(0.9, CalculateScore(t, "bbb"));
+    //}
   }
 }

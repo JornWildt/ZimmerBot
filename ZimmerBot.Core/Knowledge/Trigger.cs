@@ -141,7 +141,7 @@ namespace ZimmerBot.Core.Knowledge
       if (Regex != null)
       {
         if (context.InputContext.Input != null)
-          result = Regex.CalculateMatchResult(context, new EndOfSequenceWRegex());
+          result = Regex.CalculateNFAMatch(context);
         else
           result = new WRegex.MatchResult(0, "");
       }

@@ -172,6 +172,9 @@
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="WordRegex\GroupWRegex.cs" />
     <Compile Include="WordRegex\NegationWRegex.cs" />
+    <Compile Include="WordRegex\NFAEdge.cs" />
+    <Compile Include="WordRegex\NFAFragment.cs" />
+    <Compile Include="WordRegex\NFANode.cs" />
     <Compile Include="WordRegex\WordChoiceWRegex.cs" />
     <Compile Include="WordRegex\WRegex.cs" />
     <Compile Include="WordRegex\SequenceWRegex.cs" />

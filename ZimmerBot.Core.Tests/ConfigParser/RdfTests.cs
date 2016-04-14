@@ -47,7 +47,7 @@ ORDER BY RAND()"")
 ! rdf_import ""ConfigParser/Friends.ttl""
 ! rdf_prefix foaf ""http://xmlns.com/foaf/0.1/""
 
-> Who is friend with +
+> who is friend with +
 ! call RDF.Query(""
 PREFIX pers: <http://wellknown-persons.fake#>
 SELECT * WHERE

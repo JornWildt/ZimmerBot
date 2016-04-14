@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Tests.ConfigParser
@@ -6,6 +7,17 @@ namespace ZimmerBot.Core.Tests.ConfigParser
   [TestFixture]
   public class InputPatternTests : TestHelper
   {
+    [Test]
+    public void StringMatchIsCaseInsensitive()
+    {
+      SequenceWRegex seq = ParseRuleAndGetRootWRegex<SequenceWRegex>(@"
+> AAA bbb cCc
+: ok
+");
+
+      VerifyMatch(seq, "aaa BBB   Ccc");
+    }
+
     [Test]
     public void CanParseSequence()
     {
@@ -76,10 +88,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
-      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[1]);
+      Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
       Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
 
-      VerifyMatch(seq, "aaa oiqw bbb");
+      VerifyMatch(seq, "aaa oiqw bbb", new Dictionary<string, string> { { "1", "oiqw" } });
       VerifyNoMatch(seq, "aaa oiqw bbbx");
     }
 
@@ -93,17 +105,17 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
-      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[1]);
+      Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
       Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
 
-      VerifyMatch(seq, "aaa oiqw bbb");
+      VerifyMatch(seq, "aaa oiqw bbb", new Dictionary<string, string> { { "1", "oiqw" } });
       VerifyNoMatch(seq, "aaa bbb");
       VerifyNoMatch(seq, "aaa oiqw bbbx");
     }
 
 
     [Test]
-    public void CanParseGroup()
+    public void CanParseAndMatchGroup()
     {
       ChoiceWRegex ch = ParseRuleAndGetRootWRegex<ChoiceWRegex>(@"
 > (aaa bbb) | ccc
@@ -115,10 +127,30 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.IsInstanceOf<WordWRegex>(ch.Choices[1]);
       Assert.AreEqual("ccc", ((WordWRegex)ch.Choices[1]).Word);
 
-      VerifyMatch(ch, "aaa bbb");
+      VerifyMatch(ch, "aaa bbb", new Dictionary<string, string> { { "1", "aaa bbb" } });
       VerifyNoMatch(ch, "aaa ccc");
       VerifyNoMatch(ch, "aaa");
-      VerifyMatch(ch, "ccc");
+      VerifyMatch(ch, "ccc", new Dictionary<string, string> { { "1", "" } });
+      VerifyNoMatch(ch, "aaa ddd");
+    }
+
+
+    [Test]
+    public void CanParseAndMatchGroup2()
+    {
+      ChoiceWRegex ch = ParseRuleAndGetRootWRegex<ChoiceWRegex>(@"
+> (aaa bbb) | (ccc)
+: ok
+");
+      Assert.IsInstanceOf<GroupWRegex>(ch.Choices[0]);
+      GroupWRegex left = (GroupWRegex)ch.Choices[0];
+      Assert.AreEqual(2, ((SequenceWRegex)left.Sub).Sequence.Count);
+      Assert.IsInstanceOf<GroupWRegex>(ch.Choices[1]);
+
+      VerifyMatch(ch, "aaa bbb", new Dictionary<string, string> { { "1", "aaa bbb" }, { "2", "" } });
+      VerifyNoMatch(ch, "aaa ccc");
+      VerifyNoMatch(ch, "aaa");
+      VerifyMatch(ch, "ccc", new Dictionary<string, string> { { "1", "" }, { "2", "ccc" } });
       VerifyNoMatch(ch, "aaa ddd");
     }
 
@@ -132,16 +164,16 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
-      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[1]);
+      Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
       Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
 
-      RepetitionWRegex r = (RepetitionWRegex)seq.Sequence[1];
+      RepetitionWRegex r = (RepetitionWRegex)((GroupWRegex)seq.Sequence[1]).Sub;
       Assert.AreEqual(0, r.MinCount);
       Assert.AreEqual(1, r.MaxCount);
 
-      VerifyMatch(seq, "aaa ddd");
-      VerifyMatch(seq, "aaa bbb ddd");
-      VerifyMatch(seq, "aaa ccc ddd");
+      VerifyMatch(seq, "aaa ddd", new Dictionary<string, string> { { "1", "" }, { "2", "" } });
+      VerifyMatch(seq, "aaa bbb ddd", new Dictionary<string, string> { { "1", "bbb" }, { "2", "bbb" } });
+      VerifyMatch(seq, "aaa ccc ddd", new Dictionary<string, string> { { "1", "ccc" }, { "2", "ccc" } });
       VerifyNoMatch(seq, "aaa bbb ccc ddd");
       VerifyNoMatch(seq, "aaa ccc ccc ddd");
       VerifyNoMatch(seq, "aaa bbb");
@@ -158,22 +190,38 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
-      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[1]);
-      Assert.IsInstanceOf<RepetitionWRegex>(seq.Sequence[2]);
+      Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
+      Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[2]);
 
-      RepetitionWRegex r = (RepetitionWRegex)seq.Sequence[2];
+      RepetitionWRegex r = (RepetitionWRegex)((GroupWRegex)seq.Sequence[2]).Sub;
       Assert.IsInstanceOf<WordWRegex>(r.A);
 
-      VerifyMatch(seq, "aaa x");
-      VerifyMatch(seq, "aaa x y");
-      VerifyMatch(seq, "aaa y bbb");
-      VerifyMatch(seq, "aaa yyy zzz bbb");
+      VerifyMatch(seq, "aaa x", new Dictionary<string, string> { { "1", "x" }, { "2", "" } });
+      VerifyMatch(seq, "aaa x y", new Dictionary<string, string> { { "1", "x y" }, { "2", "" } });
+      VerifyMatch(seq, "aaa y bbb", new Dictionary<string, string> { { "1", "y bbb" }, { "2", "" } });
+      VerifyMatch(seq, "aaa yyy zzz bbb", new Dictionary<string, string> { { "1", "yyy zzz bbb" }, { "2", "" } });
+      VerifyMatch(seq, "aaa bbb bbb", new Dictionary<string, string> { { "1", "bbb bbb" }, { "2", "" } });
+      VerifyMatch(seq, "aaa ooo bbb xxxx", new Dictionary<string, string> { { "1", "ooo bbb xxxx" }, { "2", "" } });
       VerifyNoMatch(seq, "qqq o");
       VerifyNoMatch(seq, "aaa");
-      //VerifyNoMatch(seq, "aaa ooo bbb xxxx");
 
-      // Not sure about what should be right here ...
-      VerifyNoMatch(seq, "aaa bbb bbb");
+    }
+
+
+    [Test]
+    public void CanMatchDoubleSequence()
+    {
+      SequenceWRegex seq = ParseRuleAndGetRootWRegex<SequenceWRegex>(@"
+> take (the|that)? +
+: ok
+");
+      VerifyMatch(seq, "take the ball", new Dictionary<string, string> { { "1", "the" }, { "2", "the" }, { "3", "ball" } });
+      VerifyMatch(seq, "take that house", new Dictionary<string, string> { { "1", "that" }, { "2", "that" }, { "3", "house" } });
+      VerifyMatch(seq, "take the red house", new Dictionary<string, string> { { "1", "the" }, { "2", "the" }, { "3", "red house" } });
+      VerifyMatch(seq, "take house", new Dictionary<string, string> { { "1", "" }, { "2", "" }, { "3", "house" } });
+      VerifyMatch(seq, "take red house", new Dictionary<string, string> { { "1", "" }, { "2", "" }, { "3", "red house" } });
+      VerifyMatch(seq, "take that", new Dictionary<string, string> { { "1", "" }, { "2", "" }, { "3", "that" } });
+      VerifyNoMatch(seq, "take");
     }
   }
 }

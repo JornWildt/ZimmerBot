@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
-
+using System;
 
 namespace ZimmerBot.Core.WordRegex
 {
@@ -84,6 +84,14 @@ namespace ZimmerBot.Core.WordRegex
 
       context.CurrentTokenIndex = bestIndex;
       return bestResult.RegisterMatch(MatchName, bestResult.MatchedText);
+    }
+
+
+    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    {
+      List<NFAFragment> fragments = Choices.Select(c => c.CalculateNFAFragment(context)).ToList();
+      NFANode s = NFANode.CreateSplit(context, fragments.Select(f => f.Start));
+      return new NFAFragment(s, fragments.SelectMany(f => f.Out).ToList());
     }
   }
 }

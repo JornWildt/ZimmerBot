@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ZimmerBot.Core.Knowledge;
 
 
@@ -40,6 +41,13 @@ namespace ZimmerBot.Core.WordRegex
       }
 
       return new MatchResult(0, "");
+    }
+
+
+    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    {
+      NFANode node = NFANode.CreateLiteral(context, null);
+      return new NFAFragment(node, node.Out);
     }
   }
 }

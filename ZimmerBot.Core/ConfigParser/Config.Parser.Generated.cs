@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 11-04-2016 08:42:59
+// DateTime: 14-04-2016 22:29:50
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 11-04-2016 08:42:58>
+// Input file <ConfigParser\Config.Language.grammar.y - 14-04-2016 22:29:46>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -342,7 +342,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.regex = new ChoiceWRegex(ValueStack[ValueStack.Depth-3].regex, ValueStack[ValueStack.Depth-1].regex); }
         break;
       case 22: // inputPattern -> inputPattern, T_QUESTION
-{ CurrentSemanticValue.regex =  new RepetitionWRegex(ValueStack[ValueStack.Depth-2].regex, 0, 1); }
+{ CurrentSemanticValue.regex =  new GroupWRegex(new RepetitionWRegex(ValueStack[ValueStack.Depth-2].regex, 0, 1)); }
         break;
       case 23: // inputPattern -> T_LPAR, inputPatternSeq, T_RPAR
 { CurrentSemanticValue.regex = new GroupWRegex(ValueStack[ValueStack.Depth-2].regex); }
@@ -354,10 +354,10 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.regex = new ConceptWRegex(KnowledgeBase, ValueStack[ValueStack.Depth-1].s); }
         break;
       case 26: // inputPattern -> T_STAR
-{ CurrentSemanticValue.regex = new RepetitionWRegex(new WildcardWRegex()); }
+{ CurrentSemanticValue.regex = new GroupWRegex(new RepetitionWRegex(new WildcardWRegex())); }
         break;
       case 27: // inputPattern -> T_PLUS
-{ CurrentSemanticValue.regex =  new RepetitionWRegex(new WildcardWRegex(), 1, 9999); }
+{ CurrentSemanticValue.regex =  new GroupWRegex(new RepetitionWRegex(new WildcardWRegex(), 1, 9999)); }
         break;
       case 28: // inputPattern -> T_EXCL, inputPattern
 { CurrentSemanticValue.regex =  new NegationWRegex(ValueStack[ValueStack.Depth-1].regex); }

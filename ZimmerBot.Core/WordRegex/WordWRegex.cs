@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
@@ -94,6 +95,13 @@ namespace ZimmerBot.Core.WordRegex
 
       ++context.CurrentTokenIndex;
       return new MatchResult(0.1, "");
+    }
+
+
+    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    {
+      NFANode node = NFANode.CreateLiteral(context, Word);
+      return new NFAFragment(node, node.Out);
     }
   }
 }

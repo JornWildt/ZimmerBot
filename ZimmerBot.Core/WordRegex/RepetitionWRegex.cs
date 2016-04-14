@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
@@ -120,6 +121,31 @@ namespace ZimmerBot.Core.WordRegex
         return lastResult
           .RegisterMatch((context.CurrentRepetitionIndex++).ToString(), matchedText)
           .RegisterMatch(MatchName, matchedText);
+    }
+
+
+    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    {
+      NFAFragment e = A.CalculateNFAFragment(context);
+      NFANode s = NFANode.CreateSplit(context, e.Start, null);
+
+      if (MinCount == 0 && MaxCount == 1)
+      {
+        e.Out.Add(s.Out[1]);
+        return new NFAFragment(s, e.Out);
+      }
+      else if (MinCount == 0 && MaxCount > 1)
+      {
+        Patch(e.Out, s);
+        return new NFAFragment(s, s.Out);
+      }
+      else if (MinCount == 1 && MaxCount > 1)
+      {
+        Patch(e.Out, s);
+        return new NFAFragment(e.Start, s.Out);
+      }
+      else
+        throw new NotImplementedException();
     }
   }
 }

@@ -138,6 +138,8 @@ namespace ZimmerBot.Core.Knowledge
         else
           Logger.InfoFormat("Skipping RDF file '{0}' - it has already been loaded", filename);
       }
+      else
+        Logger.InfoFormat("Skipping RDF file '{0}' - cannot load RDF files into existing memory", filename);
     }
 
 
