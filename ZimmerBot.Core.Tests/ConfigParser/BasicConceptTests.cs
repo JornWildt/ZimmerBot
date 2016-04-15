@@ -17,7 +17,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual(1, kb.Concepts.Count);
       Assert.AreEqual(1, kb.Concepts["weekday"].Choices.Choices.Count);
       Assert.AreEqual("weekday", kb.Concepts["weekday"].Name);
-      Assert.AreEqual("monday", ((WordWRegex)kb.Concepts["weekday"].Choices.Choices[0]).Word);
+      Assert.AreEqual("monday", ((LiteralWRegex)kb.Concepts["weekday"].Choices.Choices[0]).Literal);
     }
 
 
@@ -31,8 +31,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual(1, kb.Concepts.Count);
       Assert.AreEqual(2, kb.Concepts["weekday"].Choices.Choices.Count);
       Assert.AreEqual("weekday", kb.Concepts["weekday"].Name);
-      Assert.AreEqual("monday", ((WordWRegex)kb.Concepts["weekday"].Choices.Choices[0]).Word);
-      Assert.AreEqual("tuesday", ((WordWRegex)kb.Concepts["weekday"].Choices.Choices[1]).Word);
+      Assert.AreEqual("monday", ((LiteralWRegex)kb.Concepts["weekday"].Choices.Choices[0]).Literal);
+      Assert.AreEqual("tuesday", ((LiteralWRegex)kb.Concepts["weekday"].Choices.Choices[1]).Literal);
     }
   }
 }

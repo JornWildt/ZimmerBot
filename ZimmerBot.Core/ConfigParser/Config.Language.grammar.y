@@ -125,7 +125,7 @@ inputPattern
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD
-      { $$.regex = new WordWRegex($1.s); }
+      { $$.regex = new LiteralWRegex($1.s); }
   | T_CWORD
       { $$.regex = new ConceptWRegex(KnowledgeBase, $1.s); }
   | T_STAR

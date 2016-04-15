@@ -50,7 +50,7 @@ namespace ZimmerBot.Core.Knowledge
     private WRegex GetRegex(object t)
     {
       if (t is string)
-        return new WordWRegex((string)t);
+        return new LiteralWRegex((string)t);
       else if (t is WRegex)
         return (WRegex)t;
       else if (t == null)

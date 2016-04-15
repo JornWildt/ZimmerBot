@@ -66,7 +66,7 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        return new WordWRegex(word);
+        return new LiteralWRegex(word);
       }
     }
   }

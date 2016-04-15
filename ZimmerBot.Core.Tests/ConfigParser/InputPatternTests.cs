@@ -27,9 +27,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.AreEqual(3, seq.Sequence.Count);
-      Assert.AreEqual("aaa", ((WordWRegex)seq.Sequence[0]).Word);
-      Assert.AreEqual("bbb", ((WordWRegex)seq.Sequence[1]).Word);
-      Assert.AreEqual("ccc", ((WordWRegex)seq.Sequence[2]).Word);
+      Assert.AreEqual("aaa", ((LiteralWRegex)seq.Sequence[0]).Literal);
+      Assert.AreEqual("bbb", ((LiteralWRegex)seq.Sequence[1]).Literal);
+      Assert.AreEqual("ccc", ((LiteralWRegex)seq.Sequence[2]).Literal);
 
       VerifyMatch(seq, "aaa bbb   ccc");
       VerifyNoMatch(seq, "aaa bbb ddd ccc");
@@ -46,10 +46,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ok
 ");
 
-      Assert.IsInstanceOf<WordWRegex>(ch.Choices[0]);
-      Assert.AreEqual("aaa", ((WordWRegex)ch.Choices[0]).Word);
-      Assert.IsInstanceOf<WordWRegex>(ch.Choices[1]);
-      Assert.AreEqual("bbb", ((WordWRegex)ch.Choices[1]).Word);
+      Assert.IsInstanceOf<LiteralWRegex>(ch.Choices[0]);
+      Assert.AreEqual("aaa", ((LiteralWRegex)ch.Choices[0]).Literal);
+      Assert.IsInstanceOf<LiteralWRegex>(ch.Choices[1]);
+      Assert.AreEqual("bbb", ((LiteralWRegex)ch.Choices[1]).Literal);
 
       VerifyMatch(ch, "aaa");
       VerifyMatch(ch, "bbb");
@@ -66,10 +66,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ok
 ");
       Assert.AreEqual(2, seq.Sequence.Count);
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[0]);
       Assert.IsInstanceOf<ChoiceWRegex>(seq.Sequence[1]);
-      Assert.IsInstanceOf<WordWRegex>(((ChoiceWRegex)seq.Sequence[1]).Choices[0]);
-      Assert.IsInstanceOf<WordWRegex>(((ChoiceWRegex)seq.Sequence[1]).Choices[1]);
+      Assert.IsInstanceOf<LiteralWRegex>(((ChoiceWRegex)seq.Sequence[1]).Choices[0]);
+      Assert.IsInstanceOf<LiteralWRegex>(((ChoiceWRegex)seq.Sequence[1]).Choices[1]);
 
       VerifyMatch(seq, "aaa bbb");
       VerifyMatch(seq, "aaa ccc");
@@ -87,9 +87,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ok
 ");
 
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[0]);
       Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[2]);
 
       VerifyMatch(seq, "aaa oiqw bbb", new Dictionary<string, string> { { "1", "oiqw" } });
       VerifyNoMatch(seq, "aaa oiqw bbbx");
@@ -104,9 +104,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ok
 ");
 
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[0]);
       Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[2]);
 
       VerifyMatch(seq, "aaa oiqw bbb", new Dictionary<string, string> { { "1", "oiqw" } });
       VerifyNoMatch(seq, "aaa bbb");
@@ -124,8 +124,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.IsInstanceOf<GroupWRegex>(ch.Choices[0]);
       GroupWRegex left = (GroupWRegex)ch.Choices[0];
       Assert.AreEqual(2, ((SequenceWRegex)left.Sub).Sequence.Count);
-      Assert.IsInstanceOf<WordWRegex>(ch.Choices[1]);
-      Assert.AreEqual("ccc", ((WordWRegex)ch.Choices[1]).Word);
+      Assert.IsInstanceOf<LiteralWRegex>(ch.Choices[1]);
+      Assert.AreEqual("ccc", ((LiteralWRegex)ch.Choices[1]).Literal);
 
       VerifyMatch(ch, "aaa bbb", new Dictionary<string, string> { { "1", "aaa bbb" } });
       VerifyNoMatch(ch, "aaa ccc");
@@ -163,9 +163,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ok
 ");
 
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[0]);
       Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[2]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[2]);
 
       RepetitionWRegex r = (RepetitionWRegex)((GroupWRegex)seq.Sequence[1]).Sub;
       Assert.AreEqual(0, r.MinCount);
@@ -189,12 +189,12 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : ok
 ");
 
-      Assert.IsInstanceOf<WordWRegex>(seq.Sequence[0]);
+      Assert.IsInstanceOf<LiteralWRegex>(seq.Sequence[0]);
       Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[1]);
       Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[2]);
 
       RepetitionWRegex r = (RepetitionWRegex)((GroupWRegex)seq.Sequence[2]).Sub;
-      Assert.IsInstanceOf<WordWRegex>(r.Sub);
+      Assert.IsInstanceOf<LiteralWRegex>(r.Sub);
 
       VerifyMatch(seq, "aaa x", new Dictionary<string, string> { { "1", "x" }, { "2", "" } });
       VerifyMatch(seq, "aaa x y", new Dictionary<string, string> { { "1", "x y" }, { "2", "" } });

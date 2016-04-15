@@ -57,7 +57,7 @@ namespace ZimmerBot.Core.Tests
     [Test]
     public void CanEvaluateWordRepitionWRegex()
     {
-      Trigger t = new Trigger("Run", new RepetitionWRegex(new WordWRegex("very")), "fast");
+      Trigger t = new Trigger("Run", new RepetitionWRegex(new LiteralWRegex("very")), "fast");
       Assert.AreEqual(0, CalculateScore(t, "Test"));
       Assert.AreEqual(0, CalculateScore(t, "very"));
       Assert.AreEqual(0, CalculateScore(t, "Run"));
@@ -94,7 +94,7 @@ namespace ZimmerBot.Core.Tests
     [Test]
     public void CanEvaluateChoiceWRegex()
     {
-      Trigger t = new Trigger("She", new ChoiceWRegex(new WordWRegex("sleeps"), new WordWRegex("walks")), "today");
+      Trigger t = new Trigger("She", new ChoiceWRegex(new LiteralWRegex("sleeps"), new LiteralWRegex("walks")), "today");
       Assert.AreEqual(0, CalculateScore(t, "Test"));
       Assert.AreEqual(0, CalculateScore(t, "she today"));
       Assert.AreEqual(0, CalculateScore(t, "she runs today"));

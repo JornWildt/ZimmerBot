@@ -178,7 +178,7 @@
     <Compile Include="WordRegex\WRegex.cs" />
     <Compile Include="WordRegex\SequenceWRegex.cs" />
     <Compile Include="WordRegex\WildcardWRegex.cs" />
-    <Compile Include="WordRegex\WordWRegex.cs" />
+    <Compile Include="WordRegex\LiteralWRegex.cs" />
     <Compile Include="WordRegex\RepetitionWRegex.cs" />
     <Compile Include="StandardProcessors\DateTimeProcessor.cs" />
     <Compile Include="Knowledge\KnowledgeBase.cs" />

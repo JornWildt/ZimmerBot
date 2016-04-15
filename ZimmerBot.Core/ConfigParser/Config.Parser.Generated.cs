@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  CBRAIN-PC412
-// DateTime: 15-04-2016 09:48:56
+// DateTime: 15-04-2016 10:10:45
 // UserName: jw
-// Input file <ConfigParser\Config.Language.grammar.y - 15-04-2016 09:48:55>
+// Input file <ConfigParser\Config.Language.grammar.y - 15-04-2016 10:10:43>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -345,7 +345,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.regex = new GroupWRegex(ValueStack[ValueStack.Depth-2].regex); }
         break;
       case 24: // inputPattern -> T_WORD
-{ CurrentSemanticValue.regex = new WordWRegex(ValueStack[ValueStack.Depth-1].s); }
+{ CurrentSemanticValue.regex = new LiteralWRegex(ValueStack[ValueStack.Depth-1].s); }
         break;
       case 25: // inputPattern -> T_CWORD
 { CurrentSemanticValue.regex = new ConceptWRegex(KnowledgeBase, ValueStack[ValueStack.Depth-1].s); }
