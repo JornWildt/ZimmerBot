@@ -33,10 +33,10 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public WRegex.MatchResult Match { get; protected set; }
+    public MatchResult Match { get; protected set; }
 
 
-    public ResponseGenerationContext(InputRequestContext context, WRegex.MatchResult match)
+    public ResponseGenerationContext(InputRequestContext context, MatchResult match)
     {
       // match can be null for scheduled, non-input based, responses
       Condition.Requires(context, nameof(context)).IsNotNull();

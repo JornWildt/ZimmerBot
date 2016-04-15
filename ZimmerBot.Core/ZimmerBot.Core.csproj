@@ -170,6 +170,7 @@
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="WordRegex\GroupWRegex.cs" />
+    <Compile Include="WordRegex\MatchResult.cs" />
     <Compile Include="WordRegex\NFAEdge.cs" />
     <Compile Include="WordRegex\NFAFragment.cs" />
     <Compile Include="WordRegex\NFAMatchNode.cs" />

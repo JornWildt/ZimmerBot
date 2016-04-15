@@ -93,7 +93,7 @@ namespace ZimmerBot.Core.Knowledge
       if (context.RestrictToRuleLabel != null && context.RestrictToRuleLabel != Label)
         return null;
 
-      WRegex.MatchResult result = Trigger.CalculateTriggerScore(context);
+      MatchResult result = Trigger.CalculateTriggerScore(context);
 
       if (Weight != null)
         result.Score = result.Score * Weight.Value;

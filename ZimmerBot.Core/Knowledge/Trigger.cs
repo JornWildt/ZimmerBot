@@ -101,10 +101,10 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public WRegex.MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
+    public MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
       if (!context.ExecuteScheduledRules && Schedule != null)
-        return new WRegex.MatchResult(0);
+        return new MatchResult(0);
 
       context.CurrentRepetitionIndex = 1;
 
@@ -135,26 +135,26 @@ namespace ZimmerBot.Core.Knowledge
           conditionModifier = 0;
       }
 
-      WRegex.MatchResult result;
+      MatchResult result;
 
       if (Regex != null)
       {
         if (context.InputContext.Input != null)
           result = Regex.CalculateNFAMatch(context);
         else
-          result = new WRegex.MatchResult(0);
+          result = new MatchResult(0);
       }
       else
       {
         if (context.InputContext.Input != null)
-          result = new WRegex.MatchResult(0);
+          result = new MatchResult(0);
         else
-          result = new WRegex.MatchResult(1);
+          result = new MatchResult(1);
       }
 
       double totalScore = conditionModifier * result.Score * Math.Max(RegexSize,1);
 
-      return new WRegex.MatchResult(result, totalScore);
+      return new MatchResult(result, totalScore);
     }
 
 

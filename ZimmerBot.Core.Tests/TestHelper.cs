@@ -50,17 +50,17 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected WRegex.MatchResult CalculateMatchResult(Trigger t, string text)
+    protected MatchResult CalculateMatchResult(Trigger t, string text)
     {
       TriggerEvaluationContext context = BuildEvaluationContextFromInput(new KnowledgeBase(), text);
-      WRegex.MatchResult result = t.CalculateTriggerScore(context);
+      MatchResult result = t.CalculateTriggerScore(context);
       return result;
     }
 
 
     protected double CalculateScore(Trigger t, string text)
     {
-      WRegex.MatchResult result = CalculateMatchResult(t, text);
+      MatchResult result = CalculateMatchResult(t, text);
       Console.WriteLine("Score for '{0}' = {1}.", text, result.Score);
       return Math.Round(result.Score, 4);
     }
@@ -96,7 +96,7 @@ namespace ZimmerBot.Core.Tests
 
     protected void VerifyMatch(WRegex x, string s, Dictionary<string,string> expectedMatches = null)
     {
-      WRegex.MatchResult result = CalculateMatch(x, s);
+      MatchResult result = CalculateMatch(x, s);
       Assert.IsTrue(result.Score > 0.9, $"The input '{s}' does not match with the wregex.");
 
       if (expectedMatches != null)
@@ -112,12 +112,12 @@ namespace ZimmerBot.Core.Tests
 
     protected void VerifyNoMatch(WRegex x, string s)
     {
-      WRegex.MatchResult result = CalculateMatch(x, s);
+      MatchResult result = CalculateMatch(x, s);
       Assert.IsTrue(result.Score < 0.9, $"The input '{s}' unexpectedly match with the wregex.");
     }
 
 
-    protected WRegex.MatchResult CalculateMatch(WRegex x, string s)
+    protected MatchResult CalculateMatch(WRegex x, string s)
     {
       Session session = new Session("default");
       RequestState state = new RequestState();
@@ -133,7 +133,7 @@ namespace ZimmerBot.Core.Tests
           executeScheduledRules: false);
 
       //WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
-      WRegex.MatchResult result = x.CalculateNFAMatch(context);
+      MatchResult result = x.CalculateNFAMatch(context);
       return result;
     }
   }

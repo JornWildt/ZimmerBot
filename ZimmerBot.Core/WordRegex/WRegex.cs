@@ -8,28 +8,6 @@ namespace ZimmerBot.Core.WordRegex
 {
   public abstract class WRegex
   {
-    public class MatchResult
-    {
-      public double Score { get; set; }
-
-      public Dictionary<string, object> Matches { get; protected set; }
-
-
-      public MatchResult(double score)
-      {
-        Score = score;
-        Matches = new Dictionary<string, object>();
-      }
-
-
-      public MatchResult(MatchResult src, double score)
-      {
-        Score = score;
-        Matches = new Dictionary<string, object>(src.Matches);
-      }
-    }
-
-
     public abstract double CalculateSize();
 
 
