@@ -30,6 +30,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
+    protected Dictionary<string, Rule> LabelToRuleMap { get; set; }
 
     public KnowledgeBase()
       : this("default")
@@ -43,6 +44,8 @@ namespace ZimmerBot.Core.Knowledge
       Concepts = new Dictionary<string, Concept>();
       Rules = new List<Rule>();
       EventHandlers = new Dictionary<Request.EventEnum, List<Rule>>();
+      LabelToRuleMap = new Dictionary<string, Rule>();
+
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new SentenceTaggingStage());
@@ -85,6 +88,11 @@ namespace ZimmerBot.Core.Knowledge
       return r;
     }
 
+    internal void RegisterRuleLabel(string label, Rule r)
+    {
+      LabelToRuleMap[label] = r;
+    }
+
 
     public void RegisterEventHandler(string e, List<Statement> statements)
     {
@@ -99,6 +107,12 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
         throw new ApplicationException($"Unknown event '{e}'");
+    }
+
+
+    public Rule GetRuleFromLabel(string label)
+    {
+      return LabelToRuleMap[label];
     }
 
 

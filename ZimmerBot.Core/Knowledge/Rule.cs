@@ -39,6 +39,7 @@ namespace ZimmerBot.Core.Knowledge
     public Rule WithLabel(string label)
     {
       Label = label;
+      KnowledgeBase.RegisterRuleLabel(label, this);
       return this;
     }
 
