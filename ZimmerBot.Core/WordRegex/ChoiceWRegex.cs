@@ -18,12 +18,6 @@ namespace ZimmerBot.Core.WordRegex
 
 
     public ChoiceWRegex(WRegex left, WRegex right)
-      : this(left, right, null)
-    {
-    }
-
-
-    public ChoiceWRegex(WRegex left, WRegex right, string matchName)
     {
       Condition.Requires(left, "left").IsNotNull();
       Condition.Requires(right, "right").IsNotNull();
@@ -31,7 +25,6 @@ namespace ZimmerBot.Core.WordRegex
       Choices = new List<WRegex>();
       Choices.Add(left);
       Choices.Add(right);
-      MatchName = matchName;
     }
 
 
@@ -51,39 +44,6 @@ namespace ZimmerBot.Core.WordRegex
     public override double CalculateSize()
     {
       return Choices.Max(c => c.CalculateSize());
-    }
-
-
-    public override WRegex GetLookahead()
-    {
-      return new ChoiceWRegex(Choices.Select(c => c.GetLookahead()));
-    }
-
-
-    public override MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead)
-    {
-      if (Choices.Count == 0)
-        return new MatchResult(0, "");
-
-      MatchResult bestResult = null;
-      int bestIndex = -1;
-
-      int initialIndex = context.CurrentTokenIndex;
-
-      for (int i = 0; i < Choices.Count; ++i)
-      {
-        context.CurrentTokenIndex = initialIndex;
-        MatchResult result = Choices[i].CalculateMatchResult(context, lookahead);
-
-        if (bestResult == null  || result.Score >= bestResult.Score)
-        {
-          bestResult = result;
-          bestIndex = context.CurrentTokenIndex;
-        }
-      }
-
-      context.CurrentTokenIndex = bestIndex;
-      return bestResult.RegisterMatch(MatchName, bestResult.MatchedText);
     }
 
 

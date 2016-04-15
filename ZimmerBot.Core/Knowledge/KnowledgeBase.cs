@@ -113,7 +113,7 @@ namespace ZimmerBot.Core.Knowledge
         {
           foreach (Rule rule in EventHandlers[context.InputContext.Request.EventType.Value])
           {
-            ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new WRegex.MatchResult(1, ""));
+            ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new WRegex.MatchResult(1));
             Reaction reaction = new Reaction(rc, rule);
             reactions.Add(reaction);
           }

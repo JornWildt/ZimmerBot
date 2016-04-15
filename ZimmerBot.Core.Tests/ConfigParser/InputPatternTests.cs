@@ -194,7 +194,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.IsInstanceOf<GroupWRegex>(seq.Sequence[2]);
 
       RepetitionWRegex r = (RepetitionWRegex)((GroupWRegex)seq.Sequence[2]).Sub;
-      Assert.IsInstanceOf<WordWRegex>(r.A);
+      Assert.IsInstanceOf<WordWRegex>(r.Sub);
 
       VerifyMatch(seq, "aaa x", new Dictionary<string, string> { { "1", "x" }, { "2", "" } });
       VerifyMatch(seq, "aaa x y", new Dictionary<string, string> { { "1", "x y" }, { "2", "" } });

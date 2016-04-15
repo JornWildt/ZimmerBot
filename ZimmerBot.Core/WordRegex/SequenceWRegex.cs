@@ -11,14 +11,7 @@ namespace ZimmerBot.Core.WordRegex
 
 
     public SequenceWRegex()
-      : this(null)
     {
-    }
-
-
-    public SequenceWRegex(string matchName)
-    {
-      MatchName = matchName;
       Sequence = new List<WRegex>();
     }
 
@@ -42,29 +35,6 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override WRegex GetLookahead()
-    {
-      return this;
-    }
-
-
-    public override MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead)
-    {
-      MatchResult result = new MatchResult(1, "");
-
-      for (int i = 0; i < Sequence.Count; ++i)
-      {
-        WRegex lookahead2 = (i < Sequence.Count - 1 ? Sequence[i + 1].GetLookahead() : lookahead);
-        MatchResult subResult = Sequence[i].CalculateMatchResult(context, lookahead2);
-        result = MatchResult.Sequence(result, subResult);
-      }
-
-      // FIXME: transfer match values
-
-      return result;
-    }
-
-
     public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
     {
       NFAFragment e1 = null, e2 = null;
@@ -79,7 +49,7 @@ namespace ZimmerBot.Core.WordRegex
         }
         else
         {
-          Patch(e1.Out, e2.Start);
+          PatchNFAEdges(e1.Out, e2.Start);
         }
         e1 = e2;
       }

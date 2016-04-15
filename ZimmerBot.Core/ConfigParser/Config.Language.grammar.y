@@ -132,8 +132,6 @@ inputPattern
       { $$.regex = new GroupWRegex(new RepetitionWRegex(new WildcardWRegex())); }
   | T_PLUS
       { $$.regex =  new GroupWRegex(new RepetitionWRegex(new WildcardWRegex(), 1, 9999)); }
-  | T_EXCL inputPattern
-      { $$.regex =  new NegationWRegex($2.regex); }
   ;
 
 /******************************************************************************

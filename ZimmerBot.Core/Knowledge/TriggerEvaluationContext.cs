@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
-using ZimmerBot.Core.Parser;
 
 
 namespace ZimmerBot.Core.Knowledge
@@ -15,8 +13,6 @@ namespace ZimmerBot.Core.Knowledge
     public string RestrictToRuleLabel { get { return InputContext.Request.RuleLabel; } }
 
     public bool ExecuteScheduledRules { get; protected set; }
-
-    public int CurrentTokenIndex { get; set; }
 
     public int CurrentRepetitionIndex { get; set; }
 

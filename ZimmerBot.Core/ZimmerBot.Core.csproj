@@ -166,16 +166,14 @@
     <Compile Include="Utilities\TimeSpanUtility.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\ConceptWRegex.cs" />
-    <Compile Include="WordRegex\EndOfSequenceWRegex.cs" />
     <Compile Include="Parser\ZStatementSequence.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
     <Compile Include="WordRegex\GroupWRegex.cs" />
-    <Compile Include="WordRegex\NegationWRegex.cs" />
     <Compile Include="WordRegex\NFAEdge.cs" />
     <Compile Include="WordRegex\NFAFragment.cs" />
+    <Compile Include="WordRegex\NFAMatchNode.cs" />
     <Compile Include="WordRegex\NFANode.cs" />
-    <Compile Include="WordRegex\WordChoiceWRegex.cs" />
     <Compile Include="WordRegex\WRegex.cs" />
     <Compile Include="WordRegex\SequenceWRegex.cs" />
     <Compile Include="WordRegex\WildcardWRegex.cs" />

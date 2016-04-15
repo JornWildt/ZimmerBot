@@ -77,7 +77,6 @@
     <Compile Include="WRegexEvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
-    <Compile Include="WRegexMatchValueTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZimmerBot.Core\ZimmerBot.Core.csproj">

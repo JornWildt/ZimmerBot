@@ -29,22 +29,9 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override MatchResult CalculateMatchResult(TriggerEvaluationContext context, WRegex lookahead)
-    {
-      MatchResult result = Concept.Choices.CalculateMatchResult(context, lookahead);
-      return result.RegisterMatch(Concept.Name, result.MatchedText);
-    }
-
-
     public override double CalculateSize()
     {
       return Concept.Choices.CalculateSize();
-    }
-
-
-    public override WRegex GetLookahead()
-    {
-      return Concept.Choices.GetLookahead();
     }
 
 

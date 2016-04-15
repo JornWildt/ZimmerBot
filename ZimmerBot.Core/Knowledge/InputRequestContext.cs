@@ -18,14 +18,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public int RepetitionCount
     {
-      get
-      {
-        return RequestContext.RepetitionCount;
-      }
-      set
-      {
-        RequestContext.RepetitionCount = value;
-      } 
+      get { return RequestContext.RepetitionCount; }
+      set { RequestContext.RepetitionCount = value; } 
     }
 
     public Request Request { get; protected set; }
