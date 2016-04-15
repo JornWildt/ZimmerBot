@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
@@ -43,6 +45,16 @@ namespace ZimmerBot.Core.WordRegex
     public override WRegex GetLookahead()
     {
       return Concept.Choices.GetLookahead();
+    }
+
+
+    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    {
+      context.MatchNames.Push(Concept.Name);
+      NFAFragment f = Concept.Choices.CalculateNFAFragment(context);
+      context.MatchNames.Pop();
+
+      return f;
     }
   }
 }

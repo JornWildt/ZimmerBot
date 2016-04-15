@@ -45,7 +45,7 @@ namespace ZimmerBot.Core.Knowledge
           SequenceWRegex seqRegex = new SequenceWRegex();
           foreach (string word in pattern)
           {
-            WRegex wordRegex = ConvertWordToWRegex(pattern[0]);
+            WRegex wordRegex = ConvertWordToWRegex(word);
             seqRegex.Add(wordRegex);
           }
           Choices.Add(seqRegex);

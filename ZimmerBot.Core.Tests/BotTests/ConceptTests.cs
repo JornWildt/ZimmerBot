@@ -12,7 +12,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! concept fruit = bananas, apple, strawberry
 ! concept meat = pork, chicken, beef
 ! concept fruit_and_meat = %meat, %fruit
-! concept like = like, enjoy, prefer
+! concept like = like, enjoy, prefer, really like
 
 > I %like %fruit_and_meat
 : I <like> <fruit_and_meat> too
@@ -31,7 +31,7 @@ namespace ZimmerBot.Core.Tests.BotTests
     [TestCase("I enjoy bananas", "I enjoy bananas too")]
     [TestCase("I prefer apple", "I prefer apple too")]
     [TestCase("I like chicken", "I like chicken too")]
-    [TestCase("I really like chicken", "I like chicken too")]
+    [TestCase("I really like chicken", "I really like chicken too")]
     [TestCase("I LIKE chiCKEN", "I LIKE chiCKEN too")] // FIXME: improve casing on match ...
     public void CanMatchConcepts(string input, string expectedAnswer)
     {
