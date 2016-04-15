@@ -5,25 +5,25 @@ using System;
 
 namespace ZimmerBot.Core.WordRegex
 {
-  public class SequenceWRegex : WRegex
+  public class SequenceWRegex : WRegexBase
   {
-    public List<WRegex> Sequence { get; protected set; }
+    public List<WRegexBase> Sequence { get; protected set; }
 
 
     public SequenceWRegex()
     {
-      Sequence = new List<WRegex>();
+      Sequence = new List<WRegexBase>();
     }
 
 
-    public SequenceWRegex Add(WRegex p)
+    public SequenceWRegex Add(WRegexBase p)
     {
       Sequence.Add(p);
       return this;
     }
 
 
-    public void Insert(int index, WRegex p)
+    public void Insert(int index, WRegexBase p)
     {
       Sequence.Insert(0, p);
     }
@@ -40,7 +40,7 @@ namespace ZimmerBot.Core.WordRegex
       NFAFragment e1 = null, e2 = null;
       NFAFragment start = null;
 
-      foreach (WRegex r in Sequence)
+      foreach (WRegexBase r in Sequence)
       {
         e2 = r.CalculateNFAFragment(context);
         if (e1 == null)

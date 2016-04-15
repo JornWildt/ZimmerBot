@@ -9,22 +9,22 @@ namespace ZimmerBot.Core.WordRegex
   /// <summary>
   /// Represents zero or more repetisions of a predicate
   /// </summary>
-  public class RepetitionWRegex : WRegex
+  public class RepetitionWRegex : WRegexBase
   {
-    public WRegex Sub { get; protected set; }
+    public WRegexBase Sub { get; protected set; }
 
     public int MinCount { get; protected set; }
 
     public int MaxCount { get; protected set; }
 
 
-    public RepetitionWRegex(WRegex a)
+    public RepetitionWRegex(WRegexBase a)
       : this(a, 0, 9999)
     {
     }
 
 
-    public RepetitionWRegex(WRegex a, int min, int max)
+    public RepetitionWRegex(WRegexBase a, int min, int max)
     {
       Condition.Requires(a, "a").IsNotNull();
       Sub = a;

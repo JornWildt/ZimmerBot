@@ -7,12 +7,12 @@ using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.WordRegex
 {
-  public class GroupWRegex : WRegex
+  public class GroupWRegex : WRegexBase
   {
-    public WRegex Sub { get; protected set; }
+    public WRegexBase Sub { get; protected set; }
 
 
-    public GroupWRegex(WRegex sub)
+    public GroupWRegex(WRegexBase sub)
     {
       Sub = sub;
     }

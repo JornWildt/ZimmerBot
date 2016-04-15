@@ -84,17 +84,17 @@ namespace ZimmerBot.Core.Tests
 
 
     protected T ParseRuleAndGetRootWRegex<T>(string s)
-      where T : WRegex
+      where T : WRegexBase
     {
       Rule r = ParseRule(s);
-      Assert.IsInstanceOf<T>(r.KnowledgeBase.Rules[0].Trigger.Regex);
-      T seq = (T)r.KnowledgeBase.Rules[0].Trigger.Regex;
+      Assert.IsInstanceOf<T>(r.KnowledgeBase.Rules[0].Trigger.Regex.Expr);
+      T expr = (T)r.KnowledgeBase.Rules[0].Trigger.Regex.Expr;
 
-      return seq;
+      return expr;
     }
 
 
-    protected void VerifyMatch(WRegex x, string s, Dictionary<string,string> expectedMatches = null)
+    protected void VerifyMatch(WRegexBase x, string s, Dictionary<string,string> expectedMatches = null)
     {
       MatchResult result = CalculateMatch(x, s);
       Assert.IsTrue(result.Score > 0.9, $"The input '{s}' does not match with the wregex.");
@@ -110,14 +110,14 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected void VerifyNoMatch(WRegex x, string s)
+    protected void VerifyNoMatch(WRegexBase x, string s)
     {
       MatchResult result = CalculateMatch(x, s);
       Assert.IsTrue(result.Score < 0.9, $"The input '{s}' unexpectedly match with the wregex.");
     }
 
 
-    protected MatchResult CalculateMatch(WRegex x, string s)
+    protected MatchResult CalculateMatch(WRegexBase x, string s)
     {
       Session session = new Session("default");
       RequestState state = new RequestState();

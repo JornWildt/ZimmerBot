@@ -9,7 +9,7 @@ namespace ZimmerBot.Core.WordRegex
   /// <summary>
   /// A WRegex that referes to a concept (which in turn contains a wregex which is used).
   /// </summary>
-  public class ConceptWRegex : WRegex
+  public class ConceptWRegex : WRegexBase
   {
     public Concept Concept { get; protected set; }
 

@@ -20,8 +20,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.AreEqual(1, kb.Rules.Count);
-      Assert.IsInstanceOf<LiteralWRegex>(kb.Rules[0].Trigger.Regex);
-      LiteralWRegex seq = (LiteralWRegex)kb.Rules[0].Trigger.Regex;
+      Assert.AreEqual(typeof(LiteralWRegex), kb.Rules[0].Trigger.Regex.TypeOfExpr);
     }
 
     [Test]

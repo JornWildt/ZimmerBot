@@ -6,36 +6,36 @@ using System;
 
 namespace ZimmerBot.Core.WordRegex
 {
-  public class ChoiceWRegex : WRegex
+  public class ChoiceWRegex : WRegexBase
   {
-    public List<WRegex> Choices { get; protected set; }
+    public List<WRegexBase> Choices { get; protected set; }
 
 
     public ChoiceWRegex()
-      : this(Enumerable.Empty<WRegex>())
+      : this(Enumerable.Empty<WRegexBase>())
     {
     }
 
 
-    public ChoiceWRegex(WRegex left, WRegex right)
+    public ChoiceWRegex(WRegexBase left, WRegexBase right)
     {
       Condition.Requires(left, "left").IsNotNull();
       Condition.Requires(right, "right").IsNotNull();
 
-      Choices = new List<WRegex>();
+      Choices = new List<WRegexBase>();
       Choices.Add(left);
       Choices.Add(right);
     }
 
 
-    public ChoiceWRegex(IEnumerable<WRegex> choices)
+    public ChoiceWRegex(IEnumerable<WRegexBase> choices)
     {
       Condition.Requires(choices, nameof(choices)).IsNotNull();
-      Choices = new List<WRegex>(choices);
+      Choices = new List<WRegexBase>(choices);
     }
 
 
-    public void Add(WRegex choice)
+    public void Add(WRegexBase choice)
     {
       Choices.Add(choice);
     }

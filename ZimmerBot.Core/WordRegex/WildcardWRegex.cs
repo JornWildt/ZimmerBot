@@ -5,7 +5,7 @@ using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.WordRegex
 {
-  public class WildcardWRegex : WRegex
+  public class WildcardWRegex : WRegexBase
   {
     public WildcardWRegex()
     {

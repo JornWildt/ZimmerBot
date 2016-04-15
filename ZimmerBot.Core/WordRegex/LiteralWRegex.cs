@@ -4,7 +4,7 @@ using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.WordRegex
 {
-  public class LiteralWRegex : WRegex
+  public class LiteralWRegex : WRegexBase
   {
     public string Literal { get; set; }
 

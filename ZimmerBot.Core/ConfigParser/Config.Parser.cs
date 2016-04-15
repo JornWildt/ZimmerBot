@@ -62,7 +62,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected Rule AddRule(string label, WRegex pattern, List<RuleModifier> modifiers, List<Statement> outputs)
+    protected Rule AddRule(string label, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> outputs)
     {
       Rule r = KnowledgeBase.AddRule(pattern);
       if (label != null)
@@ -76,7 +76,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected WRegex CombineSequence(WRegex left, WRegex right)
+    protected WRegexBase CombineSequence(WRegexBase left, WRegexBase right)
     {
       if (left == null && right != null)
         return right;
@@ -100,7 +100,7 @@ namespace ZimmerBot.Core.ConfigParser
       }
       else // (left is SequenceWRegex && right is SequenceWRegex)
       {
-        foreach (WRegex r in ((SequenceWRegex)right).Sequence)
+        foreach (WRegexBase r in ((SequenceWRegex)right).Sequence)
           ((SequenceWRegex)left).Add(r);
         return left;
       }

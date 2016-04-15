@@ -28,7 +28,7 @@ namespace ZimmerBot.Core.Knowledge
       }
       else if (pattern.Length == 1)
       {
-        Regex = GetRegex(pattern[0]);
+        Regex = new WRegex(GetRegex(pattern[0]));
         RegexSize = Regex.CalculateSize();
       }
       else if (pattern.Length > 1)
@@ -37,22 +37,22 @@ namespace ZimmerBot.Core.Knowledge
 
         foreach (object t in pattern)
         {
-          WRegex r = GetRegex(t);
+          WRegexBase r = GetRegex(t);
           p.Add(r);
         }
 
-        Regex = p;
+        Regex = new WRegex(p);
         RegexSize = p.CalculateSize();
       }
     }
 
 
-    private WRegex GetRegex(object t)
+    private WRegexBase GetRegex(object t)
     {
       if (t is string)
         return new LiteralWRegex((string)t);
-      else if (t is WRegex)
-        return (WRegex)t;
+      else if (t is WRegexBase)
+        return (WRegexBase)t;
       else if (t == null)
         throw new ArgumentNullException("t", "Null item in topics");
       else
@@ -140,7 +140,7 @@ namespace ZimmerBot.Core.Knowledge
       if (Regex != null)
       {
         if (context.InputContext.Input != null)
-          result = Regex.CalculateNFAMatch(context);
+          result = Regex.CalculateMatch(context);
         else
           result = new MatchResult(0);
       }

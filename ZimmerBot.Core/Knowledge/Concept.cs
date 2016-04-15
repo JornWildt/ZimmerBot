@@ -37,7 +37,7 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (pattern.Count == 1)
         {
-          WRegex wordRegex = ConvertWordToWRegex(pattern[0]);
+          WRegexBase wordRegex = ConvertWordToWRegex(pattern[0]);
           Choices.Add(wordRegex);
         }
         else
@@ -45,7 +45,7 @@ namespace ZimmerBot.Core.Knowledge
           SequenceWRegex seqRegex = new SequenceWRegex();
           foreach (string word in pattern)
           {
-            WRegex wordRegex = ConvertWordToWRegex(word);
+            WRegexBase wordRegex = ConvertWordToWRegex(word);
             seqRegex.Add(wordRegex);
           }
           Choices.Add(seqRegex);
@@ -54,7 +54,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    protected WRegex ConvertWordToWRegex(string word)
+    protected WRegexBase ConvertWordToWRegex(string word)
     {
       if (word.StartsWith("%"))
       {

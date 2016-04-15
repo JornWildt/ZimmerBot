@@ -1,107 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.WordRegex
 {
-  public abstract class WRegex
+  public class WRegex
   {
-    public abstract double CalculateSize();
+    public WRegexBase Expr { get; protected set; }
+
+    protected NFANode Root { get; set; }
 
 
-    public abstract NFAFragment CalculateNFAFragment(TriggerEvaluationContext context);
+    public Type TypeOfExpr { get { return Expr.GetType(); } }
 
 
-    public NFANode CalculateNFA(TriggerEvaluationContext context)
+    public WRegex(WRegexBase expr)
     {
-      NFAFragment f = CalculateNFAFragment(context);
-      PatchNFAEdges(f.Out, NFANode.MatchNode);
-
-      return f.Start;
+      Condition.Requires(expr, nameof(expr)).IsNotNull();
+      Expr = expr;
     }
 
 
-    protected void PatchNFAEdges(List<NFAEdge> edges, NFANode n)
+    public double CalculateSize()
     {
-      foreach (NFAEdge e in edges)
-      {
-        if (e.Target == null)
-          e.Target = n;
-      }
+      return Expr.CalculateSize();
     }
 
 
-   public MatchResult CalculateNFAMatch(TriggerEvaluationContext context)
+    public MatchResult CalculateMatch(TriggerEvaluationContext context)
     {
-      NFANode start = CalculateNFA(context);
-
-      List<NFAMatchNode> clist = new List<NFAMatchNode>();
-      List<NFAMatchNode> nlist = new List<NFAMatchNode>();
-
-      AddNode(new NFAMatchNode(start), clist);
-
-      foreach (var inp in context.InputContext.Input)
+      if (Root == null)
       {
-        Step(clist, inp, nlist);
-
-        List<NFAMatchNode> tmp = clist;
-        clist = nlist;
-        nlist = tmp;
+        Root = Expr.CalculateNFA(context);
       }
 
-      NFAMatchNode matchNode = clist.FirstOrDefault(n => n.Node.Type == NFANode.TypeEnum.Match);
-      double score = (matchNode != null ? 1 : 0);
-
-      MatchResult result = new MatchResult(score);
-
-      // Make sure all match groups exists
-      for (int i = 1; i < context.CurrentRepetitionIndex; ++i)
-        result.Matches[i.ToString()] = "";
-
-      if (matchNode != null)
-        foreach (var m in matchNode.Matches)
-          result.Matches[m.Key] = m.Value;
-
+      MatchResult result = Expr.CalculateNFAMatch(Root, context);
       return result;
-    }
-
-
-    protected void AddNode(NFAMatchNode s, List<NFAMatchNode> nodes)
-    {
-      if (s.Node.Type == NFANode.TypeEnum.Split)
-      {
-        foreach (NFAEdge e in s.Node.Out)
-          AddNode(new NFAMatchNode(e.Target, s.Matches), nodes);
-      }
-      else
-      {
-        nodes.Add(s);
-      }
-    }
-
-
-    protected void Step(List<NFAMatchNode> clist, ZToken inp, List<NFAMatchNode> nlist)
-    {
-      nlist.Clear();
-      foreach (NFAMatchNode c in clist)
-      {
-        if (c.Node.Type == NFANode.TypeEnum.Literal)
-        {
-          if (c.Node.Literal == null || c.Node.Literal.Equals(inp.OriginalText, StringComparison.CurrentCultureIgnoreCase))
-          {
-            foreach (string m in c.Node.MatchNames)
-            {
-              if (!c.Matches.ContainsKey(m))
-                c.Matches[m] = inp.OriginalText;
-              else
-                c.Matches[m] += " " + inp.OriginalText;
-            }
-            AddNode(new NFAMatchNode(c.Node.Out[0].Target, c.Matches), nlist);
-          }
-        }
-      }
     }
   }
 }

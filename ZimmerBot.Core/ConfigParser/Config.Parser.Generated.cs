@@ -34,7 +34,7 @@ internal partial struct ValueType
 { 
   public Statement statement;
   public List<Statement> statementList;
-  public WRegex regex;
+  public WRegexBase regex;
   public Expression expr;
   public List<Expression> exprList;
   public KeyValuePair<string,string> template;
