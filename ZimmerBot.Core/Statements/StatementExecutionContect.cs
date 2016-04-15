@@ -38,9 +38,9 @@ namespace ZimmerBot.Core.Statements
     }
 
 
-    public void Continue(string input = null)
+    public void Continue(Continuation c)
     {
-      ResponseContext.Continue(input);
+      ResponseContext.Continue(c);
     }
   }
 }

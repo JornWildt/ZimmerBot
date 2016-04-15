@@ -10,7 +10,7 @@
 %union { 
   public Statement statement;
   public List<Statement> statementList;
-  public WRegex regex;
+  public WRegexBase regex;
   public Expression expr;
   public List<Expression> exprList;
   public KeyValuePair<string,string> template;
@@ -29,7 +29,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
-%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON
+%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT
 
 %token T_IMPLIES
 %token T_COMMA
@@ -93,13 +93,13 @@ ruleSeq
   ;
 
 rule
-  : ruleId input ruleModifierSeq statementSeq
+  : ruleLabel input ruleModifierSeq statementSeq
     { 
       $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
     }
   ;
 
-ruleId
+ruleLabel
   : T_LT T_WORD { $$.s = $2.s; }
   | /* empty */
   ;
@@ -199,12 +199,13 @@ stmtSet
 
 stmtAnswer
   : T_ANSWER T_LBRACE ruleSeq T_RBRACE { $$.statement = new AnswerStatement($3.ruleList); }
+  | T_ANSWER T_AT T_WORD               { $$.statement = new AnswerStatement($3.s); }
   ;
 
 stmtContinue
   : T_CONTINUE               { $$.statement = new ContinueStatement(); }
-  | T_CONTINUE_AT T_WORD     { $$.statement = new ContinueStatement($2.s, ContinueStatement.TargetEnum.Label); }
-  | T_CONTINUE_WITH wordSeq  { $$.statement = new ContinueStatement($2.stringList, ContinueStatement.TargetEnum.Input); }
+  | T_CONTINUE_AT T_WORD     { $$.statement = new ContinueStatement(new ZimmerBot.Core.Knowledge.Continuation(ZimmerBot.Core.Knowledge.Continuation.ContinuationEnum.Label, $2.s)); }
+  | T_CONTINUE_WITH wordSeq  { $$.statement = new ContinueStatement($2.stringList); }
   ;
 
 /******************************************************************************

@@ -1,44 +1,34 @@
-﻿using CuttingEdge.Conditions;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Expressions;
 
 namespace ZimmerBot.Core.Statements
 {
   public class ContinueStatement : Statement
   {
-    public enum TargetEnum { None, Label, Input }
-
-    public string Target { get; protected set; }
-
-    public TargetEnum TargetType { get; protected set; }
+    public Continuation ContinuationChoice { get; protected set; }
 
 
     public ContinueStatement()
     {
-      TargetType = TargetEnum.None;
+      ContinuationChoice = new Continuation(Continuation.ContinuationEnum.Empty, null);
     }
 
 
-    public ContinueStatement(string target, TargetEnum targetType)
+    public ContinueStatement(Continuation c)
     {
-      Condition.Requires(target, nameof(target)).IsNotNullOrEmpty();
-
-      Target = target;
-      TargetType = targetType;
+      Condition.Requires(c, nameof(c)).IsNotNull();
+      ContinuationChoice = c;
     }
 
 
-    public ContinueStatement(List<string> target, TargetEnum targetType)
+    public ContinueStatement(List<string> target)
     {
       Condition.Requires(target, nameof(target)).IsNotNull();
 
-      Target = target.Aggregate((a,b) => a + " " + b);
-      TargetType = targetType;
+      string input = target.Aggregate((a,b) => a + " " + b);
+      ContinuationChoice = new Continuation(Continuation.ContinuationEnum.Input, input);
     }
 
 
@@ -50,13 +40,7 @@ namespace ZimmerBot.Core.Statements
 
     public override void Execute(StatementExecutionContect context)
     {
-      ResponseGenerationContext rc = context.ResponseContext;
-
-      string target = Target;
-      if (TargetType == TargetEnum.Label && target != null)
-        target = "@" + target;
-
-      context.Continue(target);
+      context.Continue(ContinuationChoice);
     }
   }
 }

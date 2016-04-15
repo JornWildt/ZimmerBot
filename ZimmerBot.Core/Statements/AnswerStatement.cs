@@ -6,7 +6,16 @@ namespace ZimmerBot.Core.Statements
 {
   public class AnswerStatement : Statement
   {
+    public string Target { get; protected set; }
+
     public List<Rule> Rules { get; protected set; }
+
+
+    public AnswerStatement(string target)
+    {
+      Condition.Requires(target, nameof(target)).IsNotNullOrEmpty();
+      Target = target;
+    }
 
 
     public AnswerStatement(List<Rule> rules)
@@ -18,14 +27,19 @@ namespace ZimmerBot.Core.Statements
 
     public override void Initialize(StatementInitializationContext context)
     {
-      foreach (Rule r in Rules)
-        r.RegisterParentRule(context.ParentRule);
+      if (Rules != null)
+        foreach (Rule r in Rules)
+          r.RegisterParentRule(context.ParentRule);
     }
 
 
     public override void Execute(StatementExecutionContect context)
     {
-      // Nothing here
+      if (Target != null)
+      {
+        Continuation c = new Continuation(Continuation.ContinuationEnum.Answer, Target);
+        context.Continue(c);
+      }
     }
   }
 }

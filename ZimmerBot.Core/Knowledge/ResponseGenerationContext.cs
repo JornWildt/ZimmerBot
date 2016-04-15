@@ -52,9 +52,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Continue(string input = null)
+    public void Continue(Continuation c)
     {
-      InputContext.Continue(input);
+      InputContext.Continue(c);
     }
   }
 }

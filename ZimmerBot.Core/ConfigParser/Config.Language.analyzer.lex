@@ -61,6 +61,8 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*rdf_import  { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix  { return (int)Token.T_RDF_PREFIX; }
 
+at { return (int)Token.T_AT; }
+
 {Number} { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 
 \%{Word}  { yylval.s = yytext; return (int)Token.T_CWORD; }

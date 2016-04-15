@@ -104,6 +104,7 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="Expressions\UnaryOperatorExpr.cs" />
+    <Compile Include="Knowledge\Continuation.cs" />
     <Compile Include="Knowledge\InputRequestContext.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Knowledge\RequestContext.cs" />

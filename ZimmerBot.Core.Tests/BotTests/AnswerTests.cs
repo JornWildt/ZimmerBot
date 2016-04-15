@@ -60,5 +60,33 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("hi", "welcome\nhow are you doing?");
       AssertDialog("fine", "good!");
     }
+
+
+    [Test]
+    public void CanTakeAnswerFromOtherRule()
+    {
+      BuildBot(@"
+> How are you
+: Fine. And you?
+! answer at how_are_you
+
+<how_are_you>
+: How are you?
+! answer
+{
+  > fine
+  : Cool
+
+  > Dreadful
+  : Sorry to hear that
+}
+");
+
+      AssertDialog("How are you", "Fine. And you?");
+      AssertDialog("Fine", "Cool");
+
+      AssertDialog("How are you", "Fine. And you?");
+      AssertDialog("Dreadful", "Sorry to hear that");
+    }
   }
 }

@@ -102,17 +102,26 @@ namespace ZimmerBot.Core.Knowledge
       inputContext.KnowledgeBase.InputPipeline.Invoke(pipelineItem);
       output.AddRange(pipelineItem.Output);
 
-      if (inputContext.DoContinueMatchingRules)
+      if (inputContext.ContinuationChoice != null)
       {
-        Request request = (inputContext.TargetForNextRuleMatching != null && inputContext.TargetForNextRuleMatching.StartsWith("@")
-          ? new Request(inputContext.Request, null) { RuleLabel = inputContext.TargetForNextRuleMatching.Substring(1) }
-          : new Request(inputContext.Request, inputContext.TargetForNextRuleMatching));
+        if (inputContext.ContinuationChoice.ContinuationType == Continuation.ContinuationEnum.Answer)
+        {
+          // Set last-rule-id as the rule of the answer
+          inputContext.State[StateKeys.SessionStore][StateKeys.LastRuleId]
+            = inputContext.KnowledgeBase.GetRuleFromLabel(inputContext.ContinuationChoice.Text).Id;
+        }
+        else
+        {
+          Request request = (inputContext.ContinuationChoice.ContinuationType == Continuation.ContinuationEnum.Label
+            ? new Request(inputContext.Request, null) { RuleLabel = inputContext.ContinuationChoice.Text }
+            : new Request(inputContext.Request, inputContext.ContinuationChoice.Text));
 
-        InvokeStatements(
-          inputContext.RequestContext,
-          request,
-          inputContext.FromTemplate,
-          output);
+          InvokeStatements(
+            inputContext.RequestContext,
+            request,
+            inputContext.FromTemplate,
+            output);
+        }
       }
     }
   }

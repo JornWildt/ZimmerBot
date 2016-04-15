@@ -28,9 +28,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public bool FromTemplate { get; protected set; }
 
-    public bool DoContinueMatchingRules { get; protected set; }
-
-    public string TargetForNextRuleMatching { get; protected set; }
+    public Continuation ContinuationChoice { get; protected set; }
 
 
     public InputRequestContext(RequestContext context, Request request, ZTokenSequence input)
@@ -44,10 +42,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Continue(string target = null)
+    public void Continue(Continuation c)
     {
-      DoContinueMatchingRules = true;
-      TargetForNextRuleMatching = target;
+      ContinuationChoice = c;
     }
   }
 }
