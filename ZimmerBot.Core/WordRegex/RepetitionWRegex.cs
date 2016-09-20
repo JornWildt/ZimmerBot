@@ -62,5 +62,11 @@ namespace ZimmerBot.Core.WordRegex
       else
         throw new NotImplementedException();
     }
+
+
+    public override string ToString()
+    {
+      return Sub.ToString() + "{" + MinCount + "," + MaxCount + "}";
+    }
   }
 }

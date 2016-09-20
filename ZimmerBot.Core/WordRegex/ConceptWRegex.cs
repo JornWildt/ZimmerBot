@@ -43,5 +43,11 @@ namespace ZimmerBot.Core.WordRegex
 
       return f;
     }
+
+
+    public override string ToString()
+    {
+      return "%" + Concept.ToString();
+    }
   }
 }

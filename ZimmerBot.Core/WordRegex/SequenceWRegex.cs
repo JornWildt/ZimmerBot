@@ -75,5 +75,11 @@ namespace ZimmerBot.Core.WordRegex
     //    }
     //  }
     //}
+
+
+    public override string ToString()
+    {
+      return Sequence.Select(c => c.ToString()).Aggregate((a, b) => a + " " + b);
+    }
   }
 }

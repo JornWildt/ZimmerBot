@@ -69,5 +69,11 @@ namespace ZimmerBot.Core.Knowledge
         return new LiteralWRegex(word);
       }
     }
+
+
+    public override string ToString()
+    {
+      return Name;
+    }
   }
 }

@@ -27,5 +27,11 @@ namespace ZimmerBot.Core.WordRegex
       NFANode node = NFANode.CreateLiteral(context, Literal);
       return new NFAFragment(node, node.Out);
     }
+
+
+    public override string ToString()
+    {
+      return Literal;
+    }
   }
 }

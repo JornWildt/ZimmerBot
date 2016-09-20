@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using CuttingEdge.Conditions;
+using log4net;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.Utilities;
@@ -10,6 +11,9 @@ namespace ZimmerBot.Core.ConfigParser
 {
   internal partial class ConfigParser
   {
+    private static ILog Logger = LogManager.GetLogger(typeof(ConfigParser));
+
+
     protected KnowledgeBase KnowledgeBase { get; set; }
 
 
@@ -64,6 +68,7 @@ namespace ZimmerBot.Core.ConfigParser
 
     protected Rule AddRule(string label, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> outputs)
     {
+      Logger.DebugFormat("Found rule: {0}", pattern);
       Rule r = KnowledgeBase.AddRule(pattern);
       if (label != null)
         r.WithLabel(label);

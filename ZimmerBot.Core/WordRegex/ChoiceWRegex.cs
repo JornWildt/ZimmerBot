@@ -53,5 +53,11 @@ namespace ZimmerBot.Core.WordRegex
       NFANode s = NFANode.CreateSplit(context, fragments.Select(f => f.Start));
       return new NFAFragment(s, fragments.SelectMany(f => f.Out).ToList());
     }
+
+
+    public override string ToString()
+    {
+      return Choices.Select(c => c.ToString()).Aggregate((a,b) => a + "|" + b);
+    }
   }
 }
