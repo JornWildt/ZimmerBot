@@ -110,6 +110,7 @@ namespace ZimmerBot.Core.Knowledge
     protected string GetDatabaseFilename()
     {
       string filename = Path.Combine(AppSettings.RDF_DataDirectory, ID + ".trig");
+      filename = AppSettings.MapServerPath(filename);
       return filename;
     }
 
@@ -120,6 +121,7 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (AppSettings.RDF_ImportDirectory.Value != null)
           filename = Path.Combine(AppSettings.RDF_ImportDirectory.Value, filename);
+        filename = AppSettings.MapServerPath(filename);
 
         if (!LoadedFiles.Contains(filename))
         {
