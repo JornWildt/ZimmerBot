@@ -28,7 +28,7 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT
 
 %token T_IMPLIES
@@ -80,6 +80,8 @@ configuration
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     
       { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_RDF_ENTITIES T_LPAR T_STRING T_RPAR
+      { RDFEntities($4.s); }
   ;
 
 conceptPatternSeq
@@ -127,7 +129,7 @@ inputPattern
   | T_WORD
       { $$.regex = new LiteralWRegex($1.s); }
   | T_CWORD
-      { $$.regex = new ConceptWRegex(KnowledgeBase, $1.s); }
+      { $$.regex = BuildConceptWRegex($1.s); }
   | T_STAR
       { $$.regex = new GroupWRegex(new RepetitionWRegex(new WildcardWRegex())); }
   | T_PLUS

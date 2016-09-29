@@ -8,6 +8,8 @@ using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Pipeline;
 using ZimmerBot.Core.Pipeline.InputStages;
+using ZimmerBot.Core.Processors;
+using ZimmerBot.Core.StandardProcessors;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.WordRegex;
 
@@ -22,15 +24,19 @@ namespace ZimmerBot.Core.Knowledge
 
     public RDFStore MemoryStore { get; protected set; }
 
-    public Dictionary<string, Concept> Concepts { get; protected set; }
+    public IDictionary<string, Concept> Concepts { get; protected set; }
 
-    public List<Rule> Rules { get; protected set; }
+    public IDictionary<string, Entity> Entities { get; protected set; }
 
-    public Dictionary<Request.EventEnum, List<Rule>> EventHandlers { get; protected set; }
+    public IList<Rule> Rules { get; protected set; }
+
+    public IDictionary<Request.EventEnum, List<Rule>> EventHandlers { get; protected set; }
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
-    protected Dictionary<string, Rule> LabelToRuleMap { get; set; }
+    protected IDictionary<string, Rule> LabelToRuleMap { get; set; }
+
+    protected IList<string> SparqlForEntities { get; set; }
 
     public KnowledgeBase()
       : this("default")
@@ -42,13 +48,15 @@ namespace ZimmerBot.Core.Knowledge
     {
       MemoryStore = new RDFStore(memoryId);
       Concepts = new Dictionary<string, Concept>();
+      Entities = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
       Rules = new List<Rule>();
       EventHandlers = new Dictionary<Request.EventEnum, List<Rule>>();
       LabelToRuleMap = new Dictionary<string, Rule>();
+      SparqlForEntities = new List<string>();
 
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
-      InputPipeline.AddHandler(new SentenceTaggingStage());
+      InputPipeline.AddHandler(new EntityTaggingStage());
       InputPipeline.AddHandler(new ReactionGeneratorStage());
       InputPipeline.AddHandler(new OutputGeneratorStage());
       InputPipeline.AddHandler(new ChatLoggerStage());
@@ -61,6 +69,24 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public void Run()
+    {
+      foreach (string s in SparqlForEntities)
+      {
+        Logger.DebugFormat("Run query for entities: {0}", s);
+        Dictionary<string, object> matches = new Dictionary<string, object>();
+        IList<object> parameters = new List<object>();
+        RDFResultSet output = MemoryStore.Query(s, matches, parameters);
+        Logger.DebugFormat("Found {0} records", output.Count);
+        foreach (var o in output)
+        {
+          if (o.ContainsKey("label"))
+            AddEntity(o["label"]);
+        }
+      }
+    }
+
+
     public Concept AddConcept(string name, List<List<string>> patterns)
     {
       Condition.Requires(name, nameof(name)).IsNotNull();
@@ -69,6 +95,14 @@ namespace ZimmerBot.Core.Knowledge
       Concept w = new Concept(this, name, patterns);
       Concepts.Add(name, w);
       return w;
+    }
+
+
+    public Entity AddEntity(string label)
+    {
+      Entity e = new Entity(label);
+      Entities[e.Label] = e;
+      return e;
     }
 
 
@@ -107,6 +141,12 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
         throw new ApplicationException($"Unknown event '{e}'");
+    }
+
+
+    public void RegisterSparqlForEntities(string sparql)
+    {
+      SparqlForEntities.Add(sparql);
     }
 
 

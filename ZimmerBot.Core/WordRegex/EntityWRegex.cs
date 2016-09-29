@@ -1,21 +1,14 @@
-﻿using CuttingEdge.Conditions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ZimmerBot.Core.Knowledge;
-
 
 namespace ZimmerBot.Core.WordRegex
 {
-  public class LiteralWRegex : WRegexBase
+  public class EntityWRegex : WRegexBase
   {
-    public string Literal { get; set; }
-
-
-    public LiteralWRegex(string l)
-    {
-      Condition.Requires(l, nameof(l)).IsNotNull();
-      Literal = l;
-    }
-
-
     public override double CalculateSize()
     {
       return 1;
@@ -24,14 +17,14 @@ namespace ZimmerBot.Core.WordRegex
 
     public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
     {
-      NFANode node = NFANode.CreateLiteral(context, Literal);
+      NFANode node = NFANode.CreateEntityLiteral(context);
       return new NFAFragment(node, node.Out);
     }
 
 
     public override string ToString()
     {
-      return Literal;
+      return "%ENTITY";
     }
   }
 }

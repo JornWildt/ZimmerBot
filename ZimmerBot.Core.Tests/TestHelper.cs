@@ -69,6 +69,7 @@ namespace ZimmerBot.Core.Tests
     protected KnowledgeBase ParseKnowledgeBase(string s)
     {
       KnowledgeBase kb = new KnowledgeBase();
+      kb.Initialize(KnowledgeBase.InitializationMode.Clear);
       CfgParser.ParseConfigurationString(kb, s);
       return kb;
     }

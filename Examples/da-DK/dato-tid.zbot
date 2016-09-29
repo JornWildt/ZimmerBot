@@ -3,7 +3,7 @@
 ! concept ugedag = mandag, tirsdag, onsdag, torsdag, fredag, lørdag, søndag
 ! concept måned = januar, februar, marts, april, maj, juni, juli, august, september, oktober, november, december
 
-> er det (ugedag)
+> er det (%ugedag)
 ! call DateTime.IsItWeekDay($1)
 : <if(answer)>Ja, for fanden!<else>Næh, desværre.<endif>
 
@@ -11,7 +11,7 @@
 ! call DateTime.Time()
 : Det er <answer; format="dddd">.
 
-> er det (måned)
+> er det (%måned)
 ! call DateTime.IsItMonth($1)
 : <if(answer)>Ja, det er <answer>.<else>Næh, desværre.<endif>
 

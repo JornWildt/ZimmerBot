@@ -48,6 +48,20 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    // new ConceptWRegex(KnowledgeBase, $1.s)
+    protected WRegexBase BuildConceptWRegex(string s)
+    {
+      if (s == "%ENTITY")
+      {
+        return new GroupWRegex(
+          new ChoiceWRegex(
+            new WildcardWRegex(),
+            new EntityWRegex()));
+      }
+      else
+        return new ConceptWRegex(KnowledgeBase, s);
+    }
+
     protected void RegisterEventHandler(string e, List<Statement> statements)
     {
       KnowledgeBase.RegisterEventHandler(e, statements);
@@ -63,6 +77,13 @@ namespace ZimmerBot.Core.ConfigParser
     protected void RDFPrefix(string prefix, string url)
     {
       KnowledgeBase.MemoryStore.DeclarePrefix(prefix, url);
+    }
+
+
+    protected void RDFEntities(string sparql)
+    {
+      KnowledgeBase.RegisterSparqlForEntities(sparql);
+      //System.Console.WriteLine("Entities loaded from {0}", sparql);
     }
 
 

@@ -40,6 +40,8 @@ namespace ZimmerBot.Console
             kb.LoadFromFiles(path);
         }
 
+        kb.Run();
+
         Bot b = new Bot(kb);
 
         // Run bot

@@ -1,0 +1,15 @@
+﻿@base <http://some-names> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<#A>
+  rdfs:label "Alibaba Inc".
+
+<#B>
+  rdfs:label "The Little Mermaid".
+
+  
+<#C>
+  rdfs:label "Duplicate".
+
+<#D>
+  rdfs:label "Duplicate".

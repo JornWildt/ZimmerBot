@@ -105,6 +105,7 @@
     <Compile Include="Bot.cs" />
     <Compile Include="Expressions\UnaryOperatorExpr.cs" />
     <Compile Include="Knowledge\Continuation.cs" />
+    <Compile Include="Knowledge\Entity.cs" />
     <Compile Include="Knowledge\InputRequestContext.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Knowledge\RequestContext.cs" />
@@ -137,7 +138,7 @@
     <Compile Include="Knowledge\SessionManager.cs" />
     <Compile Include="Pipeline\InputStages\InputPipelineItem.cs" />
     <Compile Include="Pipeline\InputStages\ReactionGeneratorStage.cs" />
-    <Compile Include="Pipeline\InputStages\SentenceTaggingStage.cs" />
+    <Compile Include="Pipeline\InputStages\EntityTaggingStage.cs" />
     <Compile Include="Pipeline\InputStages\WordTaggingStage.cs" />
     <Compile Include="Knowledge\BotRepository.cs" />
     <Compile Include="Knowledge\BotUtility.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Parser\ZStatementSequence.cs" />
     <Compile Include="Parser\GplexBuffers.cs" />
     <Compile Include="Parser\ShiftReduceParserCode.cs" />
+    <Compile Include="WordRegex\EntityWRegex.cs" />
     <Compile Include="WordRegex\GroupWRegex.cs" />
     <Compile Include="WordRegex\MatchResult.cs" />
     <Compile Include="WordRegex\NFAEdge.cs" />

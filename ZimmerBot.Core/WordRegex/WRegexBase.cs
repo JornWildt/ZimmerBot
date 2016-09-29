@@ -92,19 +92,24 @@ namespace ZimmerBot.Core.WordRegex
       nlist.Clear();
       foreach (NFAMatchNode c in clist)
       {
-        if (c.Node.Type == NFANode.TypeEnum.Literal)
+        bool literalOk = 
+          c.Node.Type == NFANode.TypeEnum.Literal
+            && (c.Node.Literal == null || c.Node.Literal.Equals(inp.OriginalText, StringComparison.CurrentCultureIgnoreCase));
+
+        bool entityOk = 
+          c.Node.Type == NFANode.TypeEnum.EntityLiteral
+            && inp.Type == ZToken.TokenType.Entity;
+
+        if (literalOk || entityOk)
         {
-          if (c.Node.Literal == null || c.Node.Literal.Equals(inp.OriginalText, StringComparison.CurrentCultureIgnoreCase))
+          foreach (string m in c.Node.MatchNames)
           {
-            foreach (string m in c.Node.MatchNames)
-            {
-              if (!c.Matches.ContainsKey(m))
-                c.Matches[m] = inp.OriginalText;
-              else
-                c.Matches[m] += " " + inp.OriginalText;
-            }
-            AddNode(new NFAMatchNode(c.Node.Out[0].Target, c.Matches), nlist);
+            if (!c.Matches.ContainsKey(m))
+              c.Matches[m] = inp.OriginalText;
+            else
+              c.Matches[m] += " " + inp.OriginalText;
           }
+          AddNode(new NFAMatchNode(c.Node.Out[0].Target, c.Matches), nlist);
         }
       }
     }

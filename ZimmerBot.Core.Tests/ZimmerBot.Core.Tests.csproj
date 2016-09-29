@@ -54,6 +54,7 @@
     <Compile Include="BotTests\ContinueTests.cs" />
     <Compile Include="BotTests\ConceptTests.cs" />
     <Compile Include="BotTests\ConditionTests.cs" />
+    <Compile Include="BotTests\EntityTest.cs" />
     <Compile Include="BotTests\EventTests.cs" />
     <Compile Include="BotTests\InfiniteLoopProtectionTests.cs" />
     <Compile Include="BotTests\OutputTests.cs" />
@@ -86,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ConfigParser\EntityNames.ttl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="ConfigParser\Friends.ttl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

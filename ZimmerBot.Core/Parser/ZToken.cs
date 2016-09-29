@@ -7,7 +7,7 @@ namespace ZimmerBot.Core.Parser
 {
   public class ZToken
   {
-    public enum TokenType { Word, Number, EMail }
+    public enum TokenType { Word, Number, EMail, Entity }
 
     public string OriginalText { get; protected set; }
 

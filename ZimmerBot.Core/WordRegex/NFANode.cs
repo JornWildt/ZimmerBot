@@ -9,7 +9,7 @@ namespace ZimmerBot.Core.WordRegex
 {
   public class NFANode
   {
-    public enum TypeEnum { Literal, Split, Match }
+    public enum TypeEnum { Literal, EntityLiteral, Split, Match }
 
     public TypeEnum Type { get; protected set; }
 
@@ -33,6 +33,15 @@ namespace ZimmerBot.Core.WordRegex
     public static NFANode CreateLiteral(TriggerEvaluationContext context, string literal)
     {
       NFANode n = new NFANode { Type = TypeEnum.Literal, Literal = literal };
+      n.Out.Add(new NFAEdge(null));
+      n.MatchNames.AddRange(context.MatchNames);
+      return n;
+    }
+
+
+    public static NFANode CreateEntityLiteral(TriggerEvaluationContext context)
+    {
+      NFANode n = new NFANode { Type = TypeEnum.EntityLiteral };
       n.Out.Add(new NFAEdge(null));
       n.MatchNames.AddRange(context.MatchNames);
       return n;
