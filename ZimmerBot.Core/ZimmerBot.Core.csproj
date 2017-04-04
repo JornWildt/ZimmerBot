@@ -167,6 +167,7 @@
     <Compile Include="Utilities\ErrorCollection.cs" />
     <Compile Include="Utilities\ParserException.cs" />
     <Compile Include="Utilities\ScheduledBotCallback.cs" />
+    <Compile Include="Utilities\Scheduler.cs" />
     <Compile Include="Utilities\TimeSpanUtility.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\ConceptWRegex.cs" />

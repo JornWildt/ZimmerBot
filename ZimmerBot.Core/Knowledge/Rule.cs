@@ -150,25 +150,13 @@ namespace ZimmerBot.Core.Knowledge
           string[] output = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context))).ToArray();
           result.Add(output[0]);
 
-          // FIXME: refactor to method
-          DateTime at = DateTime.Now.AddSeconds(2);
+          // Schedule remaining outputs delayed
+          DateTime at = DateTime.Now;
+          IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
           foreach (string o in output.Skip(1))
           {
-            IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
-
-            IJobDetail job = JobBuilder.Create<ScheduledBotCallback>()
-              .UsingJobData("Output", o)
-              .UsingJobData("SessionId", context.Request.SessionId)
-              .UsingJobData("BotId", context.Request.BotId)
-              .Build();
-
-            ITrigger trigger = TriggerBuilder.Create()
-              .StartAt(at)
-              .Build();
-
-            scheduler.ScheduleJob(job, trigger);
-
-            at = at.AddSeconds(2);
+            at = at.AddSeconds(o.Length * 0.1);
+            Scheduler.AddDelayedMessage(scheduler, at, o, context);
           }
         }
 
