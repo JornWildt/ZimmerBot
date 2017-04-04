@@ -5,7 +5,7 @@ namespace ZimmerBot.Core.TemplateParser
   public interface ITemplateExpander
   {
     /// <summary>
-    /// Expand StringTemplate placeholdes using StringTemplate.
+    /// Expand StringTemplate placeholders using StringTemplate.
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>

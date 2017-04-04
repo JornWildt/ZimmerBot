@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 
 namespace ZimmerBot.Core.TemplateParser
 {

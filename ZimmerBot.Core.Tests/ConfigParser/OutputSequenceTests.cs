@@ -29,14 +29,13 @@ with a newline.
       Assert.AreEqual(3, s.Template.Outputs.Count);
       Assert.AreEqual("default", s.Template.Key);
       Assert.AreEqual("First sentence.", s.Template.Outputs[0]);
-      Assert.AreEqual("Second sentence\r\nwith a newline.", s.Template.Outputs[1]);
+      Assert.AreEqual("Second sentence\nwith a newline.", s.Template.Outputs[1]);
       Assert.AreEqual("Third sentence.", s.Template.Outputs[2]);
-      Assert.AreEqual("First sentence.\nSecond sentence\r\nwith a newline.\nThird sentence.", s.Template.Value);
     }
 
 
     [Test]
-    public void CanParseNameOutputSequence()
+    public void CanParseNamedOutputSequence()
     {
       Rule r = ParseRule(@"
 > Yo
@@ -52,7 +51,7 @@ with a newline.
       Assert.AreEqual(3, s.Template.Outputs.Count);
       Assert.AreEqual("xxx", s.Template.Key);
       Assert.AreEqual("First sentence.", s.Template.Outputs[0]);
-      Assert.AreEqual("Second sentence\r\nwith a newline.", s.Template.Outputs[1]);
+      Assert.AreEqual("Second sentence\nwith a newline.", s.Template.Outputs[1]);
       Assert.AreEqual("Third sentence.", s.Template.Outputs[2]);
     }
   }

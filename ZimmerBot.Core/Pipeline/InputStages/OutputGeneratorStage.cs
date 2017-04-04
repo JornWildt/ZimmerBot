@@ -29,7 +29,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
         state[StateKeys.SessionStore][StateKeys.LastRuleId] = r.Rule.Id;
 
         foreach (string s in response)
-          DiaLogger.InfoFormat("Response: " + s);
+          DiaLogger.Info("Response: " + s);
       }
       else
       {
@@ -37,7 +37,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
         if (item.Context.Input != null)
           output.Add("???");
 
-        DiaLogger.InfoFormat("No suitable response found");
+        DiaLogger.Info("No suitable response found");
         state[StateKeys.SessionStore][StateKeys.LastRuleId] = null;
       }
     }

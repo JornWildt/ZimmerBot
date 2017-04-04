@@ -9,6 +9,16 @@ namespace ZimmerBot.Core.Utilities
 {
   public static class TextMerge
   {
+    private static TemplateGroup Templates { get; set; }
+
+
+    static TextMerge()
+    {
+      Templates = new TemplateGroup();
+      Templates.RegisterRenderer(typeof(DateTime), new DateRenderer());
+    }
+
+
     public static string MergeTemplate(ChainedDictionary<string, string> templates, object source)
     {
       return MergeTemplate(templates, "default", source);
@@ -24,9 +34,7 @@ namespace ZimmerBot.Core.Utilities
 
     public static string MergeTemplate(string template, IDictionary source)
     {
-      TemplateGroup group = new TemplateGroup();
-      group.RegisterRenderer(typeof(DateTime), new DateRenderer());
-      Template t = new Template(group, template);
+      Template t = new Template(Templates,template);
 
       if (source != null)
       {
