@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using NUnit.Framework;
 using ZimmerBot.Core.StandardProcessors;
 
@@ -12,7 +13,7 @@ namespace ZimmerBot.Core.Tests
 
     static bool Initialized = false;
 
-    [SetUp]
+    [OneTimeSetUp]
     public void Setup()
     {
       if (Initialized)
@@ -21,6 +22,9 @@ namespace ZimmerBot.Core.Tests
       // Start logging
       log4net.Config.XmlConfigurator.Configure();
       Logger.Info("**** STARTING ZimmerBot tests ****");
+
+      // Some tests and data loading depends on this (current directory should be the test file (.dll) location => ...\bin\Debug\x.dll)
+      Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 
       GeneralProcessor.Initialize();
       DateTimeProcessor.Initialize();
