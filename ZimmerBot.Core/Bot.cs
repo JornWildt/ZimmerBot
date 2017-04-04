@@ -82,6 +82,8 @@ namespace ZimmerBot.Core
         try
         {
           Request request = WorkQueue.Dequeue(TimeSpan.FromDays(1));
+          request.BotId = Id;
+
           Invoke(request, callbackToEnvironment: true);
         }
         catch (ThreadAbortException)
@@ -114,10 +116,16 @@ namespace ZimmerBot.Core
         Response response = BotUtility.Invoke(KnowledgeBase, req, executeScheduledRules);
 
         if (callbackToEnvironment)
-          Environment.HandleResponse(response);
+          SendResponse(response);
 
         return response;
       }
+    }
+
+
+    public void SendResponse(Response response)
+    {
+      Environment.HandleResponse(response);
     }
   }
 }

@@ -13,10 +13,10 @@ namespace ZimmerBot.Core.Statements
 
     public List<string> Outputs { get; set; }
 
-    public string Value
-    {
-      get { return Outputs.Aggregate((a, b) => a + "\n" + b); }
-    }
+    //public string Value
+    //{
+    //  get { return Outputs.Aggregate((a, b) => a + "\n" + b); }
+    //}
 
     public OutputTemplate(string key, string s, List<string> outputs)
     {

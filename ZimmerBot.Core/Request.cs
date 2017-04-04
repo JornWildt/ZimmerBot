@@ -20,6 +20,8 @@ namespace ZimmerBot.Core
 
     public EventEnum? EventType { get; set; }
 
+    public string BotId { get; set; }
+
     public Request()
       : this("default", "default")
     {

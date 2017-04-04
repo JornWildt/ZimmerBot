@@ -11,7 +11,7 @@ namespace ZimmerBot.Core.Statements
   {
     public ResponseGenerationContext ResponseContext { get; set; }
 
-    public Dictionary<string,List<string>> OutputTemplates { get; set; }
+    public Dictionary<string,List<OutputTemplate>> OutputTemplates { get; set; }
 
     public ProcessorOutput LastValue { get; set; }
 
@@ -24,7 +24,7 @@ namespace ZimmerBot.Core.Statements
       Condition.Requires(context, nameof(context)).IsNotNull();
 
       ResponseContext = context;
-      OutputTemplates = new Dictionary<string, List<string>>();
+      OutputTemplates = new Dictionary<string, List<OutputTemplate>>();
       LastValue = null;
       AdditionalOutput = new List<string>();
     }
@@ -33,8 +33,8 @@ namespace ZimmerBot.Core.Statements
     public void AddOutputTemplate(OutputTemplate template)
     {
       if (!OutputTemplates.ContainsKey(template.Key))
-        OutputTemplates[template.Key] = new List<string>();
-      OutputTemplates[template.Key].Add(template.Value);
+        OutputTemplates[template.Key] = new List<OutputTemplate>();
+      OutputTemplates[template.Key].Add(template);
     }
 
 

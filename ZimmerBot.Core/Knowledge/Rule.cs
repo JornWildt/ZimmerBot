@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CuttingEdge.Conditions;
 using Quartz;
+using Quartz.Impl;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.TemplateParser;
+using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
 
@@ -141,11 +144,32 @@ namespace ZimmerBot.Core.Knowledge
         List<string> result = new List<string>();
         if (ox_context.OutputTemplates.ContainsKey(templateName))
         {
-          IList<string> templates = ox_context.OutputTemplates[templateName];
+          IList<OutputTemplate> templates = ox_context.OutputTemplates[templateName];
 
-          string selectedTemplate = templates[Randomizer.Next(templates.Count)];
-          string output = TemplateUtility.Merge(selectedTemplate, new TemplateExpander(context));
-          result.Add(output);
+          OutputTemplate selectedTemplate = templates[Randomizer.Next(templates.Count)];
+          string[] output = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context))).ToArray();
+          result.Add(output[0]);
+
+          // FIXME: refactor to method
+          DateTime at = DateTime.Now.AddSeconds(2);
+          foreach (string o in output.Skip(1))
+          {
+            IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
+
+            IJobDetail job = JobBuilder.Create<ScheduledBotCallback>()
+              .UsingJobData("Output", o)
+              .UsingJobData("SessionId", context.Request.SessionId)
+              .UsingJobData("BotId", context.Request.BotId)
+              .Build();
+
+            ITrigger trigger = TriggerBuilder.Create()
+              .StartAt(at)
+              .Build();
+
+            scheduler.ScheduleJob(job, trigger);
+
+            at = at.AddSeconds(2);
+          }
         }
 
         result.AddRange(ox_context.AdditionalOutput);
