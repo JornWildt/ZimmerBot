@@ -31,6 +31,29 @@ with a newline.
       Assert.AreEqual("First sentence.", s.Template.Outputs[0]);
       Assert.AreEqual("Second sentence\r\nwith a newline.", s.Template.Outputs[1]);
       Assert.AreEqual("Third sentence.", s.Template.Outputs[2]);
+      Assert.AreEqual("First sentence.\nSecond sentence\r\nwith a newline.\nThird sentence.", s.Template.Value);
+    }
+
+
+    [Test]
+    public void CanParseNameOutputSequence()
+    {
+      Rule r = ParseRule(@"
+> Yo
+{xxx}: First sentence. 
++: Second sentence\
+with a newline.
++: Third sentence.");
+
+      Assert.AreEqual(1, r.Statements.Count);
+      Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[0]);
+
+      OutputTemplateStatement s = (OutputTemplateStatement)r.Statements[0];
+      Assert.AreEqual(3, s.Template.Outputs.Count);
+      Assert.AreEqual("xxx", s.Template.Key);
+      Assert.AreEqual("First sentence.", s.Template.Outputs[0]);
+      Assert.AreEqual("Second sentence\r\nwith a newline.", s.Template.Outputs[1]);
+      Assert.AreEqual("Third sentence.", s.Template.Outputs[2]);
     }
   }
 }
