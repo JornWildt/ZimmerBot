@@ -67,6 +67,7 @@
     <Compile Include="ConfigParser\EmptyInputTests.cs" />
     <Compile Include="ConfigParser\ErrorHandlingTests.cs" />
     <Compile Include="ConfigParser\InputPatternTests.cs" />
+    <Compile Include="ConfigParser\OutputSequenceTests.cs" />
     <Compile Include="ConfigParser\OutputTests.cs" />
     <Compile Include="ConfigParser\RDFTests.cs" />
     <Compile Include="ConfigParser\UnicodeTests.cs" />

@@ -13,7 +13,7 @@
   public WRegexBase regex;
   public Expression expr;
   public List<Expression> exprList;
-  public KeyValuePair<string,string> template;
+  public OutputTemplate template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
   public Knowledge.Rule rule;
@@ -173,23 +173,38 @@ statementSeq
   ;
 
 statement
-  : outputTemplate  { $$.statement = new OutputTemplateStatement($1.template); }
-  | stmtCall        { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
-  | stmtSet         { $$.statement = $1.statement;}
-  | stmtAnswer      { $$.statement = $1.statement;}
-  | stmtContinue    { $$.statement = $1.statement;}
+  : outputTemplateSequence  { $$.statement = new OutputTemplateStatement($1.template); }
+  | stmtCall                { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
+  | stmtSet                 { $$.statement = $1.statement;}
+  | stmtAnswer              { $$.statement = $1.statement;}
+  | stmtContinue            { $$.statement = $1.statement;}
+  ;
+
+outputTemplateSequence
+  : outputTemplate outputTemplateSequence2                          {  $$.template = new OutputTemplate("default", $1.s, $2.stringList); }
+  | T_LBRACE T_WORD T_RBRACE outputTemplate outputTemplateSequence2 {  $$.template = new OutputTemplate($2.s, $4.s, $5.stringList); }
+  ;
+
+outputTemplateSequence2
+  : outputTemplateSequence2 T_PLUS outputTemplate  { $$.stringList.Add($3.s); }
+  | /* empty */                                    { $$.stringList = new List<string>(); }
   ;
 
 outputTemplate
   : T_COLON  
       { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>("default", ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
-  | T_LBRACE T_WORD T_RBRACE T_COLON 
+      { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
+  ;
+
+/*
+outputTemplateNamed
+  : T_LBRACE T_WORD T_RBRACE T_COLON 
       { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
+      { $$.template = new OutputTemplate($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim(), OutputTemplate.TemplateType.Start); }
   ;
+*/
 
 stmtCall
   : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.expr, $4.exprList); }

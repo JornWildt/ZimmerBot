@@ -6,12 +6,11 @@ namespace ZimmerBot.Core.Statements
 {
   public class OutputTemplateStatement : Statement
   {
-    public KeyValuePair<string, string> Template { get; set; }
+    public OutputTemplate Template { get; set; }
 
-    public OutputTemplateStatement(KeyValuePair<string, string> template)
+    public OutputTemplateStatement(OutputTemplate template)
     {
-      Condition.Requires(template.Key, nameof(template.Key)).IsNotNull();
-      Condition.Requires(template.Value, nameof(template.Value)).IsNotNull();
+      Condition.Requires(template, nameof(template)).IsNotNull();
       Template = template;
     }
 

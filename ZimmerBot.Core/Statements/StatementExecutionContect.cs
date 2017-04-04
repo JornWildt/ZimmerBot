@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.Statements
     }
 
 
-    public void AddOutputTemplate(KeyValuePair<string, string> template)
+    public void AddOutputTemplate(OutputTemplate template)
     {
       if (!OutputTemplates.ContainsKey(template.Key))
         OutputTemplates[template.Key] = new List<string>();
