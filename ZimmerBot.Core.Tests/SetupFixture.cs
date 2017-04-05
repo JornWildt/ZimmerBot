@@ -32,5 +32,12 @@ namespace ZimmerBot.Core.Tests
 
       Initialized = true;
     }
+
+
+    [OneTimeTearDown]
+    public void TearDown()
+    {
+      ZimmerBotConfiguration.Shutdown();
+    }
   }
 }
