@@ -12,6 +12,7 @@ namespace ZimmerBot.Core
     public static readonly AppSetting<TimeSpan> RDF_BackupInterval = new AppSetting<TimeSpan>("ZimmerBot.RDF.BackupInterval", TimeSpan.FromMinutes(5));
 
     public static readonly AppSetting<TimeSpan> MessageSequenceDelay = new AppSetting<TimeSpan>("ZimmerBot.MessageSequenceDelay", TimeSpan.FromSeconds(0.05));
+    public static readonly AppSetting<string> MessageSequenceNotoficationText = new AppSetting<string>("ZimmerBot.MessageSequenceNotoficationText", " (...)", trim: AppSetting.TrimSetting.NoTrim);
 
     public static Func<string, string> MapServerPath { get; set; } = (s => s);
   }

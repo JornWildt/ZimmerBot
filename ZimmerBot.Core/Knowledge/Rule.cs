@@ -148,7 +148,7 @@ namespace ZimmerBot.Core.Knowledge
 
           OutputTemplate selectedTemplate = templates[Randomizer.Next(templates.Count)];
           string[] output = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context))).ToArray();
-          result.Add(output[0]);
+          result.Add(AddMoreNotification(output[0], output.Length>1));
 
           // Schedule remaining outputs delayed
           if (output.Length > 1)
@@ -159,7 +159,7 @@ namespace ZimmerBot.Core.Knowledge
 
             for (int i = 1; i < output.Length; ++i)
             {
-              string o = output[i];
+              string o = AddMoreNotification(output[i], i < output.Length-1);
               at = at.AddSeconds(o.Length * AppSettings.MessageSequenceDelay.Value.TotalSeconds);
               Scheduler.AddDelayedMessage(scheduler, at, o, context,  i == output.Length-1);
             }
@@ -175,6 +175,15 @@ namespace ZimmerBot.Core.Knowledge
         // Remove variables containing matches $1...$N for this rule invocation
         context.Variables.Pop();
       }
+    }
+
+
+    protected string AddMoreNotification(string text, bool hasMore)
+    {
+      if (hasMore)
+        return text + AppSettings.MessageSequenceNotoficationText;
+      else
+        return text;
     }
   }
 }
