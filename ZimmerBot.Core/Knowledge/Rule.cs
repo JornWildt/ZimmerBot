@@ -153,11 +153,12 @@ namespace ZimmerBot.Core.Knowledge
           // Schedule remaining outputs delayed
           DateTime at = DateTime.Now;
           IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
-          foreach (string o in output.Skip(1))
+          for (int i=1; i<output.Length; ++i)
           {
+            string o = output[i];
             context.Session.Store["IsWorking"] = true;
             at = at.AddSeconds(o.Length * 0.1);
-            Scheduler.AddDelayedMessage(scheduler, at, o, context);
+            Scheduler.AddDelayedMessage(scheduler, at, o, context, i != output.Length-1);
           }
         }
 

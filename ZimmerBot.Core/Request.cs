@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 
 namespace ZimmerBot.Core
 {
@@ -8,7 +9,7 @@ namespace ZimmerBot.Core
 
     public string Input { get; set; }
 
-    public object State { get; set; }
+    public Dictionary<string, string> State { get; set; }
 
     public string SessionId { get; set; }
 

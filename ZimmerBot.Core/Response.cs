@@ -8,9 +8,9 @@ namespace ZimmerBot.Core
   {
     public string[] Output { get; set; }
 
-    public object State { get; set; }
+    public Dictionary<string,string> State { get; set; }
 
-    public Response(IEnumerable<string> output, object state)
+    public Response(IEnumerable<string> output, Dictionary<string, string> state)
     {
       Condition.Requires(output, nameof(output)).IsNotNull();
 
