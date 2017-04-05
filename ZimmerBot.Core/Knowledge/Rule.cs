@@ -151,14 +151,18 @@ namespace ZimmerBot.Core.Knowledge
           result.Add(output[0]);
 
           // Schedule remaining outputs delayed
-          DateTime at = DateTime.Now;
-          IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
-          for (int i=1; i<output.Length; ++i)
+          if (output.Length > 1)
           {
-            string o = output[i];
-            context.Session.Store["IsWorking"] = true;
-            at = at.AddSeconds(o.Length * 0.1);
-            Scheduler.AddDelayedMessage(scheduler, at, o, context, i != output.Length-1);
+            DateTime at = DateTime.Now;
+            IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
+            BotUtility.MarkAsBusy(context.Session);
+
+            for (int i = 1; i < output.Length; ++i)
+            {
+              string o = output[i];
+              at = at.AddSeconds(o.Length * 0.05);
+              Scheduler.AddDelayedMessage(scheduler, at, o, context,  i == output.Length-1);
+            }
           }
         }
 

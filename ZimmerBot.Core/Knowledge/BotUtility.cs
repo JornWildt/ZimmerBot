@@ -49,7 +49,7 @@ namespace ZimmerBot.Core.Knowledge
 
     internal static Response Invoke(RequestContext context, Request request, bool executeScheduledRules, bool fromTemplate)
     {
-      if (context.Session.Store.ContainsKey("IsWorking") && context.Session.Store["IsWorking"])
+      if (IsBusy(context.Session))
       {
         return new Response(new string[0], request.State);
       }
@@ -128,6 +128,24 @@ namespace ZimmerBot.Core.Knowledge
             output);
         }
       }
+    }
+
+
+    public static void MarkAsBusy(Session session)
+    {
+      session.Store["IsBusy"] = true;
+    }
+
+
+    public static void MarkAsReady(Session session)
+    {
+      session.Store["IsBusy"] = false;
+    }
+
+
+    public static bool IsBusy(Session session)
+    {
+      return session.Store.ContainsKey("IsBusy") && session.Store["IsBusy"];
     }
   }
 }

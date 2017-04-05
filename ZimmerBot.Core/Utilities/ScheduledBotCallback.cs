@@ -13,7 +13,7 @@ namespace ZimmerBot.Core.Utilities
       string sessionId = context.JobDetail.JobDataMap.GetString("SessionId"); ;
       string stateJson = context.JobDetail.JobDataMap.GetString("State");
       string botId = context.JobDetail.JobDataMap.GetString("BotId");
-      bool nextWorking = context.JobDetail.JobDataMap.GetBoolean("NextWorking");
+      bool lastMessage = context.JobDetail.JobDataMap.GetBoolean("LastMessage");
 
       Dictionary<string, string> state = (stateJson != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(stateJson) : null);
 
@@ -21,8 +21,9 @@ namespace ZimmerBot.Core.Utilities
       Bot bot = BotRepository.Get(botId);
       bot.SendResponse(response);
 
-      Session session = SessionManager.GetOrCreateSession(sessionId);
-      session.Store["IsWorking"] = nextWorking;
+      Session session = SessionManager.GetSession(sessionId);
+      if (lastMessage)
+        BotUtility.MarkAsReady(session);
     }
   }
 }

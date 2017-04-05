@@ -29,7 +29,7 @@ with a newline.
       Assert.AreEqual(3, s.Template.Outputs.Count);
       Assert.AreEqual("default", s.Template.Key);
       Assert.AreEqual("First sentence.", s.Template.Outputs[0]);
-      Assert.AreEqual("Second sentence\r\nwith a newline.", s.Template.Outputs[1]);
+      Assert.AreEqual("Second sentence\nwith a newline.", s.Template.Outputs[1]);
       Assert.AreEqual("Third sentence.", s.Template.Outputs[2]);
     }
 
@@ -51,7 +51,7 @@ with a newline.
       Assert.AreEqual(3, s.Template.Outputs.Count);
       Assert.AreEqual("xxx", s.Template.Key);
       Assert.AreEqual("First sentence.", s.Template.Outputs[0]);
-      Assert.AreEqual("Second sentence\r\nwith a newline.", s.Template.Outputs[1]);
+      Assert.AreEqual("Second sentence\nwith a newline.", s.Template.Outputs[1]);
       Assert.AreEqual("Third sentence.", s.Template.Outputs[2]);
     }
   }

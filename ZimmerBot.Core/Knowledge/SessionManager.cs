@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -11,6 +12,14 @@ namespace ZimmerBot.Core.Knowledge
     {
       if (!Sessions.ContainsKey(sessionId))
         Sessions[sessionId] = new Session(sessionId);
+      return Sessions[sessionId];
+    }
+
+
+    public static Session GetSession(string sessionId)
+    {
+      if (!Sessions.ContainsKey(sessionId))
+        throw new InvalidOperationException($"No session with ID '{sessionId}' found.");
       return Sessions[sessionId];
     }
   }

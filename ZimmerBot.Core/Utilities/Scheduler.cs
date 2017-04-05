@@ -7,7 +7,12 @@ namespace ZimmerBot.Core.Utilities
 {
   public static class Scheduler
   {
-    public static void AddDelayedMessage(IScheduler scheduler, DateTime at, string message, ResponseGenerationContext context, bool nextWorking)
+    public static void AddDelayedMessage(
+      IScheduler scheduler, 
+      DateTime at, 
+      string message, 
+      ResponseGenerationContext context, 
+      bool lastMessage)
     {
       string stateJson = (context.Request.State != null ? JsonConvert.SerializeObject(context.Request.State) : null);
 
@@ -16,7 +21,7 @@ namespace ZimmerBot.Core.Utilities
         .UsingJobData("State", stateJson)
         .UsingJobData("SessionId", context.Request.SessionId)
         .UsingJobData("BotId", context.Request.BotId)
-        .UsingJobData("NextWorking", nextWorking)
+        .UsingJobData("LastMessage", lastMessage)
         .Build();
 
       ITrigger trigger = TriggerBuilder.Create()
