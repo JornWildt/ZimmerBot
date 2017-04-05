@@ -155,6 +155,7 @@ namespace ZimmerBot.Core.Knowledge
           IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
           foreach (string o in output.Skip(1))
           {
+            context.Session.Store["IsWorking"] = true;
             at = at.AddSeconds(o.Length * 0.1);
             Scheduler.AddDelayedMessage(scheduler, at, o, context);
           }

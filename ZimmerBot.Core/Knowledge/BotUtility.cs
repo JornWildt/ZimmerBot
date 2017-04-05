@@ -49,6 +49,11 @@ namespace ZimmerBot.Core.Knowledge
 
     internal static Response Invoke(RequestContext context, Request request, bool executeScheduledRules, bool fromTemplate)
     {
+      if (context.Session.Store.ContainsKey("IsWorking") && context.Session.Store["IsWorking"])
+      {
+        return new Response(new string[0], request.State);
+      }
+
       List<string> output = new List<string>();
 
       InvokeStatements(context, request, fromTemplate, output);
