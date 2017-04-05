@@ -15,9 +15,6 @@ namespace ZimmerBot.Core.Statements
 
     public ProcessorOutput LastValue { get; set; }
 
-    // A place for statements to write output (output template handling could use this later)
-    public List<string> AdditionalOutput { get; set; }
-
 
     public StatementExecutionContect(ResponseGenerationContext context)
     {
@@ -26,7 +23,6 @@ namespace ZimmerBot.Core.Statements
       ResponseContext = context;
       OutputTemplates = new Dictionary<string, List<OutputTemplate>>();
       LastValue = null;
-      AdditionalOutput = new List<string>();
     }
 
 

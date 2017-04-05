@@ -44,6 +44,11 @@
 
 
 > *
+! weight 0.5
 : Computeren er det ultimative svar på rationalismen.
 +: Og så søger man at opfinde den kunstige intelligens?
 +: Pffttt siger jeg, idioti.
+
+> stop
+!stop_output
+: Okay

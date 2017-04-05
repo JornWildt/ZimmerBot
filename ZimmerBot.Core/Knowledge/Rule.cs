@@ -5,6 +5,7 @@ using CuttingEdge.Conditions;
 using Quartz;
 using Quartz.Impl;
 using ZimmerBot.Core.Expressions;
+using ZimmerBot.Core.Scheduler;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.TemplateParser;
 using ZimmerBot.Core.Utilities;
@@ -134,39 +135,41 @@ namespace ZimmerBot.Core.Knowledge
           output.Execute(ox_context);
         }
 
-        // TODO - the code below could be wrapped up in a statement and make it more script like - with the
-        // possibility to generate output in multiple ways
-
-        string templateName = "default";
-        if (ox_context.LastValue != null)
-          templateName = ox_context.LastValue.TemplateName;
-
         List<string> result = new List<string>();
-        if (ox_context.OutputTemplates.ContainsKey(templateName))
+
+        // Do not generate output if bot is busy (meaning "busy simulating writing")
+        // - But do allow other forms of input handling (for instance reacting to "stop messages")
+        if (!BotUtility.IsBusy(context.Session))
         {
-          IList<OutputTemplate> templates = ox_context.OutputTemplates[templateName];
+          // TODO - the code below could be wrapped up in a statement and make it more script like - with the
+          // possibility to generate output in multiple ways
 
-          OutputTemplate selectedTemplate = templates[Randomizer.Next(templates.Count)];
-          string[] output = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context))).ToArray();
-          result.Add(AddMoreNotification(output[0], output.Length>1));
+          string templateName = "default";
+          if (ox_context.LastValue != null)
+            templateName = ox_context.LastValue.TemplateName;
 
-          // Schedule remaining outputs delayed
-          if (output.Length > 1)
+          if (ox_context.OutputTemplates.ContainsKey(templateName))
           {
-            DateTime at = DateTime.Now;
-            IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
-            BotUtility.MarkAsBusy(context.Session);
+            IList<OutputTemplate> templates = ox_context.OutputTemplates[templateName];
 
-            for (int i = 1; i < output.Length; ++i)
+            OutputTemplate selectedTemplate = templates[Randomizer.Next(templates.Count)];
+
+            string[] output = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context))).ToArray();
+            result.Add(AddMoreNotificationText(output[0], output.Length > 1));
+
+            // Schedule remaining outputs delayed
+            if (output.Length > 1)
             {
-              string o = AddMoreNotification(output[i], i < output.Length-1);
-              at = at.AddSeconds(o.Length * AppSettings.MessageSequenceDelay.Value.TotalSeconds);
-              Scheduler.AddDelayedMessage(scheduler, at, o, context,  i == output.Length-1);
+              DateTime at = DateTime.Now;
+              for (int i = 1; i < output.Length; ++i)
+              {
+                string o = AddMoreNotificationText(output[i], i < output.Length - 1);
+                at += TimeSpan.FromSeconds(o.Length * AppSettings.MessageSequenceDelay.Value.TotalSeconds);
+                ScheduleHelper.AddDelayedMessage(at, o, context);
+              }
             }
           }
         }
-
-        result.AddRange(ox_context.AdditionalOutput);
 
         return result;
       }
@@ -178,7 +181,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    protected string AddMoreNotification(string text, bool hasMore)
+    protected string AddMoreNotificationText(string text, bool hasMore)
     {
       if (hasMore)
         return text + AppSettings.MessageSequenceNotoficationText;

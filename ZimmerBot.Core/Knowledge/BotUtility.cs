@@ -49,11 +49,6 @@ namespace ZimmerBot.Core.Knowledge
 
     internal static Response Invoke(RequestContext context, Request request, bool executeScheduledRules, bool fromTemplate)
     {
-      if (IsBusy(context.Session))
-      {
-        return new Response(new string[0], request.State);
-      }
-
       List<string> output = new List<string>();
 
       InvokeStatements(context, request, fromTemplate, output);

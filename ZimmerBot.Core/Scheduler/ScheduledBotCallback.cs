@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using log4net;
 using Newtonsoft.Json;
 using Quartz;
+using Quartz.Impl.Matchers;
 using ZimmerBot.Core.Knowledge;
 
-namespace ZimmerBot.Core.Utilities
+namespace ZimmerBot.Core.Scheduler
 {
   public class ScheduledBotCallback : IJob
   {
@@ -35,11 +36,15 @@ namespace ZimmerBot.Core.Utilities
       {
         // Try to mark as as ready even if errors occured in other part of code!
         string sessionId = context.JobDetail.JobDataMap.GetString("SessionId"); ;
-        bool lastMessage = context.JobDetail.JobDataMap.GetBoolean("LastMessage");
+        var groupMatcher = GroupMatcher<JobKey>.GroupContains(sessionId);
+        var jobKeys = ScheduleHelper.DefaultScheduler.GetJobKeys(groupMatcher);
+        bool isLastMessage = (jobKeys.Count == 1);
 
-        Session session = SessionManager.GetSession(sessionId);
-        if (lastMessage)
+        if (isLastMessage)
+        {
+          Session session = SessionManager.GetSession(sessionId);
           BotUtility.MarkAsReady(session);
+        }
       }
       catch (Exception ex)
       {

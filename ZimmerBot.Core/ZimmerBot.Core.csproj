@@ -111,6 +111,7 @@
     <Compile Include="Knowledge\RequestContext.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />
+    <Compile Include="Scheduler\ScheduleHelper.cs" />
     <Compile Include="Statements\AnswerStatement.cs" />
     <Compile Include="Statements\CallStatment.cs" />
     <Compile Include="ConfigParser\ConfigurationParser.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Processors\ProcessorRegistry.cs" />
     <Compile Include="Knowledge\ResponseGenerationContext.cs" />
     <Compile Include="StandardProcessors\RDFProcessor.cs" />
+    <Compile Include="Statements\StopOutputStatement.cs" />
     <Compile Include="TemplateParser\TemplateContext.cs" />
     <Compile Include="TemplateParser\TemplateToken.cs" />
     <Compile Include="TemplateParser\TemplateUtility.cs" />
@@ -166,8 +168,7 @@
     <Compile Include="Utilities\DateRender.cs" />
     <Compile Include="Utilities\ErrorCollection.cs" />
     <Compile Include="Utilities\ParserException.cs" />
-    <Compile Include="Utilities\ScheduledBotCallback.cs" />
-    <Compile Include="Utilities\Scheduler.cs" />
+    <Compile Include="Scheduler\ScheduledBotCallback.cs" />
     <Compile Include="Utilities\TimeSpanUtility.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\ConceptWRegex.cs" />

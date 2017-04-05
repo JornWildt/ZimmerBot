@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ZimmerBot.Core.Knowledge
 {
   public static class SessionManager
   {
-    static Dictionary<string, Session> Sessions { get; set; } = new Dictionary<string, Session>();
+    static ConcurrentDictionary<string, Session> Sessions { get; set; } = new ConcurrentDictionary<string, Session>();
 
 
     public static Session GetOrCreateSession(string sessionId)

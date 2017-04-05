@@ -29,7 +29,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
-%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT
+%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_IMPLIES
 %token T_COMMA
@@ -175,9 +175,10 @@ statementSeq
 statement
   : outputTemplateSequence  { $$.statement = new OutputTemplateStatement($1.template); }
   | stmtCall                { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
-  | stmtSet                 { $$.statement = $1.statement;}
-  | stmtAnswer              { $$.statement = $1.statement;}
-  | stmtContinue            { $$.statement = $1.statement;}
+  | stmtSet                 { $$.statement = $1.statement; }
+  | stmtAnswer              { $$.statement = $1.statement; }
+  | stmtContinue            { $$.statement = $1.statement; }
+  | stmtStopOutput          { $$.statement = $1.statement; }
   ;
 
 outputTemplateSequence
@@ -223,6 +224,10 @@ stmtContinue
   : T_CONTINUE               { $$.statement = new ContinueStatement(); }
   | T_CONTINUE_AT T_WORD     { $$.statement = new ContinueStatement(new ZimmerBot.Core.Knowledge.Continuation(ZimmerBot.Core.Knowledge.Continuation.ContinuationEnum.Label, $2.s)); }
   | T_CONTINUE_WITH wordSeq  { $$.statement = new ContinueStatement($2.stringList); }
+  ;
+
+stmtStopOutput
+  : T_STOPOUTPUT { $$.statement = new StopOutputStatement(); }
   ;
 
 /******************************************************************************

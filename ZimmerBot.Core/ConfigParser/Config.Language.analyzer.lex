@@ -55,6 +55,7 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*every       { return (int)Token.T_EVERY; }
 ![ ]*on          { return (int)Token.T_ON; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
+![ ]*stop_output { return (int)Token.T_STOPOUTPUT; }
 ![ ]*continue          { return (int)Token.T_CONTINUE; }
 ![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }
 ![ ]*continue[ ]+with  { return (int)Token.T_CONTINUE_WITH; }

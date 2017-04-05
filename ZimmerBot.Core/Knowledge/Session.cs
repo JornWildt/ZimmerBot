@@ -18,6 +18,8 @@ namespace ZimmerBot.Core.Knowledge
       Store = new NullValueDictionary<string, object>();
 
       Store[StateKeys.ResponseCount] = 0;
+
+      BotUtility.MarkAsReady(this);
     }
   }
 }
