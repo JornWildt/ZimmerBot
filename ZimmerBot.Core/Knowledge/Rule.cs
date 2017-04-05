@@ -160,7 +160,7 @@ namespace ZimmerBot.Core.Knowledge
             for (int i = 1; i < output.Length; ++i)
             {
               string o = output[i];
-              at = at.AddSeconds(o.Length * 0.05);
+              at = at.AddSeconds(o.Length * AppSettings.MessageSequenceDelay.Value.TotalSeconds);
               Scheduler.AddDelayedMessage(scheduler, at, o, context,  i == output.Length-1);
             }
           }
