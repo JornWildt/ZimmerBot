@@ -10,11 +10,11 @@ namespace ZimmerBot.Core.Statements
 {
   public class OutputTemplate
   {
+    public string Id { get; protected set; }
+
     public string TemplateName { get; protected set; }
 
     public List<string> Outputs { get; protected set; }
-
-    public string Identifier { get; protected set; }
 
     public OutputTemplate(string name, string s, List<string> outputs)
     {
@@ -26,7 +26,7 @@ namespace ZimmerBot.Core.Statements
       outputs.Insert(0, s);
       Outputs = outputs;
 
-      Identifier = CryptoHelper.CalculateChecksum(outputs.Aggregate((a, b) => a + "|" + b));
+      Id = CryptoHelper.CalculateChecksum(outputs.Aggregate((a, b) => a + "|" + b));
     }
   }
 }

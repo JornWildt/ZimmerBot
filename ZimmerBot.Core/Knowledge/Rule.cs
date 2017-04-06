@@ -106,19 +106,43 @@ namespace ZimmerBot.Core.Knowledge
       if (result.Score < 0.5)
         return new List<Reaction>();
 
-      ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, result);
+      List<Reaction> reactions = SelectReactions(context, result);
+      return reactions;
+    }
 
-      return Statements
-        .Select(s => s is OutputTemplateStatement
-          ? new Reaction(rc, this, ((OutputTemplateStatement)s).Template.Identifier)
-          : new Reaction(rc, this, null)).ToList();
+
+    private List<Reaction> SelectReactions(TriggerEvaluationContext context, MatchResult result)
+    {
+      // Add one reaction for each output statement
+      List<Reaction> reactions = Statements
+        .OfType<OutputTemplateStatement>()
+        .Select(s => new Reaction(BuildResponseContext(context, result, s.Template), this, s.Template.Id))
+        .ToList();
+
+      // If no output statements are found then ensure we have at least one reaction (that does not identify an output)
+      if (reactions.Count == 0)
+        reactions.Add(new Reaction(new ResponseGenerationContext(context.InputContext, result), this, null));
+
+      return reactions;
+    }
+
+
+    private ResponseGenerationContext BuildResponseContext(TriggerEvaluationContext context, MatchResult result, OutputTemplate template)
+    {
+      int outputUsageCount = context.InputContext.Session.GetUsageCount(template.Id);
+
+      // Reduce the amount of repetition in output by lowering the reaction score by the number of times it has been used
+      double score = result.Score * Math.Pow(0.99, outputUsageCount);
+
+      ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new MatchResult(score, result.Matches));
+      return rc;
     }
 
 
     public static Random Randomizer = new Random();
 
 
-    public List<string> Invoke(ResponseGenerationContext context)
+    public List<string> Invoke(ResponseGenerationContext context, string outputId)
     {
       try
       {
@@ -144,9 +168,6 @@ namespace ZimmerBot.Core.Knowledge
         // - But do allow other forms of input handling (for instance reacting to "stop messages")
         if (!BotUtility.IsBusy(context.Session))
         {
-          // TODO - the code below could be wrapped up in a statement and make it more script like - with the
-          // possibility to generate output in multiple ways
-
           string templateName = "default";
           if (ox_context.LastValue != null)
             templateName = ox_context.LastValue.TemplateName;
@@ -154,8 +175,7 @@ namespace ZimmerBot.Core.Knowledge
           if (ox_context.OutputTemplates.ContainsKey(templateName))
           {
             IList<OutputTemplate> templates = ox_context.OutputTemplates[templateName];
-
-            OutputTemplate selectedTemplate = templates[Randomizer.Next(templates.Count)];
+            OutputTemplate selectedTemplate = SelectTemplate(templates, templateName, outputId, context.InputContext.Session);
 
             string[] output = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context))).ToArray();
             result.Add(AddMoreNotificationText(output[0], output.Length > 1));
@@ -183,6 +203,25 @@ namespace ZimmerBot.Core.Knowledge
       }
     }
 
+    private static OutputTemplate SelectTemplate(
+      IList<OutputTemplate> templates, 
+      string templateName, 
+      string outputId, 
+      Session session)
+    {
+      OutputTemplate selectedTemplate = null;
+
+      if (outputId != null)
+        selectedTemplate = templates.Where(t => t.Id == outputId).FirstOrDefault();
+
+      if (selectedTemplate == null)
+        selectedTemplate = selectedTemplate = templates[Randomizer.Next(templates.Count)];
+
+      // This template got selected, remember that
+      session.IncrementUsage(selectedTemplate.Id);
+
+      return selectedTemplate;
+    }
 
     protected string AddMoreNotificationText(string text, bool hasMore)
     {

@@ -21,5 +21,12 @@ namespace ZimmerBot.Core.WordRegex
       Score = score;
       Matches = new Dictionary<string, object>(src.Matches);
     }
+
+
+    public MatchResult(double score, Dictionary<string,object> matches)
+    {
+      Score = score;
+      Matches = matches;
+    }
   }
 }

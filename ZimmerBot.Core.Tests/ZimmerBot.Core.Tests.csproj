@@ -67,6 +67,7 @@
     <Compile Include="BotTests\EventTests.cs" />
     <Compile Include="BotTests\InfiniteLoopProtectionTests.cs" />
     <Compile Include="BotTests\OutputTests.cs" />
+    <Compile Include="BotTests\RepetitionAvoidanceTests.cs" />
     <Compile Include="BotTests\TestHelper.cs" />
     <Compile Include="BotTests\UserMemoryTests.cs" />
     <Compile Include="BotTests\SessionMemoryTests.cs" />

@@ -107,6 +107,7 @@
     <Compile Include="Knowledge\Continuation.cs" />
     <Compile Include="Knowledge\Entity.cs" />
     <Compile Include="Knowledge\InputRequestContext.cs" />
+    <Compile Include="Knowledge\OutputUsageManager.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Knowledge\RequestContext.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />

@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<string> GenerateResponse()
     {
-      return Rule.Invoke(Context);
+      return Rule.Invoke(Context, OutputIdentifier);
     }
   }
 }
