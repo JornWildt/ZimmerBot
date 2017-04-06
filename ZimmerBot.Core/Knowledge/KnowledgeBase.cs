@@ -168,7 +168,7 @@ namespace ZimmerBot.Core.Knowledge
           foreach (Rule rule in EventHandlers[context.InputContext.Request.EventType.Value])
           {
             ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new MatchResult(1));
-            Reaction reaction = new Reaction(rc, rule);
+            Reaction reaction = new Reaction(rc, rule, null);
             reactions.Add(reaction);
           }
         }
@@ -177,9 +177,10 @@ namespace ZimmerBot.Core.Knowledge
       {
         foreach (Rule r in Rules)
         {
-          Reaction reaction = r.CalculateReaction(context);
-          if (reaction != null)
-            reactions.Add(reaction);
+          IList<Reaction> result = r.CalculateReaction(context);
+          if (result != null)
+            foreach (Reaction reaction in result)
+              reactions.Add(reaction);
         }
       }
 

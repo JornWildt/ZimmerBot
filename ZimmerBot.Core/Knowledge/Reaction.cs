@@ -13,8 +13,10 @@ namespace ZimmerBot.Core.Knowledge
 
     public Rule Rule { get; protected set; }
 
+    public string OutputIdentifier { get; protected set; }
 
-    public Reaction(ResponseGenerationContext context, Rule rule)
+
+    public Reaction(ResponseGenerationContext context, Rule rule, string outputId)
     {
       Condition.Requires(context, nameof(context)).IsNotNull();
       Condition.Requires(rule, nameof(rule)).IsNotNull();
@@ -22,6 +24,7 @@ namespace ZimmerBot.Core.Knowledge
       Score = context.Match.Score;
       Context = context;
       Rule = rule;
+      OutputIdentifier = outputId;
     }
 
 

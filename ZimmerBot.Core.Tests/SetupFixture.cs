@@ -2,7 +2,7 @@
 using log4net;
 using NUnit.Framework;
 using ZimmerBot.Core.StandardProcessors;
-
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Tests
 {
@@ -29,6 +29,7 @@ namespace ZimmerBot.Core.Tests
       GeneralProcessor.Initialize();
       DateTimeProcessor.Initialize();
       RDFProcessor.Initialize();
+      CryptoHelper.Initialize();
 
       Initialized = true;
     }
@@ -37,6 +38,7 @@ namespace ZimmerBot.Core.Tests
     [OneTimeTearDown]
     public void TearDown()
     {
+      CryptoHelper.Shutdown();
       ZimmerBotConfiguration.Shutdown();
     }
   }

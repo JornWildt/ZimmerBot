@@ -1,6 +1,7 @@
 ﻿using Quartz.Impl;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.StandardProcessors;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core
 {
@@ -21,6 +22,7 @@ namespace ZimmerBot.Core
           DateTimeProcessor.Initialize();
           RDFProcessor.Initialize();
           StdSchedulerFactory.GetDefaultScheduler().Start();
+          CryptoHelper.Initialize();
           IsInitialized = true;
         }
       }
@@ -33,6 +35,7 @@ namespace ZimmerBot.Core
       {
         if (IsInitialized)
         {
+          CryptoHelper.Shutdown();
           StdSchedulerFactory.GetDefaultScheduler().Shutdown();
           AddOnHandling.AddOnLoader.ShutdownAddOns();
           RDFStoreRepository.Shutdown();

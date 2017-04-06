@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Knowledge;
@@ -50,8 +51,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ! weight 0.5
 : bbb");
 
-      Reaction reaction = CalculateReaction(r, "aaa");
-      Assert.AreEqual(0.5, reaction.Score);
+      IList<Reaction> reactions = CalculateReactions(r, "aaa");
+      Assert.AreEqual(0.5, reactions[0].Score);
     }
 
 

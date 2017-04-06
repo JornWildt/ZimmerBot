@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Statements;
@@ -36,10 +37,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.IsInstanceOf<CallStatment>(r.Statements[0]);
       Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[1]);
 
-      Reaction reaction = CalculateReaction(r, "aaa bbb");
-      Assert.IsNotNull(reaction);
+      IList<Reaction> reactions = CalculateReactions(r, "aaa bbb");
+      Assert.IsNotNull(reactions);
 
-      string result = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
+      string result = GetResponseFrom(reactions);
       Assert.AreEqual("ccc bbb", result);
     }
 
@@ -58,10 +59,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.IsInstanceOf<CallStatment>(r.Statements[0]);
       Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[1]);
 
-      Reaction reaction = CalculateReaction(r, "aaa");
-      Assert.IsNotNull(reaction);
+      IList<Reaction> reactions = CalculateReactions(r, "aaa");
+      Assert.IsNotNull(reactions);
 
-      string result = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
+      string result = GetResponseFrom(reactions);
       StringAssert.IsMatch("ccc ..+", result);
     }
 

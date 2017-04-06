@@ -32,10 +32,10 @@ ORDER BY RAND()"")
       Assert.AreEqual(1, kb.Rules.Count);
       Rule r = kb.Rules[0];
 
-      Reaction reaction = CalculateReaction(r, "hvem er ven med \"Peter Parker\"");
-      Assert.IsNotNull(reaction);
+      IList<Reaction> reactions = CalculateReactions(r, "hvem er ven med \"Peter Parker\"");
+      Assert.IsNotNull(reactions);
 
-      string response = reaction.GenerateResponse().Aggregate((a,b) => a + "\n" + b);
+      string response = GetResponseFrom(reactions);
       Assert.AreEqual("Det er 'Lisa Nilson'", response);
     }
 
@@ -61,10 +61,10 @@ ORDER BY RAND()"")
       Assert.AreEqual(1, kb.Rules.Count);
       Rule r = kb.Rules[0];
 
-      Reaction reaction = CalculateReaction(r, "who is friend with \"Peter Parker\"");
-      Assert.IsNotNull(reaction);
+      IList<Reaction> reactions = CalculateReactions(r, "who is friend with \"Peter Parker\"");
+      Assert.IsNotNull(reactions);
 
-      string response = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
+      string response = GetResponseFrom(reactions);
       Assert.AreEqual("'Lisa Nilson' is a friend", response);
     }
   }

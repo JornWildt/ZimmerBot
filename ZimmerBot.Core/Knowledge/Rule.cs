@@ -91,12 +91,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Reaction CalculateReaction(TriggerEvaluationContext context)
+    public IList<Reaction> CalculateReaction(TriggerEvaluationContext context)
     {
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
-        return null;
+        return new List<Reaction>();
       if (context.RestrictToRuleLabel != null && context.RestrictToRuleLabel != Label)
-        return null;
+        return new List<Reaction>();
 
       MatchResult result = Trigger.CalculateTriggerScore(context);
 
@@ -104,10 +104,14 @@ namespace ZimmerBot.Core.Knowledge
         result.Score = result.Score * Weight.Value;
 
       if (result.Score < 0.5)
-        return null;
+        return new List<Reaction>();
 
       ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, result);
-      return new Reaction(rc, this);
+
+      return Statements
+        .Select(s => s is OutputTemplateStatement
+          ? new Reaction(rc, this, ((OutputTemplateStatement)s).Template.Identifier)
+          : new Reaction(rc, this, null)).ToList();
     }
 
 

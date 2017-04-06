@@ -14,7 +14,7 @@ namespace ZimmerBot.Core.Tests
   {
     protected ConfigurationParser CfgParser { get; set; } = new ConfigurationParser();
 
-    protected Reaction CalculateReaction(Rule r, string text)
+    protected IList<Reaction> CalculateReactions(Rule r, string text)
     {
       TriggerEvaluationContext context = BuildEvaluationContextFromInput(r.KnowledgeBase, text);
       return r.CalculateReaction(context);
@@ -23,10 +23,16 @@ namespace ZimmerBot.Core.Tests
 
     protected string GetResponseFrom(Rule r, string text)
     {
-      Reaction reaction = CalculateReaction(r, text);
-      if (reaction == null)
+      IList<Reaction> reactions = CalculateReactions(r, text);
+      return GetResponseFrom(reactions);
+    }
+
+
+    protected string GetResponseFrom(IList<Reaction> reactions)
+    {
+      if (reactions == null || reactions.Count() == 0)
         return null;
-      string result = reaction.GenerateResponse().Aggregate((a, b) => a + "\n" + b);
+      string result = reactions.Select(rsp => rsp.GenerateResponse().Aggregate((a, b) => a + "\n" + b)).Aggregate((a, b) => a + "|" + b);
       return result;
     }
 

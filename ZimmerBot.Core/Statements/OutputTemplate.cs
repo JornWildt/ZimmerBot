@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Statements
 {
   public class OutputTemplate
   {
-    public string TemplateName { get; set; }
+    public string TemplateName { get; protected set; }
 
-    public List<string> Outputs { get; set; }
+    public List<string> Outputs { get; protected set; }
+
+    public string Identifier { get; protected set; }
 
     public OutputTemplate(string name, string s, List<string> outputs)
     {
@@ -22,6 +25,8 @@ namespace ZimmerBot.Core.Statements
       TemplateName = name;
       outputs.Insert(0, s);
       Outputs = outputs;
+
+      Identifier = CryptoHelper.CalculateChecksum(outputs.Aggregate((a, b) => a + "|" + b));
     }
   }
 }
