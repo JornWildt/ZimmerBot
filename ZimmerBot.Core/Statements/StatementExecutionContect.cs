@@ -28,9 +28,9 @@ namespace ZimmerBot.Core.Statements
 
     public void AddOutputTemplate(OutputTemplate template)
     {
-      if (!OutputTemplates.ContainsKey(template.Key))
-        OutputTemplates[template.Key] = new List<OutputTemplate>();
-      OutputTemplates[template.Key].Add(template);
+      if (!OutputTemplates.ContainsKey(template.TemplateName))
+        OutputTemplates[template.TemplateName] = new List<OutputTemplate>();
+      OutputTemplates[template.TemplateName].Add(template);
     }
 
 

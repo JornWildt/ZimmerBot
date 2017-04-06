@@ -198,15 +198,6 @@ outputTemplate
       { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
   ;
 
-/*
-outputTemplateNamed
-  : T_LBRACE T_WORD T_RBRACE T_COLON 
-      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
-    T_OUTPUT 
-      { $$.template = new OutputTemplate($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim(), OutputTemplate.TemplateType.Start); }
-  ;
-*/
-
 stmtCall
   : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.expr, $4.exprList); }
   ;

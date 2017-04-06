@@ -87,7 +87,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected Rule AddRule(string label, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> outputs)
+    protected Rule AddRule(string label, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
       Logger.DebugFormat("Found rule: {0}", pattern);
       Rule r = KnowledgeBase.AddRule(pattern);
@@ -96,8 +96,8 @@ namespace ZimmerBot.Core.ConfigParser
       if (modifiers != null)
         foreach (var m in modifiers)
           m.Invoke(r);
-      if (outputs != null)
-        r.WithOutputStatements(outputs);
+      if (statements != null)
+        r.WithStatements(statements);
       return r;
     }
 

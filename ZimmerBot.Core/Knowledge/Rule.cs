@@ -69,9 +69,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule WithOutputStatements(IEnumerable<Statement> output)
+    public Rule WithStatements(IEnumerable<Statement> statements)
     {
-      Statements = new List<Statement>(output);
+      Statements = new List<Statement>(statements);
       StatementInitializationContext context = new StatementInitializationContext(this);
       foreach (Statement o in Statements)
         o.Initialize(context);
@@ -106,7 +106,6 @@ namespace ZimmerBot.Core.Knowledge
       if (result.Score < 0.5)
         return null;
 
-      // context.State, context.OriginalRequest, context.Input
       ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, result);
       return new Reaction(rc, this);
     }
@@ -130,9 +129,9 @@ namespace ZimmerBot.Core.Knowledge
 
         StatementExecutionContect ox_context = new StatementExecutionContect(context);
 
-        foreach (Statement output in Statements)
+        foreach (Statement stmt in Statements)
         {
-          output.Execute(ox_context);
+          stmt.Execute(ox_context);
         }
 
         List<string> result = new List<string>();

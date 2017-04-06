@@ -134,7 +134,7 @@ namespace ZimmerBot.Core.Knowledge
       if (Enum.TryParse(e, true, out etype))
       {
         Rule rule = new Rule(this);
-        rule.WithOutputStatements(statements);
+        rule.WithStatements(statements);
         if (!EventHandlers.ContainsKey(etype))
           EventHandlers[etype] = new List<Rule>();
         EventHandlers[etype].Add(rule);

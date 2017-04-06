@@ -144,12 +144,12 @@ ddd");
       Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[0]);
       Assert.IsInstanceOf<OutputTemplateStatement>(r.Statements[1]);
       OutputTemplateStatement ts = (OutputTemplateStatement)r.Statements[0];
-      Assert.AreEqual("default", ts.Template.Key);
+      Assert.AreEqual("default", ts.Template.TemplateName);
       Assert.AreEqual(1, ts.Template.Outputs.Count);
       Assert.AreEqual("bbb", ts.Template.Outputs[0]);
 
       ts = (OutputTemplateStatement)r.Statements[1];
-      Assert.AreEqual("xxx", ts.Template.Key);
+      Assert.AreEqual("xxx", ts.Template.TemplateName);
       Assert.AreEqual(1, ts.Template.Outputs.Count);
       Assert.AreEqual("ccc", ts.Template.Outputs[0]);
 
