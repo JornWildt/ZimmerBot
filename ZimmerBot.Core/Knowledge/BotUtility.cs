@@ -71,6 +71,9 @@ namespace ZimmerBot.Core.Knowledge
       if (request.Input != null)
       {
         DiaLogger.InfoFormat("Invoke: {0}", request.Input);
+
+        context.Session.RegisterLatestInput(request.Input);
+
         ZTokenizer tokenizer = new ZTokenizer();
         ZStatementSequence statements = tokenizer.Tokenize(request.Input);
 
@@ -95,7 +98,7 @@ namespace ZimmerBot.Core.Knowledge
 
     static internal void InvokeWithInput(InputRequestContext inputContext, List<string> output)
     {
-      if (++inputContext.RepetitionCount >= 20)
+      if (++inputContext.RepetitionCount >= AppSettings.MaxRecursionCount)
         throw new RepetitionException($"Stopping repeated evaluation of {inputContext.RepetitionCount} tries.");
 
       var pipelineItem = new InputPipelineItem(inputContext);

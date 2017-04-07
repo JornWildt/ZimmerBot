@@ -11,6 +11,7 @@ namespace ZimmerBot.Core
     public static readonly AppSetting<bool> RDF_EnableChatLog = new AppSetting<bool>("ZimmerBot.RDF.EnableChatLog", true);
     public static readonly AppSetting<TimeSpan> RDF_BackupInterval = new AppSetting<TimeSpan>("ZimmerBot.RDF.BackupInterval", TimeSpan.FromMinutes(5));
 
+    public static readonly AppSetting<int> MaxRecursionCount = new AppSetting<int>("ZimmerBot.MaxRecursionCount", 20);
     public static readonly AppSetting<TimeSpan> MessageSequenceDelay = new AppSetting<TimeSpan>("ZimmerBot.MessageSequenceDelay", TimeSpan.FromSeconds(0.05));
     public static readonly AppSetting<string> MessageSequenceNotoficationText = new AppSetting<string>("ZimmerBot.MessageSequenceNotoficationText", " (...)", trim: AppSetting.TrimSetting.NoTrim);
 

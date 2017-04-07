@@ -7,7 +7,7 @@ using CuttingEdge.Conditions;
 
 namespace ZimmerBot.Core.Knowledge
 {
-  public static class OutputUsageManager
+  public static class SessionStateExtensions
   {
     static string UsageKey(string outputId) => "Usage_" + outputId;
 
@@ -41,6 +41,18 @@ namespace ZimmerBot.Core.Knowledge
         session.Store[key] = 1;
       else
         session.Store[key] += 1;
+    }
+
+
+    public static void RegisterLatestInput(this Session session, string input)
+    {
+      session.Store["LatestInput"] = input;
+    }
+
+
+    public static string GetLatestInput(this Session session)
+    {
+      return session.Store["LatestInput"];
     }
   }
 }

@@ -15,16 +15,19 @@ namespace ZimmerBot.Core.Scheduler
 
     public void Execute(IJobExecutionContext context)
     {
+      Bot bot = null;
+      string botId = null;
+
       try
       {
         string message = context.JobDetail.JobDataMap.GetString("Message");
         string stateJson = context.JobDetail.JobDataMap.GetString("State");
-        string botId = context.JobDetail.JobDataMap.GetString("BotId");
+        botId = context.JobDetail.JobDataMap.GetString("BotId");
 
         Dictionary<string, string> state = (stateJson != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(stateJson) : null);
 
         Response response = new Response(new string[] { message }, state);
-        Bot bot = BotRepository.Get(botId);
+        bot = BotRepository.Get(botId);
         bot.SendResponse(response);
       }
       catch (Exception ex)
@@ -44,6 +47,14 @@ namespace ZimmerBot.Core.Scheduler
         {
           Session session = SessionManager.GetSession(sessionId);
           BotUtility.MarkAsReady(session);
+
+          string latestInput = session.GetLatestInput();
+
+          if (bot != null && latestInput != null && botId != null)
+          {
+            Request req = new Request { Input = latestInput, BotId = botId, SessionId = sessionId, UserId = null };
+            bot.Invoke(req, callbackToEnvironment: true);
+          }
         }
       }
       catch (Exception ex)
