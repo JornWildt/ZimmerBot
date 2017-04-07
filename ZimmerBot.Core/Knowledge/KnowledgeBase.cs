@@ -177,10 +177,9 @@ namespace ZimmerBot.Core.Knowledge
       {
         foreach (Rule r in Rules)
         {
-          IList<Reaction> result = r.CalculateReaction(context);
-          if (result != null)
-            foreach (Reaction reaction in result)
-              reactions.Add(reaction);
+          IList<Reaction> result = r.CalculateReactions(context);
+          foreach (Reaction reaction in result)
+            reactions.Add(reaction);
         }
       }
 

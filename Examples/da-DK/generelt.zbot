@@ -53,3 +53,12 @@
 !stop_output
 : Okay
 
+> aa|bb
+: a111
+: a222
+: a333
+
+> bb
+! call DateTime.Time()
+: Det er <answer; format="dddd">.
+

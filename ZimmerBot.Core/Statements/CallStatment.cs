@@ -18,6 +18,12 @@ namespace ZimmerBot.Core.Statements
     }
 
 
+    public override RepatableMode Repeatable
+    {
+      get { return RepatableMode.AutomaticRepeatable; }
+    }
+
+
     public override void Initialize(StatementInitializationContext context)
     {
       // Do nothing

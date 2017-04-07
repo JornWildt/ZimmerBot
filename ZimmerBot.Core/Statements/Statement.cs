@@ -4,6 +4,8 @@ namespace ZimmerBot.Core.Statements
 {
   public abstract class Statement
   {
+    public enum RepatableMode { Undefined, AutomaticSingle, AutomaticRepeatable, ForcedRepeatable, ForcedSingle }
+
     public string Id { get; protected set; }
 
 
@@ -12,6 +14,8 @@ namespace ZimmerBot.Core.Statements
       Id = Guid.NewGuid().ToString();
     }
 
+
+    public abstract RepatableMode Repeatable { get; }
 
     public abstract void Initialize(StatementInitializationContext context);
 

@@ -25,6 +25,12 @@ namespace ZimmerBot.Core.Statements
     }
 
 
+    public override RepatableMode Repeatable
+    {
+      get { return RepatableMode.Undefined; }
+    }
+
+
     public override void Initialize(StatementInitializationContext context)
     {
       if (Rules != null)

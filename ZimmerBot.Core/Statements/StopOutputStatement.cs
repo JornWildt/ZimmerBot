@@ -14,6 +14,12 @@ namespace ZimmerBot.Core.Statements
       ScheduleHelper.StopDelayedMessages(context);
     }
 
+
+    public override RepatableMode Repeatable
+    {
+      get { return RepatableMode.Undefined; }
+    }
+
     public override void Initialize(StatementInitializationContext context)
     {
       // Do nothing

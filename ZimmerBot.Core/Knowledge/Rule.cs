@@ -91,7 +91,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public IList<Reaction> CalculateReaction(TriggerEvaluationContext context)
+    public IList<Reaction> CalculateReactions(TriggerEvaluationContext context)
     {
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
         return new List<Reaction>();
@@ -103,6 +103,7 @@ namespace ZimmerBot.Core.Knowledge
       if (Weight != null)
         result.Score = result.Score * Weight.Value;
 
+      // FIXME: Why exactly 0.5?
       if (result.Score < 0.5)
         return new List<Reaction>();
 
@@ -113,11 +114,19 @@ namespace ZimmerBot.Core.Knowledge
 
     private List<Reaction> SelectReactions(TriggerEvaluationContext context, MatchResult result)
     {
-      // Add one reaction for each output statement
-      List<Reaction> reactions = Statements
-        .OfType<OutputTemplateStatement>()
-        .Select(s => new Reaction(BuildResponseContext(context, result, s.Template), this, s.Template.Id))
-        .ToList();
+      Statement.RepatableMode repeatable = Statements.Max(s => s.Repeatable);
+      List<Reaction> reactions = new List<Reaction>();
+
+      if (repeatable != Statement.RepatableMode.AutomaticRepeatable && repeatable != Statement.RepatableMode.ForcedRepeatable)
+      {
+        // This is not a repeatable rule, so split it into multiple reactions that looks at output usage
+
+        // Add one reaction for each output statement
+        reactions = Statements
+          .OfType<OutputTemplateStatement>()
+          .Select(s => new Reaction(MakeWeightedReaction(context, result, s.Template), this, s.Template.Id))
+          .ToList();
+      }
 
       // If no output statements are found then ensure we have at least one reaction (that does not identify an output)
       if (reactions.Count == 0)
@@ -127,7 +136,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    private ResponseGenerationContext BuildResponseContext(TriggerEvaluationContext context, MatchResult result, OutputTemplate template)
+    private ResponseGenerationContext MakeWeightedReaction(TriggerEvaluationContext context, MatchResult result, OutputTemplate template)
     {
       int outputUsageCount = context.InputContext.Session.GetUsageCount(template.Id);
 

@@ -16,6 +16,12 @@ namespace ZimmerBot.Core.Statements
     }
 
 
+    public override RepatableMode Repeatable
+    {
+      get { return RepatableMode.Undefined; }
+    }
+
+
     public ContinueStatement(Continuation c)
     {
       Condition.Requires(c, nameof(c)).IsNotNull();
