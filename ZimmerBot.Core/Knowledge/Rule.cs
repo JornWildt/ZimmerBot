@@ -174,8 +174,8 @@ namespace ZimmerBot.Core.Knowledge
         List<string> result = new List<string>();
 
         // Do not generate output if bot is busy (meaning "busy simulating writing")
-        // - But do allow other forms of input handling (for instance reacting to "stop messages")
-        if (!BotUtility.IsBusy(context.Session))
+        // - But do allow other forms of input handling (for instance reacting to "stop writing messages")
+        if (!context.Session.IsBusyWriting())
         {
           string templateName = "default";
           if (ox_context.LastValue != null)

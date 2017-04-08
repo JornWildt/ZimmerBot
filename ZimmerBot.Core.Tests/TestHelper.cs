@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using NUnit.Framework;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Knowledge;
@@ -12,7 +13,17 @@ namespace ZimmerBot.Core.Tests
 {
   public class TestHelper : TestHelperBase
   {
+    internal static ILog Logger = LogManager.GetLogger(typeof(TestHelper));
+
     protected ConfigurationParser CfgParser { get; set; } = new ConfigurationParser();
+
+
+    protected override void SetUp()
+    {
+      base.SetUp();
+      SessionManager.ClearSessions();
+    }
+
 
     protected IList<Reaction> CalculateReactions(Rule r, string text)
     {

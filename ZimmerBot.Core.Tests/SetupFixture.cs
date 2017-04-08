@@ -1,6 +1,7 @@
 ﻿using System;
 using log4net;
 using NUnit.Framework;
+using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.StandardProcessors;
 using ZimmerBot.Core.Utilities;
 

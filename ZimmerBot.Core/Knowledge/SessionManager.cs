@@ -9,6 +9,12 @@ namespace ZimmerBot.Core.Knowledge
     static ConcurrentDictionary<string, Session> Sessions { get; set; } = new ConcurrentDictionary<string, Session>();
 
 
+    public static void ClearSessions()
+    {
+      Sessions.Clear();
+    }
+
+
     public static Session GetOrCreateSession(string sessionId)
     {
       if (!Sessions.ContainsKey(sessionId))

@@ -62,6 +62,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 : ccc
 
 > what|go
+! weight 0.999
 ! call DateTime.Time()
 : Now
 ";
@@ -74,9 +75,11 @@ namespace ZimmerBot.Core.Tests.BotTests
         for (int i = 0; i < outputs.Length+1; ++i)
         {
           string result = Invoke(b, "go");
+          Logger.Debug($"GO: {result}");
           outputCount[result] = outputCount[result] + 1;
 
           result = Invoke(b, "what");
+          Logger.Debug($"WHAT: {result}");
           outputCount[result] = outputCount[result] + 1;
         }
 

@@ -127,23 +127,5 @@ namespace ZimmerBot.Core.Knowledge
         }
       }
     }
-
-
-    public static void MarkAsBusy(Session session)
-    {
-      session.Store["IsBusy"] = true;
-    }
-
-
-    public static void MarkAsReady(Session session)
-    {
-      session.Store["IsBusy"] = false;
-    }
-
-
-    public static bool IsBusy(Session session)
-    {
-      return session.Store.ContainsKey("IsBusy") && session.Store["IsBusy"];
-    }
   }
 }

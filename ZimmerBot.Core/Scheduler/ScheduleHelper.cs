@@ -40,7 +40,7 @@ namespace ZimmerBot.Core.Scheduler
 
       DefaultScheduler.ScheduleJob(job, trigger);
 
-      BotUtility.MarkAsBusy(context.Session);
+      context.Session.MarkAsBusyWritingAndNotReadyForInput();
     }
 
 
@@ -57,7 +57,7 @@ namespace ZimmerBot.Core.Scheduler
 
       // Mark the session as ready again
       Session session = SessionManager.GetSession(sessionId);
-      BotUtility.MarkAsReady(session);
+      session.MarkAsReadyForInput();
     }
   }
 }

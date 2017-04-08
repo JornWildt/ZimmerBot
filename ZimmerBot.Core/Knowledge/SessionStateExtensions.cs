@@ -9,6 +9,8 @@ namespace ZimmerBot.Core.Knowledge
 {
   public static class SessionStateExtensions
   {
+    #region Output template usage statistics
+
     static string UsageKey(string outputId) => "Usage_" + outputId;
 
 
@@ -43,16 +45,48 @@ namespace ZimmerBot.Core.Knowledge
         session.Store[key] += 1;
     }
 
+    #endregion
+
+
+    #region Latest input handling
+
+    const string LatestInput_SessionKey = "LatestInput";
 
     public static void RegisterLatestInput(this Session session, string input)
     {
-      session.Store["LatestInput"] = input;
+      session.Store[LatestInput_SessionKey] = input;
     }
 
 
     public static string GetLatestInput(this Session session)
     {
-      return session.Store["LatestInput"];
+      return session.Store[LatestInput_SessionKey];
     }
+
+    #endregion
+
+
+    #region Busy handling
+
+    const string IsBusyWriting_SessionKey = "IsBusyWriting";
+
+    public static void MarkAsBusyWritingAndNotReadyForInput(this Session session)
+    {
+      session.Store[IsBusyWriting_SessionKey] = true;
+    }
+
+
+    public static bool IsBusyWriting(this Session session)
+    {
+      return session.Store.ContainsKey(IsBusyWriting_SessionKey) && session.Store[IsBusyWriting_SessionKey];
+    }
+
+
+    public static void MarkAsReadyForInput(this Session session)
+    {
+      session.Store[IsBusyWriting_SessionKey] = false;
+    }
+
+    #endregion
   }
 }

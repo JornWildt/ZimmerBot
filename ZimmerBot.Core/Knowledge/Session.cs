@@ -19,7 +19,7 @@ namespace ZimmerBot.Core.Knowledge
 
       Store[StateKeys.ResponseCount] = 0;
 
-      BotUtility.MarkAsReady(this);
+      this.MarkAsReadyForInput();
     }
   }
 }
