@@ -48,6 +48,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RegisterTopic(string name, List<string> triggerWords, List<Rule> rules)
+    {
+      KnowledgeBase.AddTopic(name, triggerWords, rules);
+    }
+
+
     // new ConceptWRegex(KnowledgeBase, $1.s)
     protected WRegexBase BuildConceptWRegex(string s)
     {

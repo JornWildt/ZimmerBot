@@ -101,6 +101,15 @@ namespace ZimmerBot.Core.Tests
     }
 
 
+    protected Topic ParseTopic(string s)
+    {
+      KnowledgeBase kb = ParseKnowledgeBase(s);
+      Assert.AreEqual(1, kb.Topics.Count);
+      Topic t = kb.Topics.First().Value;
+      return t;
+    }
+
+
     protected T ParseRuleAndGetRootWRegex<T>(string s)
       where T : WRegexBase
     {

@@ -30,6 +30,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public IList<Rule> Rules { get; protected set; }
 
+    public IDictionary<string,Topic> Topics { get; protected set; }
+
     public IDictionary<Request.EventEnum, List<Rule>> EventHandlers { get; protected set; }
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
@@ -48,6 +50,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       MemoryStore = new RDFStore(memoryId);
       Concepts = new Dictionary<string, Concept>();
+      Topics = new Dictionary<string, Topic>();
       Entities = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
       Rules = new List<Rule>();
       EventHandlers = new Dictionary<Request.EventEnum, List<Rule>>();
@@ -95,6 +98,14 @@ namespace ZimmerBot.Core.Knowledge
       Concept w = new Concept(this, name, patterns);
       Concepts.Add(name, w);
       return w;
+    }
+
+
+    public Topic AddTopic(string name, IList<string> triggerWords, IList<Rule> rules)
+    {
+      Topic t = new Topic(name, triggerWords, rules);
+      Topics.Add(name, t);
+      return t;
     }
 
 

@@ -110,6 +110,7 @@
     <Compile Include="Knowledge\SessionStateExtensions.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Knowledge\RequestContext.cs" />
+    <Compile Include="Knowledge\Topic.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />
     <Compile Include="Scheduler\ScheduleHelper.cs" />

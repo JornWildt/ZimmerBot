@@ -28,7 +28,7 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_IMPLIES
@@ -74,6 +74,8 @@ item
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.patternList); }
+  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
+    T_LBRACE ruleSeq T_RBRACE { RegisterTopic($2.s, $4.stringList, $7.ruleList); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
   | T_RDF_IMPORT T_STRING            
@@ -271,6 +273,11 @@ exprReference
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
+  ;
+
+wordCommaSeq
+  : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
+  | T_WORD                       { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
 cwordSeq
