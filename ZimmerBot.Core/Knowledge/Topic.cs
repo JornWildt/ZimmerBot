@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CuttingEdge.Conditions;
 
 namespace ZimmerBot.Core.Knowledge
@@ -7,19 +8,29 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Name { get; protected set; }
 
-    public IList<string> TriggerWords { get; protected set; }
+    public IList<Rule> StandardRules { get; protected set; }
 
-    public IList<Rule> Rules { get; protected set; }
+    public IList<TopicRule> TopicRules { get; protected set; }
 
-    public Topic(string name, IList<string> triggerWords, IList<Rule> rules)
+    public IEnumerable<RuleBase> AllRules { get { return StandardRules.Cast<RuleBase>().Concat(TopicRules.Cast<RuleBase>()); } }
+
+
+    public Topic(string name)
     {
       Condition.Requires(name, nameof(name)).IsNotNullOrEmpty(); ;
-      Condition.Requires(triggerWords, nameof(triggerWords)).IsNotNull();
-      Condition.Requires(rules, nameof(rules)).IsNotNull();
 
       Name = name;
-      TriggerWords = triggerWords;
-      Rules = rules;
+      StandardRules = new List<Rule>();
+      TopicRules = new List<TopicRule>();
+    }
+
+
+    public void AddRule(RuleBase r)
+    {
+      if (r is Rule)
+        StandardRules.Add((Rule)r);
+      else
+        TopicRules.Add((TopicRule)r);
     }
   }
 }

@@ -29,8 +29,8 @@ SELECT * WHERE
 ORDER BY RAND()"")
 : Det er '<result:{r | <r.name>}>'
 ");
-      Assert.AreEqual(1, kb.Rules.Count);
-      Rule r = kb.Rules[0];
+      Assert.AreEqual(1, kb.DefaultRules.Count());
+      Rule r = kb.DefaultRules.First();
 
       IList<Reaction> reactions = CalculateReactions(r, "hvem er ven med \"Peter Parker\"");
       Assert.IsNotNull(reactions);
@@ -58,8 +58,8 @@ SELECT * WHERE
 ORDER BY RAND()"")
 : '<result:{r | <r.name>}>' is a friend
 ");
-      Assert.AreEqual(1, kb.Rules.Count);
-      Rule r = kb.Rules[0];
+      Assert.AreEqual(1, kb.DefaultRules.Count());
+      Rule r = kb.DefaultRules.First();
 
       IList<Reaction> reactions = CalculateReactions(r, "who is friend with \"Peter Parker\"");
       Assert.IsNotNull(reactions);

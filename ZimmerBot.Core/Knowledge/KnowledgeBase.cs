@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CuttingEdge.Conditions;
 using log4net;
 using Quartz;
@@ -19,6 +20,10 @@ namespace ZimmerBot.Core.Knowledge
   {
     static ILog Logger = LogManager.GetLogger(typeof(KnowledgeBase));
 
+    public static Random Randomizer = new Random();
+
+    const string DefaultTopicName = "#DefaultTopic";
+
 
     public enum InitializationMode { Clear, Restore, RestoreIfExists }
 
@@ -28,15 +33,19 @@ namespace ZimmerBot.Core.Knowledge
 
     public IDictionary<string, Entity> Entities { get; protected set; }
 
-    public IList<Rule> Rules { get; protected set; }
-
     public IDictionary<string,Topic> Topics { get; protected set; }
+
+    public Topic DefaultTopic { get { return Topics[DefaultTopicName]; } }
+
+    public IEnumerable<Rule> DefaultRules { get { return Topics[DefaultTopicName].StandardRules; } }
+
+    public IEnumerable<Rule> AllRules { get { return Topics.Values.SelectMany(t => t.StandardRules); } }
 
     public IDictionary<Request.EventEnum, List<Rule>> EventHandlers { get; protected set; }
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
-    protected IDictionary<string, Rule> LabelToRuleMap { get; set; }
+    protected IDictionary<string, RuleBase> LabelToRuleMap { get; set; }
 
     protected IList<string> SparqlForEntities { get; set; }
 
@@ -52,14 +61,16 @@ namespace ZimmerBot.Core.Knowledge
       Concepts = new Dictionary<string, Concept>();
       Topics = new Dictionary<string, Topic>();
       Entities = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
-      Rules = new List<Rule>();
       EventHandlers = new Dictionary<Request.EventEnum, List<Rule>>();
-      LabelToRuleMap = new Dictionary<string, Rule>();
+      LabelToRuleMap = new Dictionary<string, RuleBase>();
       SparqlForEntities = new List<string>();
+
+      Topics[DefaultTopicName] = new Topic(DefaultTopicName);
 
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new EntityTaggingStage());
+      InputPipeline.AddHandler(new TopicAssigningStage());
       InputPipeline.AddHandler(new ReactionGeneratorStage());
       InputPipeline.AddHandler(new OutputGeneratorStage());
       InputPipeline.AddHandler(new ChatLoggerStage());
@@ -92,18 +103,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public Concept AddConcept(string name, List<List<string>> patterns)
     {
-      Condition.Requires(name, nameof(name)).IsNotNull();
-      Condition.Requires(patterns, nameof(patterns)).IsNotNull();
-
       Concept w = new Concept(this, name, patterns);
       Concepts.Add(name, w);
       return w;
     }
 
 
-    public Topic AddTopic(string name, IList<string> triggerWords, IList<Rule> rules)
+    public Topic AddTopic(string name)
     {
-      Topic t = new Topic(name, triggerWords, rules);
+      Topic t = new Topic(name);
       Topics.Add(name, t);
       return t;
     }
@@ -119,21 +127,42 @@ namespace ZimmerBot.Core.Knowledge
 
     public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
-      foreach (Rule r in Rules)
+      foreach (Rule r in AllRules)
       {
         r.RegisterScheduledJobs(scheduler, botId);
       }
     }
 
 
-    public Rule AddRule(params object[] topics)
+    public Rule AddRule(string label, string topicName, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
-      Rule r = new Rule(this, topics);
-      Rules.Add(r);
+      Logger.DebugFormat("Found rule: {0}", pattern);
+
+      topicName = topicName ?? DefaultTopicName;
+      Topic topic = Topics[topicName];
+
+      Rule r = new Rule(this, label, topic, pattern, modifiers, statements);
+      topic.AddRule(r);
+
       return r;
     }
 
-    internal void RegisterRuleLabel(string label, Rule r)
+
+    public TopicRule AddTopicRule(string label, string topicName, List<Statement> statements)
+    {
+      topicName = topicName ?? DefaultTopicName;
+      Logger.DebugFormat("Found a topic rule for '{0}'", topicName);
+
+      Topic topic = Topics[topicName];
+
+      TopicRule r = new TopicRule(this, label, topic, statements);
+      topic.AddRule(r);
+
+      return r;
+    }
+
+
+    internal void RegisterRuleLabel(string label, RuleBase r)
     {
       LabelToRuleMap[label] = r;
     }
@@ -144,8 +173,7 @@ namespace ZimmerBot.Core.Knowledge
       Request.EventEnum etype;
       if (Enum.TryParse(e, true, out etype))
       {
-        Rule rule = new Rule(this);
-        rule.WithStatements(statements);
+        Rule rule = new Rule(this, null, null, null, null, statements);
         if (!EventHandlers.ContainsKey(etype))
           EventHandlers[etype] = new List<Rule>();
         EventHandlers[etype].Add(rule);
@@ -161,10 +189,54 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public Rule GetRuleFromLabel(string label)
+    public RuleBase GetRuleFromLabel(string label)
     {
       return LabelToRuleMap[label];
     }
+
+
+#if false
+    public void FindCurrentTopic(TriggerEvaluationContext context)
+    {
+      int bestWordMatchCount = 1;
+      List<Topic> bestTopics = new List<Topic>();
+
+      if (context.InputContext.Input != null)
+      {
+        foreach (Topic t in Topics.Values)
+        {
+          int matchCount = 0;
+          foreach (string word in t.TriggerWords)
+          {
+            foreach (var token in context.InputContext.Input)
+            {
+              if (word.Equals(token.OriginalText, StringComparison.CurrentCultureIgnoreCase))
+                ++matchCount;
+            }
+          }
+
+          if (matchCount == bestWordMatchCount)
+          {
+            bestTopics.Add(t);
+          }
+          else if (matchCount > bestWordMatchCount)
+          {
+            bestWordMatchCount = matchCount;
+            bestTopics.Clear();
+            bestTopics.Add(t);
+          }
+        }
+
+        string currentTopicName = context.InputContext.Session.CurrentTopic();
+
+        string selectedTopicName = bestTopics.Count > 0
+          ? bestTopics[Randomizer.Next(bestTopics.Count)].Name
+          : (currentTopicName ?? DefaultTopicName);
+
+        context.InputContext.Session.SetCurrentTopic(selectedTopicName);
+      }
+    }
+#endif
 
 
     public ReactionSet FindMatchingReactions(TriggerEvaluationContext context, ReactionSet reactions = null)
@@ -186,12 +258,32 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        foreach (Rule r in Rules)
+        string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
+        Topic topic = Topics[topicName];
+
+        // Does user input match anything in current topic?
+        foreach (Rule r in topic.StandardRules)
         {
           IList<Reaction> result = r.CalculateReactions(context);
           foreach (Reaction reaction in result)
             reactions.Add(reaction);
         }
+
+        // No match in current topic - use topic story reaction
+        int topicRuleIndex = context.InputContext.Session.GetTopicRuleIndex(topicName);
+        if (reactions.Count == 0 && topic.TopicRules.Count > topicRuleIndex)
+        {
+          foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context))
+            reactions.Add(reaction);
+
+          context.InputContext.Session.SetTopicRuleIndex(topicName, topicRuleIndex + 1);
+
+          // No topic stories left => clear topic
+          if (topicRuleIndex == topic.TopicRules.Count-1)
+            context.InputContext.Session.SetCurrentTopic(null);
+        }
+
+        // FIXME: look at default topic
       }
 
       return reactions;

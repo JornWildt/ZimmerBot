@@ -44,6 +44,7 @@ Space      [ \t]
 $           { return (int)Token.T_DOLLAR; }
 \?          { return (int)Token.T_QUESTION; }
 \!          { return (int)Token.T_EXCL; }
+T\>         { return (int)Token.T_TOPICRULE; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
@@ -56,6 +57,7 @@ $           { return (int)Token.T_DOLLAR; }
 ![ ]*on          { return (int)Token.T_ON; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*topic       { return (int)Token.T_TOPIC; }
+![ ]*start_topic { return (int)Token.T_STARTTOPIC; }
 ![ ]*stop_output { return (int)Token.T_STOPOUTPUT; }
 ![ ]*continue          { return (int)Token.T_CONTINUE; }
 ![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }

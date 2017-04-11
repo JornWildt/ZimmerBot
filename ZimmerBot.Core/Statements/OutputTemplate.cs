@@ -16,6 +16,13 @@ namespace ZimmerBot.Core.Statements
 
     public List<string> Outputs { get; protected set; }
 
+
+    public OutputTemplate(string name, string s)
+      : this(name, s, new List<string>())
+    {
+    }
+
+
     public OutputTemplate(string name, string s, List<string> outputs)
     {
       Condition.Requires(name, nameof(name)).IsNotNullOrEmpty();

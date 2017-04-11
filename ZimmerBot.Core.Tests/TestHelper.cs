@@ -95,17 +95,17 @@ namespace ZimmerBot.Core.Tests
     protected Rule ParseRule(string s)
     {
       KnowledgeBase kb = ParseKnowledgeBase(s);
-      Assert.AreEqual(1, kb.Rules.Count);
-      Rule r = kb.Rules[0];
+      Assert.AreEqual(1, kb.DefaultRules.Count());
+      Rule r = kb.DefaultRules.First();
       return r;
     }
 
 
-    protected Topic ParseTopic(string s)
+    protected Topic ParseTopic(string s, string topicName)
     {
       KnowledgeBase kb = ParseKnowledgeBase(s);
-      Assert.AreEqual(1, kb.Topics.Count);
-      Topic t = kb.Topics.First().Value;
+      Assert.AreEqual(2, kb.Topics.Count);
+      Topic t = kb.Topics[topicName];
       return t;
     }
 
@@ -114,8 +114,8 @@ namespace ZimmerBot.Core.Tests
       where T : WRegexBase
     {
       Rule r = ParseRule(s);
-      Assert.IsInstanceOf<T>(r.KnowledgeBase.Rules[0].Trigger.Regex.Expr);
-      T expr = (T)r.KnowledgeBase.Rules[0].Trigger.Regex.Expr;
+      Assert.IsInstanceOf<T>(r.KnowledgeBase.DefaultRules.First().Trigger.Regex.Expr);
+      T expr = (T)r.KnowledgeBase.DefaultRules.First().Trigger.Regex.Expr;
 
       return expr;
     }

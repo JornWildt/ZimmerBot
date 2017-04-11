@@ -88,5 +88,38 @@ namespace ZimmerBot.Core.Knowledge
     }
 
     #endregion
+
+
+    #region Topics
+
+    const string CurrentTopic_SessionKey = "CurrentTopic";
+
+    const string TopicRuleIndex_SessionKey = "TopicRuleIndex";
+
+
+    public static void SetCurrentTopic(this Session session, string topic)
+    {
+      session.Store[CurrentTopic_SessionKey] = topic;
+    }
+
+
+    public static string CurrentTopic(this Session session)
+    {
+      return session.Store[CurrentTopic_SessionKey];
+    }
+
+
+    public static void SetTopicRuleIndex(this Session session, string topic, int index)
+    {
+      session.Store[CurrentTopic_SessionKey + ":" + topic] = index;
+    }
+
+
+    public static int GetTopicRuleIndex(this Session session, string topic)
+    {
+      return session.Store[CurrentTopic_SessionKey + ":" + topic] ?? 0;
+    }
+
+    #endregion
   }
 }

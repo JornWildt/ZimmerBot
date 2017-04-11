@@ -16,8 +16,8 @@
   public OutputTemplate template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Knowledge.Rule rule;
-  public List<Knowledge.Rule> ruleList;
+  public Knowledge.RuleBase rule;
+  public List<Knowledge.RuleBase> ruleList;
   public List<string> stringList;
   public List<List<string>> patternList;
   public string s;
@@ -28,9 +28,10 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
+%token T_TOPICRULE
 %token T_IMPLIES
 %token T_COMMA
 %token T_LPAR
@@ -75,7 +76,13 @@ configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.patternList); }
   | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
-    T_LBRACE ruleSeq T_RBRACE { RegisterTopic($2.s, $4.stringList, $7.ruleList); }
+    { StartTopic($2.s); } 
+    T_LBRACE ruleSeq T_RBRACE 
+    { FinalizeTopic($2.s); }
+  | T_TOPIC T_WORD
+    { StartTopic($2.s); } 
+    T_LBRACE ruleSeq T_RBRACE 
+    { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
   | T_RDF_IMPORT T_STRING            
@@ -93,13 +100,17 @@ conceptPatternSeq
 
 ruleSeq
   : ruleSeq rule  { $1.ruleList.Add($2.rule); $$.ruleList = $1.ruleList; }
-  | /* empty */   { $$.ruleList = new List<Knowledge.Rule>(); }
+  | /* empty */   { $$.ruleList = new List<Knowledge.RuleBase>(); }
   ;
 
 rule
   : ruleLabel input ruleModifierSeq statementSeq
     { 
       $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
+    }
+  | ruleLabel T_TOPICRULE  outputTemplateContent 
+    { 
+      $$.rule = AddTopicRule($1.s, $3.s);
     }
   ;
 
@@ -181,6 +192,7 @@ statement
   | stmtAnswer              { $$.statement = $1.statement; }
   | stmtContinue            { $$.statement = $1.statement; }
   | stmtStopOutput          { $$.statement = $1.statement; }
+  | stmtStartTopic          { $$.statement = $1.statement; }
   ;
 
 outputTemplateSequence
@@ -194,8 +206,14 @@ outputTemplateSequence2
   ;
 
 outputTemplate
-  : T_COLON  
+  : T_COLON
       { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
+    T_OUTPUT 
+      { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
+  ;
+
+outputTemplateContent
+  :   { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
       { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
   ;
@@ -221,6 +239,10 @@ stmtContinue
 
 stmtStopOutput
   : T_STOPOUTPUT { $$.statement = new StopOutputStatement(); }
+  ;
+
+stmtStartTopic
+  : T_STARTTOPIC T_WORD { $$.statement = new StartTopicStatement($2.s); }
   ;
 
 /******************************************************************************

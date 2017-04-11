@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 15-04-2016 20:29:57>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 11-04-2017 13:52:49>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 15-04-2016 20:29:58
+//  DateTime: 11-04-2017 13:52:54
 //  UserName: Jorn
 // ==========================================================================
 
@@ -21,10 +21,10 @@
 %union { 
   public Statement statement;
   public List<Statement> statementList;
-  public WRegex regex;
+  public WRegexBase regex;
   public Expression expr;
   public List<Expression> exprList;
-  public KeyValuePair<string,string> template;
+  public OutputTemplate template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
   public Knowledge.Rule rule;
@@ -39,9 +39,10 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_RDF_IMPORT, T_RDF_PREFIX, T_WHEN
-%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
+%token T_TOPICRULE
 %token T_IMPLIES
 %token T_COMMA
 %token T_LPAR
@@ -65,12 +66,6 @@
 %token T_DOLLAR
 
 %%
-// Error: NonTerminal symbol "T_AT" has no productions
-// Warning: Terminating T_AT fixes the following size-1 NonTerminal set
-   // {T_AT}
-// Error: There are 1 non-terminating NonTerminal Symbols
-   //  {T_AT}
-// --------------------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -91,12 +86,22 @@ item
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.patternList); }
+  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
+    { StartTopic($2.s); } 
+    T_LBRACE ruleSeq T_RBRACE 
+    { RegisterTopic($2.s, $4.stringList, $8.ruleList); }
+  | T_TOPIC T_WORD
+    { StartTopic($2.s); } 
+    T_LBRACE ruleSeq T_RBRACE 
+    { RegisterTopic($2.s, null, $5.ruleList); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
   | T_RDF_IMPORT T_STRING            
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     
       { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
+  | T_RDF_ENTITIES T_LPAR T_STRING T_RPAR
+      { RDFEntities($4.s); }
   ;
 
 conceptPatternSeq
@@ -110,13 +115,20 @@ ruleSeq
   ;
 
 rule
-  : ruleId input ruleModifierSeq statementSeq
+  : ruleLabel input ruleModifierSeq statementSeq
     { 
       $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
     }
+  | ruleLabel T_TOPICRULE  outputTemplateContent 
+    { 
+      $$.rule = AddTopicRule($1.s, $3.ruleModifierList, $4.statementList);
+//-----------------------------------------------------^^^
+// Error: Semantic action index is out of bounds
+// ---------------------------------------------
+    }
   ;
 
-ruleId
+ruleLabel
   : T_LT T_WORD { $$.s = $2.s; }
   | /* empty */
   ;
@@ -144,7 +156,7 @@ inputPattern
   | T_WORD
       { $$.regex = new LiteralWRegex($1.s); }
   | T_CWORD
-      { $$.regex = new ConceptWRegex(KnowledgeBase, $1.s); }
+      { $$.regex = BuildConceptWRegex($1.s); }
   | T_STAR
       { $$.regex = new GroupWRegex(new RepetitionWRegex(new WildcardWRegex())); }
   | T_PLUS
@@ -188,22 +200,36 @@ statementSeq
   ;
 
 statement
-  : outputTemplate  { $$.statement = new OutputTemplateStatement($1.template); }
-  | stmtCall        { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
-  | stmtSet         { $$.statement = $1.statement;}
-  | stmtAnswer      { $$.statement = $1.statement;}
-  | stmtContinue    { $$.statement = $1.statement;}
+  : outputTemplateSequence  { $$.statement = new OutputTemplateStatement($1.template); }
+  | stmtCall                { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
+  | stmtSet                 { $$.statement = $1.statement; }
+  | stmtAnswer              { $$.statement = $1.statement; }
+  | stmtContinue            { $$.statement = $1.statement; }
+  | stmtStopOutput          { $$.statement = $1.statement; }
+  | stmtStartTopic          { $$.statement = $1.statement; }
+  ;
+
+outputTemplateSequence
+  : outputTemplate outputTemplateSequence2                          {  $$.template = new OutputTemplate("default", $1.s, $2.stringList); }
+  | T_LBRACE T_WORD T_RBRACE outputTemplate outputTemplateSequence2 {  $$.template = new OutputTemplate($2.s, $4.s, $5.stringList); }
+  ;
+
+outputTemplateSequence2
+  : outputTemplateSequence2 T_PLUS outputTemplate  { $$.stringList.Add($3.s); }
+  | /* empty */                                    { $$.stringList = new List<string>(); }
   ;
 
 outputTemplate
-  : T_COLON  
+  : T_COLON
       { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>("default", ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
-  | T_LBRACE T_WORD T_RBRACE T_COLON 
-      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
+      { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
+  ;
+
+outputTemplateContent
+  :   { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
     T_OUTPUT 
-      { $$.template = new KeyValuePair<string,string>($2.s, ((ConfigScanner)Scanner).StringInput.ToString().Trim()); }
+      { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
   ;
 
 stmtCall
@@ -221,8 +247,16 @@ stmtAnswer
 
 stmtContinue
   : T_CONTINUE               { $$.statement = new ContinueStatement(); }
-  | T_CONTINUE_AT T_WORD     { $$.statement = new ContinueStatement($2.s, ContinueStatement.TargetEnum.Label); }
-  | T_CONTINUE_WITH wordSeq  { $$.statement = new ContinueStatement($2.stringList, ContinueStatement.TargetEnum.Input); }
+  | T_CONTINUE_AT T_WORD     { $$.statement = new ContinueStatement(new ZimmerBot.Core.Knowledge.Continuation(ZimmerBot.Core.Knowledge.Continuation.ContinuationEnum.Label, $2.s)); }
+  | T_CONTINUE_WITH wordSeq  { $$.statement = new ContinueStatement($2.stringList); }
+  ;
+
+stmtStopOutput
+  : T_STOPOUTPUT { $$.statement = new StopOutputStatement(); }
+  ;
+
+stmtStartTopic
+  : T_STARTTOPIC T_WORD { $$.statement = new StartTopicStatement($2.s); }
   ;
 
 /******************************************************************************
@@ -275,6 +309,11 @@ exprReference
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
+  ;
+
+wordCommaSeq
+  : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
+  | T_WORD                       { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
 cwordSeq

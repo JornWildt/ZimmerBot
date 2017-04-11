@@ -19,6 +19,16 @@ namespace ZimmerBot.Core.Knowledge
     public string RequiredPriorRuleId { get; protected set; }
 
 
+    public Trigger(WRegexBase pattern)
+    {
+      if (pattern != null)
+      {
+        Regex = new WRegex(pattern);
+        RegexSize = pattern.CalculateSize();
+      }
+    }
+
+
     public Trigger(params object[] pattern)
     {
       if (pattern == null || pattern.Length == 0 || pattern[0] == null)
@@ -95,7 +105,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterParentRule(Rule parentRule)
+    public void RegisterParentRule(RuleBase parentRule)
     {
       RequiredPriorRuleId = parentRule.Id;
     }

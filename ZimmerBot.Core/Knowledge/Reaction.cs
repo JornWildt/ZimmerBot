@@ -11,12 +11,12 @@ namespace ZimmerBot.Core.Knowledge
 
     public ResponseGenerationContext Context { get; protected set; }
 
-    public Rule Rule { get; protected set; }
+    public RuleBase Rule { get; protected set; }
 
     public string OutputIdentifier { get; protected set; }
 
 
-    public Reaction(ResponseGenerationContext context, Rule rule, string outputId)
+    public Reaction(ResponseGenerationContext context, RuleBase rule, string outputId)
     {
       Condition.Requires(context, nameof(context)).IsNotNull();
       Condition.Requires(rule, nameof(rule)).IsNotNull();

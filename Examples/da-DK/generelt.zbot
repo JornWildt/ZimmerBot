@@ -62,3 +62,10 @@
 ! call DateTime.Time()
 : Det er <answer; format="dddd">.
 
+! topic Zombies (zombie, dead, rotten)
+{
+  > now what
+  : Run, you fools, run!
+
+  > : The zombiecalypse is comming!
+}

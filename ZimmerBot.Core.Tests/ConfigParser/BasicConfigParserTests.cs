@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.WordRegex;
 
@@ -19,8 +20,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : selv hej
 ");
 
-      Assert.AreEqual(1, kb.Rules.Count);
-      Assert.AreEqual(typeof(LiteralWRegex), kb.Rules[0].Trigger.Regex.TypeOfExpr);
+      Assert.AreEqual(1, kb.AllRules.Count());
+      Assert.AreEqual(typeof(LiteralWRegex), kb.DefaultRules.First().Trigger.Regex.TypeOfExpr);
     }
 
     [Test]

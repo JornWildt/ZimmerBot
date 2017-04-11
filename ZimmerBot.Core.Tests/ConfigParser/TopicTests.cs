@@ -16,27 +16,22 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       // Arrange
       string cfg = @"
-! topic Zombies (zombie, dead, rotten)
+! topic Zombies
 {
   > now what
-  : Fly, you fools, fly!
+  : Run, you fools, run!
 }
 ";
       // Act
-      Topic t = ParseTopic(cfg);
+      Topic t = ParseTopic(cfg, "Zombies");
 
       // Assert
       Assert.IsNotNull(t);
       Assert.AreEqual("Zombies", t.Name);
-      Assert.IsNotNull(t.TriggerWords);
-      Assert.AreEqual(3, t.TriggerWords.Count);
-      Assert.AreEqual("zombie", t.TriggerWords[0]);
-      Assert.AreEqual("dead", t.TriggerWords[1]);
-      Assert.AreEqual("rotten", t.TriggerWords[2]);
-      Assert.IsNotNull(t.Rules);
-      Assert.AreEqual(1, t.Rules.Count);
-      Assert.IsInstanceOf<WordRegex.SequenceWRegex>(t.Rules[0].Trigger.Regex.Expr);
-      Assert.AreEqual(1, t.Rules[0].Statements.Count);
+      Assert.IsNotNull(t.StandardRules);
+      Assert.AreEqual(1, t.StandardRules.Count);
+      Assert.IsInstanceOf<WordRegex.SequenceWRegex>(t.StandardRules[0].Trigger.Regex.Expr);
+      Assert.AreEqual(1, t.StandardRules[0].Statements.Count);
     }
   }
 }

@@ -37,10 +37,10 @@ namespace ZimmerBot.Core.Tests.BotTests
     }
 
 
-    protected void AssertDialog(string s, string expectedAnswer)
+    protected void AssertDialog(string s, string expectedAnswer, string message = null)
     {
       string r = Invoke(s);
-      Assert.AreEqual(expectedAnswer, r);
+      Assert.AreEqual(expectedAnswer, r, $"Input: {s}" + (message != null ? " <= " + message : ""));
     }
   }
 }

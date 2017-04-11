@@ -13,8 +13,9 @@ namespace ZimmerBot.Core.ConfigParser
   {
     private static ILog Logger = LogManager.GetLogger(typeof(ConfigParser));
 
-
     protected KnowledgeBase KnowledgeBase { get; set; }
+
+    protected string CurrentTopic { get; set; }
 
 
     public ConfigParser(KnowledgeBase kb) 
@@ -48,13 +49,20 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterTopic(string name, List<string> triggerWords, List<Rule> rules)
+    protected void StartTopic(string name)
     {
-      KnowledgeBase.AddTopic(name, triggerWords, rules);
+      CurrentTopic = name;
+      KnowledgeBase.AddTopic(name);
     }
 
 
-    // new ConceptWRegex(KnowledgeBase, $1.s)
+    protected void FinalizeTopic(string name)
+    {
+      Condition.Requires(name, nameof(name)).IsEqualTo(CurrentTopic);
+      CurrentTopic = null;
+    }
+
+
     protected WRegexBase BuildConceptWRegex(string s)
     {
       if (s == "%ENTITY")
@@ -95,16 +103,18 @@ namespace ZimmerBot.Core.ConfigParser
 
     protected Rule AddRule(string label, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
-      Logger.DebugFormat("Found rule: {0}", pattern);
-      Rule r = KnowledgeBase.AddRule(pattern);
-      if (label != null)
-        r.WithLabel(label);
-      if (modifiers != null)
-        foreach (var m in modifiers)
-          m.Invoke(r);
-      if (statements != null)
-        r.WithStatements(statements);
-      return r;
+      return KnowledgeBase.AddRule(label, CurrentTopic, pattern, modifiers, statements);
+    }
+
+
+    protected TopicRule AddTopicRule(string label, string output)
+    {
+      List<Statement> statements = new List<Statement>
+      {
+        new OutputTemplateStatement(new OutputTemplate("default", output))
+      };
+
+      return KnowledgeBase.AddTopicRule(label, CurrentTopic, statements);
     }
 
 

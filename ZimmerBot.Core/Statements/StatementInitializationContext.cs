@@ -4,9 +4,9 @@ namespace ZimmerBot.Core.Statements
 {
   public class StatementInitializationContext
   {
-    public Rule ParentRule { get; protected set; }
+    public RuleBase ParentRule { get; protected set; }
 
-    public StatementInitializationContext(Rule parentRule)
+    public StatementInitializationContext(RuleBase parentRule)
     {
       ParentRule = parentRule;
     }
