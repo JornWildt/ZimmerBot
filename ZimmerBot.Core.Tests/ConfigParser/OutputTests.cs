@@ -13,7 +13,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanParseMultipleOneOfOutputLines()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aa bb
 : xxx
 : yyy
@@ -26,7 +26,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanUseMatchesInCallStatement()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa (bbb)
 ! call General.Echo($1)
 : ccc <result>
@@ -48,7 +48,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanParseCallStatementWithZeroParameters()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa
 ! call DateTime.Time()
 : ccc <answer>
@@ -70,7 +70,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanUseMatchInOutputTemplate()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > (aaa)
 : ccc <1>
 ");
@@ -83,7 +83,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanUse_SequenceOneOrMore_MatchInOutputTemplate()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa + bbb
 : ccc <1>
 ");
@@ -122,7 +122,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanMakeMultiLineOutput()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa
 : ccc\
 ddd");
@@ -135,7 +135,7 @@ ddd");
     [Test]
     public void CanSpecifyOutputTemplate()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa
 : bbb
 {xxx}: ccc

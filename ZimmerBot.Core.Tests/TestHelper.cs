@@ -25,14 +25,14 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected IList<Reaction> CalculateReactions(Rule r, string text)
+    protected IList<Reaction> CalculateReactions(StandardRule r, string text)
     {
       TriggerEvaluationContext context = BuildEvaluationContextFromInput(r.KnowledgeBase, text);
       return r.CalculateReactions(context);
     }
 
 
-    protected string GetResponseFrom(Rule r, string text)
+    protected string GetResponseFrom(StandardRule r, string text)
     {
       IList<Reaction> reactions = CalculateReactions(r, text);
       return GetResponseFrom(reactions);
@@ -92,11 +92,11 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected Rule ParseRule(string s)
+    protected StandardRule ParseRule(string s)
     {
       KnowledgeBase kb = ParseKnowledgeBase(s);
       Assert.AreEqual(1, kb.DefaultRules.Count());
-      Rule r = kb.DefaultRules.First();
+      StandardRule r = kb.DefaultRules.First();
       return r;
     }
 
@@ -113,7 +113,7 @@ namespace ZimmerBot.Core.Tests
     protected T ParseRuleAndGetRootWRegex<T>(string s)
       where T : WRegexBase
     {
-      Rule r = ParseRule(s);
+      StandardRule r = ParseRule(s);
       Assert.IsInstanceOf<T>(r.KnowledgeBase.DefaultRules.First().Trigger.Regex.Expr);
       T expr = (T)r.KnowledgeBase.DefaultRules.First().Trigger.Regex.Expr;
 

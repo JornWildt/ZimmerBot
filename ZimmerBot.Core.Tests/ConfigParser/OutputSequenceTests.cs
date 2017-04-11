@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanParseOutputSequence()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > Yo
 : First sentence. 
 +: Second sentence\
@@ -37,7 +37,7 @@ with a newline.
     [Test]
     public void CanParseNamedOutputSequence()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > Yo
 {xxx}: First sentence. 
 +: Second sentence\

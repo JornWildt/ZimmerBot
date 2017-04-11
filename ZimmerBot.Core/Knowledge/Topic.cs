@@ -8,11 +8,11 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Name { get; protected set; }
 
-    public IList<Rule> StandardRules { get; protected set; }
+    public IList<StandardRule> StandardRules { get; protected set; }
 
     public IList<TopicRule> TopicRules { get; protected set; }
 
-    public IEnumerable<RuleBase> AllRules { get { return StandardRules.Cast<RuleBase>().Concat(TopicRules.Cast<RuleBase>()); } }
+    public IEnumerable<Rule> AllRules { get { return StandardRules.Cast<Rule>().Concat(TopicRules.Cast<Rule>()); } }
 
 
     public Topic(string name)
@@ -20,15 +20,15 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(name, nameof(name)).IsNotNullOrEmpty(); ;
 
       Name = name;
-      StandardRules = new List<Rule>();
+      StandardRules = new List<StandardRule>();
       TopicRules = new List<TopicRule>();
     }
 
 
-    public void AddRule(RuleBase r)
+    public void AddRule(Rule r)
     {
-      if (r is Rule)
-        StandardRules.Add((Rule)r);
+      if (r is StandardRule)
+        StandardRules.Add((StandardRule)r);
       else
         TopicRules.Add((TopicRule)r);
     }

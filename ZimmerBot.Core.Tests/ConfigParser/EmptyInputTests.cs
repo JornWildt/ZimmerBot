@@ -9,7 +9,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanHandleEmptyInputPatternsForStartupRules()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 >
 : Startup");
 

@@ -12,7 +12,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanCheckConditionWithNumber()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa
 ! when session.responseCount = 0
 : bbb");
@@ -29,7 +29,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanCheckConditionWithString()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa
 ! when (xxx.yyy = ""a"")
 : bbb");
@@ -46,7 +46,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanIncludeWeight()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa
 ! weight 0.5
 : bbb");
@@ -59,7 +59,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     [Test]
     public void CanIncludeSchedule()
     {
-      Rule r = ParseRule(@"
+      StandardRule r = ParseRule(@"
 > aaa
 ! every 30");
 

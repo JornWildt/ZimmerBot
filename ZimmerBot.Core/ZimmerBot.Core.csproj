@@ -107,7 +107,7 @@
     <Compile Include="Knowledge\Continuation.cs" />
     <Compile Include="Knowledge\Entity.cs" />
     <Compile Include="Knowledge\InputRequestContext.cs" />
-    <Compile Include="Knowledge\RuleBase.cs" />
+    <Compile Include="Knowledge\Rule.cs" />
     <Compile Include="Knowledge\SessionStateExtensions.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Knowledge\RequestContext.cs" />
@@ -198,7 +198,7 @@
     <Compile Include="StandardProcessors\DateTimeProcessor.cs" />
     <Compile Include="Knowledge\KnowledgeBase.cs" />
     <Compile Include="Knowledge\ReactionSet.cs" />
-    <Compile Include="Knowledge\Rule.cs" />
+    <Compile Include="Knowledge\StandardRule.cs" />
     <Compile Include="Knowledge\Reaction.cs" />
     <Compile Include="Knowledge\Trigger.cs" />
     <Compile Include="Knowledge\Concept.cs" />

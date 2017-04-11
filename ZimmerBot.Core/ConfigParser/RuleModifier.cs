@@ -10,7 +10,7 @@ namespace ZimmerBot.Core.ConfigParser
 {
   public abstract class RuleModifier
   {
-    public abstract void Invoke(Rule r);
+    public abstract void Invoke(StandardRule r);
   }
 
 
@@ -24,7 +24,7 @@ namespace ZimmerBot.Core.ConfigParser
       Expr = expr;
     }
 
-    public override void Invoke(Rule r)
+    public override void Invoke(StandardRule r)
     {
       r.WithCondition(Expr);
     }
@@ -40,7 +40,7 @@ namespace ZimmerBot.Core.ConfigParser
       Weight = weight;
     }
 
-    public override void Invoke(Rule r)
+    public override void Invoke(StandardRule r)
     {
       r.WithWeight(Weight);
     }
@@ -56,7 +56,7 @@ namespace ZimmerBot.Core.ConfigParser
       Seconds = seconds;
     }
 
-    public override void Invoke(Rule r)
+    public override void Invoke(StandardRule r)
     {
       r.WithSchedule(TimeSpan.FromSeconds(Seconds));
     }

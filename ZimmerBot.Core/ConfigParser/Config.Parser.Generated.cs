@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 11-04-2017 22:28:48
+// DateTime: 11-04-2017 23:34:46
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 11-04-2017 22:28:47>
+// Input file <ConfigParser\Config.Language.grammar.y - 11-04-2017 23:34:43>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -41,8 +41,8 @@ internal partial struct ValueType
   public OutputTemplate template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Knowledge.RuleBase rule;
-  public List<Knowledge.RuleBase> ruleList;
+  public Knowledge.Rule rule;
+  public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> patternList;
   public string s;
@@ -385,7 +385,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { ValueStack[ValueStack.Depth-2].ruleList.Add(ValueStack[ValueStack.Depth-1].rule); CurrentSemanticValue.ruleList = ValueStack[ValueStack.Depth-2].ruleList; }
         break;
       case 19: // ruleSeq -> /* empty */
-{ CurrentSemanticValue.ruleList = new List<Knowledge.RuleBase>(); }
+{ CurrentSemanticValue.ruleList = new List<Knowledge.Rule>(); }
         break;
       case 20: // rule -> ruleLabel, input, ruleModifierSeq, statementSeq
 { 

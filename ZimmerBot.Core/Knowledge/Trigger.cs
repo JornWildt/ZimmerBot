@@ -105,7 +105,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterParentRule(RuleBase parentRule)
+    public void RegisterParentRule(Rule parentRule)
     {
       RequiredPriorRuleId = parentRule.Id;
     }

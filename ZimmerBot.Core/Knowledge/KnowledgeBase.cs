@@ -37,15 +37,15 @@ namespace ZimmerBot.Core.Knowledge
 
     public Topic DefaultTopic { get { return Topics[DefaultTopicName]; } }
 
-    public IEnumerable<Rule> DefaultRules { get { return Topics[DefaultTopicName].StandardRules; } }
+    public IEnumerable<StandardRule> DefaultRules { get { return Topics[DefaultTopicName].StandardRules; } }
 
-    public IEnumerable<Rule> AllRules { get { return Topics.Values.SelectMany(t => t.StandardRules); } }
+    public IEnumerable<StandardRule> AllRules { get { return Topics.Values.SelectMany(t => t.StandardRules); } }
 
-    public IDictionary<Request.EventEnum, List<Rule>> EventHandlers { get; protected set; }
+    public IDictionary<Request.EventEnum, List<StandardRule>> EventHandlers { get; protected set; }
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
-    protected IDictionary<string, RuleBase> LabelToRuleMap { get; set; }
+    protected IDictionary<string, Rule> LabelToRuleMap { get; set; }
 
     protected IList<string> SparqlForEntities { get; set; }
 
@@ -61,8 +61,8 @@ namespace ZimmerBot.Core.Knowledge
       Concepts = new Dictionary<string, Concept>();
       Topics = new Dictionary<string, Topic>();
       Entities = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
-      EventHandlers = new Dictionary<Request.EventEnum, List<Rule>>();
-      LabelToRuleMap = new Dictionary<string, RuleBase>();
+      EventHandlers = new Dictionary<Request.EventEnum, List<StandardRule>>();
+      LabelToRuleMap = new Dictionary<string, Rule>();
       SparqlForEntities = new List<string>();
 
       Topics[DefaultTopicName] = new Topic(DefaultTopicName);
@@ -127,21 +127,21 @@ namespace ZimmerBot.Core.Knowledge
 
     public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
-      foreach (Rule r in AllRules)
+      foreach (StandardRule r in AllRules)
       {
         r.RegisterScheduledJobs(scheduler, botId);
       }
     }
 
 
-    public Rule AddRule(string label, string topicName, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    public StandardRule AddRule(string label, string topicName, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
       Logger.DebugFormat("Found rule: {0}", pattern);
 
       topicName = topicName ?? DefaultTopicName;
       Topic topic = Topics[topicName];
 
-      Rule r = new Rule(this, label, topic, pattern, modifiers, statements);
+      StandardRule r = new StandardRule(this, label, topic, pattern, modifiers, statements);
       topic.AddRule(r);
 
       return r;
@@ -162,7 +162,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    internal void RegisterRuleLabel(string label, RuleBase r)
+    internal void RegisterRuleLabel(string label, Rule r)
     {
       LabelToRuleMap[label] = r;
     }
@@ -173,9 +173,9 @@ namespace ZimmerBot.Core.Knowledge
       Request.EventEnum etype;
       if (Enum.TryParse(e, true, out etype))
       {
-        Rule rule = new Rule(this, null, null, null, null, statements);
+        StandardRule rule = new StandardRule(this, null, null, null, null, statements);
         if (!EventHandlers.ContainsKey(etype))
-          EventHandlers[etype] = new List<Rule>();
+          EventHandlers[etype] = new List<StandardRule>();
         EventHandlers[etype].Add(rule);
       }
       else
@@ -189,7 +189,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public RuleBase GetRuleFromLabel(string label)
+    public Rule GetRuleFromLabel(string label)
     {
       return LabelToRuleMap[label];
     }
@@ -248,7 +248,7 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (EventHandlers.ContainsKey(context.InputContext.Request.EventType.Value))
         {
-          foreach (Rule rule in EventHandlers[context.InputContext.Request.EventType.Value])
+          foreach (StandardRule rule in EventHandlers[context.InputContext.Request.EventType.Value])
           {
             ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new MatchResult(1));
             Reaction reaction = new Reaction(rc, rule, null);
@@ -262,7 +262,7 @@ namespace ZimmerBot.Core.Knowledge
         Topic topic = Topics[topicName];
 
         // Does user input match anything in current topic?
-        foreach (Rule r in topic.StandardRules)
+        foreach (StandardRule r in topic.StandardRules)
         {
           IList<Reaction> result = r.CalculateReactions(context);
           foreach (Reaction reaction in result)

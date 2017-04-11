@@ -30,7 +30,7 @@ ORDER BY RAND()"")
 : Det er '<result:{r | <r.name>}>'
 ");
       Assert.AreEqual(1, kb.DefaultRules.Count());
-      Rule r = kb.DefaultRules.First();
+      StandardRule r = kb.DefaultRules.First();
 
       IList<Reaction> reactions = CalculateReactions(r, "hvem er ven med \"Peter Parker\"");
       Assert.IsNotNull(reactions);
@@ -59,7 +59,7 @@ ORDER BY RAND()"")
 : '<result:{r | <r.name>}>' is a friend
 ");
       Assert.AreEqual(1, kb.DefaultRules.Count());
-      Rule r = kb.DefaultRules.First();
+      StandardRule r = kb.DefaultRules.First();
 
       IList<Reaction> reactions = CalculateReactions(r, "who is friend with \"Peter Parker\"");
       Assert.IsNotNull(reactions);

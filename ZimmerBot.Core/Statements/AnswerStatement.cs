@@ -8,7 +8,7 @@ namespace ZimmerBot.Core.Statements
   {
     public string Target { get; protected set; }
 
-    public List<RuleBase> Rules { get; protected set; }
+    public List<Rule> Rules { get; protected set; }
 
 
     public AnswerStatement(string target)
@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.Statements
     }
 
 
-    public AnswerStatement(List<RuleBase> rules)
+    public AnswerStatement(List<Rule> rules)
     {
       Condition.Requires(rules, nameof(rules)).IsNotNull();
       Rules = rules;
@@ -34,7 +34,7 @@ namespace ZimmerBot.Core.Statements
     public override void Initialize(StatementInitializationContext context)
     {
       if (Rules != null)
-        foreach (RuleBase r in Rules)
+        foreach (Rule r in Rules)
           r.RegisterParentRule(context.ParentRule);
     }
 

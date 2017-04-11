@@ -4,7 +4,7 @@ using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
 {
-  public class TopicRule : RuleBase
+  public class TopicRule : Rule
   {
     public TopicRule(KnowledgeBase kb, string label, Topic topic, List<Statement> statements)
       : base(kb, label, topic, statements)
