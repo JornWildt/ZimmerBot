@@ -72,7 +72,10 @@ namespace ZimmerBot.Core.Knowledge
       {
         DiaLogger.InfoFormat("Invoke: {0}", request.Input);
 
-        context.Session.RegisterLatestInput(request.Input);
+        if (context.Session.IsBusyWriting())
+          context.Session.RegisterLatestInput(request.Input);
+        else
+          context.Session.RegisterLatestInput(null);
 
         ZTokenizer tokenizer = new ZTokenizer();
         ZStatementSequence statements = tokenizer.Tokenize(request.Input);

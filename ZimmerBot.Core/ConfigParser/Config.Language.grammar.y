@@ -16,8 +16,8 @@
   public OutputTemplate template;
   public RuleModifier ruleModifier;
   public List<RuleModifier> ruleModifierList;
-  public Knowledge.RuleBase rule;
-  public List<Knowledge.RuleBase> ruleList;
+  public Knowledge.Rule rule;
+  public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> patternList;
   public string s;
@@ -100,7 +100,7 @@ conceptPatternSeq
 
 ruleSeq
   : ruleSeq rule  { $1.ruleList.Add($2.rule); $$.ruleList = $1.ruleList; }
-  | /* empty */   { $$.ruleList = new List<Knowledge.RuleBase>(); }
+  | /* empty */   { $$.ruleList = new List<Knowledge.Rule>(); }
   ;
 
 rule
@@ -108,9 +108,9 @@ rule
     { 
       $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
     }
-  | ruleLabel T_TOPICRULE  outputTemplateContent 
-    { 
-      $$.rule = AddTopicRule($1.s, $3.s);
+  | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
+    {
+      $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
     }
   ;
 
@@ -185,9 +185,18 @@ statementSeq
   | /* empty */             { $$.statementList = new List<Statement>(); }
   ;
 
+topicStatementSeq
+  : topicStatementSeq internalStatement  { $1.statementList.Add($2.statement); $$.statementList = $1.statementList; }
+  | /* empty */                          { $$.statementList = new List<Statement>(); }
+  ;
+
 statement
   : outputTemplateSequence  { $$.statement = new OutputTemplateStatement($1.template); }
-  | stmtCall                { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
+  | internalStatement       { $$.statement = $1.statement; }
+  ;
+
+internalStatement
+  : stmtCall                { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
   | stmtSet                 { $$.statement = $1.statement; }
   | stmtAnswer              { $$.statement = $1.statement; }
   | stmtContinue            { $$.statement = $1.statement; }
@@ -206,10 +215,7 @@ outputTemplateSequence2
   ;
 
 outputTemplate
-  : T_COLON
-      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
-    T_OUTPUT 
-      { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
+  : T_COLON outputTemplateContent { $$.s = $2.s; }
   ;
 
 outputTemplateContent
@@ -217,6 +223,14 @@ outputTemplateContent
     T_OUTPUT 
       { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
   ;
+
+topicOutput
+  : outputTemplateContent outputTemplateSequence2 {  $$.template = new OutputTemplate("default", $1.s, $2.stringList); }
+  ;
+
+/******************************************************************************
+  STATEMENTS
+******************************************************************************/
 
 stmtCall
   : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.expr, $4.exprList); }

@@ -107,13 +107,9 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected TopicRule AddTopicRule(string label, string output)
+    protected TopicRule AddTopicRule(string label, OutputTemplate output, List<Statement> statements)
     {
-      List<Statement> statements = new List<Statement>
-      {
-        new OutputTemplateStatement(new OutputTemplate("default", output))
-      };
-
+      statements.Insert(0, new OutputTemplateStatement(output));
       return KnowledgeBase.AddTopicRule(label, CurrentTopic, statements);
     }
 

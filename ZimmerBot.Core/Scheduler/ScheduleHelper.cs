@@ -27,7 +27,7 @@ namespace ZimmerBot.Core.Scheduler
       string stateJson = (context.Request.State != null ? JsonConvert.SerializeObject(context.Request.State) : null);
 
       IJobDetail job = JobBuilder.Create<ScheduledBotCallback>()
-        .WithIdentity(at.ToString(), context.Request.SessionId)
+        .WithIdentity(Guid.NewGuid().ToString(), context.Request.SessionId)
         .UsingJobData("Message", message)
         .UsingJobData("State", stateJson)
         .UsingJobData("SessionId", context.Request.SessionId)
