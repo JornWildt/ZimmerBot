@@ -61,7 +61,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       StandardRule r = ParseRule(@"
 > aaa
-! every 30");
+! every 30
+: Another 30 seconds.");
 
       Assert.IsNotNull(r.Trigger.Schedule);
       Assert.AreEqual(TimeSpan.FromSeconds(30), r.Trigger.Schedule.Value);

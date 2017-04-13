@@ -11,6 +11,7 @@
   public Statement statement;
   public List<Statement> statementList;
   public WRegexBase regex;
+  public List<WRegexBase> regexList;
   public Expression expr;
   public List<Expression> exprList;
   public OutputTemplate template;
@@ -104,9 +105,9 @@ ruleSeq
   ;
 
 rule
-  : ruleLabel input ruleModifierSeq statementSeq
+  : ruleLabel inputSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
@@ -122,6 +123,11 @@ ruleLabel
 /******************************************************************************
   INPUT
 ******************************************************************************/
+
+inputSeq
+  : inputSeq input { $$.regexList = $1.regexList; $1.regexList.Add($2.regex); }
+  | input          { $$.regexList = new List<WRegexBase>() { $1.regex }; }
+  ;
 
 input
   : T_GT inputPatternSeq { $$.regex = $2.regex; }
@@ -180,9 +186,18 @@ schedule
   STATEMENT
 ******************************************************************************/
 
+/* Statement sequence cannot be empty. Otherwise we cannot have multi triggers like this:
+   
+   > Aaa
+   > Bbb
+   : Output
+
+   The above could be either a trigger "Aaa" with empty statement list OR two triggers "Aaa" and "Bbb" for the same list.
+*/
+
 statementSeq
   : statementSeq statement  { $1.statementList.Add($2.statement); $$.statementList = $1.statementList; }
-  | /* empty */             { $$.statementList = new List<Statement>(); }
+  | statement               { $$.statementList = new List<Statement>() { $1.statement }; }
   ;
 
 topicStatementSeq

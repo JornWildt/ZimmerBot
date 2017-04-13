@@ -101,9 +101,9 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected StandardRule AddRule(string label, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    protected StandardRule AddRule(string label, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
-      return KnowledgeBase.AddRule(label, CurrentTopic, pattern, modifiers, statements);
+      return KnowledgeBase.AddRule(label, CurrentTopic, patterns, modifiers, statements);
     }
 
 

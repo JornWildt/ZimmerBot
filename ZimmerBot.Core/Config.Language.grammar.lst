@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 11-04-2017 13:52:49>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 13-04-2017 21:56:30>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 11-04-2017 13:52:54
+//  DateTime: 13-04-2017 21:56:32
 //  UserName: Jorn
 // ==========================================================================
 
@@ -89,11 +89,11 @@ configuration
   | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
     { StartTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
-    { RegisterTopic($2.s, $4.stringList, $8.ruleList); }
+    { FinalizeTopic($2.s); }
   | T_TOPIC T_WORD
     { StartTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
-    { RegisterTopic($2.s, null, $5.ruleList); }
+    { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
   | T_RDF_IMPORT T_STRING            
@@ -115,16 +115,13 @@ ruleSeq
   ;
 
 rule
-  : ruleLabel input ruleModifierSeq statementSeq
+  : ruleLabel inputSeq ruleModifierSeq statementSeq
     { 
       $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
     }
-  | ruleLabel T_TOPICRULE  outputTemplateContent 
-    { 
-      $$.rule = AddTopicRule($1.s, $3.ruleModifierList, $4.statementList);
-//-----------------------------------------------------^^^
-// Error: Semantic action index is out of bounds
-// ---------------------------------------------
+  | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
+    {
+      $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
     }
   ;
 
@@ -136,6 +133,14 @@ ruleLabel
 /******************************************************************************
   INPUT
 ******************************************************************************/
+
+inputSeq
+  : inputSeq input { $$.regex = $2.regex; }
+  | input          { $$.regex = $2.regex; }
+//----------------------------^^^
+// Error: Semantic action index is out of bounds
+// ---------------------------------------------
+  ;
 
 input
   : T_GT inputPatternSeq { $$.regex = $2.regex; }
@@ -199,9 +204,18 @@ statementSeq
   | /* empty */             { $$.statementList = new List<Statement>(); }
   ;
 
+topicStatementSeq
+  : topicStatementSeq internalStatement  { $1.statementList.Add($2.statement); $$.statementList = $1.statementList; }
+  | /* empty */                          { $$.statementList = new List<Statement>(); }
+  ;
+
 statement
   : outputTemplateSequence  { $$.statement = new OutputTemplateStatement($1.template); }
-  | stmtCall                { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
+  | internalStatement       { $$.statement = $1.statement; }
+  ;
+
+internalStatement
+  : stmtCall                { $$.statement = new CallStatment($1.expr as FunctionCallExpr); }
   | stmtSet                 { $$.statement = $1.statement; }
   | stmtAnswer              { $$.statement = $1.statement; }
   | stmtContinue            { $$.statement = $1.statement; }
@@ -220,10 +234,7 @@ outputTemplateSequence2
   ;
 
 outputTemplate
-  : T_COLON
-      { ((ConfigScanner)Scanner).StringInput = new StringBuilder(); ((ConfigScanner)Scanner).BEGIN(2); } 
-    T_OUTPUT 
-      { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
+  : T_COLON outputTemplateContent { $$.s = $2.s; }
   ;
 
 outputTemplateContent
@@ -231,6 +242,14 @@ outputTemplateContent
     T_OUTPUT 
       { $$.s = ((ConfigScanner)Scanner).StringInput.ToString().Trim(); }
   ;
+
+topicOutput
+  : outputTemplateContent outputTemplateSequence2 {  $$.template = new OutputTemplate("default", $1.s, $2.stringList); }
+  ;
+
+/******************************************************************************
+  STATEMENTS
+******************************************************************************/
 
 stmtCall
   : T_CALL exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($2.expr, $4.exprList); }

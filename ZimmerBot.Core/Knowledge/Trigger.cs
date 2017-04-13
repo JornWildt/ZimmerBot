@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Quartz;
 using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.WordRegex;
@@ -25,6 +26,26 @@ namespace ZimmerBot.Core.Knowledge
       {
         Regex = new WRegex(pattern);
         RegexSize = pattern.CalculateSize();
+      }
+    }
+
+
+    public Trigger(List<WRegexBase> patterns)
+    {
+      if (patterns == null || patterns.Count == 0 || patterns[0] == null)
+      {
+        Regex = null;
+        RegexSize = 0;
+      }
+      else if (patterns.Count == 1)
+      {
+        Regex = new WRegex(patterns[0]);
+        RegexSize = Regex.CalculateSize();
+      }
+      else if (patterns.Count > 1)
+      {
+        Regex = new WRegex(new ChoiceWRegex(patterns));
+        RegexSize = Regex.CalculateSize();
       }
     }
 

@@ -23,10 +23,10 @@ namespace ZimmerBot.Core.Knowledge
 
 
 
-    public StandardRule(KnowledgeBase kb, string label, Topic topic, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    public StandardRule(KnowledgeBase kb, string label, Topic topic, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
       : base(kb, label, topic, statements)
     {
-      Trigger = new Trigger(pattern);
+      Trigger = new Trigger(patterns);
 
       if (modifiers != null)
         foreach (var m in modifiers)

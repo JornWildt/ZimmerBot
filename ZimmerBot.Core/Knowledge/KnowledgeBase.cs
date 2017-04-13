@@ -134,14 +134,14 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public StandardRule AddRule(string label, string topicName, WRegexBase pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    public StandardRule AddRule(string label, string topicName, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
-      Logger.DebugFormat("Found rule: {0}", pattern);
+      Logger.DebugFormat("Found rule: {0}", patterns.Select(t => t?.ToString()).Aggregate((a,b) => ">" + a + " >" + b));
 
       topicName = topicName ?? DefaultTopicName;
       Topic topic = Topics[topicName];
 
-      StandardRule r = new StandardRule(this, label, topic, pattern, modifiers, statements);
+      StandardRule r = new StandardRule(this, label, topic, patterns, modifiers, statements);
       topic.AddRule(r);
 
       return r;

@@ -122,6 +122,8 @@ namespace ZimmerBot.Core.Knowledge
             ? new Request(inputContext.Request, null) { RuleLabel = inputContext.ContinuationChoice.Text }
             : new Request(inputContext.Request, inputContext.ContinuationChoice.Text));
 
+          request.BotId = inputContext.Request.BotId;
+
           InvokeStatements(
             inputContext.RequestContext,
             request,
