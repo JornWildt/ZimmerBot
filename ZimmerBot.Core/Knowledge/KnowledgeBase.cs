@@ -195,50 +195,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-#if false
-    public void FindCurrentTopic(TriggerEvaluationContext context)
-    {
-      int bestWordMatchCount = 1;
-      List<Topic> bestTopics = new List<Topic>();
-
-      if (context.InputContext.Input != null)
-      {
-        foreach (Topic t in Topics.Values)
-        {
-          int matchCount = 0;
-          foreach (string word in t.TriggerWords)
-          {
-            foreach (var token in context.InputContext.Input)
-            {
-              if (word.Equals(token.OriginalText, StringComparison.CurrentCultureIgnoreCase))
-                ++matchCount;
-            }
-          }
-
-          if (matchCount == bestWordMatchCount)
-          {
-            bestTopics.Add(t);
-          }
-          else if (matchCount > bestWordMatchCount)
-          {
-            bestWordMatchCount = matchCount;
-            bestTopics.Clear();
-            bestTopics.Add(t);
-          }
-        }
-
-        string currentTopicName = context.InputContext.Session.CurrentTopic();
-
-        string selectedTopicName = bestTopics.Count > 0
-          ? bestTopics[Randomizer.Next(bestTopics.Count)].Name
-          : (currentTopicName ?? DefaultTopicName);
-
-        context.InputContext.Session.SetCurrentTopic(selectedTopicName);
-      }
-    }
-#endif
-
-
     public ReactionSet FindMatchingReactions(TriggerEvaluationContext context, ReactionSet reactions = null)
     {
       if (reactions == null)
@@ -262,18 +218,13 @@ namespace ZimmerBot.Core.Knowledge
         Topic topic = Topics[topicName];
 
         // Does user input match anything in current topic?
-        foreach (StandardRule r in topic.StandardRules)
-        {
-          IList<Reaction> result = r.CalculateReactions(context);
-          foreach (Reaction reaction in result)
-            reactions.Add(reaction);
-        }
+        SelectReactionsFromTopic(topic, reactions, context, 2.0);
 
         // No match in current topic - use topic story reaction
         int topicRuleIndex = context.InputContext.Session.GetTopicRuleIndex(topicName);
         if (reactions.Count == 0 && topic.TopicRules.Count > topicRuleIndex)
         {
-          foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context))
+          foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context, 2.0))
             reactions.Add(reaction);
 
           context.InputContext.Session.SetTopicRuleIndex(topicName, topicRuleIndex + 1);
@@ -283,10 +234,35 @@ namespace ZimmerBot.Core.Knowledge
             context.InputContext.Session.SetCurrentTopic(null);
         }
 
-        // FIXME: look at default topic
+        // Try all other topics than the current with a smaller weight applied
+        string nextTopicName = null;
+
+        foreach (Topic t in Topics.Where(tp => tp.Key != topicName).Select(tp => tp.Value))
+        {
+          if (SelectReactionsFromTopic(t, reactions, context, 1.0))
+            nextTopicName = t.Name;
+        }
+
+        if (nextTopicName != null)
+          context.InputContext.Session.SetCurrentTopic(nextTopicName);
       }
 
       return reactions;
+    }
+
+
+    public bool SelectReactionsFromTopic(Topic topic, ReactionSet reactions, TriggerEvaluationContext context, double weight)
+    {
+      bool reactionsAdded = false;
+      foreach (StandardRule r in topic.StandardRules)
+      {
+        IList<Reaction> result = r.CalculateReactions(context, weight);
+        foreach (Reaction reaction in result)
+          if (reactions.Add(reaction))
+            reactionsAdded = true;
+      }
+
+      return reactionsAdded;
     }
 
 

@@ -28,7 +28,7 @@ namespace ZimmerBot.Core.Tests
     protected IList<Reaction> CalculateReactions(StandardRule r, string text)
     {
       TriggerEvaluationContext context = BuildEvaluationContextFromInput(r.KnowledgeBase, text);
-      return r.CalculateReactions(context);
+      return r.CalculateReactions(context, 1.0);
     }
 
 

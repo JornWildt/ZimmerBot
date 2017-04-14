@@ -43,6 +43,74 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void CanSelectRuleFromInactiveTopicAndActivateIt()
+    {
+      // Arrange
+      BuildBot(@"
+
+> help
+: It is okay
+
+! topic Zombies
+{
+  T> Zombies are foul creatures of the dark
+  T> Run!
+  T> They are comming!
+
+  > where is the zombie
+  : In the darkness
+
+  > help
+  : The zombiecalypse is comming! Run, you fools, run!
+}
+");
+
+      // Act
+      AssertDialog("Xxx", "???", "This does not match anything");
+      AssertDialog("help", "It is okay", "No topic started yet - match default help");
+      AssertDialog("Where is the zombie?", "In the darkness", "Start topic");
+      AssertDialog("help", "The zombiecalypse is comming! Run, you fools, run!", "Topic started - match topic help");
+      AssertDialog("See, a zombie!", "Zombies are foul creatures of the dark", "First line in topic");
+    }
+
+
+    [Test]
+    public void CanHandleAnswer()
+    {
+      // Arrange
+      BuildBot(@"
+! topic Zombies
+{
+  T> Zombies contaminates
+  ! answer
+  {
+    > how
+    : through a virus
+  }
+
+  T> Zombies are slow
+  ! answer
+  {
+    > why
+    : they are dead
+      +: and rotten!
+  }
+
+  > where is the zombie
+  : In the darkness
+}
+");
+
+      // Act
+      AssertDialog("Where is the zombie?", "In the darkness", "Start topic");
+      AssertDialog("Duh", "Zombies contaminates", "Expect answer");
+      AssertDialog("how", "through a virus");
+      AssertDialog("Duh", "Zombies are slow");
+      AssertDialog("why", "they are dead (...)");
+    }
+
+
+    [Test]
     [Ignore("Not ready yet")]
     public void CanSwitchBetweenTopics()
     {

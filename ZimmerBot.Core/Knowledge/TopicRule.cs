@@ -12,10 +12,10 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public override IList<Reaction> CalculateReactions(TriggerEvaluationContext context)
+    public override IList<Reaction> CalculateReactions(TriggerEvaluationContext context, double weight)
     {
       List<Reaction> reactions = new List<Reaction>();
-      MatchResult result = new MatchResult(1.0);
+      MatchResult result = new MatchResult(1.0 * weight);
       reactions.Add(new Reaction(new ResponseGenerationContext(context.InputContext, result), this, null));
       return reactions;
     }

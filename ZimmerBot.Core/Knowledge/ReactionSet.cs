@@ -18,15 +18,17 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Add(Reaction r)
+    public bool Add(Reaction r)
     {
       if (Reactions.Count > 0 && r.Score < Reactions[0].Score)
-        return;
+        return false;
 
       if (Reactions.Count > 0  &&  r.Score > Reactions[0].Score)
         Reactions.Clear();
 
       Reactions.Add(r);
+
+      return true;
     }
 
 

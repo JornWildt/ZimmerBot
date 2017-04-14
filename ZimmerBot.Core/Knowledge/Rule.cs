@@ -46,7 +46,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public abstract IList<Reaction> CalculateReactions(TriggerEvaluationContext context);
+    public abstract IList<Reaction> CalculateReactions(TriggerEvaluationContext context, double weight);
 
 
     public static Random Randomizer = new Random();

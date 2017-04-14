@@ -74,7 +74,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public override IList<Reaction> CalculateReactions(TriggerEvaluationContext context)
+    public override IList<Reaction> CalculateReactions(TriggerEvaluationContext context, double weight)
     {
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)
         return new List<Reaction>();
@@ -85,6 +85,9 @@ namespace ZimmerBot.Core.Knowledge
 
       if (Weight != null)
         result.Score = result.Score * Weight.Value;
+
+      // Adjust with external weight
+      result.Score = result.Score * weight;
 
       // FIXME: Why exactly 0.5?
       if (result.Score < 0.5)
