@@ -41,6 +41,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public override string ToString()
+    {
+      return string.IsNullOrEmpty(Label) ? "" : "<" + Label + ">. Statements: #" + Statements.Count;
+    }
+
+
     public virtual void RegisterParentRule(Rule parentRule)
     {
     }
