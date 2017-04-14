@@ -132,6 +132,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public override string ToString()
+    {
+      return Regex != null ? Regex.ToString() + $" [Size: {RegexSize}]" : "<empty>";
+    }
+
+
     public MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
       if (!context.ExecuteScheduledRules && Schedule != null)

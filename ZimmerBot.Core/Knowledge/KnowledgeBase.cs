@@ -65,7 +65,7 @@ namespace ZimmerBot.Core.Knowledge
       LabelToRuleMap = new Dictionary<string, Rule>();
       SparqlForEntities = new List<string>();
 
-      Topics[DefaultTopicName] = new Topic(DefaultTopicName);
+      Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
 
       InputPipeline = new Pipeline<InputPipelineItem>();
       InputPipeline.AddHandler(new WordTaggingStage());
@@ -217,6 +217,8 @@ namespace ZimmerBot.Core.Knowledge
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
         Topic topic = Topics[topicName];
 
+        BotUtility.EvaluationLogger.Debug($"Matching: {context.InputContext.Request.Input}");
+
         // Does user input match anything in current topic?
         SelectReactionsFromTopic(topic, reactions, context, 2.0);
 
@@ -235,16 +237,16 @@ namespace ZimmerBot.Core.Knowledge
         }
 
         // Try all other topics than the current with a smaller weight applied
-        string nextTopicName = null;
+        Topic nextTopic = null;
 
         foreach (Topic t in Topics.Where(tp => tp.Key != topicName).Select(tp => tp.Value))
         {
           if (SelectReactionsFromTopic(t, reactions, context, 1.0))
-            nextTopicName = t.Name;
+            nextTopic = t;
         }
 
-        if (nextTopicName != null)
-          context.InputContext.Session.SetCurrentTopic(nextTopicName);
+        if (nextTopic != null && nextTopic.IsAutomaticallySelectable)
+          context.InputContext.Session.SetCurrentTopic(nextTopic.Name);
       }
 
       return reactions;
@@ -253,13 +255,18 @@ namespace ZimmerBot.Core.Knowledge
 
     public bool SelectReactionsFromTopic(Topic topic, ReactionSet reactions, TriggerEvaluationContext context, double weight)
     {
+      BotUtility.EvaluationLogger.Debug($"Select reactions from topic {topic.Name} with weight {weight}");
+
       bool reactionsAdded = false;
       foreach (StandardRule r in topic.StandardRules)
       {
         IList<Reaction> result = r.CalculateReactions(context, weight);
         foreach (Reaction reaction in result)
+        {
+          BotUtility.EvaluationLogger.Debug($"Got '{r.ToString()}' with score {reaction.Score}");
           if (reactions.Add(reaction))
             reactionsAdded = true;
+        }
       }
 
       return reactionsAdded;

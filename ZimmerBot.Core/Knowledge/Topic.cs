@@ -8,6 +8,8 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Name { get; protected set; }
 
+    public bool IsAutomaticallySelectable { get; protected set; }
+
     public IList<StandardRule> StandardRules { get; protected set; }
 
     public IList<TopicRule> TopicRules { get; protected set; }
@@ -15,11 +17,12 @@ namespace ZimmerBot.Core.Knowledge
     public IEnumerable<Rule> AllRules { get { return StandardRules.Cast<Rule>().Concat(TopicRules.Cast<Rule>()); } }
 
 
-    public Topic(string name)
+    public Topic(string name, bool isAutomaticallySelectable = true)
     {
       Condition.Requires(name, nameof(name)).IsNotNullOrEmpty(); ;
 
       Name = name;
+      IsAutomaticallySelectable = isAutomaticallySelectable;
       StandardRules = new List<StandardRule>();
       TopicRules = new List<TopicRule>();
     }

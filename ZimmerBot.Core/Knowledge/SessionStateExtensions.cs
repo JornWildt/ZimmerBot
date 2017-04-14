@@ -99,6 +99,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public static void SetCurrentTopic(this Session session, string topic)
     {
+      BotUtility.EvaluationLogger.Debug($"Set current topic to {topic}");
       session.Store[CurrentTopic_SessionKey] = topic;
     }
 

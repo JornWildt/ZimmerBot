@@ -8,7 +8,9 @@ namespace ZimmerBot.Core.Knowledge
 {
   public static class BotUtility
   {
-    static ILog DiaLogger = LogManager.GetLogger("DialogLogger");
+    public static readonly ILog EvaluationLogger = LogManager.GetLogger("EvaluationLogger");
+
+    public static readonly ILog DiaLogger = LogManager.GetLogger("DialogLogger");
 
     static INodeFactory NodeFactory = new NodeFactory();
 

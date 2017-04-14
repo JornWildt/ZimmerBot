@@ -21,6 +21,12 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    public override string ToString()
+    {
+      return Expr.ToString();
+    }
+
+
     public double CalculateSize()
     {
       return Expr.CalculateSize();

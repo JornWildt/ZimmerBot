@@ -111,6 +111,93 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void CanMarkRulesAsInactiveWithoutTopic()
+    {
+      // Arrange
+      BuildBot(@"
+
+> now what
+! weight 0.5
+: Relax
+
+! topic Zombies
+{
+  T> Zombies are foul creatures of the dark
+
+  > where is the zombie
+  : In the darkness
+
+  > now what
+  : Run!
+}
+");
+
+      // Act
+      AssertDialog("now what", "Relax");
+      AssertDialog("now what", "Relax");
+      AssertDialog("where is the zombie", "In the darkness");
+      AssertDialog("now what", "Run!");
+    }
+
+
+    [Test]
+    public void CanHandleAnswersInTopicRules()
+    {
+      BuildBot(@"
+! topic Zombies
+{
+  > Zombie
+  : Run!
+
+  > xxx
+  : Agree?
+  ! answer
+  {
+    > yes
+    : Good
+
+    > no
+    : Sorry
+  }
+}
+");
+
+      AssertDialog("yes", "???", "Not expected at this time");
+      AssertDialog("zombie", "Run!", "Start topic");
+      AssertDialog("xxx", "Agree?", "Register expected answers");
+      AssertDialog("yes", "Good", "Should match expected 'yes' answer");
+    }
+
+
+    [Test]
+    public void ItDoesNotActivateDefaultTopicAutomatically()
+    {
+      BuildBot(@"
+> why
+: Because
+
+> xxx
+: Not a zombie
+
+> yyy
+: Neither a zombie
+
+! topic Zombies
+{
+  > Zombie
+  : Run!
+
+  > yyy
+  : Still zombies
+}
+");
+      AssertDialog("Zombie", "Run!", "Start topic");
+      AssertDialog("xxx", "Not a zombie", "Match default topic - but do not make it current");
+      AssertDialog("yyy", "Still zombies", "Match in topic");
+    }
+
+
+    [Test]
     [Ignore("Not ready yet")]
     public void CanSwitchBetweenTopics()
     {

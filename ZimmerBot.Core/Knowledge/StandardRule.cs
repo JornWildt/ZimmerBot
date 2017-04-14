@@ -34,6 +34,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public override string ToString()
+    {
+      string t = Trigger != null ? Trigger.ToString() : "<empty>";
+      return $"{t} (w: {Weight}) => " + base.ToString();
+    }
+
 
     public StandardRule WithCondition(Expression c)
     {
