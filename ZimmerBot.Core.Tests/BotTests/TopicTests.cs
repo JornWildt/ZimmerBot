@@ -111,36 +111,6 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
-    public void CanMarkRulesAsInactiveWithoutTopic()
-    {
-      // Arrange
-      BuildBot(@"
-
-> now what
-! weight 0.5
-: Relax
-
-! topic Zombies
-{
-  T> Zombies are foul creatures of the dark
-
-  > where is the zombie
-  : In the darkness
-
-  > now what
-  : Run!
-}
-");
-
-      // Act
-      AssertDialog("now what", "Relax");
-      AssertDialog("now what", "Relax");
-      AssertDialog("where is the zombie", "In the darkness");
-      AssertDialog("now what", "Run!");
-    }
-
-
-    [Test]
     public void CanHandleAnswersInTopicRules()
     {
       BuildBot(@"
@@ -194,6 +164,33 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("Zombie", "Run!", "Start topic");
       AssertDialog("xxx", "Not a zombie", "Match default topic - but do not make it current");
       AssertDialog("yyy", "Still zombies", "Match in topic");
+    }
+
+
+    [Test]
+    public void CanMarkTopicRuleAsNotRepeating()
+    {
+      BuildBot(@"
+> xxx
+: Wow zombie
+! not_repeatable
+! start_topic Zombies
+
+> *
+! weight 0.999
+: No more
+
+! topic Zombies
+{
+  T> Zombie 1
+
+  T> Zombie 2
+}
+");
+      AssertDialog("xxx", "Wow zombie", "Start topic");
+      AssertDialog("kkkk", "Zombie 1", "Is in topic");
+      AssertDialog("xxx", "Zombie 2", "Not starting topic again");
+      AssertDialog("xxx", "No more", "Topic empty, no exact match anymore");
     }
 
 

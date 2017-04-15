@@ -68,6 +68,7 @@
     <Compile Include="BotTests\InfiniteLoopProtectionTests.cs" />
     <Compile Include="BotTests\MultiTriggerRuleTests.cs" />
     <Compile Include="BotTests\OutputTests.cs" />
+    <Compile Include="BotTests\RepeatableTests.cs" />
     <Compile Include="BotTests\RepetitionAvoidanceTests.cs" />
     <Compile Include="BotTests\TestHelper.cs" />
     <Compile Include="BotTests\TopicTests.cs" />

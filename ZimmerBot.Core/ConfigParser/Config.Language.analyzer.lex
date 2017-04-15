@@ -59,6 +59,8 @@ T\>         { return (int)Token.T_TOPICRULE; }
 ![ ]*topic       { return (int)Token.T_TOPIC; }
 ![ ]*start_topic { return (int)Token.T_STARTTOPIC; }
 ![ ]*stop_output { return (int)Token.T_STOPOUTPUT; }
+![ ]*repeatable        { return (int)Token.T_REPEATABLE; }
+![ ]*not_repeatable    { return (int)Token.T_NOTREPEATABLE; }
 ![ ]*continue          { return (int)Token.T_CONTINUE; }
 ![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }
 ![ ]*continue[ ]+with  { return (int)Token.T_CONTINUE_WITH; }

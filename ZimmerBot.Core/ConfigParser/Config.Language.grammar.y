@@ -29,7 +29,8 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
+%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_TOPICRULE
@@ -216,7 +217,9 @@ internalStatement
   | stmtAnswer              { $$.statement = $1.statement; }
   | stmtContinue            { $$.statement = $1.statement; }
   | stmtStopOutput          { $$.statement = $1.statement; }
-  | stmtStartTopic          { $$.statement = $1.statement; }
+  | T_STARTTOPIC T_WORD     { $$.statement = new StartTopicStatement($2.s); }
+  | T_REPEATABLE            { $$.statement = new RepeatableStatement(true); }
+  | T_NOTREPEATABLE         { $$.statement = new RepeatableStatement(false); }
   ;
 
 outputTemplateSequence

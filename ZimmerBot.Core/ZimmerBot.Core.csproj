@@ -120,6 +120,7 @@
     <Compile Include="Statements\AnswerStatement.cs" />
     <Compile Include="Statements\CallStatment.cs" />
     <Compile Include="ConfigParser\ConfigurationParser.cs" />
+    <Compile Include="Statements\RepeatableStatement.cs" />
     <Compile Include="Statements\ContinueStatement.cs" />
     <Compile Include="Statements\OutputTemplate.cs" />
     <Compile Include="Statements\StartTopicStatement.cs" />

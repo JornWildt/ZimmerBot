@@ -95,10 +95,6 @@ namespace ZimmerBot.Core.Knowledge
       // Adjust with external weight
       result.Score = result.Score * weight;
 
-      // FIXME: Why exactly 0.5?
-      if (result.Score < 0.5)
-        return new List<Reaction>();
-
       List<Reaction> reactions = SelectReactions(context, result);
       return reactions;
     }
@@ -116,7 +112,7 @@ namespace ZimmerBot.Core.Knowledge
         // Add one reaction for each output statement
         reactions = Statements
           .OfType<OutputTemplateStatement>()
-          .Select(s => new Reaction(MakeWeightedReaction(context, result, s.Template), this, s.Template.Id))
+          .Select(s => new Reaction(MakeWeightedReaction(context, result, s.Template), this, s.Template.Id))          
           .ToList();
       }
 
@@ -124,7 +120,9 @@ namespace ZimmerBot.Core.Knowledge
       if (reactions.Count == 0)
         reactions.Add(new Reaction(new ResponseGenerationContext(context.InputContext, result), this, null));
 
-      return reactions;
+      return reactions
+             .Where(s => s.Score >= 0.5) // FIXME: Why exactly 0.5?
+             .ToList();
     }
 
 
@@ -134,6 +132,7 @@ namespace ZimmerBot.Core.Knowledge
 
       // Reduce the amount of repetition in output by lowering the reaction score by the number of times it has been used
       double score = result.Score * Math.Pow(0.99, outputUsageCount);
+      //double score = result.Score * (outputUsageCount > 0 ? 0.0 : 1.0);
 
       ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new MatchResult(score, result.Matches));
       return rc;

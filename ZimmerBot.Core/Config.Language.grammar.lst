@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 13-04-2017 21:56:30>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 15-04-2017 17:26:41>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 13-04-2017 21:56:32
+//  DateTime: 15-04-2017 17:30:54
 //  UserName: Jorn
 // ==========================================================================
 
@@ -22,6 +22,7 @@
   public Statement statement;
   public List<Statement> statementList;
   public WRegexBase regex;
+  public List<WRegexBase> regexList;
   public Expression expr;
   public List<Expression> exprList;
   public OutputTemplate template;
@@ -39,7 +40,8 @@
 
 %token T_COLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
+%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_TOPICRULE
@@ -66,6 +68,8 @@
 %token T_DOLLAR
 
 %%
+// Warning: NonTerminal symbol "stmtStartTopic" is unreachable
+// -----------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -117,7 +121,7 @@ ruleSeq
 rule
   : ruleLabel inputSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddRule($1.s, $2.regex, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
@@ -135,11 +139,8 @@ ruleLabel
 ******************************************************************************/
 
 inputSeq
-  : inputSeq input { $$.regex = $2.regex; }
-  | input          { $$.regex = $2.regex; }
-//----------------------------^^^
-// Error: Semantic action index is out of bounds
-// ---------------------------------------------
+  : inputSeq input { $$.regexList = $1.regexList; $1.regexList.Add($2.regex); }
+  | input          { $$.regexList = new List<WRegexBase>() { $1.regex }; }
   ;
 
 input
@@ -199,9 +200,18 @@ schedule
   STATEMENT
 ******************************************************************************/
 
+/* Statement sequence cannot be empty. Otherwise we cannot have multi triggers like this:
+   
+   > Aaa
+   > Bbb
+   : Output
+
+   The above could be either a trigger "Aaa" with empty statement list OR two triggers "Aaa" and "Bbb" for the same list.
+*/
+
 statementSeq
   : statementSeq statement  { $1.statementList.Add($2.statement); $$.statementList = $1.statementList; }
-  | /* empty */             { $$.statementList = new List<Statement>(); }
+  | statement               { $$.statementList = new List<Statement>() { $1.statement }; }
   ;
 
 topicStatementSeq
@@ -220,7 +230,9 @@ internalStatement
   | stmtAnswer              { $$.statement = $1.statement; }
   | stmtContinue            { $$.statement = $1.statement; }
   | stmtStopOutput          { $$.statement = $1.statement; }
-  | stmtStartTopic          { $$.statement = $1.statement; }
+  | T_STARTTOPIC T_WORD     { $$.statement = new StartTopicStatement($2.s); }
+  | T_REPEATABLE            { $$.statement = new RepeatableStatement(true); }
+  | T_NOTREPEATABLE         { $$.statement = new RepeatableStatement(false); }
   ;
 
 outputTemplateSequence
