@@ -106,6 +106,8 @@ namespace ZimmerBot.Core.Knowledge
       if (++inputContext.RepetitionCount >= AppSettings.MaxRecursionCount)
         throw new RepetitionException($"Stopping repeated evaluation of {inputContext.RepetitionCount} tries.");
 
+      BotUtility.EvaluationLogger.Debug($"Invoking with input: {inputContext.Request.Input}");
+
       var pipelineItem = new InputPipelineItem(inputContext);
       inputContext.KnowledgeBase.InputPipeline.Invoke(pipelineItem);
       output.AddRange(pipelineItem.Output);

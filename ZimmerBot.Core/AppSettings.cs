@@ -5,6 +5,11 @@ namespace ZimmerBot.Core
 {
   public static class AppSettings
   {
+    public static readonly AppSetting<string> LanguageDirectory = new AppSetting<string>("ZimmerBot.LanguageDirectory", ".");
+    public static readonly AppSetting<string> Language = new AppSetting<string>("ZimmerBot.Language");
+    public static readonly AppSetting<bool> EnableStemming = new AppSetting<bool>("ZimmerBot.EnableStemming", true);
+    public static readonly AppSetting<bool> EnableSpellingCorrections = new AppSetting<bool>("ZimmerBot.EnableSpellingCorrections", true);
+
     public static readonly AppSetting<string> RDF_ImportDirectory = new AppSetting<string>("ZimmerBot.RDF.ImportDirectory");
     public static readonly AppSetting<string> RDF_DataDirectory = new AppSetting<string>("ZimmerBot.RDF.DataDirectory");
     public static readonly AppSetting<string> RDF_BaseUrl = new AppSetting<string>("ZimmerBot.RDF.BaseUrl", "http://zimmerbot.org/");

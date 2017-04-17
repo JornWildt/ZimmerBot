@@ -15,8 +15,7 @@ The Eliza clone should be the easiest to get something funny out of.
 
 ## Credits
 
-The ZimmerBot language is heavily inspired by both https://www.rivescript.com/ 
-and AIML http://www.alicebot.org/aiml.html.
+The ZimmerBot language is heavily inspired by ChatScript https://github.com/bwilcox-1234/ChatScript
 
 ZimmerBot itself builds on a lot of NuGet packages from various sources:
 
@@ -27,4 +26,15 @@ ZimmerBot itself builds on a lot of NuGet packages from various sources:
 - Quartz.net
 - Antlr4.StringTemplate
 - NUnit
+- NHunspell
 
+## Spelling corrections
+
+ZimmerBot does spell corrections and stemming using NHunspell. For this to work you need dictionary files to
+match the chosen language:
+
+* Download "xx_XX.dic" and "xx_XX.aff" files from where ever the language files are maintained. Save the files in the language file directory.
+  * Danish files can be found here: http://www.stavekontrolden.dk/
+* Set language with app-setting "ZimmerBot.Language" to your bot's language.
+* Set language file directory with app-setting "ZimmerBot.LanguageDirectory".
+* Spelling correction

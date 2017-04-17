@@ -68,6 +68,8 @@ namespace ZimmerBot.Core.Knowledge
       Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
 
       InputPipeline = new Pipeline<InputPipelineItem>();
+      InputPipeline.AddHandler(new SpellCheckerStage());
+      InputPipeline.AddHandler(new WordStemmerStage());
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new EntityTaggingStage());
       InputPipeline.AddHandler(new TopicAssigningStage());
@@ -216,8 +218,6 @@ namespace ZimmerBot.Core.Knowledge
       {
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
         Topic topic = Topics[topicName];
-
-        BotUtility.EvaluationLogger.Debug($"Matching: {context.InputContext.Request.Input}");
 
         // Does user input match anything in current topic?
         SelectReactionsFromTopic(topic, reactions, context, 2.0);

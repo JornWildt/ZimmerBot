@@ -20,6 +20,12 @@ namespace ZimmerBot.Core.Parser
     }
 
 
+    public ZToken(string t, ZToken src)
+      : this(t, src.Type)
+    {
+    }
+
+
     public ZToken(string t, TokenType type)
     {
       OriginalText = t;

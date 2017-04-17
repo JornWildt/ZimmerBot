@@ -23,6 +23,7 @@ namespace ZimmerBot.Core
           RDFProcessor.Initialize();
           StdSchedulerFactory.GetDefaultScheduler().Start();
           CryptoHelper.Initialize();
+          SpellChecker.Initialize();
           IsInitialized = true;
         }
       }
@@ -35,10 +36,11 @@ namespace ZimmerBot.Core
       {
         if (IsInitialized)
         {
+          SpellChecker.Shutdown();
           CryptoHelper.Shutdown();
           StdSchedulerFactory.GetDefaultScheduler().Shutdown();
-          AddOnHandling.AddOnLoader.ShutdownAddOns();
           RDFStoreRepository.Shutdown();
+          AddOnHandling.AddOnLoader.ShutdownAddOns();
           IsInitialized = false;
         }
       }

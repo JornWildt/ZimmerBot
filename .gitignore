@@ -2,6 +2,7 @@ bin/
 obj/
 *.user
 *.suo
+*.dll
 TestResult.xml
 *.VisualState.xml
 *.grammar.conflicts
@@ -15,3 +16,4 @@ Graphs/
 ConnectionStrings.config
 SciTE.session
 TinyVirtuoso/
+Languages/
