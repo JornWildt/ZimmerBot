@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 15-04-2017 17:26:41>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 17-04-2017 23:51:16>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 15-04-2017 17:30:54
+//  DateTime: 17-04-2017 23:51:19
 //  UserName: Jorn
 // ==========================================================================
 
@@ -41,7 +41,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
-%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_ENTITIES, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_TOPICRULE
@@ -100,6 +100,8 @@ configuration
     { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
+  | T_ENTITIES T_LPAR T_WORD T_RPAR
+    T_LBRACE wordSeqCommaSeq T_RBRACE
   | T_RDF_IMPORT T_STRING            
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     
@@ -345,6 +347,11 @@ wordSeq
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_WORD                       { $$.stringList = new List<string>(new string[] { $1.s }); }
+  ;
+
+wordSeqCommaSeq
+  : wordSeqCommaSeq T_COMMA wordSeq  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
+  | wordSeq                          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
 cwordSeq

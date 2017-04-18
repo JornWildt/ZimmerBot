@@ -47,6 +47,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected IDictionary<string, Rule> LabelToRuleMap { get; set; }
 
+    public EntityManager EntityManager { get; protected set; }
+
     protected IList<string> SparqlForEntities { get; set; }
 
     public KnowledgeBase()
@@ -63,6 +65,7 @@ namespace ZimmerBot.Core.Knowledge
       Entities = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
       EventHandlers = new Dictionary<Request.EventEnum, List<StandardRule>>();
       LabelToRuleMap = new Dictionary<string, Rule>();
+      EntityManager = new EntityManager();
       SparqlForEntities = new List<string>();
 
       Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
@@ -87,6 +90,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public void Run()
     {
+      EntityManager.UpdateStatistics();
+
       foreach (string s in SparqlForEntities)
       {
         Logger.DebugFormat("Run query for entities: {0}", s);
@@ -124,6 +129,12 @@ namespace ZimmerBot.Core.Knowledge
       Entity e = new Entity(label);
       Entities[e.Label] = e;
       return e;
+    }
+
+
+    public void RegisterEntityClass(string className, List<string> entityNames)
+    {
+      EntityManager.RegisterEntityClass(className, entityNames);
     }
 
 

@@ -64,6 +64,7 @@ T\>         { return (int)Token.T_TOPICRULE; }
 ![ ]*continue          { return (int)Token.T_CONTINUE; }
 ![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }
 ![ ]*continue[ ]+with  { return (int)Token.T_CONTINUE_WITH; }
+![ ]*entities          { return (int)Token.T_ENTITIES; }
 ![ ]*rdf_import        { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix        { return (int)Token.T_RDF_PREFIX; }
 ![ ]*rdf_entities      { return (int)Token.T_RDF_ENTITIES; }

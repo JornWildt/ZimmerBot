@@ -63,6 +63,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RegisterEntities(string className, List<string> entityNames)
+    {
+      KnowledgeBase.RegisterEntityClass(className, entityNames);
+    }
+
+
     protected WRegexBase BuildConceptWRegex(string s)
     {
       if (s == "%ENTITY")

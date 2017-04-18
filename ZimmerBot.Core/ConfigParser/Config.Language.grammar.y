@@ -1,4 +1,5 @@
 %namespace ZimmerBot.Core.ConfigParser
+%using System.Linq
 %using ZimmerBot.Core.WordRegex
 %using ZimmerBot.Core.Expressions
 %using ZimmerBot.Core.Statements
@@ -30,7 +31,7 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
-%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_ENTITIES, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_TOPICRULE
@@ -87,6 +88,9 @@ configuration
     { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
+  | T_ENTITIES T_LPAR T_WORD T_RPAR
+    T_LBRACE wordSeqCommaSeq T_RBRACE
+      { RegisterEntities($3.s, $6.stringList); }
   | T_RDF_IMPORT T_STRING            
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     
@@ -273,9 +277,6 @@ stmtStopOutput
   : T_STOPOUTPUT { $$.statement = new StopOutputStatement(); }
   ;
 
-stmtStartTopic
-  : T_STARTTOPIC T_WORD { $$.statement = new StartTopicStatement($2.s); }
-  ;
 
 /******************************************************************************
   EXPRESSION
@@ -332,6 +333,11 @@ wordSeq
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_WORD                       { $$.stringList = new List<string>(new string[] { $1.s }); }
+  ;
+
+wordSeqCommaSeq
+  : wordSeqCommaSeq T_COMMA wordSeq  { $$.stringList = $1.stringList; $$.stringList.Add($3.stringList.Aggregate((a,b) => a+" "+b)); }
+  | wordSeq                          { $$.stringList = new List<string>(new string[] { $1.stringList.Aggregate((a,b) => a+" "+b) }); }
   ;
 
 cwordSeq
