@@ -56,7 +56,6 @@ namespace ZimmerBot.Core.Knowledge
       {
         string word = tokens[t].OriginalText;
         labels[t] = new Label(null, 0);
-        double prob = 0.0;
 
         foreach (EntityClass ec in EntityClasses.Values)
         {
@@ -65,7 +64,6 @@ namespace ZimmerBot.Core.Knowledge
             double p = ec.ProbabilityFor(word, pos);
             if (p > 0.0 && (pos == 0 || t > 0 && labels[t - 1].Name == ec.ClassName && labels[t - 1].Position == pos - 1))
             {
-              prob = p;
               labels[t] = new Label(ec.ClassName, pos);
             }
           }

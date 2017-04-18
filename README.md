@@ -30,11 +30,12 @@ ZimmerBot itself builds on a lot of NuGet packages from various sources:
 
 ## Spelling corrections
 
-ZimmerBot does spell corrections and stemming using NHunspell. For this to work you need dictionary files to
+ZimmerBot does spelling corrections and stemming using NHunspell. For this to work you need dictionary files to
 match the chosen language:
 
 * Download "xx_XX.dic" and "xx_XX.aff" files from where ever the language files are maintained. Save the files in the language file directory.
   * Danish files can be found here: http://www.stavekontrolden.dk/
 * Set language with app-setting "ZimmerBot.Language" to your bot's language.
 * Set language file directory with app-setting "ZimmerBot.LanguageDirectory".
-* Spelling correction
+* Spelling correction can be disabled with "ZimmerBot.EnableSpellingCorrections".
+* Stemming can be disabled with "ZimmerBot.EnableStemming".
