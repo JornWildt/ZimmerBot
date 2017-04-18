@@ -40,7 +40,7 @@ namespace ZimmerBot.Console
             kb.LoadFromFiles(path);
         }
 
-        kb.Run();
+        kb.SetupComplete();
 
         Bot b = new Bot(kb);
 

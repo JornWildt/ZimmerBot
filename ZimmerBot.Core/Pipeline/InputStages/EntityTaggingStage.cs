@@ -13,25 +13,10 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
       ZTokenSequence input = item.Context.Input;
 
-      for (int i = 0; i < input.Count; ++i)
-      {
-        for (int j = input.Count-1; j >= i; --j)
-        {
-          string inputWord = input[i].OriginalText;
-          for (int k = i + 1; k <= j; ++k)
-            inputWord += " " + input[k].OriginalText;
+      ZTokenSequence output = item.Context.KnowledgeBase.EntityManager.CalculateLabels(input);
 
-          if (item.Context.KnowledgeBase.Entities.ContainsKey(inputWord))
-          {
-            input.RemoveRange(i + 1, j - i);
-            input[i] = new ZToken(item.Context.KnowledgeBase.Entities[inputWord].OriginalLabel, ZToken.TokenType.Entity);
-            ++i;
-          }
-
-          if (i >= input.Count)
-            break;
-        }
-      }
+      input.Clear();
+      input.AddRange(output);
     }
   }
 }

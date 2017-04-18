@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
 
@@ -23,6 +24,7 @@ namespace ZimmerBot.Core.Knowledge
 
     protected Dictionary<string, double[]> WordByPositionInCategoryProbability { get; set; }
 
+    static Regex LabelReducer = new Regex("[^\\w ]");
 
     public EntityClass(string className)
     {
@@ -35,6 +37,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public void AddEntity(string name)
     {
+      // Remove punctuation and other ignored characters
+      name = LabelReducer.Replace(name, " ");
+
       // Ignore repeated entities
       if (TokenizedEntityNames.ContainsKey(name))
         return;

@@ -13,23 +13,38 @@ namespace ZimmerBot.Core.Parser
 
     public TokenType Type { get; protected set; }
 
+    public string EntityClass { get; protected set; }
+
 
     public ZToken(string t)
-      : this(t, TokenType.Word)
+      : this(t, TokenType.Word, null)
     {
     }
 
 
     public ZToken(string t, ZToken src)
-      : this(t, src.Type)
+      : this(t, src.Type, src.EntityClass)
     {
     }
 
 
     public ZToken(string t, TokenType type)
+      : this(t, type, null)
+    {
+    }
+
+
+    public ZToken(string t, string entityClass)
+      : this(t, TokenType.Word, entityClass)
+    {
+    }
+
+
+    public ZToken(string t, TokenType type, string entityClass)
     {
       OriginalText = t;
       Type = type;
+      EntityClass = entityClass;
     }
 
 

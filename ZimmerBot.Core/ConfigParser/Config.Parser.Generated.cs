@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 18-04-2017 00:18:15
+// DateTime: 18-04-2017 16:39:59
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 18-04-2017 00:18:06>
+// Input file <ConfigParser\Config.Language.grammar.y - 18-04-2017 16:39:53>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -79,7 +79,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
   private static State[] states = new State[170];
   private static string[] nonTerms = new string[] {
       "main", "$accept", "itemSeq", "item", "configuration", "rule", "conceptPatternSeq", 
-      "wordCommaSeq", "Anon@1", "ruleSeq", "Anon@2", "statementSeq", "wordSeqCommaSeq", 
+      "wordCommaSeq", "Anon@1", "ruleSeq", "Anon@2", "statementSeq", "stringSeq", 
       "cwordSeq", "ruleLabel", "inputSeq", "ruleModifierSeq", "topicOutput", 
       "topicStatementSeq", "input", "inputPatternSeq", "inputPattern", "ruleModifier", 
       "condition", "weight", "schedule", "expr", "statement", "internalStatement", 
@@ -101,10 +101,10 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[9] = new State(new int[]{28,10,5,-7,11,-7,23,-7,15,-7,16,-7,17,-7,18,-7,41,-7,26,-7,42,-7,3,-7});
     states[10] = new State(new int[]{35,13,36,14},new int[]{-14,11,-47,15});
     states[11] = new State(new int[]{35,13,36,14,28,-17,5,-17,11,-17,23,-17,15,-17,16,-17,17,-17,18,-17,41,-17,26,-17,42,-17,3,-17},new int[]{-47,12});
-    states[12] = new State(-98);
-    states[13] = new State(-100);
-    states[14] = new State(-101);
-    states[15] = new State(-99);
+    states[12] = new State(-96);
+    states[13] = new State(-98);
+    states[14] = new State(-99);
+    states[15] = new State(-97);
     states[16] = new State(new int[]{35,13,36,14,28,-18,5,-18,11,-18,23,-18,15,-18,16,-18,17,-18,18,-18,41,-18,26,-18,42,-18,3,-18},new int[]{-47,12});
     states[17] = new State(new int[]{35,18});
     states[18] = new State(new int[]{29,19,31,-10},new int[]{-11,139});
@@ -243,12 +243,12 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[151] = new State(new int[]{35,152});
     states[152] = new State(new int[]{30,153});
     states[153] = new State(new int[]{31,154});
-    states[154] = new State(new int[]{35,97},new int[]{-13,155,-42,159});
+    states[154] = new State(new int[]{37,159},new int[]{-13,155});
     states[155] = new State(new int[]{32,156,28,157});
     states[156] = new State(-13);
-    states[157] = new State(new int[]{35,97},new int[]{-42,158});
-    states[158] = new State(new int[]{35,96,32,-96,28,-96});
-    states[159] = new State(new int[]{35,96,32,-97,28,-97});
+    states[157] = new State(new int[]{37,158});
+    states[158] = new State(-100);
+    states[159] = new State(-101);
     states[160] = new State(new int[]{37,161});
     states[161] = new State(-14);
     states[162] = new State(new int[]{35,163});
@@ -357,12 +357,12 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     rules[93] = new Rule(-42, new int[]{35});
     rules[94] = new Rule(-8, new int[]{-8,28,35});
     rules[95] = new Rule(-8, new int[]{35});
-    rules[96] = new Rule(-13, new int[]{-13,28,-42});
-    rules[97] = new Rule(-13, new int[]{-42});
-    rules[98] = new Rule(-14, new int[]{-14,-47});
-    rules[99] = new Rule(-14, new int[]{-47});
-    rules[100] = new Rule(-47, new int[]{35});
-    rules[101] = new Rule(-47, new int[]{36});
+    rules[96] = new Rule(-14, new int[]{-14,-47});
+    rules[97] = new Rule(-14, new int[]{-47});
+    rules[98] = new Rule(-47, new int[]{35});
+    rules[99] = new Rule(-47, new int[]{36});
+    rules[100] = new Rule(-13, new int[]{-13,28,37});
+    rules[101] = new Rule(-13, new int[]{37});
   }
 
   protected override void Initialize() {
@@ -396,7 +396,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 12: // configuration -> T_ON, T_LPAR, T_WORD, T_RPAR, T_LBRACE, statementSeq, T_RBRACE
 { RegisterEventHandler(ValueStack[ValueStack.Depth-5].s, ValueStack[ValueStack.Depth-2].statementList); }
         break;
-      case 13: // configuration -> T_ENTITIES, T_LPAR, T_WORD, T_RPAR, T_LBRACE, wordSeqCommaSeq, 
+      case 13: // configuration -> T_ENTITIES, T_LPAR, T_WORD, T_RPAR, T_LBRACE, stringSeq, 
                //                  T_RBRACE
 { RegisterEntities(ValueStack[ValueStack.Depth-5].s, ValueStack[ValueStack.Depth-2].stringList); }
         break;
@@ -646,25 +646,25 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.stringList = ValueStack[ValueStack.Depth-3].stringList; CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].s); }
         break;
       case 95: // wordCommaSeq -> T_WORD
-{ CurrentSemanticValue.stringList = new List<string>(new string[] { ValueStack[ValueStack.Depth-1].s }); }
+{ CurrentSemanticValue.stringList = new List<string>(); CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].s); }
         break;
-      case 96: // wordSeqCommaSeq -> wordSeqCommaSeq, T_COMMA, wordSeq
-{ CurrentSemanticValue.stringList = ValueStack[ValueStack.Depth-3].stringList; CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].stringList.Aggregate((a,b) => a+" "+b)); }
-        break;
-      case 97: // wordSeqCommaSeq -> wordSeq
-{ CurrentSemanticValue.stringList = new List<string>(new string[] { ValueStack[ValueStack.Depth-1].stringList.Aggregate((a,b) => a+" "+b) }); }
-        break;
-      case 98: // cwordSeq -> cwordSeq, cword
+      case 96: // cwordSeq -> cwordSeq, cword
 { CurrentSemanticValue.stringList = ValueStack[ValueStack.Depth-2].stringList; CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].s); }
         break;
-      case 99: // cwordSeq -> cword
+      case 97: // cwordSeq -> cword
 { CurrentSemanticValue.stringList = new List<string>(new string[] { ValueStack[ValueStack.Depth-1].s }); }
         break;
-      case 100: // cword -> T_WORD
+      case 98: // cword -> T_WORD
 { CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s; }
         break;
-      case 101: // cword -> T_CWORD
+      case 99: // cword -> T_CWORD
 { CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s; }
+        break;
+      case 100: // stringSeq -> stringSeq, T_COMMA, T_STRING
+{ CurrentSemanticValue.stringList = ValueStack[ValueStack.Depth-3].stringList; CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].s); }
+        break;
+      case 101: // stringSeq -> T_STRING
+{ CurrentSemanticValue.stringList = new List<string>(); CurrentSemanticValue.stringList.Add(ValueStack[ValueStack.Depth-1].s); }
         break;
     }
 #pragma warning restore 162, 1522

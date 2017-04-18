@@ -88,6 +88,7 @@ namespace ZimmerBot.Core.Tests
       KnowledgeBase kb = new KnowledgeBase();
       kb.Initialize(KnowledgeBase.InitializationMode.Clear);
       CfgParser.ParseConfigurationString(kb, s);
+      kb.SetupComplete();
       return kb;
     }
 

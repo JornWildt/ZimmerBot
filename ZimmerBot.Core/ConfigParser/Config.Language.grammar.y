@@ -89,7 +89,7 @@ configuration
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
   | T_ENTITIES T_LPAR T_WORD T_RPAR
-    T_LBRACE wordSeqCommaSeq T_RBRACE
+    T_LBRACE stringSeq T_RBRACE
       { RegisterEntities($3.s, $6.stringList); }
   | T_RDF_IMPORT T_STRING            
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
@@ -332,12 +332,7 @@ wordSeq
 
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
-  | T_WORD                       { $$.stringList = new List<string>(new string[] { $1.s }); }
-  ;
-
-wordSeqCommaSeq
-  : wordSeqCommaSeq T_COMMA wordSeq  { $$.stringList = $1.stringList; $$.stringList.Add($3.stringList.Aggregate((a,b) => a+" "+b)); }
-  | wordSeq                          { $$.stringList = new List<string>(new string[] { $1.stringList.Aggregate((a,b) => a+" "+b) }); }
+  | T_WORD                       { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
 cwordSeq
@@ -348,6 +343,11 @@ cwordSeq
 cword
   : T_WORD   { $$.s = $1.s; }
   | T_CWORD  { $$.s = $1.s; }
+  ;
+
+stringSeq
+  : stringSeq T_COMMA T_STRING { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
+  | T_STRING                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
 %%

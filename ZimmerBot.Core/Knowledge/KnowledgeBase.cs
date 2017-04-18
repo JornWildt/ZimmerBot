@@ -31,8 +31,6 @@ namespace ZimmerBot.Core.Knowledge
 
     public IDictionary<string, Concept> Concepts { get; protected set; }
 
-    public IDictionary<string, Entity> Entities { get; protected set; }
-
     public IDictionary<string,Topic> Topics { get; protected set; }
 
     public Topic DefaultTopic { get { return Topics[DefaultTopicName]; } }
@@ -62,7 +60,6 @@ namespace ZimmerBot.Core.Knowledge
       MemoryStore = new RDFStore(memoryId);
       Concepts = new Dictionary<string, Concept>();
       Topics = new Dictionary<string, Topic>();
-      Entities = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
       EventHandlers = new Dictionary<Request.EventEnum, List<StandardRule>>();
       LabelToRuleMap = new Dictionary<string, Rule>();
       EntityManager = new EntityManager();
@@ -88,23 +85,21 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Run()
+    public void SetupComplete()
     {
-      EntityManager.UpdateStatistics();
-
       foreach (string s in SparqlForEntities)
       {
         Logger.DebugFormat("Run query for entities: {0}", s);
         Dictionary<string, object> matches = new Dictionary<string, object>();
         IList<object> parameters = new List<object>();
-        RDFResultSet output = MemoryStore.Query(s, matches, parameters);
-        Logger.DebugFormat("Found {0} records", output.Count);
-        foreach (var o in output)
-        {
-          if (o.ContainsKey("label"))
-            AddEntity(o["label"]);
-        }
+        RDFResultSet result = MemoryStore.Query(s, matches, parameters);
+        Logger.DebugFormat("Found {0} records", result.Count);
+
+        EntityManager.RegisterEntityClass("default", 
+          result.Where(item => item.ContainsKey("label")).Select(item => item["label"]));
       }
+
+      EntityManager.UpdateStatistics();
     }
 
 
@@ -121,14 +116,6 @@ namespace ZimmerBot.Core.Knowledge
       Topic t = new Topic(name);
       Topics.Add(name, t);
       return t;
-    }
-
-
-    public Entity AddEntity(string label)
-    {
-      Entity e = new Entity(label);
-      Entities[e.Label] = e;
-      return e;
     }
 
 
