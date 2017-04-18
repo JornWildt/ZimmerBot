@@ -28,7 +28,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
       ClassName = className;
-      TokenizedEntityNames = new Dictionary<string,string[]>();
+      TokenizedEntityNames = new Dictionary<string,string[]>(StringComparer.OrdinalIgnoreCase);
       WordByPositionCount = new List<int>();
     }
 
@@ -57,7 +57,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public void UpdateStatistics(double totalNumberOfWords)
     {
-      WordByPositionInCategoryProbability = new Dictionary<string, double[]>();
+      WordByPositionInCategoryProbability = new Dictionary<string, double[]>(StringComparer.OrdinalIgnoreCase);
 
       // Count occurences
       foreach (var entry in TokenizedEntityNames)
@@ -84,7 +84,6 @@ namespace ZimmerBot.Core.Knowledge
         {
           WordByPositionInCategoryProbability[word][pos] =
             PositionInCategoryProbability[pos] * WordByPositionInCategoryProbability[word][pos] / WordByPositionCount[pos];
-          //Console.WriteLine($"P({word}|{ClassName}[{pos}]) = {WordByPositionInCategoryProbability[word][pos]}");
         }
       }
     }
