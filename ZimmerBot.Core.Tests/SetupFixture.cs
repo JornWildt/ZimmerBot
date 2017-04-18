@@ -31,6 +31,7 @@ namespace ZimmerBot.Core.Tests
       DateTimeProcessor.Initialize();
       RDFProcessor.Initialize();
       CryptoHelper.Initialize();
+      SpellChecker.Initialize();
 
       Initialized = true;
     }
