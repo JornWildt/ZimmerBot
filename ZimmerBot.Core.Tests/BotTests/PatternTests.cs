@@ -26,15 +26,15 @@ namespace ZimmerBot.Core.Tests.BotTests
 {
   > is it snowing
   > how hot is it
-  > is it raining in {entity:location:}
+  > is it raining in {entity:location}
   > how is the weather in {entity:location} today
 }
 
->> { intent: current_weather }
-: The weather is good!
+#>> { intent: current_weather }
+#: The weather is good!
 
->> { intent: current_weather, p1 }
-: The weather in '<1>' is good!
+#>> { intent: current_weather, p1 }
+#: The weather in '<1>' is good!
 ";
       KnowledgeBase kb = ParseKnowledgeBase(cfg);
     }

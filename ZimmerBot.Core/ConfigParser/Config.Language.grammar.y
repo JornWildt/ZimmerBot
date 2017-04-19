@@ -3,6 +3,7 @@
 %using ZimmerBot.Core.WordRegex
 %using ZimmerBot.Core.Expressions
 %using ZimmerBot.Core.Statements
+%using ZimmerBot.Core.Patterns
 %partial
 %parsertype ConfigParser
 %visibility internal
@@ -23,7 +24,11 @@
   public List<string> stringList;
   public List<List<string>> conceptList;
   public List<KeyValuePair<string,string>> keyValueList;
+  public KeyValuePair<string,string> keyValue;
   public List<Pattern> patternList;
+  public Pattern pattern;
+  public List<PatternExpr> patternExprList;
+  public PatternExpr patternExpr;
   public string s;
   public double n;
 }
@@ -357,22 +362,40 @@ stringSeq
   ;
 
 keyValueSeq
-  : keyValueSeq T_COMMA keyValue
-  | keyValue
+  : keyValueSeq T_COMMA keyValue { $$.keyValueList = $1.keyValueList; $$.keyValueList.Add($3.keyValue); }
+  | keyValue                     { $$.keyValueList = new List<KeyValuePair<string,string>>(); $$.keyValueList.Add($1.keyValue); }
   ;
 
 keyValue
-  : T_WORD T_EQU value
+  : T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
   ;
 
 value
-  : T_WORD
-  | T_STRING
+  : T_WORD   { $$.s = $1.s; }
+  | T_STRING { $$.s = $1.s; }
   ;
 
 patternSeq
-  : patternSeq pattern
-  | pattern
+  : patternSeq pattern  { $$.patternList = $1.patternList; $$.patternList.Add($2.pattern); }
+  | pattern             { $$.patternList = new List<Pattern>(); $$.patternList.Add($1.pattern); }
+  ;
+
+pattern
+  : T_GT patternExprSeq { $$.pattern = new Pattern($2.patternExprList); }
+  ;
+
+patternExprSeq
+  : patternExprSeq patternExpr { $$.patternExprList = $1.patternExprList; $$.patternExprList.Add($2.patternExpr); }
+  | patternExpr                { $$.patternExprList = new List<PatternExpr>(); $$.patternExprList.Add($1.patternExpr); }
+  ;
+
+patternExpr
+  : entityPatternExpr { $$.patternExpr = $1.patternExpr; }
+  | T_WORD            { $$.patternExpr = new WordPatternExpr($1.s); }
+  ;
+
+entityPatternExpr
+  : T_LBRACE T_WORD T_COLON T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, $4.s); }
   ;
 
 %%

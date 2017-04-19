@@ -50,6 +50,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected IList<string> SparqlForEntities { get; set; }
 
+    public PatternManager PatternManager { get; protected set; }
+
     public KnowledgeBase()
       : this("default")
     {
@@ -65,6 +67,7 @@ namespace ZimmerBot.Core.Knowledge
       LabelToRuleMap = new Dictionary<string, Rule>();
       EntityManager = new EntityManager();
       SparqlForEntities = new List<string>();
+      PatternManager = new PatternManager();
 
       Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
 
@@ -128,6 +131,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
     {
+      PatternSet set = new PatternSet(identifiers, patterns);
+      PatternManager.AddPatternSet(set);
     }
 
 
