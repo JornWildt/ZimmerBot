@@ -17,5 +17,11 @@ namespace ZimmerBot.Core.Patterns
       ParameterName = parameterName;
       EntityClass = entityClass;
     }
+
+
+    public override string Identifier
+    {
+      get { return "Entity:" + EntityClass; }
+    }
   }
 }

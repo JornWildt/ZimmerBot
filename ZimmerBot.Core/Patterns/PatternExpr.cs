@@ -8,5 +8,6 @@ namespace ZimmerBot.Core.Patterns
 {
   public abstract class PatternExpr
   {
+    public abstract string Identifier { get; }
   }
 }

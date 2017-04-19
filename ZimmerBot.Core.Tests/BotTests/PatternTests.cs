@@ -19,24 +19,32 @@ namespace ZimmerBot.Core.Tests.BotTests
 {
   ""London"",
   ""New York"",
-  ""Smørum Nedre""
+  ""Smørum Nedre"",
+  ""Tølløse Ovre""
 }
 
 ! pattern (intent = current_weather, type = question)
 {
   > is it snowing
   > how hot is it
-  > is it raining in {entity:location}
-  > how is the weather in {entity:location} today
+  > is it raining in {l:location}
+  > how is the weather in {l:location} today
 }
 
-#>> { intent: current_weather }
-#: The weather is good!
+>> { intent = current_weather, type = question }
+: The weather is good
 
-#>> { intent: current_weather, p1 }
-#: The weather in '<1>' is good!
+>> { intent = current_weather, type = question, l = * }
+: The weather is good in '<l>'
+
+>> { intent = current_weather, type = question, l = ""Smørum Ovre"" }
+: The weather is always fantastic in Smørum Ovre
 ";
-      KnowledgeBase kb = ParseKnowledgeBase(cfg);
+      BuildBot(cfg);
+
+      //AssertDialog("is it snowing", "The weather is good");
+      //AssertDialog("is it raining in new york", "The weather is good in 'new york'");
+      AssertDialog("how is the weather in Smørum Ovre today", "The weather is always fantastic in Smørum Ovre");
     }
   }
 }

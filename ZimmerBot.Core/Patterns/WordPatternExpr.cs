@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System;
+using CuttingEdge.Conditions;
 
 namespace ZimmerBot.Core.Patterns
 {
@@ -12,6 +13,12 @@ namespace ZimmerBot.Core.Patterns
       Condition.Requires(word, nameof(word)).IsNotNullOrWhiteSpace();
 
       Word = word;
+    }
+
+
+    public override string Identifier
+    {
+      get { return Word; }
     }
   }
 }

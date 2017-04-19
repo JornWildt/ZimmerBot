@@ -105,6 +105,7 @@ namespace ZimmerBot.Core.Knowledge
       }
 
       EntityManager.UpdateStatistics();
+      PatternManager.UpdateStatistics();
     }
 
 
@@ -230,6 +231,9 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
+        Pattern matchingPattern = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
+
+
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
         Topic topic = Topics[topicName];
 

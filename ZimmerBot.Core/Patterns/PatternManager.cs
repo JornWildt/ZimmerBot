@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
 {
@@ -19,6 +21,33 @@ namespace ZimmerBot.Core.Patterns
       Condition.Requires(set, nameof(set)).IsNotNull();
 
       PatternSets.Add(set);
+    }
+
+
+    public void UpdateStatistics()
+    {
+      double totalNumberOfWords = PatternSets.Sum(c => c.NumberOfWords);
+      foreach (var entry in PatternSets)
+        entry.UpdateStatistics(totalNumberOfWords);
+    }
+
+
+    public Pattern CalculateMostLikelyPattern(ZTokenSequence input)
+    {
+      double prob = 0.0;
+      Pattern result = null;
+
+      foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
+      {
+        double pb = pt.CalculateProbability(input);
+        if (pb > prob)
+        {
+          prob = pb;
+          result = pt;
+        }
+      }
+
+      return result;
     }
   }
 }

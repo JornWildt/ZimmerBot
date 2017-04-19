@@ -14,6 +14,20 @@ namespace ZimmerBot.Core.Patterns
     public List<Pattern> Patterns { get; protected set; }
 
 
+    private double? _numberOfWords;
+    public double NumberOfWords
+    {
+      get
+      {
+        if (_numberOfWords == null)
+        {
+          _numberOfWords = Patterns.Sum(p => p.NumberOfWords);
+        }
+        return _numberOfWords.Value;
+      }
+    }
+
+
     public PatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
     {
       Condition.Requires(identifiers, nameof(identifiers)).IsNotNull();
@@ -21,6 +35,13 @@ namespace ZimmerBot.Core.Patterns
 
       Identifiers = identifiers;
       Patterns = patterns;
+    }
+
+
+    public void UpdateStatistics(double totalNumberOfWords)
+    {
+      foreach (var pattern in Patterns)
+        pattern.UpdateStatistics(totalNumberOfWords);
     }
   }
 }
