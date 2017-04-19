@@ -22,7 +22,6 @@ namespace ZimmerBot.Core.Knowledge
     public double? Weight { get; protected set; }
 
 
-
     public StandardRule(KnowledgeBase kb, string label, Topic topic, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
       : base(kb, label, topic, statements)
     {
@@ -97,45 +96,6 @@ namespace ZimmerBot.Core.Knowledge
 
       List<Reaction> reactions = SelectReactions(context, result);
       return reactions;
-    }
-
-
-    private List<Reaction> SelectReactions(TriggerEvaluationContext context, MatchResult result)
-    {
-      Statement.RepatableMode repeatable = Statements.Max(s => s.Repeatable);
-      List<Reaction> reactions = new List<Reaction>();
-
-      if (repeatable != Statement.RepatableMode.AutomaticRepeatable && repeatable != Statement.RepatableMode.ForcedRepeatable)
-      {
-        // This is not a repeatable rule, so split it into multiple reactions that looks at output usage
-
-        // Add one reaction for each output statement
-        reactions = Statements
-          .OfType<OutputTemplateStatement>()
-          .Select(s => new Reaction(MakeWeightedReaction(context, result, s.Template), this, s.Template.Id))          
-          .ToList();
-      }
-
-      // If no output statements are found then ensure we have at least one reaction (that does not identify an output)
-      if (reactions.Count == 0)
-        reactions.Add(new Reaction(new ResponseGenerationContext(context.InputContext, result), this, null));
-
-      return reactions
-             .Where(s => s.Score >= 0.5) // FIXME: Why exactly 0.5?
-             .ToList();
-    }
-
-
-    private ResponseGenerationContext MakeWeightedReaction(TriggerEvaluationContext context, MatchResult result, OutputTemplate template)
-    {
-      int outputUsageCount = context.InputContext.Session.GetUsageCount(template.Id);
-
-      // Reduce the amount of repetition in output by lowering the reaction score by the number of times it has been used
-      double score = result.Score * Math.Pow(0.99, outputUsageCount);
-      //double score = result.Score * (outputUsageCount > 0 ? 0.0 : 1.0);
-
-      ResponseGenerationContext rc = new ResponseGenerationContext(context.InputContext, new MatchResult(score, result.Matches));
-      return rc;
     }
   }
 }

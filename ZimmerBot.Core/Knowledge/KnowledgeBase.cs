@@ -231,8 +231,8 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        Pattern matchingPattern = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
-
+        PatternMatchResult matchingPattern = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
+        context.MatchedPattern = matchingPattern;
 
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
         Topic topic = Topics[topicName];
@@ -276,7 +276,7 @@ namespace ZimmerBot.Core.Knowledge
       BotUtility.EvaluationLogger.Debug($"Select reactions from topic {topic.Name} with weight {weight}");
 
       bool reactionsAdded = false;
-      foreach (StandardRule r in topic.StandardRules)
+      foreach (Rule r in topic.StandardRules.Cast<Rule>().Concat(topic.PatternRules))
       {
         IList<Reaction> result = r.CalculateReactions(context, weight);
         foreach (Reaction reaction in result)

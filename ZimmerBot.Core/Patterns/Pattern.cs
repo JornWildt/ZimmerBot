@@ -10,11 +10,17 @@ namespace ZimmerBot.Core.Patterns
 {
   public class Pattern
   {
+    public PatternSet ParentPatternSet { get; protected set; }
+
     public List<PatternExpr> Expressions { get; protected set; }
 
     public double NumberOfWords { get; protected set; }
 
     protected Dictionary<string, double> WordInPatternProbability { get; set; }
+
+    protected double TotalNumberOfWords { get; set; }
+
+    protected double PatternProbability { get; set; }
 
 
     public Pattern(List<PatternExpr> expressions)
@@ -26,8 +32,15 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public void UpdateStatistics(double totalNumberOfWords)
+    public void RegisterParent(PatternSet set)
     {
+      ParentPatternSet = set;
+    }
+
+
+    public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
+    {
+      TotalNumberOfWords = totalNumberOfWords;
       WordInPatternProbability = new Dictionary<string, double>();
 
       // Count occurences
@@ -39,14 +52,14 @@ namespace ZimmerBot.Core.Patterns
         WordInPatternProbability[key] += 1;
       }
 
-      // Calculate total probability of this pattern
-      // (relative to the total number of words in all patterns)
-      double PatternProbability = NumberOfWords / totalNumberOfWords;
+      // All patterns have equal probability since this system have no apriori knowledge of actual usage patterns
+      PatternProbability = 1.0 / totalNumberOfPatterns;
 
       // Normalize
       foreach (string key in WordInPatternProbability.Keys.ToArray())
       {
-        WordInPatternProbability[key] = PatternProbability * WordInPatternProbability[key] / NumberOfWords;
+        WordInPatternProbability[key] 
+          = PatternProbability * (WordInPatternProbability[key] + 1) / (NumberOfWords + totalNumberOfWords);
       }
     }
 
@@ -58,13 +71,13 @@ namespace ZimmerBot.Core.Patterns
       foreach (var token in input)
       {
         string key = (token.Type == ZToken.TokenType.Entity
-          ? "Entity:" + token.OriginalText
+          ? EntityPatternExpr.GetIdentifier(token.EntityClass)
           : token.OriginalText);
 
         if (WordInPatternProbability.ContainsKey(key))
           prob *= WordInPatternProbability[key];
         else
-          prob *= 0.01; // FIXME: what here?
+          prob *= PatternProbability * 1 / (NumberOfWords + TotalNumberOfWords);
       }
 
       return prob;

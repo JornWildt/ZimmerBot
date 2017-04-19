@@ -35,13 +35,16 @@ namespace ZimmerBot.Core.Patterns
 
       Identifiers = identifiers;
       Patterns = patterns;
+
+      foreach (Pattern p in Patterns)
+        p.RegisterParent(this);
     }
 
 
-    public void UpdateStatistics(double totalNumberOfWords)
+    public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {
       foreach (var pattern in Patterns)
-        pattern.UpdateStatistics(totalNumberOfWords);
+        pattern.UpdateStatistics(totalNumberOfPatterns, totalNumberOfWords);
     }
   }
 }

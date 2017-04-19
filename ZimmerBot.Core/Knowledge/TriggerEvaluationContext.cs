@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
-
+using ZimmerBot.Core.Patterns;
 
 namespace ZimmerBot.Core.Knowledge
 {
   public class TriggerEvaluationContext
   {
     public InputRequestContext InputContext { get; protected set; }
+
+    public PatternMatchResult MatchedPattern { get; set; }
 
     public string RestrictToRuleId { get { return InputContext.Request.RuleId; } }
 

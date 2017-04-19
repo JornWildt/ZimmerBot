@@ -26,28 +26,40 @@ namespace ZimmerBot.Core.Patterns
 
     public void UpdateStatistics()
     {
-      double totalNumberOfWords = PatternSets.Sum(c => c.NumberOfWords);
+      double totalNumberOfPatterns = PatternSets.Sum(p => p.Patterns.Count); ;
+      double totalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);
+
       foreach (var entry in PatternSets)
-        entry.UpdateStatistics(totalNumberOfWords);
+        entry.UpdateStatistics(totalNumberOfPatterns, totalNumberOfWords);
     }
 
 
-    public Pattern CalculateMostLikelyPattern(ZTokenSequence input)
+    public PatternMatchResult CalculateMostLikelyPattern(ZTokenSequence input)
     {
-      double prob = 0.0;
+      double minProb = double.MaxValue;
+      double maxProb = 0.0;
       Pattern result = null;
 
       foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
       {
         double pb = pt.CalculateProbability(input);
-        if (pb > prob)
+
+        if (pb > maxProb)
         {
-          prob = pb;
+          maxProb = pb;
           result = pt;
         }
+
+        if (pb < minProb)
+          minProb = pb;
       }
 
-      return result;
+      var rel = maxProb / minProb;
+
+      if (rel > 3.0) // FIXME: why this number? Make configurable
+        return new PatternMatchResult(result, input);
+      else
+        return null;
     }
   }
 }

@@ -35,7 +35,7 @@ namespace ZimmerBot.Core.Parser
 
 
     public ZToken(string t, string entityClass)
-      : this(t, TokenType.Word, entityClass)
+      : this(t, entityClass == null ? TokenType.Word : TokenType.Entity, entityClass)
     {
     }
 

@@ -81,16 +81,16 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       KnowledgeBase kb = ParseKnowledgeBase(cfg);
       Assert.IsNotNull(kb.DefaultTopic.PatternRules);
       Assert.AreEqual(3, kb.DefaultTopic.PatternRules.Count);
-      Assert.IsNotNull(kb.DefaultTopic.PatternRules[0].Pattern);
-      Assert.AreEqual(2, kb.DefaultTopic.PatternRules[0].Pattern.Count);
-      Assert.AreEqual("intent", kb.DefaultTopic.PatternRules[0].Pattern[0].Key);
-      Assert.AreEqual("current_weather", kb.DefaultTopic.PatternRules[0].Pattern[0].Value);
-      Assert.AreEqual("type", kb.DefaultTopic.PatternRules[0].Pattern[1].Key);
-      Assert.AreEqual("question", kb.DefaultTopic.PatternRules[0].Pattern[1].Value);
-      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[1].Pattern[2].Key);
-      Assert.AreEqual(Constants.StarValue, kb.DefaultTopic.PatternRules[1].Pattern[2].Value);
-      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[2].Pattern[2].Key);
-      Assert.AreEqual("Smørum Nedre", kb.DefaultTopic.PatternRules[2].Pattern[2].Value);
+      Assert.IsNotNull(kb.DefaultTopic.PatternRules[0].KeyValuePattern);
+      Assert.AreEqual(2, kb.DefaultTopic.PatternRules[0].KeyValuePattern.Count);
+      Assert.AreEqual("intent", kb.DefaultTopic.PatternRules[0].KeyValuePattern[0].Key);
+      Assert.AreEqual("current_weather", kb.DefaultTopic.PatternRules[0].KeyValuePattern[0].Value);
+      Assert.AreEqual("type", kb.DefaultTopic.PatternRules[0].KeyValuePattern[1].Key);
+      Assert.AreEqual("question", kb.DefaultTopic.PatternRules[0].KeyValuePattern[1].Value);
+      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Key);
+      Assert.AreEqual(Constants.StarValue, kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Value);
+      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Key);
+      Assert.AreEqual("Smørum Nedre", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Value);
     }
   }
 }

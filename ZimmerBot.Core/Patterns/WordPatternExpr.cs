@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
 {
@@ -19,6 +20,12 @@ namespace ZimmerBot.Core.Patterns
     public override string Identifier
     {
       get { return Word; }
+    }
+
+
+    public override void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens)
+    {
+      // Do nothing
     }
   }
 }

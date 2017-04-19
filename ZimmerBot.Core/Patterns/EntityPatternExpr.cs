@@ -1,4 +1,6 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
+using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
 {
@@ -21,7 +23,23 @@ namespace ZimmerBot.Core.Patterns
 
     public override string Identifier
     {
-      get { return "Entity:" + EntityClass; }
+      get { return GetIdentifier(EntityClass); }
+    }
+
+
+    public static string GetIdentifier(string name)
+    {
+      return "Entity:" + name;
+    }
+
+
+    public override void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens)
+    {
+      if (entityTokens.Count > 0)
+      {
+        ZToken entity = entityTokens.Dequeue();
+        matchValues[ParameterName] = entity.OriginalText;
+      }
     }
   }
 }
