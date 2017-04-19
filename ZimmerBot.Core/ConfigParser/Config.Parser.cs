@@ -3,6 +3,7 @@ using System.IO;
 using CuttingEdge.Conditions;
 using log4net;
 using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Patterns;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
@@ -66,6 +67,12 @@ namespace ZimmerBot.Core.ConfigParser
     protected void RegisterEntities(string className, List<string> entityNames)
     {
       KnowledgeBase.RegisterEntityClass(className, entityNames);
+    }
+
+
+    protected void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    {
+      KnowledgeBase.RegisterPatternSet(identifiers, patterns);
     }
 
 

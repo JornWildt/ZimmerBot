@@ -21,7 +21,9 @@
   public Knowledge.Rule rule;
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
-  public List<List<string>> patternList;
+  public List<List<string>> conceptList;
+  public List<KeyValuePair<string,string>> keyValueList;
+  public List<Pattern> patternList;
   public string s;
   public double n;
 }
@@ -31,7 +33,8 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
-%token T_ENTITIES, T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
+%token T_ENTITIES, T_PATTERN
+%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_TOPICRULE
@@ -77,7 +80,7 @@ item
 
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
-      { RegisterConcept($2.s, $4.patternList); }
+      { RegisterConcept($2.s, $4.conceptList); }
   | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
     { StartTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
@@ -91,6 +94,9 @@ configuration
   | T_ENTITIES T_LPAR T_WORD T_RPAR
     T_LBRACE stringSeq T_RBRACE
       { RegisterEntities($3.s, $6.stringList); }
+  | T_PATTERN T_LPAR keyValueSeq T_RPAR
+    T_LBRACE patternSeq T_RBRACE
+      { RegisterPatternSet($3.keyValueList, $6.patternList); }
   | T_RDF_IMPORT T_STRING            
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     
@@ -100,8 +106,8 @@ configuration
   ;
 
 conceptPatternSeq
-  : conceptPatternSeq T_COMMA cwordSeq  { $1.patternList.Add($3.stringList); $$.patternList = $1.patternList; }
-  | cwordSeq                            { $$.patternList = new List<List<string>>(); $$.patternList.Add($1.stringList); }
+  : conceptPatternSeq T_COMMA cwordSeq  { $1.conceptList.Add($3.stringList); $$.conceptList = $1.conceptList; }
+  | cwordSeq                            { $$.conceptList = new List<List<string>>(); $$.conceptList.Add($1.stringList); }
   ;
 
 ruleSeq
@@ -348,6 +354,25 @@ cword
 stringSeq
   : stringSeq T_COMMA T_STRING { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_STRING                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+keyValueSeq
+  : keyValueSeq T_COMMA keyValue
+  | keyValue
+  ;
+
+keyValue
+  : T_WORD T_EQU value
+  ;
+
+value
+  : T_WORD
+  | T_STRING
+  ;
+
+patternSeq
+  : patternSeq pattern
+  | pattern
   ;
 
 %%

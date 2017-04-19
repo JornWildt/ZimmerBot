@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CuttingEdge.Conditions;
+
+namespace ZimmerBot.Core.Patterns
+{
+  public class PatternSet
+  {
+    public List<KeyValuePair<string,string>> Identifiers { get; protected set; }
+
+    public List<Pattern> Patterns { get; protected set; }
+
+
+    public PatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    {
+      Condition.Requires(identifiers, nameof(identifiers)).IsNotNull();
+      Condition.Requires(patterns, nameof(patterns)).IsNotNull();
+
+      Identifiers = identifiers;
+      Patterns = patterns;
+    }
+  }
+}

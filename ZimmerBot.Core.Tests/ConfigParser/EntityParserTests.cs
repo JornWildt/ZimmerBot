@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
@@ -35,7 +32,6 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ";
 
       KnowledgeBase kb = ParseKnowledgeBase(cfg);
-      kb.SetupComplete();
 
       Assert.AreEqual(2, kb.EntityManager.EntityClasses.Count);
       Assert.IsTrue(kb.EntityManager.EntityClasses.ContainsKey("city"));

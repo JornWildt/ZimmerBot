@@ -7,6 +7,7 @@ using log4net;
 using Quartz;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Patterns;
 using ZimmerBot.Core.Pipeline;
 using ZimmerBot.Core.Pipeline.InputStages;
 using ZimmerBot.Core.Processors;
@@ -122,6 +123,11 @@ namespace ZimmerBot.Core.Knowledge
     public void RegisterEntityClass(string className, List<string> entityNames)
     {
       EntityManager.RegisterEntityClass(className, entityNames);
+    }
+
+
+    public void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    {
     }
 
 
