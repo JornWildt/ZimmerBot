@@ -13,7 +13,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
   public class PatternParserTests : TestHelper
   {
     [Test]
-    public void CanParseWeatherRequests()
+    public void CanParsePatternDefinition()
     {
       string cfg = @"
 ! pattern (intent = current_weather, type = ""question"")
@@ -57,5 +57,41 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual("l", expr4.ParameterName);
       Assert.AreEqual("location", expr4.EntityClass);
     }
+
+
+    [Test]
+    public void CanParsePatternUsage()
+    {
+      string cfg = @"
+! pattern (intent = current_weather, type = ""question"")
+{
+  > is it snowing
+  > is it raining in {l:location}
+}
+
+>> { intent = current_weather, type = question }
+: The weather is good
+
+>> { intent = current_weather, type = question, l = * }
+: The weather is good in <l>
+
+>> { intent = current_weather, type = question, l = ""Smørum Nedre"" }
+: The weather is fantastic in Smørum Nedre
+";
+      KnowledgeBase kb = ParseKnowledgeBase(cfg);
+      Assert.IsNotNull(kb.DefaultTopic.PatternRules);
+      Assert.AreEqual(3, kb.DefaultTopic.PatternRules.Count);
+      Assert.IsNotNull(kb.DefaultTopic.PatternRules[0].Pattern);
+      Assert.AreEqual(2, kb.DefaultTopic.PatternRules[0].Pattern.Count);
+      Assert.AreEqual("intent", kb.DefaultTopic.PatternRules[0].Pattern[0].Key);
+      Assert.AreEqual("current_weather", kb.DefaultTopic.PatternRules[0].Pattern[0].Value);
+      Assert.AreEqual("type", kb.DefaultTopic.PatternRules[0].Pattern[1].Key);
+      Assert.AreEqual("question", kb.DefaultTopic.PatternRules[0].Pattern[1].Value);
+      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[1].Pattern[2].Key);
+      Assert.AreEqual(Constants.StarValue, kb.DefaultTopic.PatternRules[1].Pattern[2].Value);
+      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[2].Pattern[2].Key);
+      Assert.AreEqual("Smørum Nedre", kb.DefaultTopic.PatternRules[2].Pattern[2].Value);
+    }
   }
 }
+

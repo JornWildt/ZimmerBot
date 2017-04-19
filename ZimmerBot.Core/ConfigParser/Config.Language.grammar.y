@@ -4,6 +4,8 @@
 %using ZimmerBot.Core.Expressions
 %using ZimmerBot.Core.Statements
 %using ZimmerBot.Core.Patterns
+%using ZimmerBot.Core.Utilities
+
 %partial
 %parsertype ConfigParser
 %visibility internal
@@ -23,7 +25,7 @@
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> conceptList;
-  public List<KeyValuePair<string,string>> keyValueList;
+  public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
   public List<Pattern> patternList;
   public Pattern pattern;
@@ -43,6 +45,7 @@
 %token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_TOPICRULE
+%token T_GTGT
 %token T_IMPLIES
 %token T_COMMA
 %token T_LPAR
@@ -128,6 +131,10 @@ rule
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
       $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
+    }
+  | ruleLabel T_GTGT T_LBRACE keyValueSeq T_RBRACE ruleModifierSeq statementSeq
+    { 
+      $$.rule = AddPatternRule($1.s, $4.keyValueList, $6.ruleModifierList, $7.statementList);
     }
   ;
 
@@ -363,7 +370,7 @@ stringSeq
 
 keyValueSeq
   : keyValueSeq T_COMMA keyValue { $$.keyValueList = $1.keyValueList; $$.keyValueList.Add($3.keyValue); }
-  | keyValue                     { $$.keyValueList = new List<KeyValuePair<string,string>>(); $$.keyValueList.Add($1.keyValue); }
+  | keyValue                     { $$.keyValueList = new StringPairList(); $$.keyValueList.Add($1.keyValue); }
   ;
 
 keyValue
@@ -373,6 +380,7 @@ keyValue
 value
   : T_WORD   { $$.s = $1.s; }
   | T_STRING { $$.s = $1.s; }
+  | T_STAR   { $$.s = Constants.StarValue; }
   ;
 
 patternSeq

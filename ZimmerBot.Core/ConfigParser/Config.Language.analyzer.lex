@@ -27,6 +27,7 @@ Space      [ \t]
 /* Scanner body */
 
 \>          { return (int)Token.T_GT; }
+\>\>        { return (int)Token.T_GTGT; }
 \<          { return (int)Token.T_LT; }
 :           { return (int)Token.T_COLON; }
 =>          { return (int)Token.T_IMPLIES; }

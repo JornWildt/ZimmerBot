@@ -19,5 +19,11 @@ namespace ZimmerBot.Core.Knowledge
       reactions.Add(new Reaction(new ResponseGenerationContext(context.InputContext, result), this, null));
       return reactions;
     }
+
+
+    public override string ToString()
+    {
+      return "Topic rule";
+    }
   }
 }

@@ -13,6 +13,7 @@ using ZimmerBot.Core.Pipeline.InputStages;
 using ZimmerBot.Core.Processors;
 using ZimmerBot.Core.StandardProcessors;
 using ZimmerBot.Core.Statements;
+using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
@@ -147,28 +148,32 @@ namespace ZimmerBot.Core.Knowledge
 
     public StandardRule AddRule(string label, string topicName, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
-      Logger.DebugFormat("Found rule: {0}", patterns.Select(t => t?.ToString()).Aggregate((a,b) => ">" + a + " >" + b));
-
-      topicName = topicName ?? DefaultTopicName;
-      Topic topic = Topics[topicName];
-
-      StandardRule r = new StandardRule(this, label, topic, patterns, modifiers, statements);
-      topic.AddRule(r);
-
-      return r;
+      return AddRule(topicName, topic => new StandardRule(this, label, topic, patterns, modifiers, statements));
     }
 
 
     public TopicRule AddTopicRule(string label, string topicName, List<Statement> statements)
     {
-      topicName = topicName ?? DefaultTopicName;
-      Logger.DebugFormat("Found a topic rule for '{0}'", topicName);
+      return AddRule(topicName, topic => new TopicRule(this, label, topic, statements));
+    }
 
+
+    public PatternRule AddPatternRule(string label, string topicName, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      return AddRule(topicName, topic => new PatternRule(this, label, topic, pattern, modifiers, statements));
+    }
+
+
+    protected T AddRule<T>(string topicName, Func<Topic,T> ruleBuilder)
+      where T : Rule
+    {
+      topicName = topicName ?? DefaultTopicName;
       Topic topic = Topics[topicName];
 
-      TopicRule r = new TopicRule(this, label, topic, statements);
-      topic.AddRule(r);
+      T r = ruleBuilder(topic);
+      Logger.Debug($"Adding rule to topic '{topicName}': {r.ToString()}");
 
+      topic.AddRule(r);
       return r;
     }
 

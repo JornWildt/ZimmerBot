@@ -107,12 +107,14 @@
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Expressions\UnaryOperatorExpr.cs" />
     <Compile Include="Knowledge\Continuation.cs" />
     <Compile Include="Knowledge\Entity.cs" />
     <Compile Include="Knowledge\EntityClass.cs" />
     <Compile Include="Knowledge\EntityManager.cs" />
     <Compile Include="Knowledge\InputRequestContext.cs" />
+    <Compile Include="Knowledge\PatternRule.cs" />
     <Compile Include="Knowledge\Rule.cs" />
     <Compile Include="Knowledge\SessionStateExtensions.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
@@ -192,6 +194,7 @@
     <Compile Include="Utilities\ParserException.cs" />
     <Compile Include="Scheduler\ScheduledBotCallback.cs" />
     <Compile Include="Utilities\SpellChecker.cs" />
+    <Compile Include="Utilities\StringPairList.cs" />
     <Compile Include="Utilities\TimeSpanUtility.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />
     <Compile Include="WordRegex\ConceptWRegex.cs" />

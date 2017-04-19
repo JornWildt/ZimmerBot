@@ -12,9 +12,11 @@ namespace ZimmerBot.Core.Knowledge
 
     public IList<StandardRule> StandardRules { get; protected set; }
 
+    public IList<PatternRule> PatternRules { get; protected set; }
+
     public IList<TopicRule> TopicRules { get; protected set; }
 
-    public IEnumerable<Rule> AllRules { get { return StandardRules.Cast<Rule>().Concat(TopicRules.Cast<Rule>()); } }
+    public IEnumerable<Rule> AllRules { get { return StandardRules.Cast<Rule>().Concat(TopicRules.Cast<Rule>().Concat(PatternRules.Cast<Rule>())); } }
 
 
     public Topic(string name, bool isAutomaticallySelectable = true)
@@ -25,6 +27,7 @@ namespace ZimmerBot.Core.Knowledge
       IsAutomaticallySelectable = isAutomaticallySelectable;
       StandardRules = new List<StandardRule>();
       TopicRules = new List<TopicRule>();
+      PatternRules = new List<PatternRule>();
     }
 
 
@@ -32,6 +35,8 @@ namespace ZimmerBot.Core.Knowledge
     {
       if (r is StandardRule)
         StandardRules.Add((StandardRule)r);
+      else if (r is PatternRule)
+        PatternRules.Add((PatternRule)r);
       else
         TopicRules.Add((TopicRule)r);
     }
