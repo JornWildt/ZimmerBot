@@ -47,7 +47,7 @@ namespace ZimmerBot.Core.Knowledge
       if (ok)
       {
         // Larger pattern sets are more difficult to match and thus prioritized higher
-        double score = KeyValuePattern.Count;
+        double score = context.MatchedPattern.MatchPattern.Expressions.Count;
 
         MatchResult result = new MatchResult(score * weight);
         foreach (var item in matchValues)

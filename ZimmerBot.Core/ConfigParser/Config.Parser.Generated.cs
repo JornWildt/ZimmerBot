@@ -3,10 +3,10 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Machine:  CBRAIN-PC412
-// DateTime: 19-04-2017 12:32:34
-// UserName: jw
-// Input file <ConfigParser\Config.Language.grammar.y - 19-04-2017 12:32:32>
+// Machine:  JORN-PC
+// DateTime: 20-04-2017 00:32:18
+// UserName: Jorn
+// Input file <ConfigParser\Config.Language.grammar.y - 20-04-2017 00:32:13>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -84,8 +84,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[118];
-  private static State[] states = new State[205];
+  private static Rule[] rules = new Rule[119];
+  private static State[] states = new State[206];
   private static string[] nonTerms = new string[] {
       "main", "$accept", "itemSeq", "item", "configuration", "rule", "conceptPatternSeq", 
       "wordCommaSeq", "Anon@1", "ruleSeq", "Anon@2", "statementSeq", "stringSeq", 
@@ -103,7 +103,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[0] = new State(-4,new int[]{-1,1,-3,3});
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
-    states[3] = new State(new int[]{5,6,11,17,24,158,15,165,16,175,17,195,18,197,19,200,43,86,3,-2,27,-26,28,-26,44,-26},new int[]{-4,4,-5,5,-6,204,-17,27});
+    states[3] = new State(new int[]{5,6,11,17,24,158,15,165,16,175,17,196,18,198,19,201,43,86,3,-2,27,-26,28,-26,44,-26},new int[]{-4,4,-5,5,-6,205,-17,27});
     states[4] = new State(-3);
     states[5] = new State(-5);
     states[6] = new State(new int[]{37,7});
@@ -279,32 +279,33 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[176] = new State(new int[]{37,143},new int[]{-14,177,-50,149});
     states[177] = new State(new int[]{32,178,30,141});
     states[178] = new State(new int[]{33,179});
-    states[179] = new State(new int[]{44,183},new int[]{-15,180,-52,194});
+    states[179] = new State(new int[]{44,183},new int[]{-15,180,-52,195});
     states[180] = new State(new int[]{34,181,44,183},new int[]{-52,182});
     states[181] = new State(-14);
     states[182] = new State(-110);
-    states[183] = new State(new int[]{33,187,37,192},new int[]{-53,184,-54,193,-55,186});
-    states[184] = new State(new int[]{33,187,37,192,34,-112,44,-112},new int[]{-54,185,-55,186});
+    states[183] = new State(new int[]{33,187,37,192,39,193},new int[]{-53,184,-54,194,-55,186});
+    states[184] = new State(new int[]{33,187,37,192,39,193,34,-112,44,-112},new int[]{-54,185,-55,186});
     states[185] = new State(-113);
     states[186] = new State(-115);
     states[187] = new State(new int[]{37,188});
     states[188] = new State(new int[]{4,189});
     states[189] = new State(new int[]{37,190});
     states[190] = new State(new int[]{34,191});
-    states[191] = new State(-117);
+    states[191] = new State(-118);
     states[192] = new State(-116);
-    states[193] = new State(-114);
-    states[194] = new State(-111);
-    states[195] = new State(new int[]{39,196});
-    states[196] = new State(-15);
-    states[197] = new State(new int[]{37,198});
-    states[198] = new State(new int[]{39,199});
-    states[199] = new State(-16);
-    states[200] = new State(new int[]{31,201});
-    states[201] = new State(new int[]{39,202});
-    states[202] = new State(new int[]{32,203});
-    states[203] = new State(-17);
-    states[204] = new State(-6);
+    states[193] = new State(-117);
+    states[194] = new State(-114);
+    states[195] = new State(-111);
+    states[196] = new State(new int[]{39,197});
+    states[197] = new State(-15);
+    states[198] = new State(new int[]{37,199});
+    states[199] = new State(new int[]{39,200});
+    states[200] = new State(-16);
+    states[201] = new State(new int[]{31,202});
+    states[202] = new State(new int[]{39,203});
+    states[203] = new State(new int[]{32,204});
+    states[204] = new State(-17);
+    states[205] = new State(-6);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
@@ -424,7 +425,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     rules[114] = new Rule(-53, new int[]{-54});
     rules[115] = new Rule(-54, new int[]{-55});
     rules[116] = new Rule(-54, new int[]{37});
-    rules[117] = new Rule(-55, new int[]{33,37,4,37,34});
+    rules[117] = new Rule(-54, new int[]{39});
+    rules[118] = new Rule(-55, new int[]{33,37,4,37,34});
   }
 
   protected override void Initialize() {
@@ -777,7 +779,10 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 116: // patternExpr -> T_WORD
 { CurrentSemanticValue.patternExpr = new WordPatternExpr(ValueStack[ValueStack.Depth-1].s); }
         break;
-      case 117: // entityPatternExpr -> T_LBRACE, T_WORD, T_COLON, T_WORD, T_RBRACE
+      case 117: // patternExpr -> T_STRING
+{ CurrentSemanticValue.patternExpr = new WordPatternExpr(ValueStack[ValueStack.Depth-1].s); }
+        break;
+      case 118: // entityPatternExpr -> T_LBRACE, T_WORD, T_COLON, T_WORD, T_RBRACE
 { CurrentSemanticValue.patternExpr = new EntityPatternExpr(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-2].s); }
         break;
     }

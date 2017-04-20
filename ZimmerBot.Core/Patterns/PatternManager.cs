@@ -54,7 +54,7 @@ namespace ZimmerBot.Core.Patterns
           minProb = pb;
       }
 
-      var rel = maxProb / minProb;
+      var rel = input.Count * maxProb / minProb;
 
       if (rel > 3.0) // FIXME: why this number? Make configurable
         return new PatternMatchResult(result, input);
