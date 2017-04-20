@@ -74,8 +74,14 @@ namespace ZimmerBot.Core.Patterns
           ? EntityPatternExpr.GetIdentifier(token.EntityClass)
           : token.OriginalText);
 
+        string wildcardKey = (token.Type == ZToken.TokenType.Entity
+          ? EntityPatternExpr.GetIdentifier("")
+          : token.OriginalText);
+
         if (WordInPatternProbability.ContainsKey(key))
           prob *= WordInPatternProbability[key];
+        else if (WordInPatternProbability.ContainsKey(wildcardKey))
+          prob *= WordInPatternProbability[wildcardKey];
         else
           prob *= PatternProbability * 1 / (NumberOfWords + TotalNumberOfWords);
       }

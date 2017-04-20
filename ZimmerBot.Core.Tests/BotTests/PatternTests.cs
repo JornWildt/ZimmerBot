@@ -6,7 +6,7 @@ namespace ZimmerBot.Core.Tests.BotTests
   public class PatternTests : TestHelper
   {
     [Test]
-    public void CanParseWeatherRequests()
+    public void CanMatchPatterns()
     {
       string cfg = @"
 ! entities (location)
@@ -50,6 +50,35 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       AssertDialog("is green your favorite color?", "???", "Make sure completely unknown inputs does not match");
       AssertDialog("grumph idugh yuckmay", "???", "Make sure completely unknown inputs does not match");
+    }
+    [Test]
+
+
+    public void CanMatchEntitiesWithoutClass()
+    {
+      string cfg = @"
+! entities (location)
+{
+  ""London""
+}
+
+! entities (person)
+{
+  ""Mario Zimmer""
+}
+
+! pattern (intent = where_is, type = question)
+{
+  > where is {item}
+}
+
+>> { intent = where_is, type = question, item = *}
+: You can find '<item>' at home.
+";
+      BuildBot(cfg);
+
+      AssertDialog("where is london", "You can find 'london' at home.");
+      AssertDialog("where is Mario Zimmer", "You can find 'Mario Zimmer' at home.");
     }
   }
 }

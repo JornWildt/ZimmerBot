@@ -20,6 +20,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 {
   > is it snowing
   > is it raining in {l:location}
+  > what is {item}
 }
 ";
       KnowledgeBase kb = ParseKnowledgeBase(cfg);
@@ -37,7 +38,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual("question", set.Identifiers[1].Value);
 
       Assert.IsNotNull(set.Patterns);
-      Assert.AreEqual(2, set.Patterns.Count);
+      Assert.AreEqual(3, set.Patterns.Count);
 
       Assert.IsNotNull(set.Patterns[0]);
       Assert.IsNotNull(set.Patterns[0].Expressions);
@@ -56,26 +57,35 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       EntityPatternExpr expr4 = (EntityPatternExpr)set.Patterns[1].Expressions[4];
       Assert.AreEqual("l", expr4.ParameterName);
       Assert.AreEqual("location", expr4.EntityClass);
+
+      Assert.IsNotNull(set.Patterns[2]);
+      Assert.IsNotNull(set.Patterns[2].Expressions);
+      Assert.AreEqual(3, set.Patterns[2].Expressions.Count);
+      Assert.IsInstanceOf<WordPatternExpr>(set.Patterns[2].Expressions[0]);
+      Assert.IsInstanceOf<EntityPatternExpr>(set.Patterns[2].Expressions[2]);
+      EntityPatternExpr expr2_2 = (EntityPatternExpr)set.Patterns[2].Expressions[2];
+      Assert.AreEqual("item", expr2_2.ParameterName);
+      Assert.IsNull(expr2_2.EntityClass);
     }
 
 
     [Test]
-    public void CanParsePatternUsage()
+    public void CanParsePatternMatchingRules()
     {
       string cfg = @"
 ! pattern (intent = current_weather, type = ""question"")
 {
   > is it snowing
-  > is it raining in {l:location}
+  > is it raining in {loc:location}
 }
 
 >> { intent = current_weather, type = question }
 : The weather is good
 
->> { intent = current_weather, type = question, l = * }
-: The weather is good in <l>
+>> { intent = current_weather, type = question, loc = * }
+: The weather is good in <loc>
 
->> { intent = current_weather, type = question, l = ""Smørum Nedre"" }
+>> { intent = current_weather, type = question, loc = ""Smørum Nedre"" }
 : The weather is fantastic in Smørum Nedre
 ";
       KnowledgeBase kb = ParseKnowledgeBase(cfg);
@@ -87,9 +97,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual("current_weather", kb.DefaultTopic.PatternRules[0].KeyValuePattern[0].Value);
       Assert.AreEqual("type", kb.DefaultTopic.PatternRules[0].KeyValuePattern[1].Key);
       Assert.AreEqual("question", kb.DefaultTopic.PatternRules[0].KeyValuePattern[1].Value);
-      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Key);
+      Assert.AreEqual("loc", kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Key);
       Assert.AreEqual(Constants.StarValue, kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Value);
-      Assert.AreEqual("l", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Key);
+      Assert.AreEqual("loc", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Key);
       Assert.AreEqual("Smørum Nedre", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Value);
     }
   }

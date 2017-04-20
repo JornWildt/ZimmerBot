@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
@@ -8,6 +9,10 @@ namespace ZimmerBot.Core.Patterns
   public class PatternManager
   {
     public List<PatternSet> PatternSets { get; protected set; }
+
+    protected double TotalNumberOfPatterns { get; set; }
+
+    protected double TotalNumberOfWords { get; set; }
 
 
     public PatternManager()
@@ -26,17 +31,19 @@ namespace ZimmerBot.Core.Patterns
 
     public void UpdateStatistics()
     {
-      double totalNumberOfPatterns = PatternSets.Sum(p => p.Patterns.Count); ;
-      double totalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);
+      TotalNumberOfPatterns = PatternSets.Sum(p => p.Patterns.Count); ;
+      TotalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);
 
       foreach (var entry in PatternSets)
-        entry.UpdateStatistics(totalNumberOfPatterns, totalNumberOfWords);
+        entry.UpdateStatistics(TotalNumberOfPatterns, TotalNumberOfWords);
     }
 
 
     public PatternMatchResult CalculateMostLikelyPattern(ZTokenSequence input)
     {
-      double minProb = double.MaxValue;
+      if (PatternSets.Count == 0)
+        return null;
+
       double maxProb = 0.0;
       Pattern result = null;
 
@@ -49,14 +56,13 @@ namespace ZimmerBot.Core.Patterns
           maxProb = pb;
           result = pt;
         }
-
-        if (pb < minProb)
-          minProb = pb;
       }
 
-      var rel = input.Count * maxProb / minProb;
+      // This value approximates the smallest probability for a match 
+      // (namely P(u)^N where N = number of un-matched words "u")
+      double minProb = Math.Pow((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords+ result.Expressions.Count), input.Count);
 
-      if (rel > 3.0) // FIXME: why this number? Make configurable
+      if (maxProb > minProb * 2)
         return new PatternMatchResult(result, input);
       else
         return null;

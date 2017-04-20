@@ -405,6 +405,7 @@ patternExpr
 
 entityPatternExpr
   : T_LBRACE T_WORD T_COLON T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, $4.s); }
+  | T_LBRACE T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, null); }
   ;
 
 %%
