@@ -22,6 +22,8 @@ namespace ZimmerBot.Core.Patterns
 
     protected double PatternProbability { get; set; }
 
+    protected double UnknownWordProbability { get; set; }
+
 
     public Pattern(List<PatternExpr> expressions)
     {
@@ -41,7 +43,7 @@ namespace ZimmerBot.Core.Patterns
     public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {
       TotalNumberOfWords = totalNumberOfWords;
-      WordInPatternProbability = new Dictionary<string, double>();
+      WordInPatternProbability = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
       // Count occurences
       foreach (var expr in Expressions)
@@ -59,14 +61,16 @@ namespace ZimmerBot.Core.Patterns
       foreach (string key in WordInPatternProbability.Keys.ToArray())
       {
         WordInPatternProbability[key] 
-          = PatternProbability * (WordInPatternProbability[key] + 1) / (NumberOfWords + totalNumberOfWords);
+          = Math.Log(PatternProbability * (WordInPatternProbability[key] + 1) / (NumberOfWords + totalNumberOfWords));
       }
+
+      UnknownWordProbability = Math.Log(PatternProbability * 1 / (NumberOfWords + TotalNumberOfWords));
     }
 
 
     public double CalculateProbability(ZTokenSequence input)
     {
-      double prob = 1.0;
+      double prob = 0.0;
 
       foreach (var token in input)
       {
@@ -79,11 +83,11 @@ namespace ZimmerBot.Core.Patterns
           : token.OriginalText);
 
         if (WordInPatternProbability.ContainsKey(key))
-          prob *= WordInPatternProbability[key];
+          prob += WordInPatternProbability[key];
         else if (WordInPatternProbability.ContainsKey(wildcardKey))
-          prob *= WordInPatternProbability[wildcardKey];
+          prob += WordInPatternProbability[wildcardKey];
         else
-          prob *= PatternProbability * 1 / (NumberOfWords + TotalNumberOfWords);
+          prob += UnknownWordProbability;
       }
 
       return prob;

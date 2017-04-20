@@ -17,12 +17,20 @@ namespace ZimmerBot.Core.Patterns
 
       ParameterName = parameterName;
       EntityClass = entityClass;
+      _weight = (EntityClass == Constants.StarValue ? 0.5 : 1.0);
     }
 
 
     public override string Identifier
     {
       get { return GetIdentifier(EntityClass); }
+    }
+
+
+    protected double _weight;
+    public override double Weight
+    {
+      get { return _weight; }
     }
 
 

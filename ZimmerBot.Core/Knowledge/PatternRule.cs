@@ -47,7 +47,8 @@ namespace ZimmerBot.Core.Knowledge
       if (ok)
       {
         // Larger pattern sets are more difficult to match and thus prioritized higher
-        double score = context.MatchedPattern.MatchPattern.Expressions.Count;
+        // - but wildcard matches weight less
+        double score = context.MatchedPattern.MatchPattern.Expressions.Sum(expr => expr.Weight);
 
         MatchResult result = new MatchResult(score * weight);
         foreach (var item in matchValues)

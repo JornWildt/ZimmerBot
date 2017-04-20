@@ -7,6 +7,8 @@ namespace ZimmerBot.Core.Patterns
   {
     public abstract string Identifier { get; }
 
+    public abstract double Weight { get; }
+
     public abstract void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens);
   }
 }

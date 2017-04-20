@@ -44,7 +44,7 @@ namespace ZimmerBot.Core.Patterns
       if (PatternSets.Count == 0)
         return null;
 
-      double maxProb = 0.0;
+      double maxProb = -10000;
       Pattern result = null;
 
       foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
@@ -60,9 +60,10 @@ namespace ZimmerBot.Core.Patterns
 
       // This value approximates the smallest probability for a match 
       // (namely P(u)^N where N = number of un-matched words "u")
-      double minProb = Math.Pow((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords+ result.Expressions.Count), input.Count);
+      double minProb = input.Count * 
+        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + input.Count));
 
-      if (maxProb > minProb * 2)
+      if (maxProb > minProb + Math.Log(5))
         return new PatternMatchResult(result, input);
       else
         return null;
