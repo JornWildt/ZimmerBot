@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using log4net;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
@@ -47,9 +48,9 @@ namespace ZimmerBot.Console
         // Run bot
         ConsoleBotEnvironment.RunInteractiveConsoleBot("ZimmerBot> ", b);
       }
-      catch (ParserException ex)
+      catch (Exception ex)
       {
-        Logger.Fatal(ex);
+        Logger.Error(ex);
         System.Console.WriteLine("Parser error:\n" + ex.ToString());
       }
 

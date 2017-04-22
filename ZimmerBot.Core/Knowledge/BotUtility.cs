@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using log4net;
 using VDS.RDF;
 using ZimmerBot.Core.Parser;
@@ -11,6 +12,8 @@ namespace ZimmerBot.Core.Knowledge
     public static readonly ILog EvaluationLogger = LogManager.GetLogger("EvaluationLogger");
 
     public static readonly ILog DiaLogger = LogManager.GetLogger("DialogLogger");
+
+    public static readonly ILog Logger = LogManager.GetLogger(typeof(BotUtility));
 
     static INodeFactory NodeFactory = new NodeFactory();
 
@@ -51,19 +54,27 @@ namespace ZimmerBot.Core.Knowledge
 
     internal static Response Invoke(RequestContext context, Request request, bool executeScheduledRules, bool fromTemplate)
     {
-      List<string> output = new List<string>();
-
-      InvokeStatements(context, request, fromTemplate, output);
-
-      if (output.Count > 0)
+      try
       {
-        context.State[StateKeys.SessionStore][StateKeys.ResponseCount] = context.State[StateKeys.SessionStore][StateKeys.ResponseCount] + 1;
+        List<string> output = new List<string>();
 
-        return new Response(output, request.State);
+        InvokeStatements(context, request, fromTemplate, output);
+
+        if (output.Count > 0)
+        {
+          context.State[StateKeys.SessionStore][StateKeys.ResponseCount] = context.State[StateKeys.SessionStore][StateKeys.ResponseCount] + 1;
+
+          return new Response(output, request.State);
+        }
+        else
+        {
+          return new Response(new string[0], request.State);
+        }
       }
-      else
+      catch (Exception ex)
       {
-        return new Response(new string[0], request.State);
+        Logger.Error(ex);
+        throw;
       }
     }
 

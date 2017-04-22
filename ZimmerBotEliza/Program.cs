@@ -35,8 +35,12 @@ namespace ZimmerBotEliza
       }
       catch (ParserException ex)
       {
-        Logger.Fatal(ex);
+        Logger.Error(ex);
         System.Console.WriteLine("Parser error:\n" + ex.ToString());
+      }
+      catch (Exception ex)
+      {
+        Logger.Error(ex);
       }
 
       // Shutdown framework again (this is required as there are some background threads that need to be aborted)

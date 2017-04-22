@@ -111,6 +111,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public Concept AddConcept(string name, List<List<string>> patterns)
     {
+      if (Concepts.ContainsKey(name))
+        throw new InvalidOperationException($"Repeated definition of concept '{name}'");
       Concept w = new Concept(this, name, patterns);
       Concepts.Add(name, w);
       return w;
@@ -231,10 +233,15 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        PatternMatchResult matchingPattern = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
-        context.MatchedPattern = matchingPattern;
+        if (context.InputContext.Input != null)
+        {
+          PatternMatchResult matchingPattern = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
+          context.MatchedPattern = matchingPattern;
+        }
 
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
+        if (!Topics.ContainsKey(topicName))
+          throw new InvalidOperationException($"Current topic was '{topicName}' but no topics with that name could be found.");
         Topic topic = Topics[topicName];
 
         // Does user input match anything in current topic?

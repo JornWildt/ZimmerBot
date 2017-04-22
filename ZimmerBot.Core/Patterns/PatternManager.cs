@@ -67,7 +67,7 @@ namespace ZimmerBot.Core.Patterns
       double minProb = input.Count * 
         Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + input.Count));
 
-      if (maxProb > minProb + Math.Log(5))
+      if (maxProb > minProb + Math.Log(input.Count))
         return new PatternMatchResult(result, input);
       else
         return null;
