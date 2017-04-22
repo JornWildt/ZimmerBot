@@ -105,7 +105,7 @@ namespace ZimmerBot.Core.Knowledge
       }
 
       EntityManager.UpdateStatistics();
-      PatternManager.UpdateStatistics();
+      PatternManager.UpdateStatistics(this);
     }
 
 

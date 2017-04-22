@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.WordRegex;
@@ -11,6 +12,8 @@ namespace ZimmerBot.Core.Knowledge
     public KnowledgeBase KnowledgeBase { get; protected set; }
 
     public string Name { get; protected set; }
+
+    public List<List<string>> OriginalPatterns { get; protected set; }
 
     public ChoiceWRegex Choices { get; protected set; }
 
@@ -24,6 +27,7 @@ namespace ZimmerBot.Core.Knowledge
 
       KnowledgeBase = kb;
       Name = name;
+      OriginalPatterns = patterns;
 
       ConvertToWRegex(patterns);
     }
@@ -68,6 +72,34 @@ namespace ZimmerBot.Core.Knowledge
       {
         return new LiteralWRegex(word);
       }
+    }
+
+
+    public IEnumerable<string> ExpandPatterns()
+    {
+      foreach (List<string> pattern in OriginalPatterns)
+      {
+        // FIXME: does not expand "%x %y", only "%x"
+        string word = pattern.Aggregate((a, b) => a + " " + b);
+        foreach (string w in ExpandWord(word))
+          yield return w;
+      }
+    }
+
+
+    public IEnumerable<string> ExpandWord(string word)
+    {
+      if (word.StartsWith("%"))
+      {
+        string key = word.Substring(1);
+        if (!KnowledgeBase.Concepts.ContainsKey(key))
+          throw new InvalidOperationException($"The concept reference '{key}' in concept definition '{Name}' could not be found.");
+
+        foreach (string w in KnowledgeBase.Concepts[key].ExpandPatterns())
+          yield return w;
+      }
+      else
+        yield return word;
     }
 
 

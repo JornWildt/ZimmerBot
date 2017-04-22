@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Patterns
 {
@@ -40,6 +41,17 @@ namespace ZimmerBot.Core.Patterns
         p.RegisterParent(this);
     }
 
+
+    public void ExpandPatterns(KnowledgeBase kb)
+    {
+      Pattern[] existingPatterns = Patterns.ToArray();
+      Patterns.Clear();
+
+      foreach (Pattern p in existingPatterns)
+      {
+        p.ExpandExpressions(kb, Patterns);
+      }
+    }
 
     public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {

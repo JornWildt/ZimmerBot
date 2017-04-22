@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
@@ -29,8 +30,11 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public void UpdateStatistics()
+    public void UpdateStatistics(KnowledgeBase kb)
     {
+      foreach (var entry in PatternSets)
+        entry.ExpandPatterns(kb);
+
       TotalNumberOfPatterns = PatternSets.Sum(p => p.Patterns.Count); ;
       TotalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);
 

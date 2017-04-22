@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns

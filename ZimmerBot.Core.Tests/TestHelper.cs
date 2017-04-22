@@ -83,12 +83,13 @@ namespace ZimmerBot.Core.Tests
     }
 
 
-    protected KnowledgeBase ParseKnowledgeBase(string s)
+    protected KnowledgeBase ParseKnowledgeBase(string s, bool doSetupComplete = true)
     {
       KnowledgeBase kb = new KnowledgeBase();
       kb.Initialize(KnowledgeBase.InitializationMode.Clear);
       CfgParser.ParseConfigurationString(kb, s);
-      kb.SetupComplete();
+      if (doSetupComplete)
+        kb.SetupComplete();
       return kb;
     }
 

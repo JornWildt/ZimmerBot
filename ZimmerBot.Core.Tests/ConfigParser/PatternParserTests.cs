@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Patterns;
 
@@ -101,6 +96,74 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual(Constants.StarValue, kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Value);
       Assert.AreEqual("loc", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Key);
       Assert.AreEqual("Smørum Nedre", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Value);
+    }
+
+
+    [Test]
+    public void CanParseAndExpandConceptsInPatterns()
+    {
+      string cfg = @"
+! concept like = like, enjoy, prefer
+
+! pattern (intent = you_like, type = question)
+{
+  > do you %like fruits
+}
+";
+      KnowledgeBase kb = ParseKnowledgeBase(cfg, doSetupComplete: false);
+      PatternSet set = kb.PatternManager.PatternSets[0];
+      Assert.AreEqual(1, set.Patterns.Count);
+      Assert.IsNotNull(set.Patterns[0].Expressions);
+      Assert.AreEqual(4, set.Patterns[0].Expressions.Count);
+      Assert.IsInstanceOf<ConceptPatternExpr>(set.Patterns[0].Expressions[2]);
+
+      ConceptPatternExpr cexpr = (ConceptPatternExpr)set.Patterns[0].Expressions[2];
+      Assert.AreEqual("like", cexpr.Word);
+
+      string[] expectedWords = new string[] { "like", "enjoy", "prefer" };
+
+      kb.SetupComplete();
+      Assert.AreEqual(3, set.Patterns.Count);
+      for (int i=0; i<set.Patterns.Count; ++i)
+      {
+        Pattern p = set.Patterns[i];
+        Assert.AreEqual(4, p.Expressions.Count);
+        Assert.IsInstanceOf<WordPatternExpr>(p.Expressions[2]);
+
+        WordPatternExpr wexpr = (WordPatternExpr)p.Expressions[2];
+        Assert.AreEqual(expectedWords[i], wexpr.Word);
+      }
+    }
+
+
+    [Test]
+    public void CanParseAndExpandRecursiveConceptsInPatterns()
+    {
+      string cfg = @"
+! concept like_1 = enjoy, prefer
+! concept like = like, %like_1
+
+! pattern (intent = you_like, type = question)
+{
+  > do you %like fruits
+}
+";
+      KnowledgeBase kb = ParseKnowledgeBase(cfg, doSetupComplete: false);
+      PatternSet set = kb.PatternManager.PatternSets[0];
+
+      string[] expectedWords = new string[] { "like", "enjoy", "prefer" };
+
+      kb.SetupComplete();
+      Assert.AreEqual(3, set.Patterns.Count);
+      for (int i = 0; i < set.Patterns.Count; ++i)
+      {
+        Pattern p = set.Patterns[i];
+        Assert.AreEqual(4, p.Expressions.Count);
+        Assert.IsInstanceOf<WordPatternExpr>(p.Expressions[2]);
+
+        WordPatternExpr wexpr = (WordPatternExpr)p.Expressions[2];
+        Assert.AreEqual(expectedWords[i], wexpr.Word);
+      }
     }
   }
 }

@@ -121,6 +121,7 @@
     <Compile Include="Knowledge\RequestContext.cs" />
     <Compile Include="Knowledge\Topic.cs" />
     <Compile Include="Knowledge\TopicRule.cs" />
+    <Compile Include="Patterns\ConceptPatternExpr.cs" />
     <Compile Include="Patterns\EntityPatternExpr.cs" />
     <Compile Include="Patterns\Pattern.cs" />
     <Compile Include="Patterns\PatternManager.cs" />

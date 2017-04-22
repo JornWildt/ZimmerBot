@@ -400,6 +400,7 @@ patternExprSeq
 patternExpr
   : entityPatternExpr { $$.patternExpr = $1.patternExpr; }
   | T_WORD            { $$.patternExpr = new WordPatternExpr($1.s); }
+  | T_CWORD           { $$.patternExpr = new ConceptPatternExpr($1.s); }
   | T_STRING          { $$.patternExpr = new WordPatternExpr($1.s); }
   ;
 

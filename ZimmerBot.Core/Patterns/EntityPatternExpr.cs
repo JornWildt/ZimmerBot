@@ -40,6 +40,12 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
+    public override string ToString()
+    {
+      return "{" + EntityClass + ":" + ParameterName + "}";
+    }
+
+
     public override void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens)
     {
       if (entityTokens.Count > 0)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
@@ -37,6 +38,52 @@ namespace ZimmerBot.Core.Patterns
     public void RegisterParent(PatternSet set)
     {
       ParentPatternSet = set;
+    }
+
+
+    public override string ToString()
+    {
+      return Expressions.Select(e => e.ToString()).Aggregate((a,b) => a + ", " + b);
+    }
+
+
+    public void ExpandExpressions(KnowledgeBase kb, List<Pattern> output)
+    {
+      Stack<PatternExpr> prefix = new Stack<PatternExpr>();
+      ExpandExpressions(kb, output, prefix, 0);
+    }
+
+
+    protected void ExpandExpressions(KnowledgeBase kb, List<Pattern> output, Stack<PatternExpr> prefix, int pos)
+    {
+      if (pos >= Expressions.Count)
+      {
+        Pattern newPattern = new Pattern(prefix.Reverse().ToList());
+        newPattern.RegisterParent(ParentPatternSet);
+        output.Add(newPattern);
+        return;
+      }
+
+      if (Expressions[pos] is ConceptPatternExpr)
+      {
+        ConceptPatternExpr cexpr = (ConceptPatternExpr)Expressions[pos];
+        if (!kb.Concepts.ContainsKey(cexpr.Word))
+          throw new InvalidOperationException($"Could not find concept '{cexpr.Word}' for pattern '{this.ToString()}'");
+        Concept c = kb.Concepts[cexpr.Word];
+
+        foreach (string word in c.ExpandPatterns())
+        {
+          prefix.Push(new WordPatternExpr(word));
+          ExpandExpressions(kb, output, prefix, pos + 1);
+          prefix.Pop();
+        }
+      }
+      else
+      {
+        prefix.Push(Expressions[pos]);
+        ExpandExpressions(kb, output, prefix, pos + 1);
+        prefix.Pop();
+      }
     }
 
 

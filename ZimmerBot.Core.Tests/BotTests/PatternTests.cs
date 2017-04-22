@@ -140,5 +140,48 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("where is Mario Zimmer", "'Mario Zimmer' is here.");
       AssertDialog("WHERE iS mario ZIMmer", "'mario ZIMmer' is here.");
     }
+
+
+    [Test]
+    public void CanMatchConcepts()
+    {
+      string cfg = @"
+! concept kill = kill, murder
+! pattern ( intent = how_to_kill )
+{
+  > how do you kill {something}
+}
+
+>> { intent = how_to_kill }
+: With an axe
+";
+
+      BuildBot(cfg);
+
+      AssertDialog("how do you kill a zombie", "With an axe");
+    }
+
+
+    [Test]
+    public void CanMatchRecursiveConcepts()
+    {
+      string cfg = @"
+! concept kill_1 = murder, stab
+! concept kill = kill, %kill_1
+
+! pattern ( intent = how_to_kill )
+{
+  > how do you kill {something}
+}
+
+>> { intent = how_to_kill }
+: With an axe
+";
+
+      BuildBot(cfg);
+
+      AssertDialog("how do you kill a zombie", "With an axe");
+      AssertDialog("how do you murder a zombie", "With an axe");
+    }
   }
 }

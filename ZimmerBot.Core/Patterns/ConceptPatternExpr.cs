@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
 {
-  public class WordPatternExpr : PatternExpr
+  public class ConceptPatternExpr : PatternExpr
   {
     public string Word { get; protected set; }
 
 
-    public WordPatternExpr(string word)
+    public ConceptPatternExpr(string cword)
     {
-      Condition.Requires(word, nameof(word)).IsNotNullOrWhiteSpace();
+      Condition.Requires(cword, nameof(cword)).IsNotNullOrWhiteSpace();
 
-      Word = word;
+      if (cword.StartsWith("%"))
+        cword = cword.Substring(1);
+
+      Word = cword;
     }
 
 
@@ -32,7 +34,7 @@ namespace ZimmerBot.Core.Patterns
 
     public override string ToString()
     {
-      return Word;
+      return "%" + Word;
     }
 
 
