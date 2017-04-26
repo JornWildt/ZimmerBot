@@ -138,6 +138,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public void ExtractWordsForSpellChecker()
+    {
+      Regex.ExtractWordsForSpellChecker();
+    }
+
+
     public MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
       if (!context.ExecuteScheduledRules && Schedule != null)

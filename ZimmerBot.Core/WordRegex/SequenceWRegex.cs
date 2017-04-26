@@ -29,6 +29,12 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    public override void ExtractWordsForSpellChecker()
+    {
+      Sequence.ForEach(expr => expr.ExtractWordsForSpellChecker());
+    }
+
+
     public override double CalculateSize()
     {
       return Sequence.Sum(w => w.CalculateSize());

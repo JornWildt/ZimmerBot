@@ -27,6 +27,12 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    public void ExtractWordsForSpellChecker()
+    {
+      Expr.ExtractWordsForSpellChecker();
+    }
+
+
     public double CalculateSize()
     {
       return Expr.CalculateSize();

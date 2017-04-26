@@ -15,10 +15,15 @@ namespace ZimmerBot.Core.Patterns
 
     protected double TotalNumberOfWords { get; set; }
 
+    protected KnowledgeBase KnowledgeBase { get; set; }
 
-    public PatternManager()
+
+    public PatternManager(KnowledgeBase kb)
     {
+      Condition.Requires(kb, nameof(kb)).IsNotNull();
+
       PatternSets = new List<PatternSet>();
+      KnowledgeBase = kb;
     }
 
 
@@ -30,10 +35,10 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public void UpdateStatistics(KnowledgeBase kb)
+    public void SetupComplete()
     {
       foreach (var entry in PatternSets)
-        entry.ExpandPatterns(kb);
+        entry.ExpandPatterns(KnowledgeBase);
 
       TotalNumberOfPatterns = PatternSets.Sum(p => p.Patterns.Count); ;
       TotalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);

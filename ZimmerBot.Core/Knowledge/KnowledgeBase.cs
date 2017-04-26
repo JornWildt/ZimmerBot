@@ -66,9 +66,9 @@ namespace ZimmerBot.Core.Knowledge
       Topics = new Dictionary<string, Topic>();
       EventHandlers = new Dictionary<Request.EventEnum, List<StandardRule>>();
       LabelToRuleMap = new Dictionary<string, Rule>();
-      EntityManager = new EntityManager();
+      EntityManager = new EntityManager(this);
       SparqlForEntities = new List<string>();
-      PatternManager = new PatternManager();
+      PatternManager = new PatternManager(this);
 
       Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
 
@@ -104,8 +104,11 @@ namespace ZimmerBot.Core.Knowledge
           result.Where(item => item.ContainsKey("label")).Select(item => item["label"]));
       }
 
-      EntityManager.UpdateStatistics();
-      PatternManager.UpdateStatistics(this);
+      foreach (Rule r in AllRules)
+        r.SetupComplete();
+
+      EntityManager.SetupComplete();
+      PatternManager.SetupComplete();
     }
 
 
@@ -261,13 +264,13 @@ namespace ZimmerBot.Core.Knowledge
             context.InputContext.Session.SetCurrentTopic(null);
         }
 
-        // Try all other topics than the current with a smaller weight applied
+        // Try default topic with a smaller weight applied
         Topic nextTopic = null;
 
-        foreach (Topic t in Topics.Where(tp => tp.Key != topicName).Select(tp => tp.Value))
+        if (topicName != DefaultTopicName)
         {
-          if (SelectReactionsFromTopic(t, reactions, context, 1.0))
-            nextTopic = t;
+          if (SelectReactionsFromTopic(DefaultTopic, reactions, context, 1.0))
+            nextTopic = DefaultTopic;
         }
 
         if (nextTopic != null && nextTopic.IsAutomaticallySelectable)

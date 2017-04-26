@@ -8,6 +8,8 @@ namespace ZimmerBot.Core.WordRegex
 {
   public abstract class WRegexBase
   {
+    public abstract void ExtractWordsForSpellChecker();
+
     public abstract double CalculateSize();
 
 

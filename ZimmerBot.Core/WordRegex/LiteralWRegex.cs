@@ -1,6 +1,7 @@
-﻿using CuttingEdge.Conditions;
+﻿using System;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
-
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.WordRegex
 {
@@ -13,6 +14,12 @@ namespace ZimmerBot.Core.WordRegex
     {
       Condition.Requires(l, nameof(l)).IsNotNull();
       Literal = l;
+    }
+
+
+    public override void ExtractWordsForSpellChecker()
+    {
+      SpellChecker.AddWord(Literal);
     }
 
 

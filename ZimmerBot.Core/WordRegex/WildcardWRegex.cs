@@ -12,6 +12,12 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    public override void ExtractWordsForSpellChecker()
+    {
+      // Do nothing
+    }
+
+
     public override double CalculateSize()
     {
       return 1;

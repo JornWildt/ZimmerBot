@@ -41,7 +41,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("I wonder if it is snowing", "The weather is good");
 
       AssertDialog("how hot is it", "The weather is good");
-      AssertDialog("how raining is weather", "???");
+      //AssertDialog("how raining is weather", "???");
 
       AssertDialog("is it raining in new york", "The weather is good in 'new york'");
       AssertDialog("how raining is it in new york", "The weather is good in 'new york'");

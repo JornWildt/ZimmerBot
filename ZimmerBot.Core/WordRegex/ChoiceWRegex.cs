@@ -41,6 +41,12 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    public override void ExtractWordsForSpellChecker()
+    {
+      Choices.ForEach(c => c.ExtractWordsForSpellChecker());
+    }
+
+
     public override double CalculateSize()
     {
       return Choices.Max(c => c.CalculateSize());

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Knowledge
@@ -11,9 +12,15 @@ namespace ZimmerBot.Core.Knowledge
   {
     public Dictionary<string, EntityClass> EntityClasses { get; protected set; }
 
-    public EntityManager()
+    protected KnowledgeBase KnowledgeBase { get; set; }
+
+
+    public EntityManager(KnowledgeBase kb)
     {
+      Condition.Requires(kb, nameof(kb)).IsNotNull();
+
       EntityClasses = new Dictionary<string, EntityClass>();
+      KnowledgeBase = kb;
     }
 
 
@@ -29,7 +36,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void UpdateStatistics()
+    public void SetupComplete()
     {
       double totalNumberOfWords = EntityClasses.Select(c => c.Value.TotalNumberOfWords).Sum();
       foreach (var entry in EntityClasses)

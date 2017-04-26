@@ -48,6 +48,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public abstract void SetupComplete();
+
+
     public virtual void RegisterParentRule(Rule parentRule)
     {
     }

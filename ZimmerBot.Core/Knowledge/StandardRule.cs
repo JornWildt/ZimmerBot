@@ -79,6 +79,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public override void SetupComplete()
+    {
+      Trigger.ExtractWordsForSpellChecker();
+    }
+
+
     public override IList<Reaction> CalculateReactions(TriggerEvaluationContext context, double weight)
     {
       if (context.RestrictToRuleId != null && context.RestrictToRuleId != Id)

@@ -47,6 +47,9 @@ namespace ZimmerBot.Core.Tests.BotTests
     {
       // Arrange
       BuildBot(@"
+> where is the zombie
+: In the darkness
+! start_topic Zombies
 
 > help
 : It is okay
@@ -79,6 +82,10 @@ namespace ZimmerBot.Core.Tests.BotTests
     {
       // Arrange
       BuildBot(@"
+> where is the zombie
+: In the darkness
+! start_topic Zombies
+
 ! topic Zombies
 {
   T> Zombies contaminates
@@ -95,6 +102,8 @@ namespace ZimmerBot.Core.Tests.BotTests
     : they are dead
       +: and rotten!
   }
+
+  T> this is here to have an extra topic story line
 
   > where is the zombie
   : In the darkness
@@ -114,11 +123,12 @@ namespace ZimmerBot.Core.Tests.BotTests
     public void CanHandleAnswersInTopicRules()
     {
       BuildBot(@"
+> Zombie
+: Run!
+! start_topic Zombies
+
 ! topic Zombies
 {
-  > Zombie
-  : Run!
-
   > xxx
   : Agree?
   ! answer
@@ -143,6 +153,10 @@ namespace ZimmerBot.Core.Tests.BotTests
     public void ItDoesNotActivateDefaultTopicAutomatically()
     {
       BuildBot(@"
+> Zombie
+: Run!
+! start_topic Zombies
+
 > why
 : Because
 
@@ -154,9 +168,6 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 ! topic Zombies
 {
-  > Zombie
-  : Run!
-
   > yyy
   : Still zombies
 }

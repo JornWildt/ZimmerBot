@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.ConfigParser;
@@ -19,6 +20,12 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(pattern, nameof(pattern)).IsNotNull();
 
       KeyValuePattern = pattern;
+    }
+
+
+    public override void SetupComplete()
+    {
+      // Do nothing
     }
 
 
