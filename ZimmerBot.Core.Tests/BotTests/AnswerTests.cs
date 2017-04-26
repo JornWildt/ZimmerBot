@@ -88,5 +88,52 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("How are you", "Fine. And you?");
       AssertDialog("Dreadful", "Sorry to hear that");
     }
+
+
+    [Test]
+    public void CannotUseAnswersWithoutPrecedingQuestion()
+    {
+      BuildBot(@"
+> How are you
+: Fine. And you?
+! answer
+{
+  > fine
+  : Cool
+
+  > Dreadful
+  : Sorry to hear that
+}
+");
+
+      AssertDialog("Fine", "???");
+      AssertDialog("Dreadful", "???");
+    }
+
+
+    [Test]
+    public void CannotUseAnswersWithoutPrecedingQuestion2()
+    {
+      BuildBot(@"
+> help
+: Just a second
+
+> How are you
+: Fine. And you?
+! answer
+{
+  > fine
+  : Cool
+
+  > Dreadful
+  : Sorry to hear that
+}
+");
+
+      AssertDialog("How are you", "Fine. And you?");
+      AssertDialog("help", "Just a second");
+      AssertDialog("Fine", "???");
+      AssertDialog("Dreadful", "???");
+    }
   }
 }

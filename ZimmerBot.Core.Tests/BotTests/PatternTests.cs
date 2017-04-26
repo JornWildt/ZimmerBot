@@ -183,5 +183,40 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("how do you kill a zombie", "With an axe");
       AssertDialog("how do you murder a zombie", "With an axe");
     }
+
+
+    [Test]
+    public void ItDoesNotSelectAnswerWithoutQuestion()
+    {
+      BuildBot(@"
+! pattern (intent = yes)
+{
+  > yes
+  > aye
+  > sure
+}
+
+> Zombie
+: Run!
+! start_topic Zombies
+
+! topic Zombies
+{
+  > xxx
+  : Agree?
+  ! answer
+  {
+    >> { intent = yes }
+    : Good
+
+    >> { intent = no }
+    : Sorry
+  }
+}
+");
+
+      AssertDialog("zombie", "Run!", "Start topic");
+      AssertDialog("yes", "???", "Should NOT match (un)expected 'yes' answer");
+    }
   }
 }

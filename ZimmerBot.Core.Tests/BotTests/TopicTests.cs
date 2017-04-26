@@ -150,6 +150,35 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void ItDoesNotSelectAnswerWithoutQuestion()
+    {
+      BuildBot(@"
+> Zombie
+: Run!
+! start_topic Zombies
+
+! topic Zombies
+{
+  > xxx
+  : Agree?
+  ! answer
+  {
+    > yes
+    : Good
+
+    > no
+    : Sorry
+  }
+}
+");
+
+      AssertDialog("zombie", "Run!", "Start topic");
+      AssertDialog("yes", "???", "Should NOT match (un)expected 'yes' answer");
+      AssertDialog("no", "???", "Should NOT match (un)expected 'no' answer");
+    }
+
+
+    [Test]
     public void ItDoesNotActivateDefaultTopicAutomatically()
     {
       BuildBot(@"

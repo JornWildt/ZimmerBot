@@ -13,6 +13,8 @@ namespace ZimmerBot.Core.Knowledge
   {
     public StringPairList KeyValuePattern { get; protected set; }
 
+    public string RequiredPriorRuleId { get; protected set; }
+
 
     public PatternRule(KnowledgeBase kb, string label, Topic topic, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
       : base(kb, label, topic, statements)
@@ -20,6 +22,12 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(pattern, nameof(pattern)).IsNotNull();
 
       KeyValuePattern = pattern;
+    }
+
+
+    public override void RegisterParentRule(Rule parentRule)
+    {
+      RequiredPriorRuleId = parentRule.Id;
     }
 
 
@@ -32,6 +40,25 @@ namespace ZimmerBot.Core.Knowledge
     public override IList<Reaction> CalculateReactions(TriggerEvaluationContext context, double weight)
     {
       if (context.MatchedPattern == null)
+        return new List<Reaction>();
+
+      double conditionModifier = 1;
+
+      if (RequiredPriorRuleId != null)
+      {
+        string lastRuleId = context.InputContext.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
+        if (lastRuleId is string)
+        {
+          if (RequiredPriorRuleId == lastRuleId)
+            conditionModifier *= 4;
+          else
+            conditionModifier = 0;
+        }
+        else
+          conditionModifier = 0;
+      }
+
+      if (conditionModifier == 0)
         return new List<Reaction>();
 
       bool ok = true;

@@ -242,7 +242,7 @@ namespace ZimmerBot.Core.Knowledge
           context.MatchedPattern = matchingPattern;
 
           if (matchingPattern != null)
-            BotUtility.EvaluationLogger.Debug($"Matched pattern: {matchingPattern.ToString()}");
+            BotUtility.EvaluationLogger.Debug($"Matched pattern: {matchingPattern.MatchPattern.ToString()}");
         }
 
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
