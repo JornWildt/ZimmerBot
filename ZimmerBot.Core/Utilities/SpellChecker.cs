@@ -7,7 +7,7 @@ namespace ZimmerBot.Core.Utilities
 {
   public static class SpellChecker
   {
-    private static bool IsInitialized { get; set; }
+    public static bool IsInitialized { get; private set; }
 
     private static Hunspell Speller { get; set; }
 
@@ -35,6 +35,18 @@ namespace ZimmerBot.Core.Utilities
         Speller.Dispose();
       Speller = null;
       IsInitialized = false;
+    }
+
+
+    public static void AddWord(string word)
+    {
+      if (!IsInitialized)
+        throw new InvalidOperationException("Spell checker not initialized");
+
+      if (Speller == null)
+        return;
+
+      Speller.Add(word);
     }
 
 

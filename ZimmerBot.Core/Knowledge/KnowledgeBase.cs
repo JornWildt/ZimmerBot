@@ -240,6 +240,9 @@ namespace ZimmerBot.Core.Knowledge
         {
           PatternMatchResult matchingPattern = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
           context.MatchedPattern = matchingPattern;
+
+          if (matchingPattern != null)
+            BotUtility.EvaluationLogger.Debug($"Matched pattern: {matchingPattern.ToString()}");
         }
 
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;

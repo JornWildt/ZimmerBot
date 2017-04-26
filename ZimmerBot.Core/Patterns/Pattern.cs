@@ -87,6 +87,15 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
+    public void ExtractWordsForSpellChecker()
+    {
+      foreach (var expr in Expressions)
+      {
+        expr.ExtractWordsForSpellChecker();
+      }
+    }
+
+
     public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {
       TotalNumberOfWords = totalNumberOfWords;

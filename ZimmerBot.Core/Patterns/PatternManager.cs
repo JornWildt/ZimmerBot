@@ -4,6 +4,7 @@ using System.Linq;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Patterns
 {
@@ -44,7 +45,12 @@ namespace ZimmerBot.Core.Patterns
       TotalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);
 
       foreach (var entry in PatternSets)
+      {
         entry.UpdateStatistics(TotalNumberOfPatterns, TotalNumberOfWords);
+
+        if (SpellChecker.IsInitialized)
+          entry.ExtractWordsForSpellChecker();
+      }
     }
 
 

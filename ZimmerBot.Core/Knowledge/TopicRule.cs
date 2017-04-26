@@ -12,6 +12,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public override void SetupComplete()
+    {
+      // Do nothing
+    }
+
+
     public override IList<Reaction> CalculateReactions(TriggerEvaluationContext context, double weight)
     {
       List<Reaction> reactions = new List<Reaction>();

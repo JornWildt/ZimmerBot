@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Patterns
 {
@@ -33,6 +34,12 @@ namespace ZimmerBot.Core.Patterns
     public override string ToString()
     {
       return Word;
+    }
+
+
+    public override void ExtractWordsForSpellChecker()
+    {
+      SpellChecker.AddWord(Word);
     }
 
 

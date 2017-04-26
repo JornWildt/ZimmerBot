@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
 
@@ -43,6 +44,12 @@ namespace ZimmerBot.Core.Patterns
     public override string ToString()
     {
       return "{" + EntityClass + ":" + ParameterName + "}";
+    }
+
+
+    public override void ExtractWordsForSpellChecker()
+    {
+      // Do nothing
     }
 
 

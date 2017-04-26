@@ -140,7 +140,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public void ExtractWordsForSpellChecker()
     {
-      Regex.ExtractWordsForSpellChecker();
+      if (Regex != null)
+        Regex.ExtractWordsForSpellChecker();
     }
 
 

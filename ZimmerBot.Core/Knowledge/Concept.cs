@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
@@ -72,6 +73,13 @@ namespace ZimmerBot.Core.Knowledge
       {
         return new LiteralWRegex(word);
       }
+    }
+
+
+    public void ExtractWordsForSpellChecker()
+    {
+      foreach (string word in ExpandPatterns())
+        SpellChecker.AddWord(word);
     }
 
 

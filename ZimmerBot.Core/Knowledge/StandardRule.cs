@@ -81,7 +81,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public override void SetupComplete()
     {
-      Trigger.ExtractWordsForSpellChecker();
+      if (SpellChecker.IsInitialized)
+        Trigger.ExtractWordsForSpellChecker();
     }
 
 

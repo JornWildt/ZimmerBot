@@ -58,5 +58,12 @@ namespace ZimmerBot.Core.Patterns
       foreach (var pattern in Patterns)
         pattern.UpdateStatistics(totalNumberOfPatterns, totalNumberOfWords);
     }
+
+
+    public void ExtractWordsForSpellChecker()
+    {
+      foreach (var pattern in Patterns)
+        pattern.ExtractWordsForSpellChecker();
+    }
   }
 }
