@@ -84,7 +84,7 @@ namespace ZimmerBot.Core.Knowledge
         // - but wildcard matches weight less
         double score = context.MatchedPattern.MatchPattern.Expressions.Sum(expr => expr.Weight);
 
-        MatchResult result = new MatchResult(score * weight);
+        MatchResult result = new MatchResult(score * weight * conditionModifier);
         foreach (var item in matchValues)
           result.Matches[item.Key] = item.Value;
 

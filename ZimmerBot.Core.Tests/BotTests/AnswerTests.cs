@@ -135,5 +135,34 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("Fine", "???");
       AssertDialog("Dreadful", "???");
     }
+
+
+    [Test]
+    public void PatternRulesAndRegexRulesAreTriggeredEqualyInAnswers()
+    {
+      // Arrange
+      BuildBot(@"
+! pattern (intent = yes)
+{
+  > yes
+}
+
+> What
+: Yes or No?
+! answer
+{
+  >> { intent = yes }
+  : Great!
+
+  > +
+  : Okay
+}
+
+");
+
+      // Act
+      AssertDialog("What", "Yes or No?");
+      AssertDialog("Yes", "Great!");
+    }
   }
 }
