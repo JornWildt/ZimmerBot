@@ -260,8 +260,6 @@ namespace ZimmerBot.Core.Knowledge
           foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context, 2.0))
             reactions.Add(reaction);
 
-          context.InputContext.Session.SetTopicRuleIndex(topicName, topicRuleIndex + 1);
-
           // No topic stories left => clear topic
           if (topicRuleIndex == topic.TopicRules.Count-1)
             context.InputContext.Session.SetCurrentTopic(null);

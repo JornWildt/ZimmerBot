@@ -101,7 +101,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public List<string> Invoke(ResponseGenerationContext context, string outputId)
+    public virtual List<string> Invoke(ResponseGenerationContext context, string outputId)
     {
       try
       {

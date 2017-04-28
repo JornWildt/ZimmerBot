@@ -116,6 +116,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public static void IncrementTopicRuleIndex(this Session session, string topic)
+    {
+      int index = session.Store[CurrentTopic_SessionKey + ":" + topic] ?? 0;
+      session.Store[CurrentTopic_SessionKey + ":" + topic] = index + 1;
+    }
+
+
     public static int GetTopicRuleIndex(this Session session, string topic)
     {
       return session.Store[CurrentTopic_SessionKey + ":" + topic] ?? 0;

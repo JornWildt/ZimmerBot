@@ -235,6 +235,38 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void ItDoesNotCountTopicRulesAsusedWhenSelectingOtherRules()
+    {
+      // Arrange
+      BuildBot(@"
+> Help
+: Zombies!
+! start_topic Zombies
+
+> what is that
+: That
+
+! topic Zombies
+{
+  T> Text1
+  T> Text2
+  T> Text3
+  T> Text4
+}
+");
+
+      // Act
+      AssertDialog("What is that", "That");
+      AssertDialog("help", "Zombies!");
+      AssertDialog("X", "Text1");
+      AssertDialog("What is that", "That");
+      AssertDialog("What is that", "That");
+      AssertDialog("X", "Text2");
+      AssertDialog("X", "Text3");
+    }
+
+
+    [Test]
     [Ignore("Not ready yet")]
     public void CanSwitchBetweenTopics()
     {

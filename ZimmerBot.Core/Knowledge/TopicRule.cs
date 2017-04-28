@@ -27,6 +27,14 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public override List<string> Invoke(ResponseGenerationContext context, string outputId)
+    {
+      // Prepare for next topic rule whenever a topic rule is invoked
+      context.Session.IncrementTopicRuleIndex(RelatedTopic.Name);
+
+      return base.Invoke(context, outputId);
+    }
+
     public override string ToString()
     {
       return "Topic rule";
