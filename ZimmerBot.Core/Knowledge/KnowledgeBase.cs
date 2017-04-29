@@ -152,21 +152,21 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public StandardRule AddRule(string label, string topicName, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
+    public StandardRule AddRegexRule(string label, string topicName, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
       return AddRule(topicName, topic => new StandardRule(this, label, topic, patterns, modifiers, statements));
+    }
+
+
+    public StandardRule AddFuzzyRule(string label, string topicName, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      return AddRule(topicName, topic => new StandardRule(this, label, topic, pattern, modifiers, statements));
     }
 
 
     public TopicRule AddTopicRule(string label, string topicName, List<Statement> statements)
     {
       return AddRule(topicName, topic => new TopicRule(this, label, topic, statements));
-    }
-
-
-    public PatternRule AddPatternRule(string label, string topicName, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
-    {
-      return AddRule(topicName, topic => new PatternRule(this, label, topic, pattern, modifiers, statements));
     }
 
 
@@ -195,7 +195,7 @@ namespace ZimmerBot.Core.Knowledge
       Request.EventEnum etype;
       if (Enum.TryParse(e, true, out etype))
       {
-        StandardRule rule = new StandardRule(this, null, null, null, null, statements);
+        StandardRule rule = new StandardRule(this, statements);
         if (!EventHandlers.ContainsKey(etype))
           EventHandlers[etype] = new List<StandardRule>();
         EventHandlers[etype].Add(rule);
@@ -287,7 +287,7 @@ namespace ZimmerBot.Core.Knowledge
       BotUtility.EvaluationLogger.Debug($"Select reactions from topic {topic.Name} with weight {weight}");
 
       bool reactionsAdded = false;
-      foreach (Rule r in topic.StandardRules.Cast<Rule>().Concat(topic.PatternRules))
+      foreach (Rule r in topic.StandardRules)
       {
         IList<Reaction> result = r.CalculateReactions(context, weight);
         foreach (Reaction reaction in result)

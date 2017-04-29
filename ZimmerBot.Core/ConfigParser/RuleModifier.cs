@@ -56,9 +56,11 @@ namespace ZimmerBot.Core.ConfigParser
       Seconds = seconds;
     }
 
+
     public override void Invoke(StandardRule r)
     {
-      r.WithSchedule(TimeSpan.FromSeconds(Seconds));
+      // FIXME!
+      //r.WithSchedule(TimeSpan.FromSeconds(Seconds));
     }
   }
 

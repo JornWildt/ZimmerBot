@@ -218,5 +218,29 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("zombie", "Run!", "Start topic");
       AssertDialog("yes", "???", "Should NOT match (un)expected 'yes' answer");
     }
+
+
+    [Test]
+    public void CanUseWeightInPatterns()
+    {
+      BuildBot(@"
+! pattern (intent = what, type = question )
+{
+  > what
+}
+
+>> { intent = what }
+: That!
+
+>> { type = question }
+! weight 0.5
+: Yes!
+: Aha!
+: Yep!
+: No!
+");
+
+      AssertDialog("what", "That!");
+    }
   }
 }

@@ -84,18 +84,24 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 : The weather is fantastic in Smørum Nedre
 ";
       KnowledgeBase kb = ParseKnowledgeBase(cfg);
-      Assert.IsNotNull(kb.DefaultTopic.PatternRules);
-      Assert.AreEqual(3, kb.DefaultTopic.PatternRules.Count);
-      Assert.IsNotNull(kb.DefaultTopic.PatternRules[0].KeyValuePattern);
-      Assert.AreEqual(2, kb.DefaultTopic.PatternRules[0].KeyValuePattern.Count);
-      Assert.AreEqual("intent", kb.DefaultTopic.PatternRules[0].KeyValuePattern[0].Key);
-      Assert.AreEqual("current_weather", kb.DefaultTopic.PatternRules[0].KeyValuePattern[0].Value);
-      Assert.AreEqual("type", kb.DefaultTopic.PatternRules[0].KeyValuePattern[1].Key);
-      Assert.AreEqual("question", kb.DefaultTopic.PatternRules[0].KeyValuePattern[1].Value);
-      Assert.AreEqual("loc", kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Key);
-      Assert.AreEqual(Constants.StarValue, kb.DefaultTopic.PatternRules[1].KeyValuePattern[2].Value);
-      Assert.AreEqual("loc", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Key);
-      Assert.AreEqual("Smørum Nedre", kb.DefaultTopic.PatternRules[2].KeyValuePattern[2].Value);
+      Assert.IsNotNull(kb.DefaultTopic.StandardRules);
+      Assert.AreEqual(3, kb.DefaultTopic.StandardRules.Count);
+      Assert.IsInstanceOf<FuzzyTrigger>(kb.DefaultTopic.StandardRules[0].Trigger);
+      Assert.IsInstanceOf<FuzzyTrigger>(kb.DefaultTopic.StandardRules[1].Trigger);
+      Assert.IsInstanceOf<FuzzyTrigger>(kb.DefaultTopic.StandardRules[2].Trigger);
+
+      FuzzyTrigger t1 = (FuzzyTrigger)kb.DefaultTopic.StandardRules[0].Trigger;
+      FuzzyTrigger t2 = (FuzzyTrigger)kb.DefaultTopic.StandardRules[1].Trigger;
+      FuzzyTrigger t3 = (FuzzyTrigger)kb.DefaultTopic.StandardRules[2].Trigger;
+      Assert.AreEqual(2, t1.KeyValuePattern.Count);
+      Assert.AreEqual("intent", t1.KeyValuePattern[0].Key);
+      Assert.AreEqual("current_weather", t1.KeyValuePattern[0].Value);
+      Assert.AreEqual("type", t1.KeyValuePattern[1].Key);
+      Assert.AreEqual("question", t1.KeyValuePattern[1].Value);
+      Assert.AreEqual("loc", t2.KeyValuePattern[2].Key);
+      Assert.AreEqual(Constants.StarValue, t2.KeyValuePattern[2].Value);
+      Assert.AreEqual("loc", t3.KeyValuePattern[2].Key);
+      Assert.AreEqual("Smørum Nedre", t3.KeyValuePattern[2].Value);
     }
 
 

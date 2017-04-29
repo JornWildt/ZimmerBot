@@ -116,8 +116,12 @@ namespace ZimmerBot.Core.Tests
       where T : WRegexBase
     {
       StandardRule r = ParseRule(s);
-      Assert.IsInstanceOf<T>(r.KnowledgeBase.DefaultRules.First().Trigger.Regex.Expr);
-      T expr = (T)r.KnowledgeBase.DefaultRules.First().Trigger.Regex.Expr;
+
+      Assert.IsInstanceOf<RegexTrigger>(r.Trigger);
+      RegexTrigger trigger = (RegexTrigger)r.Trigger;
+
+      Assert.IsInstanceOf<T>(trigger.Regex.Expr);
+      T expr = (T)trigger.Regex.Expr;
 
       return expr;
     }

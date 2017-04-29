@@ -114,9 +114,15 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected StandardRule AddRule(string label, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
+    protected StandardRule AddRegexRule(string label, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
-      return (StandardRule)KnowledgeBase.AddRule(label, CurrentTopic, patterns, modifiers, statements);
+      return KnowledgeBase.AddRegexRule(label, CurrentTopic, patterns, modifiers, statements);
+    }
+
+
+    protected StandardRule AddFuzzyRule(string label, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      return KnowledgeBase.AddFuzzyRule(label, CurrentTopic, pattern, modifiers, statements);
     }
 
 
@@ -124,12 +130,6 @@ namespace ZimmerBot.Core.ConfigParser
     {
       statements.Insert(0, new OutputTemplateStatement(output));
       return KnowledgeBase.AddTopicRule(label, CurrentTopic, statements);
-    }
-
-
-    protected PatternRule AddPatternRule(string label, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
-    {
-      return KnowledgeBase.AddPatternRule(label, CurrentTopic, pattern, modifiers, statements);
     }
 
 

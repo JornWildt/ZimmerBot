@@ -31,7 +31,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual("Zombies", t.Name);
       Assert.IsNotNull(t.StandardRules);
       Assert.AreEqual(1, t.StandardRules.Count);
-      Assert.IsInstanceOf<WordRegex.SequenceWRegex>(t.StandardRules[0].Trigger.Regex.Expr);
+      Assert.IsInstanceOf<RegexTrigger>(t.StandardRules[0].Trigger);
+
+      RegexTrigger trigger = (RegexTrigger)t.StandardRules[0].Trigger;
+      Assert.IsInstanceOf<WordRegex.SequenceWRegex>(trigger.Regex.Expr);
       Assert.AreEqual(1, t.StandardRules[0].Statements.Count);
     }
 

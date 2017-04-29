@@ -13,7 +13,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 >
 : Startup");
 
-      Assert.IsNull(r.Trigger.Regex);
+      Assert.IsInstanceOf<EmptyTrigger>(r.Trigger);
     }
   }
 }

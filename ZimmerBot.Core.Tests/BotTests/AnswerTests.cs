@@ -152,6 +152,8 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! answer
 {
   >> { intent = yes }
+  # Add tiny weight to overrule random choice
+  ! weight 1.01
   : Great!
 
   > +

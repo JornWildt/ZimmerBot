@@ -126,15 +126,15 @@ ruleSeq
 rule
   : ruleLabel inputSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddRegexRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
+    }
+  | ruleLabel T_GTGT T_LBRACE keyValueSeq T_RBRACE ruleModifierSeq statementSeq
+    { 
+      $$.rule = AddFuzzyRule($1.s, $4.keyValueList, $6.ruleModifierList, $7.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
       $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
-    }
-  | ruleLabel T_GTGT T_LBRACE keyValueSeq T_RBRACE ruleModifierSeq statementSeq
-    { 
-      $$.rule = AddPatternRule($1.s, $4.keyValueList, $6.ruleModifierList, $7.statementList);
     }
   ;
 

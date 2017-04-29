@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
 using Quartz;
-using Quartz.Impl;
 using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Expressions;
-using ZimmerBot.Core.Scheduler;
 using ZimmerBot.Core.Statements;
-using ZimmerBot.Core.TemplateParser;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 
@@ -25,8 +19,30 @@ namespace ZimmerBot.Core.Knowledge
     public StandardRule(KnowledgeBase kb, string label, Topic topic, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
       : base(kb, label, topic, statements)
     {
-      Trigger = new Trigger(patterns);
+      if (patterns == null || patterns.Count == 0 || patterns[0] == null)
+        Trigger = new EmptyTrigger();
+      else
+        Trigger = new RegexTrigger(patterns);
+      HandleModifiers(modifiers);
+    }
 
+
+    public StandardRule(KnowledgeBase kb, string label, Topic topic, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
+      : base(kb, label, topic, statements)
+    {
+      Trigger = new FuzzyTrigger(pattern);
+      HandleModifiers(modifiers);
+    }
+
+
+    public StandardRule(KnowledgeBase kb, List<Statement> statements)
+      : base(kb, null, null, statements)
+    {
+    }
+
+
+    private void HandleModifiers(List<RuleModifier> modifiers)
+    {
       if (modifiers != null)
         foreach (var m in modifiers)
           m.Invoke(this);
@@ -43,13 +59,6 @@ namespace ZimmerBot.Core.Knowledge
     public StandardRule WithCondition(Expression c)
     {
       Trigger.WithCondition(c);
-      return this;
-    }
-
-
-    public StandardRule WithSchedule(TimeSpan interval)
-    {
-      Trigger.WithSchedule(interval);
       return this;
     }
 

@@ -21,7 +21,10 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ");
 
       Assert.AreEqual(1, kb.AllRules.Count());
-      Assert.AreEqual(typeof(LiteralWRegex), kb.DefaultRules.First().Trigger.Regex.TypeOfExpr);
+      StandardRule r = kb.DefaultRules.First();
+      Assert.IsInstanceOf<RegexTrigger>(r.Trigger);
+      RegexTrigger trigger = (RegexTrigger)r.Trigger;
+      Assert.AreEqual(typeof(LiteralWRegex), trigger.Regex.TypeOfExpr);
     }
 
     [Test]
