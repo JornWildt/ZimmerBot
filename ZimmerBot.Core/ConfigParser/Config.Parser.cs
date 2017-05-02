@@ -76,6 +76,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RegisterDefinitions(List<WordDefinition> definition)
+    {
+      KnowledgeBase.RegisterDefinitions(definition);
+    }
+
+
     protected WRegexBase BuildConceptWRegex(string s)
     {
       if (s == "%ENTITY")

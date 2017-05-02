@@ -63,6 +63,7 @@
     <Compile Include="BotTests\ContinueTests.cs" />
     <Compile Include="BotTests\ConceptTests.cs" />
     <Compile Include="BotTests\ConditionTests.cs" />
+    <Compile Include="BotTests\DefineTests.cs" />
     <Compile Include="BotTests\EntityTest.cs" />
     <Compile Include="BotTests\EventTests.cs" />
     <Compile Include="BotTests\InfiniteLoopProtectionTests.cs" />

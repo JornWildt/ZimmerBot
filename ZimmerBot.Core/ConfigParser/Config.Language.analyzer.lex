@@ -66,6 +66,7 @@ T\>         { return (int)Token.T_TOPICRULE; }
 ![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }
 ![ ]*continue[ ]+with  { return (int)Token.T_CONTINUE_WITH; }
 ![ ]*entities          { return (int)Token.T_ENTITIES; }
+![ ]*define            { return (int)Token.T_DEFINE; }
 ![ ]*pattern           { return (int)Token.T_PATTERN; }
 ![ ]*rdf_import        { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix        { return (int)Token.T_RDF_PREFIX; }

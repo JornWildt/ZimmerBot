@@ -26,13 +26,36 @@ namespace ZimmerBot.Core.Knowledge
 
     public void RegisterEntityClass(string className, IEnumerable<string> entityNames)
     {
-      if (!EntityClasses.ContainsKey(className))
-        EntityClasses[className] = new EntityClass(className);
+      Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
+      Condition.Requires(entityNames, nameof(entityNames)).IsNotNull();
 
-      EntityClass ec = EntityClasses[className];
+      EntityClass ec = GetOrCreateClass(className);
 
       foreach (string entityName in entityNames)
         ec.AddEntity(entityName);
+    }
+
+
+    public void RegisterEntity(string entityName, List<string> alternateNames, string className)
+    {
+      Condition.Requires(entityName, nameof(entityName)).IsNotNullOrWhiteSpace();
+      Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
+      Condition.Requires(alternateNames, nameof(alternateNames)).IsNotNull();
+
+      EntityClass ec = GetOrCreateClass(className);
+      ec.AddEntity(entityName);
+
+      foreach (string alt in alternateNames)
+        ec.AddEntity(alt);
+    }
+
+
+    protected EntityClass GetOrCreateClass(string className)
+    {
+      if (!EntityClasses.ContainsKey(className))
+        EntityClasses[className] = new EntityClass(className);
+
+      return EntityClasses[className];
     }
 
 

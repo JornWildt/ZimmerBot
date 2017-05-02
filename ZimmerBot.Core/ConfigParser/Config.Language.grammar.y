@@ -31,6 +31,8 @@
   public Pattern pattern;
   public List<PatternExpr> patternExprList;
   public PatternExpr patternExpr;
+  public List<ZimmerBot.Core.Knowledge.WordDefinition> wordDefinitionList;
+  public ZimmerBot.Core.Knowledge.WordDefinition wordDefinition;
   public string s;
   public double n;
 }
@@ -40,9 +42,9 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
-%token T_ENTITIES, T_PATTERN
-%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
-%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
+%token T_ENTITIES, T_PATTERN, T_DEFINE
+%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES
+%token T_WHEN, T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
 %token T_TOPICRULE
 %token T_GTGT
@@ -102,6 +104,8 @@ configuration
   | T_ENTITIES T_LPAR T_WORD T_RPAR
     T_LBRACE stringSeq T_RBRACE
       { RegisterEntities($3.s, $6.stringList); }
+  | T_DEFINE T_LBRACE definitionSeq T_RBRACE
+      { RegisterDefinitions($3.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
     T_LBRACE patternSeq T_RBRACE
       { RegisterPatternSet($3.keyValueList, $6.patternList); }
@@ -338,14 +342,40 @@ exprReference
   | T_WORD                     { $$.expr = new DotExpression($1.s); }
   ;
 
+
+/******************************************************************************
+  WORD DEFINITIONS
+******************************************************************************/
+
+definitionSeq
+  : definition definitionSeq  { $$.wordDefinitionList = $2.wordDefinitionList; $$.wordDefinitionList.Add($1.wordDefinition); }
+  | /* empty */               { $$.wordDefinitionList = new List<ZimmerBot.Core.Knowledge.WordDefinition>(); }
+  ;
+
+definition
+  : definitionWord T_COLON T_WORD T_LPAR emptyWordCommaSeq T_RPAR T_DOT
+      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $3.s, $5.stringList);}
+  ;
+
+definitionWord
+  : T_WORD    { $$.s = $1.s; }
+  | T_STRING  { $$.s = $1.s; }
+  ;
+
+
 /******************************************************************************
   OTHER
 ******************************************************************************/
 
-
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
+  ;
+
+
+emptyWordCommaSeq
+  : wordCommaSeq    { $$.stringList = $1.stringList; }
+  | /* empty */     { $$.stringList = new List<string>(); }
   ;
 
 wordCommaSeq

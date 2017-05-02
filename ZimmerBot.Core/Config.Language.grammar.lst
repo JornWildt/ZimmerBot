@@ -1,11 +1,11 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 19-04-2017 10:59:18>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 02-05-2017 16:47:24>
 // ==========================================================================
 //  Version:  1.5.2
-//  Machine:  CBRAIN-PC412
-//  DateTime: 19-04-2017 10:59:22
-//  UserName: jw
+//  Machine:  JORN-PC
+//  DateTime: 02-05-2017 16:47:35
+//  UserName: Jorn
 // ==========================================================================
 
 
@@ -15,6 +15,8 @@
 %using ZimmerBot.Core.Expressions
 %using ZimmerBot.Core.Statements
 %using ZimmerBot.Core.Patterns
+%using ZimmerBot.Core.Utilities
+
 %partial
 %parsertype ConfigParser
 %visibility internal
@@ -34,7 +36,7 @@
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> conceptList;
-  public List<KeyValuePair<string,string>> keyValueList;
+  public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
   public List<Pattern> patternList;
   public Pattern pattern;
@@ -49,11 +51,15 @@
 %token T_COLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
-%token T_ENTITIES, T_PATTERN
-%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, T_WHEN
-%token T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
+%token T_ENTITIES, T_PATTERN, T_DEFINE
+%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, 
+%token T_WHEN, T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
+//^^^^
+// Error: Syntax error, unexpected %token, expecting ident, or litchar
+// -------------------------------------------------------------------
 
 %token T_TOPICRULE
+%token T_GTGT
 %token T_IMPLIES
 %token T_COMMA
 %token T_LPAR
@@ -77,12 +83,6 @@
 %token T_DOLLAR
 
 %%
-// Error: NonTerminal symbol "T_PATTERNINPUT" has no productions
-// Warning: Terminating T_PATTERNINPUT fixes the following size-1 NonTerminal set
-   // {T_PATTERNINPUT}
-// Error: There are 1 non-terminating NonTerminal Symbols
-   //  {T_PATTERNINPUT}
-// ------------------------------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -116,6 +116,8 @@ configuration
   | T_ENTITIES T_LPAR T_WORD T_RPAR
     T_LBRACE stringSeq T_RBRACE
       { RegisterEntities($3.s, $6.stringList); }
+  | T_DEFINE T_LBRACE definitionSeq T_RBRACE
+      { /*RegisterDefinition($3.definitionList);*/ }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
     T_LBRACE patternSeq T_RBRACE
       { RegisterPatternSet($3.keyValueList, $6.patternList); }
@@ -140,13 +142,16 @@ ruleSeq
 rule
   : ruleLabel inputSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddRegexRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
+    }
+  | ruleLabel T_GTGT T_LBRACE keyValueSeq T_RBRACE ruleModifierSeq statementSeq
+    { 
+      $$.rule = AddFuzzyRule($1.s, $4.keyValueList, $6.ruleModifierList, $7.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
       $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
     }
-  | T_PATTERNINPUT T_LBRACE keyValueSeq T_RBRACE
   ;
 
 ruleLabel
@@ -349,10 +354,28 @@ exprReference
   | T_WORD                     { $$.expr = new DotExpression($1.s); }
   ;
 
+
+/******************************************************************************
+  WORD DEFINITIONS
+******************************************************************************/
+
+definitionSeq
+  : definition definitionSeq
+  | /* empty */
+  ;
+
+definition
+  : definitionWord T_WORD T_LPAR wordCommaSeq T_RPAR T_DOT
+  ;
+
+definitionWord
+  : T_WORD
+  | T_STRING
+  ;
+
 /******************************************************************************
   OTHER
 ******************************************************************************/
-
 
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
@@ -381,7 +404,7 @@ stringSeq
 
 keyValueSeq
   : keyValueSeq T_COMMA keyValue { $$.keyValueList = $1.keyValueList; $$.keyValueList.Add($3.keyValue); }
-  | keyValue                     { $$.keyValueList = new List<KeyValuePair<string,string>>(); $$.keyValueList.Add($1.keyValue); }
+  | keyValue                     { $$.keyValueList = new StringPairList(); $$.keyValueList.Add($1.keyValue); }
   ;
 
 keyValue
@@ -391,6 +414,7 @@ keyValue
 value
   : T_WORD   { $$.s = $1.s; }
   | T_STRING { $$.s = $1.s; }
+  | T_STAR   { $$.s = Constants.StarValue; }
   ;
 
 patternSeq
@@ -410,10 +434,13 @@ patternExprSeq
 patternExpr
   : entityPatternExpr { $$.patternExpr = $1.patternExpr; }
   | T_WORD            { $$.patternExpr = new WordPatternExpr($1.s); }
+  | T_CWORD           { $$.patternExpr = new ConceptPatternExpr($1.s); }
+  | T_STRING          { $$.patternExpr = new WordPatternExpr($1.s); }
   ;
 
 entityPatternExpr
   : T_LBRACE T_WORD T_COLON T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, $4.s); }
+  | T_LBRACE T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, null); }
   ;
 
 %%// ==========================================================================

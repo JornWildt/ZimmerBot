@@ -143,6 +143,15 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public void RegisterDefinitions(List<WordDefinition> definitions)
+    {
+      foreach (WordDefinition wd in definitions)
+      {
+        EntityManager.RegisterEntity(wd.Word, wd.Alternatives, wd.Type);
+      }
+    }
+
+
     public void RegisterScheduledJobs(IScheduler scheduler, string botId)
     {
       foreach (StandardRule r in AllRules)
