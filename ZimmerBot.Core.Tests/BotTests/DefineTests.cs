@@ -16,7 +16,8 @@ namespace ZimmerBot.Core.Tests.BotTests
       BuildBot(@"
 ! define
 {
-  ""walk"": verb (walking, walked).
+  ""walk"": verb (""walking"", ""walked"").
+  ""run"": verb (running, ran).
   wasabi: noun ().
   ""walkie talkie"": noun ().
   ""walt disney"": noun ().

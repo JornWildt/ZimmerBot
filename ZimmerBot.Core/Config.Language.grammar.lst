@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 02-05-2017 16:47:24>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 02-05-2017 22:57:39>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 02-05-2017 16:47:35
+//  DateTime: 02-05-2017 22:57:43
 //  UserName: Jorn
 // ==========================================================================
 
@@ -42,6 +42,8 @@
   public Pattern pattern;
   public List<PatternExpr> patternExprList;
   public PatternExpr patternExpr;
+  public List<ZimmerBot.Core.Knowledge.WordDefinition> wordDefinitionList;
+  public ZimmerBot.Core.Knowledge.WordDefinition wordDefinition;
   public string s;
   public double n;
 }
@@ -52,11 +54,8 @@
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
 %token T_ENTITIES, T_PATTERN, T_DEFINE
-%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES, 
+%token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES
 %token T_WHEN, T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
-//^^^^
-// Error: Syntax error, unexpected %token, expecting ident, or litchar
-// -------------------------------------------------------------------
 
 %token T_TOPICRULE
 %token T_GTGT
@@ -83,6 +82,8 @@
 %token T_DOLLAR
 
 %%
+// Warning: NonTerminal symbol "emptyWordCommaSeq" is unreachable
+// --------------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -117,7 +118,7 @@ configuration
     T_LBRACE stringSeq T_RBRACE
       { RegisterEntities($3.s, $6.stringList); }
   | T_DEFINE T_LBRACE definitionSeq T_RBRACE
-      { /*RegisterDefinition($3.definitionList);*/ }
+      { RegisterDefinitions($3.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
     T_LBRACE patternSeq T_RBRACE
       { RegisterPatternSet($3.keyValueList, $6.patternList); }
@@ -360,18 +361,20 @@ exprReference
 ******************************************************************************/
 
 definitionSeq
-  : definition definitionSeq
-  | /* empty */
+  : definition definitionSeq  { $$.wordDefinitionList = $2.wordDefinitionList; $$.wordDefinitionList.Add($1.wordDefinition); }
+  | /* empty */               { $$.wordDefinitionList = new List<ZimmerBot.Core.Knowledge.WordDefinition>(); }
   ;
 
 definition
-  : definitionWord T_WORD T_LPAR wordCommaSeq T_RPAR T_DOT
+  : definitionWord T_COLON T_WORD T_LPAR emptyWordStringCommaSeq T_RPAR T_DOT
+      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $3.s, $5.stringList);}
   ;
 
 definitionWord
-  : T_WORD
-  | T_STRING
+  : T_WORD    { $$.s = $1.s; }
+  | T_STRING  { $$.s = $1.s; }
   ;
+
 
 /******************************************************************************
   OTHER
@@ -382,9 +385,29 @@ wordSeq
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
+emptyWordCommaSeq
+  : wordCommaSeq    { $$.stringList = $1.stringList; }
+  | /* empty */     { $$.stringList = new List<string>(); }
+  ;
+
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_WORD                       { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+emptyWordStringCommaSeq
+  : wordStringCommaSeq    { $$.stringList = $1.stringList; }
+  | /* empty */           { $$.stringList = new List<string>(); }
+  ;
+
+wordStringCommaSeq
+  : wordStringCommaSeq T_COMMA wordOrString  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
+  | wordOrString                             { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+wordOrString
+  : T_WORD   { $$.s = $1.s; }
+  | T_STRING { $$.s = $1.s; }
   ;
 
 cwordSeq

@@ -5,6 +5,9 @@ using CuttingEdge.Conditions;
 
 namespace ZimmerBot.Core.Knowledge
 {
+  /// <summary>
+  /// This class represent an entity indentified in user input.
+  /// </summary>
   public class Entity
   {
     public string Label { get; protected set; }

@@ -353,7 +353,7 @@ definitionSeq
   ;
 
 definition
-  : definitionWord T_COLON T_WORD T_LPAR emptyWordCommaSeq T_RPAR T_DOT
+  : definitionWord T_COLON T_WORD T_LPAR emptyWordStringCommaSeq T_RPAR T_DOT
       { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $3.s, $5.stringList);}
   ;
 
@@ -372,7 +372,6 @@ wordSeq
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
-
 emptyWordCommaSeq
   : wordCommaSeq    { $$.stringList = $1.stringList; }
   | /* empty */     { $$.stringList = new List<string>(); }
@@ -381,6 +380,21 @@ emptyWordCommaSeq
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_WORD                       { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+emptyWordStringCommaSeq
+  : wordStringCommaSeq    { $$.stringList = $1.stringList; }
+  | /* empty */           { $$.stringList = new List<string>(); }
+  ;
+
+wordStringCommaSeq
+  : wordStringCommaSeq T_COMMA wordOrString  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
+  | wordOrString                             { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+wordOrString
+  : T_WORD   { $$.s = $1.s; }
+  | T_STRING { $$.s = $1.s; }
   ;
 
 cwordSeq
