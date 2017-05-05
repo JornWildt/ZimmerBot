@@ -1,11 +1,11 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 04-05-2017 15:49:39>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 05-05-2017 16:06:24>
 // ==========================================================================
 //  Version:  1.5.2
-//  Machine:  JORN-PC
-//  DateTime: 04-05-2017 15:49:43
-//  UserName: Jorn
+//  Machine:  CBRAIN-PC412
+//  DateTime: 05-05-2017 16:06:29
+//  UserName: jw
 // ==========================================================================
 
 
@@ -44,6 +44,10 @@
   public PatternExpr patternExpr;
   public List<ZimmerBot.Core.Knowledge.WordDefinition> wordDefinitionList;
   public ZimmerBot.Core.Knowledge.WordDefinition wordDefinition;
+  public List<RdfDefinition> rdfDefinitionList;
+  public RdfDefinition rdfDefinition;
+  public List<RdfValue> rdfValueList;
+  public RdfValue rdfValue;
   public string s;
   public double n;
 }
@@ -82,8 +86,6 @@
 %token T_DOLLAR
 
 %%
-// Warning: NonTerminal symbol "emptyWordCommaSeq" is unreachable
-// --------------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -361,13 +363,13 @@ exprReference
 ******************************************************************************/
 
 definitionSeq
-  : definition T_DOT definitionSeq  { $$.wordDefinitionList = $2.wordDefinitionList; $$.wordDefinitionList.Add($1.wordDefinition); }
+  : definition T_DOT definitionSeq  { $$.wordDefinitionList = $3.wordDefinitionList; $$.wordDefinitionList.Add($1.wordDefinition); }
   | /* empty */                     { $$.wordDefinitionList = new List<ZimmerBot.Core.Knowledge.WordDefinition>(); }
   ;
 
 definition
   : definitionWord definitionAlternatives T_COLON definitionDataSeq
-      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList);}
+      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);}
   ;
 
 definitionWord
@@ -381,23 +383,28 @@ definitionAlternatives
   ;
 
 definitionDataSeq
-  : definitionData T_SEMICOLON definitionDataSeq
-  | /* empty */
+  : definitionData T_SEMICOLON definitionDataSeq  { $$.rdfDefinitionList = $3.rdfDefinitionList; $$.rdfDefinitionList.Add($1.rdfDefinition); }
+  | definitionData                                { $$.rdfDefinitionList = new List<RdfDefinition>(); $$.rdfDefinitionList.Add($1.rdfDefinition); }
+  | /* empty */                                   { $$.rdfDefinitionList = new List<RdfDefinition>(); 
+//------------------------------------------------^
+// Error: Position of unmatched brace
+// ----------------------------------
   ;
 
 definitionData
-  : wordOrString T_COLON definitionDataValueSeq
+  : wordOrString T_COLON definitionDataValueSeq { $$.rdfDefinition = new RdfDefinition($1.s, $3.rdfValueList); }
   ;
 
 definitionDataValueSeq
-  : definitionDataValue T_COMMA definitionDataValueSeq
-  | definitionDataValue
+  : definitionDataValue T_COMMA definitionDataValueSeq  { $$.rdfValueList = $3.rdfValueList; $$.rdfValueList.Add($1.rdfValue); }
+  | definitionDataValue                                 { $$.rdfValueList = new List<RdfValue>(); $$.rdfValueList.Add($1.rdfValue); }
   ;
 
 definitionDataValue
-  : T_STRING
-  | T_WORD
-  | T_LT T_WORD T_GT
+  : T_STRING          { $$.rdfValue = new RdfStringValue($1.s); }
+  | T_WORD            { $$.rdfValue = new RdfStringValue($1.s); }
+  | T_NUMBER          { $$.rdfValue = new RdfNumberValue($1.n); }
+  | T_LT wordSeq T_GT { $$.rdfValue = new RdfInternalUriValue($2.stringList); }
   ;
 
 /******************************************************************************
@@ -409,10 +416,12 @@ wordSeq
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
+  /*
 emptyWordCommaSeq
   : wordCommaSeq    { $$.stringList = $1.stringList; }
-  | /* empty */     { $$.stringList = new List<string>(); }
+  |      { $$.stringList = new List<string>(); }
   ;
+*/  
 
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
@@ -490,5 +499,8 @@ entityPatternExpr
   | T_LBRACE T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, null); }
   ;
 
-%%// ==========================================================================
+%%// Error: Premature termination of Code Block
+// Error: Syntax error, unexpected %%, expecting codeEnd, or error
+// ---------------------------------------------------------------
+// ==========================================================================
 

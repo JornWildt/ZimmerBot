@@ -86,39 +86,25 @@ namespace ZimmerBot.Core.Tests.BotTests
   India: .
   ""Africa"": .
   ""North America"": .
+  ""Earth"": .
 }
 
-! pattern (intent = show_me_animals)
-{
-  > show me the animals
-}
-
->> { intent = show_me_animals, a = * }
+> show animals
 ! call RDF.Query(""
-SELECT ? cname ? csname ? aname
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bot: <http://zimmerbot/stuff#>
+SELECT ?cname
 WHERE
 {
-  ?name rdfs:
-  ?feature rdf:type gn:Feature.
-  ? feature gn:alternateName? fname .
-  ?feature gn:parentCountry? country .
-  OPTIONAL { ?country gn:alternateName? cname }.
-  OPTIONAL { ?country gn:shortName? csname }.
-  OPTIONAL { 
-    ?feature gn:parentADM1? area .
-    ?area gn:alternateName? aname
-  }.
-  FILTER(lcase(str(?fname)) = lcase(str(@2)))
+  ?animal rdf:type bot:animal.
+  ?animal rdfs:label ?name.
 }
-      LIMIT 1
 "")
-: < 2 > ligger i < result:{ r | <if (r.csname)>< r.csname ><else>< r.cname >< endif ><if (r.aname)> (< r.aname >) < endif >}>.
-
+: <result:{r | <r.name> }>.
 ");
 
-      AssertDialog("echo horse", "Got 'horse'");
-      AssertDialog("echo horses", "Got 'horses'");
-      AssertDialog("echo walt disney", "Got 'walt disney'");
+      AssertDialog("show animals", "Horse etc.");
     }
   }
 }

@@ -107,6 +107,11 @@
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
+    <Compile Include="ConfigParser\RdfDefinition.cs" />
+    <Compile Include="ConfigParser\RdfInternalUriValue.cs" />
+    <Compile Include="ConfigParser\RdfNumberValue.cs" />
+    <Compile Include="ConfigParser\RdfStringValue.cs" />
+    <Compile Include="ConfigParser\RdfValue.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Expressions\UnaryOperatorExpr.cs" />
     <Compile Include="Knowledge\Continuation.cs" />

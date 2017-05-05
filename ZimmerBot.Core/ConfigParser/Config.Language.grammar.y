@@ -33,6 +33,10 @@
   public PatternExpr patternExpr;
   public List<ZimmerBot.Core.Knowledge.WordDefinition> wordDefinitionList;
   public ZimmerBot.Core.Knowledge.WordDefinition wordDefinition;
+  public List<RdfDefinition> rdfDefinitionList;
+  public RdfDefinition rdfDefinition;
+  public List<RdfValue> rdfValueList;
+  public RdfValue rdfValue;
   public string s;
   public double n;
 }
@@ -354,7 +358,7 @@ definitionSeq
 
 definition
   : definitionWord definitionAlternatives T_COLON definitionDataSeq
-      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList);}
+      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);}
   ;
 
 definitionWord
@@ -368,24 +372,25 @@ definitionAlternatives
   ;
 
 definitionDataSeq
-  : definitionData T_SEMICOLON definitionDataSeq
-  | definitionData
+  : definitionData T_SEMICOLON definitionDataSeq  { $$.rdfDefinitionList = $3.rdfDefinitionList; $$.rdfDefinitionList.Add($1.rdfDefinition); }
+  | definitionData                                { $$.rdfDefinitionList = new List<RdfDefinition>(); $$.rdfDefinitionList.Add($1.rdfDefinition); }
+  | /* empty */                                   { $$.rdfDefinitionList = new List<RdfDefinition>(); }
   ;
 
 definitionData
-  : wordOrString T_COLON definitionDataValueSeq
+  : wordOrString T_COLON definitionDataValueSeq { $$.rdfDefinition = new RdfDefinition($1.s, $3.rdfValueList); }
   ;
 
 definitionDataValueSeq
-  : definitionDataValue T_COMMA definitionDataValueSeq
-  | definitionDataValue
+  : definitionDataValue T_COMMA definitionDataValueSeq  { $$.rdfValueList = $3.rdfValueList; $$.rdfValueList.Add($1.rdfValue); }
+  | definitionDataValue                                 { $$.rdfValueList = new List<RdfValue>(); $$.rdfValueList.Add($1.rdfValue); }
   ;
 
 definitionDataValue
-  : T_STRING
-  | T_WORD
-  | T_NUMBER
-  | T_LT wordSeq T_GT
+  : T_STRING          { $$.rdfValue = new RdfStringValue($1.s); }
+  | T_WORD            { $$.rdfValue = new RdfStringValue($1.s); }
+  | T_NUMBER          { $$.rdfValue = new RdfNumberValue($1.n); }
+  | T_LT wordSeq T_GT { $$.rdfValue = new RdfInternalUriValue($2.stringList); }
   ;
 
 /******************************************************************************

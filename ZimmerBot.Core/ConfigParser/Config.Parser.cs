@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using CuttingEdge.Conditions;
 using log4net;
+using VDS.RDF;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Patterns;
 using ZimmerBot.Core.Statements;
@@ -116,7 +117,6 @@ namespace ZimmerBot.Core.ConfigParser
     protected void RDFEntities(string sparql)
     {
       KnowledgeBase.RegisterSparqlForEntities(sparql);
-      //System.Console.WriteLine("Entities loaded from {0}", sparql);
     }
 
 
