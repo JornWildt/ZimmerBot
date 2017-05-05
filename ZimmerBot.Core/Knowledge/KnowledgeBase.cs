@@ -143,11 +143,11 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterDefinitions(List<WordDefinition> definitions)
+    public void RegisterDefinitions(string mainClass, List<WordDefinition> definitions)
     {
       foreach (WordDefinition wd in definitions)
       {
-        EntityManager.RegisterEntity(wd.Word, wd.Alternatives, wd.Type);
+        EntityManager.RegisterEntity(wd.Word, wd.Alternatives, mainClass);
       }
     }
 

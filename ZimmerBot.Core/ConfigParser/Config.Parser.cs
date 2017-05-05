@@ -76,9 +76,9 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterDefinitions(List<WordDefinition> definition)
+    protected void RegisterDefinitions(string mainClass, List<WordDefinition> definition)
     {
-      KnowledgeBase.RegisterDefinitions(definition);
+      KnowledgeBase.RegisterDefinitions(mainClass, definition);
     }
 
 

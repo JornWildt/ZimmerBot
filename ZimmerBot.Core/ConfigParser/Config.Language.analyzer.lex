@@ -30,6 +30,7 @@ Space      [ \t]
 \>\>        { return (int)Token.T_GTGT; }
 \<          { return (int)Token.T_LT; }
 :           { return (int)Token.T_COLON; }
+;           { return (int)Token.T_SEMICOLON; }
 =>          { return (int)Token.T_IMPLIES; }
 ,           { return (int)Token.T_COMMA; }
 \.          { return (int)Token.T_DOT; }

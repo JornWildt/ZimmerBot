@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace ZimmerBot.Core.Tests.BotTests
 {
@@ -14,13 +9,36 @@ namespace ZimmerBot.Core.Tests.BotTests
     public void CanDefineWords()
     {
       BuildBot(@"
-! define
+! define (animal)
 {
-  ""walk"": verb (""walking"", ""walked"").
-  ""run"": verb (running, ran).
-  wasabi: noun ().
-  ""walkie talkie"": noun ().
-  ""walt disney"": noun ().
+  ""Elefant"" (""elefants""):
+    ""description"": ""Big animal"";
+    ""class"": ""mamal"";
+    ""location"": <India>, <Africa>.
+
+  Horse (horses):
+    description: ""Large animal with four legs"";
+    class: mamal;
+    location: <Earth>.
+
+  Bison (bisons):
+    description: ""Large animal with four legs"";
+    class: mamal;
+    location: <North America>.
+}
+
+! define (country)
+{
+  India: .
+  ""Africa"": .
+  ""North America"": .
+}
+
+! define (person)
+{
+  ""Walt Disney"":
+    description: ""Well known person"";
+    born: 1901.
 }
 
 ! pattern (intent = echo)
@@ -32,12 +50,75 @@ namespace ZimmerBot.Core.Tests.BotTests
 : Got '<a>'
 ");
 
-      AssertDialog("echo walk", "Got 'walk'");
-      AssertDialog("echo walking", "Got 'walking'");
-      AssertDialog("echo walked", "Got 'walked'");
-      AssertDialog("echo wasabi", "Got 'wasabi'");
-      AssertDialog("echo walkie talkie", "Got 'walkie talkie'");
-      AssertDialog("echo Walt Disney", "Got 'Walt Disney'");
+      AssertDialog("echo horse", "Got 'horse'");
+      AssertDialog("echo horses", "Got 'horses'");
+      AssertDialog("echo walt disney", "Got 'walt disney'");
+    }
+
+
+    [Test]
+    public void CanFindDefinedDataViaRDF()
+    {
+      BuildBot(@"
+! define (animal)
+{
+  ""Elefant"" (""elefants""):
+    ""description"": ""Big animal"";
+    ""class"": ""mamal"";
+    ""location"": <India>, <Africa>;
+    ""color"": ""gray"".
+
+  Horse (horses):
+    description: ""Large animal with four legs"";
+    class: mamal;
+    location: <Earth>;
+    color: brown.
+
+  Bison (bisons):
+    description: ""Large animal with four legs"";
+    class: mamal;
+    color: brown;
+    location: <North America>.
+}
+
+! define (country)
+{
+  India: .
+  ""Africa"": .
+  ""North America"": .
+}
+
+! pattern (intent = show_me_animals)
+{
+  > show me the animals
+}
+
+>> { intent = show_me_animals, a = * }
+! call RDF.Query(""
+SELECT ? cname ? csname ? aname
+WHERE
+{
+  ?name rdfs:
+  ?feature rdf:type gn:Feature.
+  ? feature gn:alternateName? fname .
+  ?feature gn:parentCountry? country .
+  OPTIONAL { ?country gn:alternateName? cname }.
+  OPTIONAL { ?country gn:shortName? csname }.
+  OPTIONAL { 
+    ?feature gn:parentADM1? area .
+    ?area gn:alternateName? aname
+  }.
+  FILTER(lcase(str(?fname)) = lcase(str(@2)))
+}
+      LIMIT 1
+"")
+: < 2 > ligger i < result:{ r | <if (r.csname)>< r.csname ><else>< r.cname >< endif ><if (r.aname)> (< r.aname >) < endif >}>.
+
+");
+
+      AssertDialog("echo horse", "Got 'horse'");
+      AssertDialog("echo horses", "Got 'horses'");
+      AssertDialog("echo walt disney", "Got 'walt disney'");
     }
   }
 }

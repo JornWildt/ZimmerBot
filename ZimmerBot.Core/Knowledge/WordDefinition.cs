@@ -11,19 +11,15 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string Word { get; protected set; }
 
-    public string Type { get; protected set; }
-
     public List<string> Alternatives { get; protected set; }
 
 
-    public WordDefinition(string word, string type, List<string> alternatives)
+    public WordDefinition(string word, List<string> alternatives)
     {
       Condition.Requires(word, nameof(word)).IsNotNullOrWhiteSpace();
-      Condition.Requires(type, nameof(type)).IsNotNullOrWhiteSpace();
       Condition.Requires(alternatives, nameof(alternatives)).IsNotNull();
 
       Word = word;
-      Type = type;
       Alternatives = alternatives;
     }
   }

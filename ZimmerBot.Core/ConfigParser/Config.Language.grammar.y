@@ -39,7 +39,7 @@
 
 %start main
 
-%token T_COLON
+%token T_COLON, T_SEMICOLON
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
 %token T_ENTITIES, T_PATTERN, T_DEFINE
@@ -104,8 +104,8 @@ configuration
   | T_ENTITIES T_LPAR T_WORD T_RPAR
     T_LBRACE stringSeq T_RBRACE
       { RegisterEntities($3.s, $6.stringList); }
-  | T_DEFINE T_LBRACE definitionSeq T_RBRACE
-      { RegisterDefinitions($3.wordDefinitionList); }
+  | T_DEFINE T_LPAR wordOrString T_RPAR T_LBRACE definitionSeq T_RBRACE
+      { RegisterDefinitions($3.s, $6.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
     T_LBRACE patternSeq T_RBRACE
       { RegisterPatternSet($3.keyValueList, $6.patternList); }
@@ -348,13 +348,13 @@ exprReference
 ******************************************************************************/
 
 definitionSeq
-  : definition definitionSeq  { $$.wordDefinitionList = $2.wordDefinitionList; $$.wordDefinitionList.Add($1.wordDefinition); }
-  | /* empty */               { $$.wordDefinitionList = new List<ZimmerBot.Core.Knowledge.WordDefinition>(); }
+  : definition T_DOT definitionSeq  { $$.wordDefinitionList = $3.wordDefinitionList; $$.wordDefinitionList.Add($1.wordDefinition); }
+  | /* empty */                     { $$.wordDefinitionList = new List<ZimmerBot.Core.Knowledge.WordDefinition>(); }
   ;
 
 definition
-  : definitionWord T_COLON T_WORD T_LPAR emptyWordStringCommaSeq T_RPAR T_DOT
-      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $3.s, $5.stringList);}
+  : definitionWord definitionAlternatives T_COLON definitionDataSeq
+      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList);}
   ;
 
 definitionWord
@@ -362,6 +362,31 @@ definitionWord
   | T_STRING  { $$.s = $1.s; }
   ;
 
+definitionAlternatives
+  : T_LPAR emptyWordStringCommaSeq T_RPAR { $$.stringList = $2.stringList; }
+  | /* empty */                           { $$.stringList = new List<string>(); }
+  ;
+
+definitionDataSeq
+  : definitionData T_SEMICOLON definitionDataSeq
+  | definitionData
+  ;
+
+definitionData
+  : wordOrString T_COLON definitionDataValueSeq
+  ;
+
+definitionDataValueSeq
+  : definitionDataValue T_COMMA definitionDataValueSeq
+  | definitionDataValue
+  ;
+
+definitionDataValue
+  : T_STRING
+  | T_WORD
+  | T_NUMBER
+  | T_LT wordSeq T_GT
+  ;
 
 /******************************************************************************
   OTHER
@@ -372,10 +397,12 @@ wordSeq
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
+  /*
 emptyWordCommaSeq
   : wordCommaSeq    { $$.stringList = $1.stringList; }
-  | /* empty */     { $$.stringList = new List<string>(); }
+  |      { $$.stringList = new List<string>(); }
   ;
+*/  
 
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
