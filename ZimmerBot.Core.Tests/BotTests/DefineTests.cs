@@ -62,7 +62,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       BuildBot(@"
 ! define (animal)
 {
-  ""Elefant"" (""elefants""):
+  ""Elephant"" (""elephants""):
     ""description"": ""Big animal"";
     ""class"": ""mamal"";
     ""location"": <India>, <Africa>;
@@ -89,22 +89,54 @@ namespace ZimmerBot.Core.Tests.BotTests
   ""Earth"": .
 }
 
+! rdf_prefix rdf ""http://www.w3.org/1999/02/22-rdf-syntax-ns#""
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+! rdf_prefix ztype ""http://zimmerbot.org/fact/type/""
+! rdf_prefix zatt ""http://zimmerbot.org/fact/att/""
+
 > show animals
 ! call RDF.Query(""
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX bot: <http://zimmerbot/stuff#>
-SELECT ?cname
+SELECT ?name
 WHERE
 {
-  ?animal rdf:type bot:animal.
-  ?animal rdfs:label ?name.
+  ?animal rdf:type ztype:animal.
+  ?animal rdfs:label ?name
 }
+ORDER BY ?name
 "")
 : <result:{r | <r.name> }>.
+
+> show countries
+! call RDF.Query(""
+SELECT ?country
+WHERE
+{
+  ?country a ztype:country.
+}
+ORDER BY ?country
+"")
+: <result:{r | <r.country> }>.
+
+> where can I find elephants
+! call RDF.Query(""
+SELECT ?name
+WHERE
+{
+  ?country a ztype:country.
+  ?animal a ztype:animal.
+  ?animal rdfs:label ?aname.
+  ?animal zatt:location ?country.
+  ?country rdfs:label ?name.
+  FILTER (?aname = 'Elephant')
+}
+ORDER BY ?country
+"")
+: <result:{r |<r.name>}; separator="", "">.
 ");
 
-      AssertDialog("show animals", "Horse etc.");
+      //AssertDialog("show animals", "Bison Elephant Horse .");
+      //AssertDialog("show countries", "http://zimmerbot.org/fact/id/Africa http://zimmerbot.org/fact/id/Earth http://zimmerbot.org/fact/id/India http://zimmerbot.org/fact/id/North_America .");
+      AssertDialog("where can I find elephants", "Africa, India.");
     }
   }
 }

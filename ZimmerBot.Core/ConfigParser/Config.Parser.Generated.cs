@@ -3,10 +3,10 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Machine:  CBRAIN-PC412
-// DateTime: 05-05-2017 16:06:42
-// UserName: jw
-// Input file <ConfigParser\Config.Language.grammar.y - 05-05-2017 16:06:37>
+// Machine:  JORN-PC
+// DateTime: 07-05-2017 14:12:17
+// UserName: Jorn
+// Input file <ConfigParser\Config.Language.grammar.y - 05-05-2017 16:55:04>
 
 // options: conflicts no-lines gplex conflicts
 

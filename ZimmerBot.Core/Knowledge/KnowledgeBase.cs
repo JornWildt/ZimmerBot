@@ -49,6 +49,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public EntityManager EntityManager { get; protected set; }
 
+    protected WordDefinitionManager WordDefinitionManager { get; set; }
+
     protected IList<string> SparqlForEntities { get; set; }
 
     public PatternManager PatternManager { get; protected set; }
@@ -67,6 +69,7 @@ namespace ZimmerBot.Core.Knowledge
       EventHandlers = new Dictionary<Request.EventEnum, List<StandardRule>>();
       LabelToRuleMap = new Dictionary<string, Rule>();
       EntityManager = new EntityManager(this);
+      WordDefinitionManager = new WordDefinitionManager(this);
       SparqlForEntities = new List<string>();
       PatternManager = new PatternManager(this);
 
@@ -103,6 +106,8 @@ namespace ZimmerBot.Core.Knowledge
         EntityManager.RegisterEntityClass("default", 
           result.Where(item => item.ContainsKey("label")).Select(item => item["label"]));
       }
+
+      WordDefinitionManager.SetupComplete(MemoryStore);
 
       foreach (Rule r in AllRules)
         r.SetupComplete();
@@ -145,6 +150,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public void RegisterDefinitions(string mainClass, List<WordDefinition> definitions)
     {
+      WordDefinitionManager.RegisterWords(mainClass, definitions);
       foreach (WordDefinition wd in definitions)
       {
         EntityManager.RegisterEntity(wd.Word, wd.Alternatives, mainClass);

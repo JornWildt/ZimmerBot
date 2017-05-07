@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 02-04-2016 21:18:39
+//  DateTime: 07-05-2017 13:50:59
 //  UserName: Jorn
 // ==========================================================================
 
@@ -17,7 +17,7 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [[:IsLetter:]]+[[:IsLetter:]0-9]*
+Word       [[:IsLetter:]_]+[[:IsLetter:]0-9_]*
 Number     [0-9]+(\.[0-9]+)?
 Comment    #
 Space      [ \t]
@@ -38,8 +38,10 @@ Space      [ \t]
 /* Scanner body */
 
 \>          { return (int)Token.T_GT; }
+\>\>        { return (int)Token.T_GTGT; }
 \<          { return (int)Token.T_LT; }
 :           { return (int)Token.T_COLON; }
+;           { return (int)Token.T_SEMICOLON; }
 =>          { return (int)Token.T_IMPLIES; }
 ,           { return (int)Token.T_COMMA; }
 \.          { return (int)Token.T_DOT; }
@@ -55,24 +57,39 @@ Space      [ \t]
 $           { return (int)Token.T_DOLLAR; }
 \?          { return (int)Token.T_QUESTION; }
 \!          { return (int)Token.T_EXCL; }
+T\>         { return (int)Token.T_TOPICRULE; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
 ![ ]*concept     { return (int)Token.T_CONCEPT; }
+![ ]*set         { return (int)Token.T_SET; }
 ![ ]*call        { return (int)Token.T_CALL; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
+![ ]*when        { return (int)Token.T_WHEN; }
 ![ ]*every       { return (int)Token.T_EVERY; }
+![ ]*on          { return (int)Token.T_ON; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
-![ ]*rdf_import  { return (int)Token.T_RDF_IMPORT; }
-![ ]*rdf_prefix  { return (int)Token.T_RDF_PREFIX; }
+![ ]*topic       { return (int)Token.T_TOPIC; }
+![ ]*start_topic { return (int)Token.T_STARTTOPIC; }
+![ ]*stop_output { return (int)Token.T_STOPOUTPUT; }
+![ ]*repeatable        { return (int)Token.T_REPEATABLE; }
+![ ]*not_repeatable    { return (int)Token.T_NOTREPEATABLE; }
+![ ]*continue          { return (int)Token.T_CONTINUE; }
+![ ]*continue[ ]+at    { return (int)Token.T_CONTINUE_AT; }
+![ ]*continue[ ]+with  { return (int)Token.T_CONTINUE_WITH; }
+![ ]*entities          { return (int)Token.T_ENTITIES; }
+![ ]*define            { return (int)Token.T_DEFINE; }
+![ ]*pattern           { return (int)Token.T_PATTERN; }
+![ ]*rdf_import        { return (int)Token.T_RDF_IMPORT; }
+![ ]*rdf_prefix        { return (int)Token.T_RDF_PREFIX; }
+![ ]*rdf_entities      { return (int)Token.T_RDF_ENTITIES; }
+
+at { return (int)Token.T_AT; }
 
 {Number} { yylval.n = TryParseDouble(yytext); return (int)Token.T_NUMBER; }
 
-%{Word}  { yylval.s = yytext; return (int)Token.T_CWORD; }
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// Error: Expected end-of-line here
-// --------------------------------
-{Word}   { yylval.s = yytext; return (int)Token.T_WORD; }
+\%{Word}  { yylval.s = yytext; return (int)Token.T_CWORD; }
+{Word}    { yylval.s = yytext; return (int)Token.T_WORD; }
 
 {Comment}   { BEGIN(comment); }
 
@@ -80,58 +97,22 @@ $           { return (int)Token.T_DOLLAR; }
 
 
 <str>[^\n\"]* { StringInput.Append(yytext); }
-//----^^-^
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// ----------------------------------------
-<str>\"       { BEGIN(INITIAL); return (int)Token.T_STRING; }
-//---^
-// Error: Illegal character in this context
+<str>\\"      { StringInput.Append(yytext[1]); }
 // Error: Literal string terminated by end of line
 // -----------------------------------------------
+<str>\"       { BEGIN(INITIAL); yylval.s = StringInput.ToString(); return (int)Token.T_STRING; }
+// Error: Invalid production rule
+// Error: Parser error <Syntax error, unexpected <, expecting pattern, or {> 
+// --------------------------------------------------------------------------
 
 <comment>[^\r\n]* /* skip */
-//--------^^-^
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// ----------------------------------------
 <comment>\r|\n    { BEGIN(INITIAL); }
-//-------^--^
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// ----------------------------------------
 
 
 <output>[^\r\n\\]*    { StringInput.Append(yytext); }
-//-------^^-^
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// ----------------------------------------
 <output>\\(\r\n?|\n)  { StringInput.Append(yytext.Substring(1)); }
-//------^^-^
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// ----------------------------------------
 <output>\\[^\r\n]     { StringInput.Append(yytext.Substring(1)); }
-//------^^-^
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// ----------------------------------------
 <output>\r\n?|\n      { BEGIN(INITIAL); return (int)Token.T_OUTPUT; }
-//------^-^---^
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// Error: Illegal character in this context
-// ----------------------------------------
 
-%%// Error: Missing matching construct <')'> 
-// Error: Missing matching construct <']'> 
-// Error: Parser error <Syntax error, unexpected %%> 
-// --------------------------------------------------
-// ==========================================================================
+%%// ==========================================================================
 

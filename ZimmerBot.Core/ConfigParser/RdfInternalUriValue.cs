@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
 using VDS.RDF;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.ConfigParser
 {
@@ -21,10 +22,10 @@ namespace ZimmerBot.Core.ConfigParser
 
     public override INode BuildRdfNode(INodeFactory factory)
     {
-      // FIXME: configurable
-      Uri nameUri = new Uri("http://zimmerbot/stuff#" + Name);
+      string id = StringUtility.Word2Identifier(Name);
+      Uri idUri = UrlConstants.FactIdUrl(id);
 
-      return factory.CreateUriNode(nameUri);
+      return factory.CreateUriNode(idUri);
     }
   }
 }

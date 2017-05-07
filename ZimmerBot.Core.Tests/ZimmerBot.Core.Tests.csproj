@@ -94,6 +94,7 @@
     <Compile Include="TemplateParser\ErrorHandlingTests.cs" />
     <Compile Include="TemplateParser\TestHelper.cs" />
     <Compile Include="TestHelperBase.cs" />
+    <Compile Include="Utilities\StringUtilityTests.cs" />
     <Compile Include="WRegexEvaluationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />

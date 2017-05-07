@@ -85,8 +85,10 @@ at { return (int)Token.T_AT; }
 {Space}+		/* skip */
 
 
-<str>[^\n\"]* { StringInput.Append(yytext); }
-<str>\"       { BEGIN(INITIAL); yylval.s = StringInput.ToString(); return (int)Token.T_STRING; }
+<str>[^\\"]* { StringInput.Append(yytext); }
+<str>\\\\       { StringInput.Append(yytext[1]); }
+<str>\\\"       { StringInput.Append(yytext[1]); }
+<str>\"         { BEGIN(INITIAL); yylval.s = StringInput.ToString(); return (int)Token.T_STRING; }
 
 <comment>[^\r\n]* /* skip */
 <comment>\r|\n    { BEGIN(INITIAL); }

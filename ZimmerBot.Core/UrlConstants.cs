@@ -20,8 +20,14 @@ namespace ZimmerBot.Core
     public static Uri ChatEntriesUrl(string id) => CreateUrl("chat/entries/" + id);
     public static readonly Uri ChatEntryTypeUrl = CreateUrl("types/chatentry");
 
+    public static Uri FactIdUrl(string id) => CreateUrl("fact/id/" + id);
+    public static Uri FactTypeUrl(string id) => CreateUrl("fact/type/" + id);
+    public static Uri FactAttributeUrl(string id) => CreateUrl("fact/att/" + id);
+
 
     public static Uri Rdf(string key) => new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#" + key);
+
+    public static Uri Rdfs(string key) => new Uri("http://www.w3.org/2000/01/rdf-schema#" + key);
 
     public static Uri DcTerms(string key) => new Uri("http://purl.org/dc/terms/" + key);
 
