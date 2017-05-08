@@ -91,15 +91,15 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 ! rdf_prefix rdf ""http://www.w3.org/1999/02/22-rdf-syntax-ns#""
 ! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
-! rdf_prefix ztype ""http://zimmerbot.org/fact/type/""
-! rdf_prefix zatt ""http://zimmerbot.org/fact/att/""
+! rdf_prefix zr ""http://zimmerbot.org/resource/""
+! rdf_prefix zp ""http://zimmerbot.org/property/""
 
 > show animals
 ! call RDF.Query(""
 SELECT ?name
 WHERE
 {
-  ?animal rdf:type ztype:animal.
+  ?animal rdf:type zr:animal.
   ?animal rdfs:label ?name
 }
 ORDER BY ?name
@@ -111,7 +111,7 @@ ORDER BY ?name
 SELECT ?country
 WHERE
 {
-  ?country a ztype:country.
+  ?country a zr:country.
 }
 ORDER BY ?country
 "")
@@ -122,10 +122,10 @@ ORDER BY ?country
 SELECT ?name
 WHERE
 {
-  ?country a ztype:country.
-  ?animal a ztype:animal.
+  ?country a zr:country.
+  ?animal a zr:animal.
   ?animal rdfs:label ?aname.
-  ?animal zatt:location ?country.
+  ?animal zp:location ?country.
   ?country rdfs:label ?name.
   FILTER (?aname = 'Elephant')
 }
@@ -134,8 +134,8 @@ ORDER BY ?country
 : <result:{r |<r.name>}; separator="", "">.
 ");
 
-      //AssertDialog("show animals", "Bison Elephant Horse .");
-      //AssertDialog("show countries", "http://zimmerbot.org/fact/id/Africa http://zimmerbot.org/fact/id/Earth http://zimmerbot.org/fact/id/India http://zimmerbot.org/fact/id/North_America .");
+      AssertDialog("show animals", "Bison Elephant Horse .");
+      AssertDialog("show countries", "http://zimmerbot.org/resource/Africa http://zimmerbot.org/resource/Earth http://zimmerbot.org/resource/India http://zimmerbot.org/resource/North_America .");
       AssertDialog("where can I find elephants", "Africa, India.");
     }
   }
