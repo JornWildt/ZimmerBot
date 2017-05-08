@@ -42,6 +42,8 @@ namespace ZimmerBot.Core.Knowledge
     {
       foreach (var item in Definitions)
       {
+        DefineRdfsClass(item.Key, store);
+
         foreach (var word in item.Value)
         {
           RegisterRdfData(item.Key, word, store);
@@ -54,30 +56,41 @@ namespace ZimmerBot.Core.Knowledge
 
     static readonly Uri RdfsLabel = UrlConstants.Rdfs("label");
 
+    static readonly Uri RdfsClass = UrlConstants.Rdfs("Class");
+
 
     private void RegisterRdfData(string mainClass, WordDefinition word, RDFStore store)
     {
       // Create subject identifier from word
-      string id = StringUtility.Word2Identifier(word.Word);
-      Uri subject = UrlConstants.FactIdUrl(id);
+      string propId = StringUtility.Word2Identifier(word.Word);
+      Uri subject = UrlConstants.ResourceUrl(propId);
 
       // Define word as of type mainClass
-      Uri type = UrlConstants.FactTypeUrl(mainClass);
+      Uri type = UrlConstants.ResourceUrl(mainClass);
       store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(type));
 
       // Define word as label for itself
       store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), word.Word.ToLiteral(NodeFactory));
 
-      foreach (var rdf in word.RdfDefinitions)
+      // Define all properties associated with word
+      foreach (var prop in word.RdfDefinitions)
       {
-        id = StringUtility.Word2Identifier(rdf.Name);
-        Uri predicate = UrlConstants.FactAttributeUrl(id);
+        propId = StringUtility.Word2Identifier(prop.Name);
+        Uri propUri = UrlConstants.PropertyUrl(propId);
 
-        foreach (var value in rdf.Values)
+        foreach (var value in prop.Values)
         {
-          store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(predicate), value.BuildRdfNode(NodeFactory));
+          store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(propUri), value.BuildRdfNode(NodeFactory));
         }
       }
+    }
+
+
+    private void DefineRdfsClass(string c, RDFStore store)
+    {
+      Uri subject = UrlConstants.ResourceUrl(c);
+      store.Update(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(RdfsClass));
+      store.Update(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), c.ToLiteral(NodeFactory));
     }
   }
 }

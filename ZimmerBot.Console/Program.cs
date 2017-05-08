@@ -23,6 +23,12 @@ namespace ZimmerBot.Console
 
       KnowledgeBase.InitializationMode initMode = KnowledgeBase.InitializationMode.RestoreIfExists;
 
+      foreach (string arg in args)
+      {
+        if (arg == "--clear")
+          initMode = KnowledgeBase.InitializationMode.Clear;
+      }
+
       try
       {
         KnowledgeBase kb = new KnowledgeBase();
@@ -38,7 +44,8 @@ namespace ZimmerBot.Console
         else
         {
           foreach (string path in args)
-            kb.LoadFromFiles(path);
+            if (!path.StartsWith("-"))
+              kb.LoadFromFiles(path);
         }
 
         kb.SetupComplete();

@@ -23,7 +23,7 @@ namespace ZimmerBot.Core.ConfigParser
     public override INode BuildRdfNode(INodeFactory factory)
     {
       string id = StringUtility.Word2Identifier(Name);
-      Uri idUri = UrlConstants.FactIdUrl(id);
+      Uri idUri = UrlConstants.ResourceUrl(id);
 
       return factory.CreateUriNode(idUri);
     }

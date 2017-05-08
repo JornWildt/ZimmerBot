@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 07-05-2017 14:12:17
+//  DateTime: 08-05-2017 08:37:16
 //  UserName: Jorn
-//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 07-05-2017 14:12:08>
+//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 08-05-2017 08:35:21>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: unicode, verbose, parser, stack, minimize
@@ -127,8 +127,8 @@ namespace ZimmerBot.Core.ConfigParser
         
         enum Result {accept, noMatch, contextFound};
 
-        const int maxAccept = 68;
-        const int initial = 69;
+        const int maxAccept = 69;
+        const int initial = 70;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
@@ -170,7 +170,7 @@ internal StringBuilder StringInput = null;
         }
     };
 
-    static int[] startState = new int[] {69, 54, 59, 66, 0};
+    static int[] startState = new int[] {70, 54, 60, 67, 0};
 
 #region TwoLevelCharacterMap
     //
@@ -1169,7 +1169,7 @@ internal StringBuilder StringInput = null;
             return MapC(code);
     }
 
-    static Table[] NxS = new Table[191] {
+    static Table[] NxS = new Table[192] {
 /* NxS[   0] */ new Table(0, 0, 0, null), // Shortest string ""
 /* NxS[   1] */ // Shortest string ">"
       new Table(1, 1, -1, new short[] {53}),
@@ -1191,8 +1191,8 @@ internal StringBuilder StringInput = null;
 /* NxS[  16] */ new Table(0, 0, -1, null), // Shortest string "$"
 /* NxS[  17] */ new Table(0, 0, -1, null), // Shortest string "?"
 /* NxS[  18] */ // Shortest string "!"
-      new Table(21, 21, -1, new short[] {72, 73, 74, 75, 76, 77, 
-          78, 79, 80, -1, 81, -1, -1, -1, -1, 82, -1, -1, -1, -1, 83}),
+      new Table(21, 21, -1, new short[] {73, 74, 75, 76, 77, 78, 
+          79, 80, 81, -1, 82, -1, -1, -1, -1, 83, -1, -1, -1, -1, 84}),
 /* NxS[  19] */ // Shortest string "T"
       new Table(46, 29, 22, new short[] {-1, 22, -1, -1, -1, -1, 
           -1, -1, 29, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
@@ -1212,7 +1212,7 @@ internal StringBuilder StringInput = null;
           22, 22, 22, 22, 22, -1, 22}),
 /* NxS[  24] */ // Shortest string "0"
       new Table(45, 16, -1, new short[] {24, -1, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, 71}),
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, 72}),
 /* NxS[  25] */ new Table(0, 0, -1, null), // Shortest string "#"
 /* NxS[  26] */ // Shortest string "%T"
       new Table(46, 29, 26, new short[] {-1, 26, -1, -1, -1, -1, 
@@ -1244,14 +1244,14 @@ internal StringBuilder StringInput = null;
 /* NxS[  46] */ new Table(0, 0, -1, null), // Shortest string "!on"
 /* NxS[  47] */ new Table(0, 0, -1, null), // Shortest string "!call"
 /* NxS[  48] */ // Shortest string "!continue"
-      new Table(21, 1, -1, new short[] {182}),
+      new Table(21, 1, -1, new short[] {183}),
 /* NxS[  49] */ new Table(0, 0, -1, null), // Shortest string "!continue\x20with"
 /* NxS[  50] */ new Table(0, 0, -1, null), // Shortest string "!continue\x20at"
 /* NxS[  51] */ new Table(0, 0, -1, null), // Shortest string "!concept"
 /* NxS[  52] */ new Table(0, 0, -1, null), // Shortest string "=>"
 /* NxS[  53] */ new Table(0, 0, -1, null), // Shortest string ">>"
 /* NxS[  54] */ // Shortest string ""
-      new Table(0, 21, 55, new short[] {189, 55, 55, 55, 55, 55, 
+      new Table(0, 21, 55, new short[] {190, 55, 55, 55, 55, 55, 
           55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 56}),
 /* NxS[  55] */ // Shortest string ">"
       new Table(0, 21, 55, new short[] {-1, 55, 55, 55, 55, 55, 
@@ -1259,279 +1259,281 @@ internal StringBuilder StringInput = null;
 /* NxS[  56] */ new Table(0, 0, -1, null), // Shortest string "\""
 /* NxS[  57] */ new Table(0, 0, -1, null), // Shortest string ""
 /* NxS[  58] */ new Table(0, 0, -1, null), // Shortest string ""
-/* NxS[  59] */ // Shortest string ""
-      new Table(50, 4, 60, new short[] {61, 60, 62, 190}),
-/* NxS[  60] */ // Shortest string ">"
-      new Table(50, 4, 60, new short[] {-1, 60, -1, -1}),
-/* NxS[  61] */ new Table(0, 0, -1, null), // Shortest string "\n"
-/* NxS[  62] */ // Shortest string "\r"
-      new Table(50, 1, -1, new short[] {61}),
-/* NxS[  63] */ new Table(0, 0, -1, null), // Shortest string ""
+/* NxS[  59] */ new Table(0, 0, -1, null), // Shortest string ""
+/* NxS[  60] */ // Shortest string ""
+      new Table(50, 4, 61, new short[] {62, 61, 63, 191}),
+/* NxS[  61] */ // Shortest string ">"
+      new Table(50, 4, 61, new short[] {-1, 61, -1, -1}),
+/* NxS[  62] */ new Table(0, 0, -1, null), // Shortest string "\n"
+/* NxS[  63] */ // Shortest string "\r"
+      new Table(50, 1, -1, new short[] {62}),
 /* NxS[  64] */ new Table(0, 0, -1, null), // Shortest string ""
-/* NxS[  65] */ // Shortest string ""
-      new Table(50, 1, -1, new short[] {64}),
+/* NxS[  65] */ new Table(0, 0, -1, null), // Shortest string ""
 /* NxS[  66] */ // Shortest string ""
-      new Table(50, 3, 67, new short[] {68, 67, 68}),
-/* NxS[  67] */ // Shortest string ">"
-      new Table(50, 3, 67, new short[] {-1, 67, -1}),
-/* NxS[  68] */ new Table(0, 0, -1, null), // Shortest string "\n"
-/* NxS[  69] */ // Shortest string ""
-      new Table(45, 38, 22, new short[] {24, 70, 22, 25, 21, -1, 
+      new Table(50, 1, -1, new short[] {65}),
+/* NxS[  67] */ // Shortest string ""
+      new Table(50, 3, 68, new short[] {69, 68, 69}),
+/* NxS[  68] */ // Shortest string ">"
+      new Table(50, 3, 68, new short[] {-1, 68, -1}),
+/* NxS[  69] */ new Table(0, 0, -1, null), // Shortest string "\n"
+/* NxS[  70] */ // Shortest string ""
+      new Table(45, 38, 22, new short[] {24, 71, 22, 25, 21, -1, 
           -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 
           14, 15, 16, 17, 18, 19, 20, 21, 22, 22, 22, 22, 22, 22, 22, 23}),
-/* NxS[  70] */ // Shortest string "%"
+/* NxS[  71] */ // Shortest string "%"
       new Table(19, 29, -1, new short[] {26, -1, -1, 26, 26, 26, 
           26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 
           26, 26, 26, 26, -1, -1, 26}),
-/* NxS[  71] */ // Shortest string "0."
+/* NxS[  72] */ // Shortest string "0."
       new Table(45, 1, -1, new short[] {27}),
-/* NxS[  72] */ // Shortest string "!\x20"
-      new Table(21, 21, -1, new short[] {72, 73, 74, 75, 76, 77, 
-          78, 79, 80, -1, 81, -1, -1, -1, -1, 82, -1, -1, -1, -1, 83}),
-/* NxS[  73] */ // Shortest string "!c"
-      new Table(23, 7, -1, new short[] {173, -1, -1, -1, -1, -1, 
-          174}),
-/* NxS[  74] */ // Shortest string "!o"
+/* NxS[  73] */ // Shortest string "!\x20"
+      new Table(21, 21, -1, new short[] {73, 74, 75, 76, 77, 78, 
+          79, 80, 81, -1, 82, -1, -1, -1, -1, 83, -1, -1, -1, -1, 84}),
+/* NxS[  74] */ // Shortest string "!c"
+      new Table(23, 7, -1, new short[] {174, -1, -1, -1, -1, -1, 
+          175}),
+/* NxS[  75] */ // Shortest string "!o"
       new Table(24, 1, -1, new short[] {46}),
-/* NxS[  75] */ // Shortest string "!n"
-      new Table(23, 1, -1, new short[] {161}),
-/* NxS[  76] */ // Shortest string "!e"
-      new Table(24, 12, -1, new short[] {152, -1, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, 153}),
-/* NxS[  77] */ // Shortest string "!p"
-      new Table(29, 1, -1, new short[] {147}),
-/* NxS[  78] */ // Shortest string "!t"
-      new Table(23, 1, -1, new short[] {144}),
-/* NxS[  79] */ // Shortest string "!s"
-      new Table(25, 3, -1, new short[] {126, -1, 127}),
-/* NxS[  80] */ // Shortest string "!a"
-      new Table(24, 1, -1, new short[] {122}),
-/* NxS[  81] */ // Shortest string "!w"
-      new Table(25, 10, -1, new short[] {116, -1, -1, -1, -1, -1, 
-          -1, -1, -1, 117}),
-/* NxS[  82] */ // Shortest string "!r"
-      new Table(25, 17, -1, new short[] {88, -1, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 89}),
-/* NxS[  83] */ // Shortest string "!d"
-      new Table(25, 1, -1, new short[] {84}),
-/* NxS[  84] */ // Shortest string "!de"
-      new Table(42, 1, -1, new short[] {85}),
-/* NxS[  85] */ // Shortest string "!def"
-      new Table(32, 1, -1, new short[] {86}),
-/* NxS[  86] */ // Shortest string "!defi"
-      new Table(24, 1, -1, new short[] {87}),
-/* NxS[  87] */ // Shortest string "!defin"
+/* NxS[  76] */ // Shortest string "!n"
+      new Table(23, 1, -1, new short[] {162}),
+/* NxS[  77] */ // Shortest string "!e"
+      new Table(24, 12, -1, new short[] {153, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, 154}),
+/* NxS[  78] */ // Shortest string "!p"
+      new Table(29, 1, -1, new short[] {148}),
+/* NxS[  79] */ // Shortest string "!t"
+      new Table(23, 1, -1, new short[] {145}),
+/* NxS[  80] */ // Shortest string "!s"
+      new Table(25, 3, -1, new short[] {127, -1, 128}),
+/* NxS[  81] */ // Shortest string "!a"
+      new Table(24, 1, -1, new short[] {123}),
+/* NxS[  82] */ // Shortest string "!w"
+      new Table(25, 10, -1, new short[] {117, -1, -1, -1, -1, -1, 
+          -1, -1, -1, 118}),
+/* NxS[  83] */ // Shortest string "!r"
+      new Table(25, 17, -1, new short[] {89, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 90}),
+/* NxS[  84] */ // Shortest string "!d"
+      new Table(25, 1, -1, new short[] {85}),
+/* NxS[  85] */ // Shortest string "!de"
+      new Table(42, 1, -1, new short[] {86}),
+/* NxS[  86] */ // Shortest string "!def"
+      new Table(32, 1, -1, new short[] {87}),
+/* NxS[  87] */ // Shortest string "!defi"
+      new Table(24, 1, -1, new short[] {88}),
+/* NxS[  88] */ // Shortest string "!defin"
       new Table(25, 1, -1, new short[] {30}),
-/* NxS[  88] */ // Shortest string "!re"
-      new Table(26, 1, -1, new short[] {109}),
-/* NxS[  89] */ // Shortest string "!rd"
-      new Table(42, 1, -1, new short[] {90}),
-/* NxS[  90] */ // Shortest string "!rdf"
-      new Table(38, 1, -1, new short[] {91}),
-/* NxS[  91] */ // Shortest string "!rdf_"
-      new Table(25, 8, -1, new short[] {92, 93, -1, -1, -1, -1, 
-          -1, 94}),
-/* NxS[  92] */ // Shortest string "!rdf_e"
-      new Table(24, 1, -1, new short[] {103}),
-/* NxS[  93] */ // Shortest string "!rdf_p"
+/* NxS[  89] */ // Shortest string "!re"
+      new Table(26, 1, -1, new short[] {110}),
+/* NxS[  90] */ // Shortest string "!rd"
+      new Table(42, 1, -1, new short[] {91}),
+/* NxS[  91] */ // Shortest string "!rdf"
+      new Table(38, 1, -1, new short[] {92}),
+/* NxS[  92] */ // Shortest string "!rdf_"
+      new Table(25, 8, -1, new short[] {93, 94, -1, -1, -1, -1, 
+          -1, 95}),
+/* NxS[  93] */ // Shortest string "!rdf_e"
+      new Table(24, 1, -1, new short[] {104}),
+/* NxS[  94] */ // Shortest string "!rdf_p"
+      new Table(36, 1, -1, new short[] {100}),
+/* NxS[  95] */ // Shortest string "!rdf_i"
+      new Table(43, 1, -1, new short[] {96}),
+/* NxS[  96] */ // Shortest string "!rdf_im"
+      new Table(26, 1, -1, new short[] {97}),
+/* NxS[  97] */ // Shortest string "!rdf_imp"
+      new Table(23, 1, -1, new short[] {98}),
+/* NxS[  98] */ // Shortest string "!rdf_impo"
       new Table(36, 1, -1, new short[] {99}),
-/* NxS[  94] */ // Shortest string "!rdf_i"
-      new Table(43, 1, -1, new short[] {95}),
-/* NxS[  95] */ // Shortest string "!rdf_im"
-      new Table(26, 1, -1, new short[] {96}),
-/* NxS[  96] */ // Shortest string "!rdf_imp"
-      new Table(23, 1, -1, new short[] {97}),
-/* NxS[  97] */ // Shortest string "!rdf_impo"
-      new Table(36, 1, -1, new short[] {98}),
-/* NxS[  98] */ // Shortest string "!rdf_impor"
+/* NxS[  99] */ // Shortest string "!rdf_impor"
       new Table(27, 1, -1, new short[] {31}),
-/* NxS[  99] */ // Shortest string "!rdf_pr"
-      new Table(25, 1, -1, new short[] {100}),
-/* NxS[ 100] */ // Shortest string "!rdf_pre"
-      new Table(42, 1, -1, new short[] {101}),
-/* NxS[ 101] */ // Shortest string "!rdf_pref"
-      new Table(32, 1, -1, new short[] {102}),
-/* NxS[ 102] */ // Shortest string "!rdf_prefi"
+/* NxS[ 100] */ // Shortest string "!rdf_pr"
+      new Table(25, 1, -1, new short[] {101}),
+/* NxS[ 101] */ // Shortest string "!rdf_pre"
+      new Table(42, 1, -1, new short[] {102}),
+/* NxS[ 102] */ // Shortest string "!rdf_pref"
+      new Table(32, 1, -1, new short[] {103}),
+/* NxS[ 103] */ // Shortest string "!rdf_prefi"
       new Table(44, 1, -1, new short[] {32}),
-/* NxS[ 103] */ // Shortest string "!rdf_en"
-      new Table(27, 1, -1, new short[] {104}),
-/* NxS[ 104] */ // Shortest string "!rdf_ent"
-      new Table(32, 1, -1, new short[] {105}),
-/* NxS[ 105] */ // Shortest string "!rdf_enti"
-      new Table(27, 1, -1, new short[] {106}),
-/* NxS[ 106] */ // Shortest string "!rdf_entit"
-      new Table(32, 1, -1, new short[] {107}),
-/* NxS[ 107] */ // Shortest string "!rdf_entiti"
-      new Table(25, 1, -1, new short[] {108}),
-/* NxS[ 108] */ // Shortest string "!rdf_entitie"
+/* NxS[ 104] */ // Shortest string "!rdf_en"
+      new Table(27, 1, -1, new short[] {105}),
+/* NxS[ 105] */ // Shortest string "!rdf_ent"
+      new Table(32, 1, -1, new short[] {106}),
+/* NxS[ 106] */ // Shortest string "!rdf_enti"
+      new Table(27, 1, -1, new short[] {107}),
+/* NxS[ 107] */ // Shortest string "!rdf_entit"
+      new Table(32, 1, -1, new short[] {108}),
+/* NxS[ 108] */ // Shortest string "!rdf_entiti"
+      new Table(25, 1, -1, new short[] {109}),
+/* NxS[ 109] */ // Shortest string "!rdf_entitie"
       new Table(28, 1, -1, new short[] {33}),
-/* NxS[ 109] */ // Shortest string "!rep"
-      new Table(25, 1, -1, new short[] {110}),
-/* NxS[ 110] */ // Shortest string "!repe"
-      new Table(29, 1, -1, new short[] {111}),
-/* NxS[ 111] */ // Shortest string "!repea"
-      new Table(27, 1, -1, new short[] {112}),
-/* NxS[ 112] */ // Shortest string "!repeat"
-      new Table(29, 1, -1, new short[] {113}),
-/* NxS[ 113] */ // Shortest string "!repeata"
-      new Table(40, 1, -1, new short[] {114}),
-/* NxS[ 114] */ // Shortest string "!repeatab"
-      new Table(30, 1, -1, new short[] {115}),
-/* NxS[ 115] */ // Shortest string "!repeatabl"
+/* NxS[ 110] */ // Shortest string "!rep"
+      new Table(25, 1, -1, new short[] {111}),
+/* NxS[ 111] */ // Shortest string "!repe"
+      new Table(29, 1, -1, new short[] {112}),
+/* NxS[ 112] */ // Shortest string "!repea"
+      new Table(27, 1, -1, new short[] {113}),
+/* NxS[ 113] */ // Shortest string "!repeat"
+      new Table(29, 1, -1, new short[] {114}),
+/* NxS[ 114] */ // Shortest string "!repeata"
+      new Table(40, 1, -1, new short[] {115}),
+/* NxS[ 115] */ // Shortest string "!repeatab"
+      new Table(30, 1, -1, new short[] {116}),
+/* NxS[ 116] */ // Shortest string "!repeatabl"
       new Table(25, 1, -1, new short[] {34}),
-/* NxS[ 116] */ // Shortest string "!we"
-      new Table(32, 1, -1, new short[] {119}),
-/* NxS[ 117] */ // Shortest string "!wh"
-      new Table(25, 1, -1, new short[] {118}),
-/* NxS[ 118] */ // Shortest string "!whe"
+/* NxS[ 117] */ // Shortest string "!we"
+      new Table(32, 1, -1, new short[] {120}),
+/* NxS[ 118] */ // Shortest string "!wh"
+      new Table(25, 1, -1, new short[] {119}),
+/* NxS[ 119] */ // Shortest string "!whe"
       new Table(24, 1, -1, new short[] {35}),
-/* NxS[ 119] */ // Shortest string "!wei"
-      new Table(33, 1, -1, new short[] {120}),
-/* NxS[ 120] */ // Shortest string "!weig"
-      new Table(34, 1, -1, new short[] {121}),
-/* NxS[ 121] */ // Shortest string "!weigh"
+/* NxS[ 120] */ // Shortest string "!wei"
+      new Table(33, 1, -1, new short[] {121}),
+/* NxS[ 121] */ // Shortest string "!weig"
+      new Table(34, 1, -1, new short[] {122}),
+/* NxS[ 122] */ // Shortest string "!weigh"
       new Table(27, 1, -1, new short[] {36}),
-/* NxS[ 122] */ // Shortest string "!an"
-      new Table(28, 1, -1, new short[] {123}),
-/* NxS[ 123] */ // Shortest string "!ans"
-      new Table(31, 1, -1, new short[] {124}),
-/* NxS[ 124] */ // Shortest string "!answ"
-      new Table(25, 1, -1, new short[] {125}),
-/* NxS[ 125] */ // Shortest string "!answe"
+/* NxS[ 123] */ // Shortest string "!an"
+      new Table(28, 1, -1, new short[] {124}),
+/* NxS[ 124] */ // Shortest string "!ans"
+      new Table(31, 1, -1, new short[] {125}),
+/* NxS[ 125] */ // Shortest string "!answ"
+      new Table(25, 1, -1, new short[] {126}),
+/* NxS[ 126] */ // Shortest string "!answe"
       new Table(36, 1, -1, new short[] {37}),
-/* NxS[ 126] */ // Shortest string "!se"
+/* NxS[ 127] */ // Shortest string "!se"
       new Table(27, 1, -1, new short[] {40}),
-/* NxS[ 127] */ // Shortest string "!st"
-      new Table(23, 7, -1, new short[] {128, -1, -1, -1, -1, -1, 
-          129}),
-/* NxS[ 128] */ // Shortest string "!sto"
-      new Table(26, 1, -1, new short[] {137}),
-/* NxS[ 129] */ // Shortest string "!sta"
-      new Table(36, 1, -1, new short[] {130}),
-/* NxS[ 130] */ // Shortest string "!star"
-      new Table(27, 1, -1, new short[] {131}),
-/* NxS[ 131] */ // Shortest string "!start"
-      new Table(38, 1, -1, new short[] {132}),
-/* NxS[ 132] */ // Shortest string "!start_"
-      new Table(27, 1, -1, new short[] {133}),
-/* NxS[ 133] */ // Shortest string "!start_t"
-      new Table(23, 1, -1, new short[] {134}),
-/* NxS[ 134] */ // Shortest string "!start_to"
-      new Table(26, 1, -1, new short[] {135}),
-/* NxS[ 135] */ // Shortest string "!start_top"
-      new Table(32, 1, -1, new short[] {136}),
-/* NxS[ 136] */ // Shortest string "!start_topi"
+/* NxS[ 128] */ // Shortest string "!st"
+      new Table(23, 7, -1, new short[] {129, -1, -1, -1, -1, -1, 
+          130}),
+/* NxS[ 129] */ // Shortest string "!sto"
+      new Table(26, 1, -1, new short[] {138}),
+/* NxS[ 130] */ // Shortest string "!sta"
+      new Table(36, 1, -1, new short[] {131}),
+/* NxS[ 131] */ // Shortest string "!star"
+      new Table(27, 1, -1, new short[] {132}),
+/* NxS[ 132] */ // Shortest string "!start"
+      new Table(38, 1, -1, new short[] {133}),
+/* NxS[ 133] */ // Shortest string "!start_"
+      new Table(27, 1, -1, new short[] {134}),
+/* NxS[ 134] */ // Shortest string "!start_t"
+      new Table(23, 1, -1, new short[] {135}),
+/* NxS[ 135] */ // Shortest string "!start_to"
+      new Table(26, 1, -1, new short[] {136}),
+/* NxS[ 136] */ // Shortest string "!start_top"
+      new Table(32, 1, -1, new short[] {137}),
+/* NxS[ 137] */ // Shortest string "!start_topi"
       new Table(22, 1, -1, new short[] {38}),
-/* NxS[ 137] */ // Shortest string "!stop"
-      new Table(38, 1, -1, new short[] {138}),
-/* NxS[ 138] */ // Shortest string "!stop_"
-      new Table(23, 1, -1, new short[] {139}),
-/* NxS[ 139] */ // Shortest string "!stop_o"
-      new Table(39, 1, -1, new short[] {140}),
-/* NxS[ 140] */ // Shortest string "!stop_ou"
-      new Table(27, 1, -1, new short[] {141}),
-/* NxS[ 141] */ // Shortest string "!stop_out"
-      new Table(26, 1, -1, new short[] {142}),
-/* NxS[ 142] */ // Shortest string "!stop_outp"
-      new Table(39, 1, -1, new short[] {143}),
-/* NxS[ 143] */ // Shortest string "!stop_outpu"
+/* NxS[ 138] */ // Shortest string "!stop"
+      new Table(38, 1, -1, new short[] {139}),
+/* NxS[ 139] */ // Shortest string "!stop_"
+      new Table(23, 1, -1, new short[] {140}),
+/* NxS[ 140] */ // Shortest string "!stop_o"
+      new Table(39, 1, -1, new short[] {141}),
+/* NxS[ 141] */ // Shortest string "!stop_ou"
+      new Table(27, 1, -1, new short[] {142}),
+/* NxS[ 142] */ // Shortest string "!stop_out"
+      new Table(26, 1, -1, new short[] {143}),
+/* NxS[ 143] */ // Shortest string "!stop_outp"
+      new Table(39, 1, -1, new short[] {144}),
+/* NxS[ 144] */ // Shortest string "!stop_outpu"
       new Table(27, 1, -1, new short[] {39}),
-/* NxS[ 144] */ // Shortest string "!to"
-      new Table(26, 1, -1, new short[] {145}),
-/* NxS[ 145] */ // Shortest string "!top"
-      new Table(32, 1, -1, new short[] {146}),
-/* NxS[ 146] */ // Shortest string "!topi"
+/* NxS[ 145] */ // Shortest string "!to"
+      new Table(26, 1, -1, new short[] {146}),
+/* NxS[ 146] */ // Shortest string "!top"
+      new Table(32, 1, -1, new short[] {147}),
+/* NxS[ 147] */ // Shortest string "!topi"
       new Table(22, 1, -1, new short[] {41}),
-/* NxS[ 147] */ // Shortest string "!pa"
-      new Table(27, 1, -1, new short[] {148}),
-/* NxS[ 148] */ // Shortest string "!pat"
+/* NxS[ 148] */ // Shortest string "!pa"
       new Table(27, 1, -1, new short[] {149}),
-/* NxS[ 149] */ // Shortest string "!patt"
-      new Table(25, 1, -1, new short[] {150}),
-/* NxS[ 150] */ // Shortest string "!patte"
-      new Table(36, 1, -1, new short[] {151}),
-/* NxS[ 151] */ // Shortest string "!patter"
+/* NxS[ 149] */ // Shortest string "!pat"
+      new Table(27, 1, -1, new short[] {150}),
+/* NxS[ 150] */ // Shortest string "!patt"
+      new Table(25, 1, -1, new short[] {151}),
+/* NxS[ 151] */ // Shortest string "!patte"
+      new Table(36, 1, -1, new short[] {152}),
+/* NxS[ 152] */ // Shortest string "!patter"
       new Table(24, 1, -1, new short[] {42}),
-/* NxS[ 152] */ // Shortest string "!en"
-      new Table(27, 1, -1, new short[] {156}),
-/* NxS[ 153] */ // Shortest string "!ev"
-      new Table(25, 1, -1, new short[] {154}),
-/* NxS[ 154] */ // Shortest string "!eve"
-      new Table(36, 1, -1, new short[] {155}),
-/* NxS[ 155] */ // Shortest string "!ever"
+/* NxS[ 153] */ // Shortest string "!en"
+      new Table(27, 1, -1, new short[] {157}),
+/* NxS[ 154] */ // Shortest string "!ev"
+      new Table(25, 1, -1, new short[] {155}),
+/* NxS[ 155] */ // Shortest string "!eve"
+      new Table(36, 1, -1, new short[] {156}),
+/* NxS[ 156] */ // Shortest string "!ever"
       new Table(37, 1, -1, new short[] {43}),
-/* NxS[ 156] */ // Shortest string "!ent"
-      new Table(32, 1, -1, new short[] {157}),
-/* NxS[ 157] */ // Shortest string "!enti"
-      new Table(27, 1, -1, new short[] {158}),
-/* NxS[ 158] */ // Shortest string "!entit"
-      new Table(32, 1, -1, new short[] {159}),
-/* NxS[ 159] */ // Shortest string "!entiti"
-      new Table(25, 1, -1, new short[] {160}),
-/* NxS[ 160] */ // Shortest string "!entitie"
+/* NxS[ 157] */ // Shortest string "!ent"
+      new Table(32, 1, -1, new short[] {158}),
+/* NxS[ 158] */ // Shortest string "!enti"
+      new Table(27, 1, -1, new short[] {159}),
+/* NxS[ 159] */ // Shortest string "!entit"
+      new Table(32, 1, -1, new short[] {160}),
+/* NxS[ 160] */ // Shortest string "!entiti"
+      new Table(25, 1, -1, new short[] {161}),
+/* NxS[ 161] */ // Shortest string "!entitie"
       new Table(28, 1, -1, new short[] {44}),
-/* NxS[ 161] */ // Shortest string "!no"
-      new Table(27, 1, -1, new short[] {162}),
-/* NxS[ 162] */ // Shortest string "!not"
-      new Table(38, 1, -1, new short[] {163}),
-/* NxS[ 163] */ // Shortest string "!not_"
-      new Table(36, 1, -1, new short[] {164}),
-/* NxS[ 164] */ // Shortest string "!not_r"
-      new Table(25, 1, -1, new short[] {165}),
-/* NxS[ 165] */ // Shortest string "!not_re"
-      new Table(26, 1, -1, new short[] {166}),
-/* NxS[ 166] */ // Shortest string "!not_rep"
-      new Table(25, 1, -1, new short[] {167}),
-/* NxS[ 167] */ // Shortest string "!not_repe"
-      new Table(29, 1, -1, new short[] {168}),
-/* NxS[ 168] */ // Shortest string "!not_repea"
-      new Table(27, 1, -1, new short[] {169}),
-/* NxS[ 169] */ // Shortest string "!not_repeat"
-      new Table(29, 1, -1, new short[] {170}),
-/* NxS[ 170] */ // Shortest string "!not_repeata"
-      new Table(40, 1, -1, new short[] {171}),
-/* NxS[ 171] */ // Shortest string "!not_repeatab"
-      new Table(30, 1, -1, new short[] {172}),
-/* NxS[ 172] */ // Shortest string "!not_repeatabl"
+/* NxS[ 162] */ // Shortest string "!no"
+      new Table(27, 1, -1, new short[] {163}),
+/* NxS[ 163] */ // Shortest string "!not"
+      new Table(38, 1, -1, new short[] {164}),
+/* NxS[ 164] */ // Shortest string "!not_"
+      new Table(36, 1, -1, new short[] {165}),
+/* NxS[ 165] */ // Shortest string "!not_r"
+      new Table(25, 1, -1, new short[] {166}),
+/* NxS[ 166] */ // Shortest string "!not_re"
+      new Table(26, 1, -1, new short[] {167}),
+/* NxS[ 167] */ // Shortest string "!not_rep"
+      new Table(25, 1, -1, new short[] {168}),
+/* NxS[ 168] */ // Shortest string "!not_repe"
+      new Table(29, 1, -1, new short[] {169}),
+/* NxS[ 169] */ // Shortest string "!not_repea"
+      new Table(27, 1, -1, new short[] {170}),
+/* NxS[ 170] */ // Shortest string "!not_repeat"
+      new Table(29, 1, -1, new short[] {171}),
+/* NxS[ 171] */ // Shortest string "!not_repeata"
+      new Table(40, 1, -1, new short[] {172}),
+/* NxS[ 172] */ // Shortest string "!not_repeatab"
+      new Table(30, 1, -1, new short[] {173}),
+/* NxS[ 173] */ // Shortest string "!not_repeatabl"
       new Table(25, 1, -1, new short[] {45}),
-/* NxS[ 173] */ // Shortest string "!co"
-      new Table(24, 1, -1, new short[] {176}),
-/* NxS[ 174] */ // Shortest string "!ca"
-      new Table(30, 1, -1, new short[] {175}),
-/* NxS[ 175] */ // Shortest string "!cal"
+/* NxS[ 174] */ // Shortest string "!co"
+      new Table(24, 1, -1, new short[] {177}),
+/* NxS[ 175] */ // Shortest string "!ca"
+      new Table(30, 1, -1, new short[] {176}),
+/* NxS[ 176] */ // Shortest string "!cal"
       new Table(30, 1, -1, new short[] {47}),
-/* NxS[ 176] */ // Shortest string "!con"
-      new Table(22, 6, -1, new short[] {177, -1, -1, -1, -1, 178}),
-/* NxS[ 177] */ // Shortest string "!conc"
-      new Table(25, 1, -1, new short[] {187}),
-/* NxS[ 178] */ // Shortest string "!cont"
-      new Table(32, 1, -1, new short[] {179}),
-/* NxS[ 179] */ // Shortest string "!conti"
-      new Table(24, 1, -1, new short[] {180}),
-/* NxS[ 180] */ // Shortest string "!contin"
-      new Table(39, 1, -1, new short[] {181}),
-/* NxS[ 181] */ // Shortest string "!continu"
+/* NxS[ 177] */ // Shortest string "!con"
+      new Table(22, 6, -1, new short[] {178, -1, -1, -1, -1, 179}),
+/* NxS[ 178] */ // Shortest string "!conc"
+      new Table(25, 1, -1, new short[] {188}),
+/* NxS[ 179] */ // Shortest string "!cont"
+      new Table(32, 1, -1, new short[] {180}),
+/* NxS[ 180] */ // Shortest string "!conti"
+      new Table(24, 1, -1, new short[] {181}),
+/* NxS[ 181] */ // Shortest string "!contin"
+      new Table(39, 1, -1, new short[] {182}),
+/* NxS[ 182] */ // Shortest string "!continu"
       new Table(25, 1, -1, new short[] {48}),
-/* NxS[ 182] */ // Shortest string "!continue\x20"
-      new Table(21, 11, -1, new short[] {182, -1, -1, -1, -1, -1, 
-          -1, -1, 183, -1, 184}),
-/* NxS[ 183] */ // Shortest string "!continue\x20a"
+/* NxS[ 183] */ // Shortest string "!continue\x20"
+      new Table(21, 11, -1, new short[] {183, -1, -1, -1, -1, -1, 
+          -1, -1, 184, -1, 185}),
+/* NxS[ 184] */ // Shortest string "!continue\x20a"
       new Table(27, 1, -1, new short[] {50}),
-/* NxS[ 184] */ // Shortest string "!continue\x20w"
-      new Table(32, 1, -1, new short[] {185}),
-/* NxS[ 185] */ // Shortest string "!continue\x20wi"
-      new Table(27, 1, -1, new short[] {186}),
-/* NxS[ 186] */ // Shortest string "!continue\x20wit"
+/* NxS[ 185] */ // Shortest string "!continue\x20w"
+      new Table(32, 1, -1, new short[] {186}),
+/* NxS[ 186] */ // Shortest string "!continue\x20wi"
+      new Table(27, 1, -1, new short[] {187}),
+/* NxS[ 187] */ // Shortest string "!continue\x20wit"
       new Table(34, 1, -1, new short[] {49}),
-/* NxS[ 187] */ // Shortest string "!conce"
-      new Table(26, 1, -1, new short[] {188}),
-/* NxS[ 188] */ // Shortest string "!concep"
+/* NxS[ 188] */ // Shortest string "!conce"
+      new Table(26, 1, -1, new short[] {189}),
+/* NxS[ 189] */ // Shortest string "!concep"
       new Table(27, 1, -1, new short[] {51}),
-/* NxS[ 189] */ // Shortest string ""
-      new Table(0, 21, -1, new short[] {57, -1, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 58}),
 /* NxS[ 190] */ // Shortest string ""
-      new Table(50, 3, 63, new short[] {64, 63, 65}),
+      new Table(0, 25, -1, new short[] {57, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 58, -1, 
+          -1, -1, 59}),
+/* NxS[ 191] */ // Shortest string ""
+      new Table(50, 3, 64, new short[] {65, 64, 66}),
     };
 
 int NextState() {
@@ -2130,26 +2132,29 @@ StringInput.Append(yytext[1]);
         case 58: // In <str> Recognized '\\\"',	Shortest string ""
 StringInput.Append(yytext[1]);
             break;
-        case 59: // In <output> Recognized '[^\r\n\\]*',	Shortest string ""
-        case 60: // In <output> Recognized '[^\r\n\\]*',	Shortest string ">"
+        case 59: // In <str> Recognized '\\n',	Shortest string ""
+StringInput.Append("\n");
+            break;
+        case 60: // In <output> Recognized '[^\r\n\\]*',	Shortest string ""
+        case 61: // In <output> Recognized '[^\r\n\\]*',	Shortest string ">"
 StringInput.Append(yytext);
             break;
-        case 61: // In <output> Recognized '\r\n?|\n',	Shortest string "\n"
-        case 62: // In <output> Recognized '\r\n?|\n',	Shortest string "\r"
+        case 62: // In <output> Recognized '\r\n?|\n',	Shortest string "\n"
+        case 63: // In <output> Recognized '\r\n?|\n',	Shortest string "\r"
 BEGIN(INITIAL); return (int)Token.T_OUTPUT;
             break;
-        case 63: // In <output> Recognized '\\[^\r\n]',	Shortest string ""
+        case 64: // In <output> Recognized '\\[^\r\n]',	Shortest string ""
 StringInput.Append(yytext.Substring(1));
             break;
-        case 64: // In <output> Recognized '\\(\r\n?|\n)',	Shortest string ""
         case 65: // In <output> Recognized '\\(\r\n?|\n)',	Shortest string ""
+        case 66: // In <output> Recognized '\\(\r\n?|\n)',	Shortest string ""
 StringInput.Append(yytext.Substring(1));
             break;
-        case 66: // In <comment> Recognized '[^\r\n]*',	Shortest string ""
-        case 67: // In <comment> Recognized '[^\r\n]*',	Shortest string ">"
+        case 67: // In <comment> Recognized '[^\r\n]*',	Shortest string ""
+        case 68: // In <comment> Recognized '[^\r\n]*',	Shortest string ">"
 /* skip */
             break;
-        case 68: // In <comment> Recognized '\r|\n',	Shortest string "\n"
+        case 69: // In <comment> Recognized '\r|\n',	Shortest string "\n"
 BEGIN(INITIAL);
             break;
         default:
