@@ -20,7 +20,7 @@ namespace ZimmerBot.Core.WordRegex
 
     public override double CalculateSize()
     {
-      return 1;
+      return 0.5;
     }
 
 

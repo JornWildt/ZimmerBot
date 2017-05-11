@@ -56,6 +56,8 @@ namespace ZimmerBot.Core.Parser
 
     public override string ToString()
     {
+      if (Type == TokenType.Entity)
+        return $"{OriginalText}[E:{EntityClass}]";
       return OriginalText;
     }
   }

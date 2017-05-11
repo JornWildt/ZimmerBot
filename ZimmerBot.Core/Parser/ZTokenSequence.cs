@@ -19,7 +19,7 @@ namespace ZimmerBot.Core.Parser
 
     public override string ToString()
     {
-      return this.Select(t => t.ToString()).Aggregate((a, b) => a + "," + b);
+      return this.Select(t => t.ToString()).Aggregate((a, b) => a + ", " + b);
     }
 
 

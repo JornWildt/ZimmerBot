@@ -300,6 +300,8 @@ namespace ZimmerBot.Core.Knowledge
     public bool SelectReactionsFromTopic(Topic topic, ReactionSet reactions, TriggerEvaluationContext context, double weight)
     {
       BotUtility.EvaluationLogger.Debug($"Select reactions from topic {topic.Name} with weight {weight}");
+      foreach (var x in context.MatchedPattern.MatchValues)
+        BotUtility.EvaluationLogger.Debug("");
 
       bool reactionsAdded = false;
       foreach (Rule r in topic.StandardRules)

@@ -65,5 +65,21 @@ WHERE
       AssertDialog("Describe alibaba inc", "'alibaba inc' is an entity");
       //AssertDialog("Describe alibaba mermaid", "'alibaba mermaid' is an entity");
     }
+
+
+    [Test]
+    public void CanMatchEntityAsNormalWord()
+    {
+      BuildBot(@"
+! entities (person)
+{
+  ""friend""
+}
+
+> do you have a friend
+: Yes!
+");
+      AssertDialog("do you have a friend", "Yes!");
+    }
   }
 }

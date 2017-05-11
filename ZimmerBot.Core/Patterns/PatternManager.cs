@@ -59,6 +59,8 @@ namespace ZimmerBot.Core.Patterns
       if (PatternSets.Count == 0)
         return null;
 
+      BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}");
+
       double maxProb = -10000;
       Pattern result = null;
 
@@ -70,6 +72,8 @@ namespace ZimmerBot.Core.Patterns
         {
           maxProb = pb;
           result = pt;
+
+          BotUtility.EvaluationLogger.Debug($"Probable match: {result.ToString()}");
         }
       }
 
