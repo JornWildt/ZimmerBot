@@ -300,8 +300,10 @@ namespace ZimmerBot.Core.Knowledge
     public bool SelectReactionsFromTopic(Topic topic, ReactionSet reactions, TriggerEvaluationContext context, double weight)
     {
       BotUtility.EvaluationLogger.Debug($"Select reactions from topic {topic.Name} with weight {weight}");
-      foreach (var x in context.MatchedPattern.MatchValues)
-        BotUtility.EvaluationLogger.Debug("");
+      if (context.MatchedPattern != null && context.MatchedPattern.MatchValues != null)
+      {
+        BotUtility.EvaluationLogger.Debug("Match values: " + context.MatchedPattern.MatchValues.Select(v => v.Key + ":" + v.Value).Aggregate((a,b) => a + ", " + b));
+      }
 
       bool reactionsAdded = false;
       foreach (Rule r in topic.StandardRules)
