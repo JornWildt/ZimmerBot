@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 08-05-2017 08:37:17
+// DateTime: 15-05-2017 22:43:37
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 05-05-2017 16:55:04>
+// Input file <ConfigParser\Config.Language.grammar.y - 15-05-2017 08:56:03>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -95,7 +95,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
   private static string[] nonTerms = new string[] {
       "main", "$accept", "itemSeq", "item", "configuration", "rule", "conceptPatternSeq", 
       "wordCommaSeq", "Anon@1", "ruleSeq", "Anon@2", "statementSeq", "stringSeq", 
-      "wordOrString", "definitionSeq", "keyValueSeq", "patternSeq", "cwordSeq", 
+      "wordStringCommaSeq", "definitionSeq", "keyValueSeq", "patternSeq", "cwordSeq", 
       "ruleLabel", "inputSeq", "ruleModifierSeq", "topicOutput", "topicStatementSeq", 
       "input", "inputPatternSeq", "inputPattern", "ruleModifier", "condition", 
       "weight", "schedule", "expr", "statement", "internalStatement", "outputTemplateSequence", 
@@ -103,8 +103,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       "outputTemplate", "outputTemplateSequence2", "outputTemplateContent", "Anon@3", 
       "exprReference", "exprSeq", "wordSeq", "exprSeq2", "exprBinary", "exprUnary", 
       "exprIdentifier", "definition", "definitionWord", "definitionAlternatives", 
-      "definitionDataSeq", "emptyWordStringCommaSeq", "definitionData", "definitionDataValueSeq", 
-      "definitionDataValue", "wordStringCommaSeq", "cword", "keyValue", "value", 
+      "definitionDataSeq", "emptyWordStringCommaSeq", "definitionData", "wordOrString", 
+      "definitionDataValueSeq", "definitionDataValue", "cword", "keyValue", "value", 
       "pattern", "patternExprSeq", "patternExpr", "entityPatternExpr", };
 
   static ConfigParser() {
@@ -284,8 +284,8 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[173] = new State(-126);
     states[174] = new State(-127);
     states[175] = new State(new int[]{33,176});
-    states[176] = new State(new int[]{39,204,41,205},new int[]{-14,177});
-    states[177] = new State(new int[]{34,178});
+    states[176] = new State(new int[]{39,204,41,205},new int[]{-14,177,-57,212});
+    states[177] = new State(new int[]{34,178,32,210});
     states[178] = new State(new int[]{35,179});
     states[179] = new State(new int[]{39,213,41,214,36,-96},new int[]{-15,180,-51,182,-52,185});
     states[180] = new State(new int[]{36,181});
@@ -295,16 +295,16 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[184] = new State(-95);
     states[185] = new State(new int[]{33,206,4,-101},new int[]{-53,186});
     states[186] = new State(new int[]{4,187});
-    states[187] = new State(new int[]{39,204,41,205,51,-104},new int[]{-54,188,-56,189,-14,192});
+    states[187] = new State(new int[]{39,204,41,205,51,-104},new int[]{-54,188,-56,189,-57,192});
     states[188] = new State(-97);
     states[189] = new State(new int[]{5,190,51,-103});
-    states[190] = new State(new int[]{39,204,41,205,51,-104},new int[]{-54,191,-56,189,-14,192});
+    states[190] = new State(new int[]{39,204,41,205,51,-104},new int[]{-54,191,-56,189,-57,192});
     states[191] = new State(-102);
     states[192] = new State(new int[]{4,193});
-    states[193] = new State(new int[]{41,198,39,199,42,200,45,201},new int[]{-57,194,-58,195});
+    states[193] = new State(new int[]{41,198,39,199,42,200,45,201},new int[]{-58,194,-59,195});
     states[194] = new State(-105);
     states[195] = new State(new int[]{32,196,5,-107,51,-107});
-    states[196] = new State(new int[]{41,198,39,199,42,200,45,201},new int[]{-57,197,-58,195});
+    states[196] = new State(new int[]{41,198,39,199,42,200,45,201},new int[]{-58,197,-59,195});
     states[197] = new State(-106);
     states[198] = new State(-108);
     states[199] = new State(-109);
@@ -314,11 +314,11 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     states[203] = new State(-111);
     states[204] = new State(-120);
     states[205] = new State(-121);
-    states[206] = new State(new int[]{39,204,41,205,34,-117},new int[]{-55,207,-59,209,-14,212});
+    states[206] = new State(new int[]{39,204,41,205,34,-117},new int[]{-55,207,-14,209,-57,212});
     states[207] = new State(new int[]{34,208});
     states[208] = new State(-100);
     states[209] = new State(new int[]{32,210,34,-116});
-    states[210] = new State(new int[]{39,204,41,205},new int[]{-14,211});
+    states[210] = new State(new int[]{39,204,41,205},new int[]{-57,211});
     states[211] = new State(-118);
     states[212] = new State(-119);
     states[213] = new State(-98);
@@ -463,23 +463,23 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
     rules[102] = new Rule(-54, new int[]{-56,5,-54});
     rules[103] = new Rule(-54, new int[]{-56});
     rules[104] = new Rule(-54, new int[]{});
-    rules[105] = new Rule(-56, new int[]{-14,4,-57});
-    rules[106] = new Rule(-57, new int[]{-58,32,-57});
-    rules[107] = new Rule(-57, new int[]{-58});
-    rules[108] = new Rule(-58, new int[]{41});
-    rules[109] = new Rule(-58, new int[]{39});
-    rules[110] = new Rule(-58, new int[]{42});
-    rules[111] = new Rule(-58, new int[]{45,-46,46});
+    rules[105] = new Rule(-56, new int[]{-57,4,-58});
+    rules[106] = new Rule(-58, new int[]{-59,32,-58});
+    rules[107] = new Rule(-58, new int[]{-59});
+    rules[108] = new Rule(-59, new int[]{41});
+    rules[109] = new Rule(-59, new int[]{39});
+    rules[110] = new Rule(-59, new int[]{42});
+    rules[111] = new Rule(-59, new int[]{45,-46,46});
     rules[112] = new Rule(-46, new int[]{-46,39});
     rules[113] = new Rule(-46, new int[]{39});
     rules[114] = new Rule(-8, new int[]{-8,32,39});
     rules[115] = new Rule(-8, new int[]{39});
-    rules[116] = new Rule(-55, new int[]{-59});
+    rules[116] = new Rule(-55, new int[]{-14});
     rules[117] = new Rule(-55, new int[]{});
-    rules[118] = new Rule(-59, new int[]{-59,32,-14});
-    rules[119] = new Rule(-59, new int[]{-14});
-    rules[120] = new Rule(-14, new int[]{39});
-    rules[121] = new Rule(-14, new int[]{41});
+    rules[118] = new Rule(-14, new int[]{-14,32,-57});
+    rules[119] = new Rule(-14, new int[]{-57});
+    rules[120] = new Rule(-57, new int[]{39});
+    rules[121] = new Rule(-57, new int[]{41});
     rules[122] = new Rule(-18, new int[]{-18,-60});
     rules[123] = new Rule(-18, new int[]{-60});
     rules[124] = new Rule(-60, new int[]{39});
@@ -540,9 +540,9 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
                //                  T_RBRACE
 { RegisterEntities(ValueStack[ValueStack.Depth-5].s, ValueStack[ValueStack.Depth-2].stringList); }
         break;
-      case 14: // configuration -> T_DEFINE, T_LPAR, wordOrString, T_RPAR, T_LBRACE, 
+      case 14: // configuration -> T_DEFINE, T_LPAR, wordStringCommaSeq, T_RPAR, T_LBRACE, 
                //                  definitionSeq, T_RBRACE
-{ RegisterDefinitions(ValueStack[ValueStack.Depth-5].s, ValueStack[ValueStack.Depth-2].wordDefinitionList); }
+{ RegisterDefinitions(ValueStack[ValueStack.Depth-5].stringList, ValueStack[ValueStack.Depth-2].wordDefinitionList); }
         break;
       case 15: // configuration -> T_PATTERN, T_LPAR, keyValueSeq, T_RPAR, T_LBRACE, patternSeq, 
                //                  T_RBRACE

@@ -148,12 +148,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterDefinitions(string mainClass, List<WordDefinition> definitions)
+    public void RegisterDefinitions(List<string> mainClasses, List<WordDefinition> definitions)
     {
-      WordDefinitionManager.RegisterWords(mainClass, definitions);
+      WordDefinitionManager.RegisterDefinitions(mainClasses, definitions);
       foreach (WordDefinition wd in definitions)
       {
-        EntityManager.RegisterEntity(wd.Word, wd.Alternatives, mainClass);
+        EntityManager.RegisterEntity(wd.Word, wd.Alternatives, mainClasses);
       }
     }
 

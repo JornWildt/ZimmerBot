@@ -149,19 +149,23 @@ ORDER BY ?country
   ""Anker Jørgensen"":.
 }
 
+! rdf_prefix rdf ""http://www.w3.org/1999/02/22-rdf-syntax-ns#""
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+
 > show all
 ! call RDF.Query(""
-SELECT ?type
+SELECT ?name
 WHERE
 {
   ?s rdf:type ?type.
+  ?type rdfs:label ?name.
 }
-ORDER BY ?type
+ORDER BY ?name
 "")
-: <result:{r | <r.type> }>.
+: <result:{r | <r.name> }>.
 ");
 
-      AssertDialog("show all", "XXX");
+      AssertDialog("show all", "person politician .");
     }
   }
 }

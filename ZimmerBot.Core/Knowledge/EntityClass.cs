@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -73,6 +74,8 @@ namespace ZimmerBot.Core.Knowledge
           if (!WordByPositionInCategoryProbability.ContainsKey(word))
             WordByPositionInCategoryProbability[word] = new double[LongestWordCount];
           WordByPositionInCategoryProbability[word][pos] += 1.0;
+
+          SpellChecker.AddWord(word);
         }
       }
 

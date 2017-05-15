@@ -16,6 +16,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<RdfDefinition> RdfDefinitions { get; protected set; }
 
+    public List<string> Classes { get; set; }
+
 
     public WordDefinition(string word, List<string> alternatives, List<RdfDefinition> rdf)
     {
