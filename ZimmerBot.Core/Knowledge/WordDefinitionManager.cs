@@ -29,9 +29,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterWords(string mainClass, List<WordDefinition> definitions)
+    public void RegisterWords(List<string> mainClasses, List<WordDefinition> definitions)
     {
-      Condition.Requires(mainClass, nameof(mainClass)).IsNotNullOrWhiteSpace();
+      Condition.Requires(mainClasses, nameof(mainClasses)).IsNotNull();
       Condition.Requires(definitions, nameof(definitions)).IsNotEmpty();
 
       Definitions[mainClass] = definitions;
@@ -58,6 +58,8 @@ namespace ZimmerBot.Core.Knowledge
 
     static readonly Uri RdfsClass = UrlConstants.Rdfs("Class");
 
+    static readonly Uri KnownBy = UrlConstants.PropertyUrl("knownby");
+
 
     private void RegisterRdfData(string mainClass, WordDefinition word, RDFStore store)
     {
@@ -71,6 +73,11 @@ namespace ZimmerBot.Core.Knowledge
 
       // Define word as label for itself
       store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), word.Word.ToLiteral(NodeFactory));
+
+      // Define word and alternatives as "knownby" for indexing
+      store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), word.Word.ToLower().ToLiteral(NodeFactory));
+      foreach (string alt in word.Alternatives)
+        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), alt.ToLower().ToLiteral(NodeFactory));
 
       // Define all properties associated with word
       foreach (var prop in word.RdfDefinitions)

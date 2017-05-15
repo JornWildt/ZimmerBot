@@ -108,8 +108,8 @@ configuration
   | T_ENTITIES T_LPAR T_WORD T_RPAR
     T_LBRACE stringSeq T_RBRACE
       { RegisterEntities($3.s, $6.stringList); }
-  | T_DEFINE T_LPAR wordOrString T_RPAR T_LBRACE definitionSeq T_RBRACE
-      { RegisterDefinitions($3.s, $6.wordDefinitionList); }
+  | T_DEFINE T_LPAR wordStringCommaSeq T_RPAR T_LBRACE definitionSeq T_RBRACE
+      { RegisterDefinitions($3.stringList, $6.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
     T_LBRACE patternSeq T_RBRACE
       { RegisterPatternSet($3.keyValueList, $6.patternList); }

@@ -36,17 +36,20 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterEntity(string entityName, List<string> alternateNames, string className)
+    public void RegisterEntity(string entityName, List<string> alternateNames, List<string> classNames)
     {
       Condition.Requires(entityName, nameof(entityName)).IsNotNullOrWhiteSpace();
-      Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
+      Condition.Requires(classNames, nameof(classNames)).IsNotNull();
       Condition.Requires(alternateNames, nameof(alternateNames)).IsNotNull();
 
-      EntityClass ec = GetOrCreateClass(className);
-      ec.AddEntity(entityName);
+      foreach (string className in classNames)
+      {
+        EntityClass ec = GetOrCreateClass(className);
+        ec.AddEntity(entityName);
 
-      foreach (string alt in alternateNames)
-        ec.AddEntity(alt);
+        foreach (string alt in alternateNames)
+          ec.AddEntity(alt);
+      }
     }
 
 

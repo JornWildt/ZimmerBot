@@ -185,11 +185,14 @@ namespace ZimmerBot.Core.Knowledge
         queryString.Namespaces.AddNamespace(prefix.Key, new Uri(prefix.Value));
       queryString.CommandText = s;
 
+      Logger.Debug($"RDF Query: {queryString.CommandText}");
+
       if (matches != null)
       {
         foreach (var match in matches)
         {
           queryString.SetParameter(match.Key, NodeFactory.CreateLiteralNode(match.Value.ToString()));
+          Logger.Debug($"Add parameter @{match.Key} with '{match.Value}'");
         }
       }
 
@@ -198,7 +201,11 @@ namespace ZimmerBot.Core.Knowledge
         for (int i = 0; i < parameters.Count; ++i)
         {
           if (parameters[i] != null)
-            queryString.SetParameter("p"+(i+1), NodeFactory.CreateLiteralNode(parameters[i].ToString()));
+          {
+            string pname = "p" + (i + 1);
+            queryString.SetParameter(pname, NodeFactory.CreateLiteralNode(parameters[i].ToString()));
+            Logger.Debug($"Add parameter @{pname} with '{parameters[i]}'");
+          }
         }
       }
 

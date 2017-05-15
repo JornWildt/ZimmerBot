@@ -138,5 +138,30 @@ ORDER BY ?country
       AssertDialog("show countries", "http://zimmerbot.org/resource/Africa http://zimmerbot.org/resource/Earth http://zimmerbot.org/resource/India http://zimmerbot.org/resource/North_America .");
       AssertDialog("where can I find elephants", "Africa, India.");
     }
+
+
+    [Test]
+    public void CanDefineMultipleClassesSimultaneously()
+    {
+      BuildBot(@"
+!define (politician, person)
+{
+  ""Anker Jørgensen"":.
+}
+
+> show all
+! call RDF.Query(""
+SELECT ?type
+WHERE
+{
+  ?s rdf:type ?type.
+}
+ORDER BY ?type
+"")
+: <result:{r | <r.type> }>.
+");
+
+      AssertDialog("show all", "XXX");
+    }
   }
 }
