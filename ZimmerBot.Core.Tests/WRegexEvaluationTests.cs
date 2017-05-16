@@ -35,8 +35,8 @@ namespace ZimmerBot.Core.Tests
     {
       Trigger t = new RegexTrigger("I", new WildcardWRegex(), "happy");
       Assert.AreEqual(0.0, CalculateScore(t, "Test"));
-      Assert.AreEqual(3.0, CalculateScore(t, "I am happy"));
-      Assert.AreEqual(3.0, CalculateScore(t, "I very happy"));
+      Assert.AreEqual(2.5, CalculateScore(t, "I am happy"));
+      Assert.AreEqual(2.5, CalculateScore(t, "I very happy"));
       Assert.AreEqual(0, CalculateScore(t, "I happy am"));
       Assert.AreEqual(0, CalculateScore(t, "I am very happy"));
     }
@@ -50,7 +50,7 @@ namespace ZimmerBot.Core.Tests
       Assert.AreEqual(0, CalculateScore(t, "I am happy"));
       Assert.AreEqual(0, CalculateScore(t, "I very happy"));
       Assert.AreEqual(0, CalculateScore(t, "I happy am"));
-      Assert.AreEqual(4.0, CalculateScore(t, "I am very happy"));
+      Assert.AreEqual(3.0, CalculateScore(t, "I am very happy"));
     }
 
 
@@ -75,19 +75,19 @@ namespace ZimmerBot.Core.Tests
       Assert.AreEqual(0, CalculateScore(t, "Test"));
       Assert.AreEqual(0, CalculateScore(t, "very"));
       Assert.AreEqual(0, CalculateScore(t, "Run"));
-      Assert.AreEqual(3.0, CalculateScore(t, "Run fast"));
-      Assert.AreEqual(3.0, CalculateScore(t, "Run very fast"));
-      Assert.AreEqual(3.0, CalculateScore(t, "Run very very fast"));
-      Assert.AreEqual(3.0, CalculateScore(t, "Run very very very fast"));
+      Assert.AreEqual(2.5, CalculateScore(t, "Run fast"));
+      Assert.AreEqual(2.5, CalculateScore(t, "Run very fast"));
+      Assert.AreEqual(2.5, CalculateScore(t, "Run very very fast"));
+      Assert.AreEqual(2.5, CalculateScore(t, "Run very very very fast"));
     }
 
     [Test]
     public void CanEvaluateDoubleWildcardRepetition()
     {
       Trigger t = new RegexTrigger(new RepetitionWRegex(new WildcardWRegex()), "mother", new RepetitionWRegex(new WildcardWRegex()));
-      Assert.AreEqual(3, CalculateScore(t, "I miss my mother"));
-      Assert.AreEqual(3, CalculateScore(t, "I miss my mother so much"));
-      Assert.AreEqual(3, CalculateScore(t, "mother is the best"));
+      Assert.AreEqual(2, CalculateScore(t, "I miss my mother"));
+      Assert.AreEqual(2, CalculateScore(t, "I miss my mother so much"));
+      Assert.AreEqual(2, CalculateScore(t, "mother is the best"));
       Assert.AreEqual(0, CalculateScore(t, "father is the best"));
     }
 

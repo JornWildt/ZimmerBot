@@ -36,13 +36,12 @@ WHERE
 {
   ?thing rdfs:label ?name.
   ?thing zp:knownby ?k.
-  FILTER ( ?k = @topic )
+  FILTER ( ?k = lcase(@topic) )
 }
 "")
 : Yes: <result:{r |<r.name>}>.
 ");
 
-      // FILTER (lcase(?name) = lcase(@topic))
       AssertDialog("what is crocodile", "Yes: Crocodile.");
       AssertDialog("what is croc", "Yes: Crocodile.");
       AssertDialog("what is CROCODILES", "Yes: Crocodile.");

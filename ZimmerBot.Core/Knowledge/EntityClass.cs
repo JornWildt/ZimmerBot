@@ -75,7 +75,8 @@ namespace ZimmerBot.Core.Knowledge
             WordByPositionInCategoryProbability[word] = new double[LongestWordCount];
           WordByPositionInCategoryProbability[word][pos] += 1.0;
 
-          SpellChecker.AddWord(word);
+          if (SpellChecker.IsInitialized)
+            SpellChecker.AddWord(word);
         }
       }
 

@@ -33,6 +33,8 @@ namespace ZimmerBot.Core.Tests.BotTests
     protected string Invoke(Bot b, Request request)
     {
       Response response = b.Invoke(request);
+      if (response.Output.Length == 0)
+        return "";
       return response.Output.Aggregate((x,y) => x + "\n" + y);
     }
 
