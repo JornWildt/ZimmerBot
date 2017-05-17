@@ -26,13 +26,38 @@ namespace ZimmerBot.Core.Knowledge
 
     public void RegisterEntityClass(string className, IEnumerable<string> entityNames)
     {
+      List<List<string>> names = new List<List<string>>();
+      names.Add(entityNames.ToList());
+      RegisterEntityClass(className, names);
+    }
+
+
+    public void RegisterEntityClass(string className, List<List<string>> entityNames)
+    {
       Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
       Condition.Requires(entityNames, nameof(entityNames)).IsNotNull();
 
       EntityClass ec = GetOrCreateClass(className);
 
-      foreach (string entityName in entityNames)
-        ec.AddEntity(entityName);
+      if (entityNames.Count == 1)
+      {
+        Condition.Requires(entityNames[0], nameof(entityNames)+"[0]").IsNotNull();
+
+        // Single list of entity names implies each name contains multiple space separated words
+        foreach (string entityName in entityNames[0])
+          ec.AddEntity(entityName);
+      }
+      else
+      {
+        for (int pos = 0; pos < entityNames.Count; ++pos)
+        {
+          Condition.Requires(entityNames[pos], nameof(entityNames) + "[" + pos + "]").IsNotNull();
+
+          // List of list of entity names implies each name is exactly one word
+          foreach (string entityWord in entityNames[pos])
+            ec.AddEntityWord(entityWord, pos);
+        }
+      }
     }
 
 

@@ -13,11 +13,17 @@ namespace ZimmerBot.Core.Knowledge
   {
     public string ClassName { get; protected set; }
 
-    public int LongestWordCount { get; protected set; }
+    public int LongestWordCount
+    {
+      get
+      {
+        return TokenizedEntityNames.Count;
+      }
+    }
 
     public double TotalNumberOfWords { get; protected set; }
 
-    protected Dictionary<string, string[]> TokenizedEntityNames;
+    protected List<List<string>> TokenizedEntityNames;
 
     protected List<int> WordByPositionCount { get; set; }
 
@@ -31,7 +37,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
       ClassName = className;
-      TokenizedEntityNames = new Dictionary<string,string[]>(StringComparer.OrdinalIgnoreCase);
+      TokenizedEntityNames = new List<List<string>>();
       WordByPositionCount = new List<int>();
     }
 
@@ -42,22 +48,46 @@ namespace ZimmerBot.Core.Knowledge
       name = LabelReducer.Replace(name, " ");
 
       // Ignore repeated entities
-      if (TokenizedEntityNames.ContainsKey(name))
-        return;
+      //if (TokenizedEntityNames.ContainsKey(name))
+        //return;
 
       string[] tokens = name.Split(' ').ToArray();
-      TokenizedEntityNames[name] = tokens;
-
-      if (tokens.Length > LongestWordCount)
-        LongestWordCount = tokens.Length;
+      //TokenizedEntityNames[name] = tokens;
 
       for (int pos = 0; pos < tokens.Length; ++pos)
       {
-        while (pos >= WordByPositionCount.Count)
-          WordByPositionCount.Add(0);
-        WordByPositionCount[pos] += 1;
-        TotalNumberOfWords += 1;
+        RegisterWordToken(tokens[pos], pos);
       }
+    }
+
+
+    public void AddEntityWord(string word, int pos)
+    {
+      RegisterWordToken(word, pos);
+    }
+
+
+    protected void RegisterWordToken(string word, int pos)
+    {
+      // Register tokens
+      while (pos >= TokenizedEntityNames.Count)
+        TokenizedEntityNames.Add(new List<string>());
+      TokenizedEntityNames[pos].Add(word);
+
+      // Update statistics
+      UpdateStatistics(pos);
+
+      // Add word to spell checker
+      if (SpellChecker.IsInitialized)
+        SpellChecker.AddWord(word);
+    }
+
+    protected void UpdateStatistics(int pos)
+    {
+      while (pos >= WordByPositionCount.Count)
+        WordByPositionCount.Add(0);
+      WordByPositionCount[pos] += 1;
+      TotalNumberOfWords += 1;
     }
 
 
@@ -66,11 +96,10 @@ namespace ZimmerBot.Core.Knowledge
       WordByPositionInCategoryProbability = new Dictionary<string, double[]>(StringComparer.OrdinalIgnoreCase);
 
       // Count occurences
-      foreach (var entry in TokenizedEntityNames)
+      for (int pos = 0; pos < TokenizedEntityNames.Count; ++pos)
       {
-        for (int pos = 0; pos < entry.Value.Length; ++pos)
+        foreach (string word in TokenizedEntityNames[pos])
         {
-          string word = entry.Value[pos];
           if (!WordByPositionInCategoryProbability.ContainsKey(word))
             WordByPositionInCategoryProbability[word] = new double[LongestWordCount];
           WordByPositionInCategoryProbability[word][pos] += 1.0;

@@ -65,7 +65,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterEntities(string className, List<string> entityNames)
+    protected void RegisterEntities(string className, List<List<string>> entityNames)
     {
       KnowledgeBase.RegisterEntityClass(className, entityNames);
     }

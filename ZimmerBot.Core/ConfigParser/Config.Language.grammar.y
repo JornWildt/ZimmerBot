@@ -24,7 +24,7 @@
   public Knowledge.Rule rule;
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
-  public List<List<string>> conceptList;
+  public List<List<string>> stringListList;
   public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
   public List<Pattern> patternList;
@@ -94,7 +94,7 @@ item
 
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
-      { RegisterConcept($2.s, $4.conceptList); }
+      { RegisterConcept($2.s, $4.stringListList); }
   | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
     { StartTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
@@ -105,9 +105,8 @@ configuration
     { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
-  | T_ENTITIES T_LPAR T_WORD T_RPAR
-    T_LBRACE stringSeq T_RBRACE
-      { RegisterEntities($3.s, $6.stringList); }
+  | T_ENTITIES T_LPAR T_WORD T_RPAR T_LBRACE stringSet T_RBRACE
+      { RegisterEntities($3.s, $6.stringListList); }
   | T_DEFINE T_LPAR wordStringCommaSeq T_RPAR T_LBRACE definitionSeq T_RBRACE
       { RegisterDefinitions($3.stringList, $6.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
@@ -122,8 +121,8 @@ configuration
   ;
 
 conceptPatternSeq
-  : conceptPatternSeq T_COMMA cwordSeq  { $1.conceptList.Add($3.stringList); $$.conceptList = $1.conceptList; }
-  | cwordSeq                            { $$.conceptList = new List<List<string>>(); $$.conceptList.Add($1.stringList); }
+  : conceptPatternSeq T_COMMA cwordSeq  { $1.stringListList.Add($3.stringList); $$.stringListList = $1.stringListList; }
+  | cwordSeq                            { $$.stringListList = new List<List<string>>(); $$.stringListList.Add($1.stringList); }
   ;
 
 ruleSeq
@@ -402,13 +401,6 @@ wordSeq
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
   ;
 
-  /*
-emptyWordCommaSeq
-  : wordCommaSeq    { $$.stringList = $1.stringList; }
-  |      { $$.stringList = new List<string>(); }
-  ;
-*/  
-
 wordCommaSeq
   : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_WORD                       { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
@@ -437,6 +429,16 @@ cwordSeq
 cword
   : T_WORD   { $$.s = $1.s; }
   | T_CWORD  { $$.s = $1.s; }
+  ;
+
+stringSet
+  : stringSeq    { $$.stringListList = new List<List<string>>(); $$.stringListList.Add($1.stringList); }
+  | stringSeqSeq { $$.stringListList = $1.stringListList; }
+  ;
+
+stringSeqSeq
+  : stringSeqSeq T_COMMA T_LBRACE stringSeq T_RBRACE { $$.stringListList = $1.stringListList; $$.stringListList.Add($4.stringList); }
+  | T_LBRACE stringSeq T_RBRACE                      { $$.stringListList = new List<List<string>>(); $$.stringListList.Add($2.stringList); }
   ;
 
 stringSeq

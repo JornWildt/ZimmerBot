@@ -137,7 +137,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     {
       // Arrange
       var x = new Tuple<string, ZTokenSequence>[]
-     {
+      {
         new Tuple<string, ZTokenSequence>("zimmers", new ZTokenSequence { new ZToken("zimmers", "organization") }),
         new Tuple<string, ZTokenSequence>("acme INC", new ZTokenSequence { new ZToken("acme INC", "organization") }),
         new Tuple<string, ZTokenSequence>(
@@ -181,6 +181,47 @@ namespace ZimmerBot.Core.Tests.ConfigParser
           Assert.AreEqual(expectedOutput[i].EntityClass, result[i].EntityClass, $"Testing: {src.Item1}");
         }
       }
+    }
+
+
+    [Test]
+    public void CanDefineCartesianProductForEntities()
+    {
+      // Arrange
+      string cfg = @"
+! entities (person)
+{
+  {
+    ""Helle"",
+    ""Lars""
+  },
+  {
+    ""Hansen"",
+    ""Jensen""
+  }
+}
+";
+      // Act
+      KnowledgeBase kb = ParseKnowledgeBase(cfg);
+      kb.SetupComplete();
+
+      // Assert
+      Assert.True(kb.EntityManager.EntityClasses.ContainsKey("person"));
+
+      EntityClass ec = kb.EntityManager.EntityClasses["person"];
+      Assert.AreEqual(2, ec.LongestWordCount);
+
+      ZTokenSequence zinput = new ZTokenSequence(new ZToken[] { new ZToken("Helle"), new ZToken("Jensen") });
+
+      // Act
+      ZTokenSequence result = kb.EntityManager.CalculateLabels(zinput);
+
+      // Assert
+      Assert.AreEqual(1, result.Count);
+      Assert.IsNotNull(result[0]);
+      Assert.AreEqual("Helle Jensen", result[0].OriginalText);
+      Assert.AreEqual(ZToken.TokenType.Entity, result[0].Type);
+      Assert.AreEqual("person", result[0].EntityClass);
     }
   }
 }
