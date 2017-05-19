@@ -144,15 +144,22 @@ namespace ZimmerBot.Core.Tests.ConfigParser
         new Tuple<string, ZTokenSequence>(
           "where is Blue whale located", 
           new ZTokenSequence { new ZToken("where"), new ZToken("is"), new ZToken("Blue whale", "organization"), new ZToken("located") }),
-        //new Tuple<string, ZTokenSequence>(
-        //  "Zimmers inc is fun",
-        //  new ZTokenSequence { new ZToken("Zimmers inc", "organization"), new ZToken("is"), new ZToken("fun") }),
         new Tuple<string, ZTokenSequence>(
           "Here is national health insurance",
           new ZTokenSequence { new ZToken("Here"), new ZToken("is"), new ZToken("national health insurance", "organization") }),
         new Tuple<string, ZTokenSequence>(
-          "Here is national health acme inc",
-          new ZTokenSequence { new ZToken("Here"), new ZToken("is"), new ZToken("national health", "organization"), new ZToken("acme inc", "organization") })
+          "Here is national health insurance and national health and acme inc and some more",
+          new ZTokenSequence {
+            new ZToken("Here"),
+            new ZToken("is"),
+            new ZToken("national health insurance", "organization"),
+            new ZToken("and"),
+            new ZToken("national health", "organization"),
+            new ZToken("and"),
+            new ZToken("acme inc", "organization"),
+            new ZToken("and"),
+            new ZToken("some"),
+            new ZToken("more")}),
       };
 
       string cfg = @"
@@ -172,12 +179,12 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       foreach (var src in x)
       {
         ZTokenSequence zinput = new ZTokenSequence(src.Item1.Split(' ').Select(i => new ZToken(i)));
-        List<ZTokenSequence> result = new List<ZTokenSequence>();
+        ZTokenSequenceList result = new ZTokenSequenceList();
         kb.EntityManager.FindEntities(zinput, result);
 
         ZTokenSequence expectedOutput = src.Item2;
 
-        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual(1, result.Count, "Testing: " + zinput.ToString());
         Assert.AreEqual(expectedOutput.Count, result[0].Count);
         for (int i = 0; i < expectedOutput.Count; ++i)
         {

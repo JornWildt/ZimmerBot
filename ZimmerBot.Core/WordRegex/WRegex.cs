@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
@@ -13,13 +14,20 @@ namespace ZimmerBot.Core.WordRegex
 
     public Type TypeOfExpr { get { return Expr.GetType(); } }
 
+    static Regex LabelReducer = new Regex("[^\\w ]");
 
-    public static WRegexBase BuildFromSpaceSeparatedString(string s)
+
+    public static WRegexBase BuildFromSpaceSeparatedString(string s, bool doStrip)
     {
       string[] words = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
       SequenceWRegex p = new SequenceWRegex();
-      foreach (string w in words)
+      foreach (string word in words)
+      {
+        string w = word;
+        if (doStrip)
+          w = LabelReducer.Replace(w, "");
         p.Add(new LiteralWRegex(w));
+      }
       return p;
     }
 

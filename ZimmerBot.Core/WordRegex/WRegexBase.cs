@@ -26,7 +26,11 @@ namespace ZimmerBot.Core.WordRegex
 
       public EvaluationContext(TriggerEvaluationContext context)
       {
-        Input = context.InputContext.Input;
+        // FIXME: must handle multiple possibilities!
+        if (context.InputContext.Input != null)
+          Input = context.InputContext.Input[0];
+        else
+          Input = null;
         CurrentRepetitionIndex = context.CurrentRepetitionIndex;
         MatchNames = context.MatchNames;
         StartPosition = 0;

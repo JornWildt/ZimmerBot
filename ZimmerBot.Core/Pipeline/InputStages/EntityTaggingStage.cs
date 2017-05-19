@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Pipeline.InputStages
@@ -11,12 +12,11 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       if (item.Context.Input == null)
         return;
 
-      ZTokenSequence input = item.Context.Input;
-
-      ZTokenSequence output = item.Context.KnowledgeBase.EntityManager.CalculateLabels(input);
-
-      input.Clear();
-      input.AddRange(output);
+      // Take a copy of the input list since we are adding to it in the loop
+      foreach (ZTokenSequence input in item.Context.Input.ToArray())
+      {
+        item.Context.KnowledgeBase.EntityManager.FindEntities(input, item.Context.Input);
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using CuttingEdge.Conditions;
 using log4net;
 using VDS.RDF;
@@ -80,6 +81,22 @@ namespace ZimmerBot.Core.ConfigParser
     protected void RegisterDefinitions(List<string> mainClasses, List<WordDefinition> definition)
     {
       KnowledgeBase.RegisterDefinitions(mainClasses, definition);
+    }
+
+
+    protected bool DoStripRegexLiterals = false;
+
+    static Regex LabelReducer = new Regex("[^\\w ]");
+
+    protected WRegexBase BuildLiteralWRegex(string literal)
+    {
+      if (DoStripRegexLiterals)
+      {
+        literal = LabelReducer.Replace(literal, "");
+        return new LiteralWRegex(literal);
+      }
+      else
+        return new LiteralWRegex(literal);
     }
 
 

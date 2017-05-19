@@ -11,16 +11,17 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       if (!AppSettings.EnableStemming)
         return;
 
-      ZTokenSequence input = item.Context.Input;
-
-      if (input != null)
+      foreach (ZTokenSequence input in item.Context.Input)
       {
-        for (int i = 0; i < input.Count; ++i)
+        if (input != null)
         {
-          string word = input[i].OriginalText;
-          string stem = SpellChecker.Stem(word);
-          BotUtility.EvaluationLogger.Debug($"Stemming {word} => {stem}");
-          input[i] = new ZToken(stem, input[i]);
+          for (int i = 0; i < input.Count; ++i)
+          {
+            string word = input[i].OriginalText;
+            string stem = SpellChecker.Stem(word);
+            BotUtility.EvaluationLogger.Debug($"Stemming {word} => {stem}");
+            input[i] = new ZToken(stem, input[i]);
+          }
         }
       }
     }

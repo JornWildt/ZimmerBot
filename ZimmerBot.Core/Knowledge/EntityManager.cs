@@ -72,8 +72,8 @@ namespace ZimmerBot.Core.Knowledge
 
         foreach (string alt in alternateNames)
         {
-          alt = LabelReducer.Replace(alt, "");
-          ec.AddEntity(new LiteralWRegex(alt));
+          string alt2 = LabelReducer.Replace(alt, "");
+          ec.AddEntity(new LiteralWRegex(alt2));
         }
       }
     }
@@ -147,7 +147,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void FindEntities(ZTokenSequence input, List<ZTokenSequence> output)
+    public void FindEntities(ZTokenSequence input, ZTokenSequenceList output)
     {
       FindEntities(input, 0, output);
     }
@@ -155,18 +155,23 @@ namespace ZimmerBot.Core.Knowledge
 
     protected void FindEntities(ZTokenSequence input, int start, List<ZTokenSequence> output)
     {
-      for (int i = start; i < input.Count; ++i)
+      foreach (var ec in EntityClasses)
       {
-        for (int j = input.Count; j > i; --j)
+        for (int i = start; i < input.Count; ++i)
         {
-          foreach (var ec in EntityClasses)
+          for (int j = input.Count; j > i; --j)
           {
             bool isEntity = ec.Value.IsEntityMatch(input, i, j);
             if (isEntity)
             {
               ZTokenSequence result = input.CompactEntity(i, j, ec.Value.ClassName);
               output.Add(result);
-              FindEntities(result, j, output);
+
+              if (j != i+1)
+                FindEntities(result, j-1, output);
+
+              // This is a greedy algortihm, so do not try to match smaller combinations
+              i = j;
             }
           }
         }

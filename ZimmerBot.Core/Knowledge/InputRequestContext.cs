@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
 
@@ -24,7 +25,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public Request Request { get; protected set; }
 
-    public ZTokenSequence Input { get; set; }
+    public ZTokenSequenceList Input { get; set; }
 
     public bool FromTemplate { get; protected set; }
 
@@ -38,7 +39,10 @@ namespace ZimmerBot.Core.Knowledge
 
       RequestContext = context;
       Request = request;
-      Input = input;
+      if (input != null)
+        Input = new ZTokenSequenceList { input };
+      else
+        Input = null;
     }
 
 

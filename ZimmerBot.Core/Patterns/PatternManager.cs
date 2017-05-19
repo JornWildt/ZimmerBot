@@ -54,36 +54,46 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public PatternMatchResult CalculateMostLikelyPattern(ZTokenSequence input)
+    public PatternMatchResult CalculateMostLikelyPattern(ZTokenSequenceList inputs)
     {
       if (PatternSets.Count == 0)
         return null;
 
-      BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}");
+      BotUtility.EvaluationLogger.Debug($"Trying to match input: {inputs.ToString()}");
 
-      double maxProb = -10000;
       Pattern result = null;
+      ZTokenSequence resultInput = null;
 
-      foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
+      // Try all possible variations/reductions of the input
+      foreach (ZTokenSequence input in inputs)
       {
-        double pb = pt.CalculateProbability(input);
+        // This value approximates the smallest probability for a match 
+        // (namely P(u)^N where N = number of un-matched words "u")
+        double minimalAllowedProb = input.Count *
+          Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + input.Count));
 
-        if (pb > maxProb)
+        minimalAllowedProb += Math.Log(input.Count);
+
+        // This value represents the best probability found so far - might as well start with the minimal allowed probability
+        double maxProb = minimalAllowedProb;
+
+        foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
         {
-          maxProb = pb;
-          result = pt;
+          double pb = pt.CalculateProbability(input);
 
-          BotUtility.EvaluationLogger.Debug($"Probable match: {result.ToString()}");
+          if (pb > maxProb)
+          {
+            maxProb = pb;
+            result = pt;
+            resultInput = input;
+
+            BotUtility.EvaluationLogger.Debug($"Probable match: {result.ToString()}");
+          }
         }
       }
 
-      // This value approximates the smallest probability for a match 
-      // (namely P(u)^N where N = number of un-matched words "u")
-      double minProb = input.Count * 
-        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + input.Count));
-
-      if (maxProb > minProb + Math.Log(input.Count))
-        return new PatternMatchResult(result, input);
+      if (result != null)
+        return new PatternMatchResult(result, resultInput);
       else
         return null;
     }

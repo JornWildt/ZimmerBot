@@ -131,6 +131,7 @@
     <Compile Include="Knowledge\TopicRule.cs" />
     <Compile Include="Knowledge\WordDefinition.cs" />
     <Compile Include="Knowledge\WordDefinitionManager.cs" />
+    <Compile Include="Parser\ZTokenSequenceList.cs" />
     <Compile Include="Patterns\ConceptPatternExpr.cs" />
     <Compile Include="Patterns\EntityPatternExpr.cs" />
     <Compile Include="Patterns\Pattern.cs" />

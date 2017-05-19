@@ -11,16 +11,17 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       if (!AppSettings.EnableSpellingCorrections)
         return;
 
-      ZTokenSequence input = item.Context.Input;
-
-      if (input != null)
+      foreach (var input in item.Context.Input)
       {
-        for (int i = 0; i < input.Count; ++i)
+        if (input != null)
         {
-          string word = input[i].OriginalText;
-          string checkedWord = SpellChecker.SpellCheck(word);
-          BotUtility.EvaluationLogger.Debug($"Spell checking {word} => {checkedWord}");
-          input[i] = new ZToken(checkedWord, input[i]);
+          for (int i = 0; i < input.Count; ++i)
+          {
+            string word = input[i].OriginalText;
+            string checkedWord = SpellChecker.SpellCheck(word);
+            BotUtility.EvaluationLogger.Debug($"Spell checking {word} => {checkedWord}");
+            input[i] = new ZToken(checkedWord, input[i]);
+          }
         }
       }
     }

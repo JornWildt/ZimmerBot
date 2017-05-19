@@ -105,8 +105,13 @@ configuration
     { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
-  | T_ENTITIES T_LPAR T_WORD T_RPAR T_LBRACE entityDefinition T_RBRACE
-      { RegisterEntities($3.s, $6.regexList); }
+  | T_ENTITIES T_LPAR T_WORD T_RPAR 
+      { DoStripRegexLiterals = true; }
+    T_LBRACE entityDefinition T_RBRACE
+      { 
+        DoStripRegexLiterals = false;
+        RegisterEntities($3.s, $7.regexList); 
+      }
   | T_DEFINE T_LPAR wordStringCommaSeq T_RPAR T_LBRACE definitionSeq T_RBRACE
       { RegisterDefinitions($3.stringList, $6.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
@@ -176,7 +181,7 @@ inputPattern
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD
-      { $$.regex = new LiteralWRegex($1.s); }
+      { $$.regex = BuildLiteralWRegex($1.s); }
   | T_CWORD
       { $$.regex = BuildConceptWRegex($1.s); }
   | T_STAR
@@ -397,7 +402,7 @@ definitionDataValue
 ******************************************************************************/
 
 entityDefinition
-  : stringSeq    { $$.regexList = new List<WRegexBase>(); $$.regexList.AddRange($1.stringList.Select(s => WRegex.BuildFromSpaceSeparatedString(s))); }
+  : stringSeq    { $$.regexList = new List<WRegexBase>(); $$.regexList.AddRange($1.stringList.Select(s => WRegex.BuildFromSpaceSeparatedString(s, true))); }
   | inputSeq     { $$.regexList = $1.regexList; }
   ;
 
