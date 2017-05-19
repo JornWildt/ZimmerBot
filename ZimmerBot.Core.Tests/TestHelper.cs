@@ -166,7 +166,7 @@ namespace ZimmerBot.Core.Tests
           executeScheduledRules: false);
 
       //WRegex.MatchResult result = x.CalculateMatchResult(context, new EndOfSequenceWRegex());
-      MatchResult result = x.CalculateNFAMatch(context);
+      MatchResult result = x.CalculateNFAMatch(new WRegexBase.EvaluationContext(context));
       return result;
     }
   }

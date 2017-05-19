@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    public override NFAFragment CalculateNFAFragment(EvaluationContext context)
     {
       string index = (context.CurrentRepetitionIndex++).ToString();
 

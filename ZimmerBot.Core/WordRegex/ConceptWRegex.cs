@@ -41,7 +41,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    public override NFAFragment CalculateNFAFragment(EvaluationContext context)
     {
       context.MatchNames.Push(Concept.Name);
       NFAFragment f = Concept.Choices.CalculateNFAFragment(context);

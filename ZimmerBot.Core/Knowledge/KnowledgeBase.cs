@@ -135,9 +135,9 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterEntityClass(string className, List<List<string>> entityNames)
+    public void RegisterEntityClass(string className, List<WRegexBase> entityPatterns)
     {
-      EntityManager.RegisterEntityClass(className, entityNames);
+      EntityManager.RegisterEntityClass(className, entityPatterns);
     }
 
 

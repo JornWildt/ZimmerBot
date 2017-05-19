@@ -105,8 +105,8 @@ configuration
     { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
-  | T_ENTITIES T_LPAR T_WORD T_RPAR T_LBRACE stringSet T_RBRACE
-      { RegisterEntities($3.s, $6.stringListList); }
+  | T_ENTITIES T_LPAR T_WORD T_RPAR T_LBRACE entityDefinition T_RBRACE
+      { RegisterEntities($3.s, $6.regexList); }
   | T_DEFINE T_LPAR wordStringCommaSeq T_RPAR T_LBRACE definitionSeq T_RBRACE
       { RegisterDefinitions($3.stringList, $6.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
@@ -396,6 +396,14 @@ definitionDataValue
   OTHER
 ******************************************************************************/
 
+entityDefinition
+  : stringSeq    { $$.regexList = new List<WRegexBase>(); $$.regexList.AddRange($1.stringList.Select(s => WRegex.BuildFromSpaceSeparatedString(s))); }
+  | inputSeq     { $$.regexList = $1.regexList; }
+  ;
+
+  /*| stringSeqSeq { $$.stringListList = $1.stringListList; }*/
+
+
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
@@ -431,15 +439,12 @@ cword
   | T_CWORD  { $$.s = $1.s; }
   ;
 
-stringSet
-  : stringSeq    { $$.stringListList = new List<List<string>>(); $$.stringListList.Add($1.stringList); }
-  | stringSeqSeq { $$.stringListList = $1.stringListList; }
-  ;
-
+/*
 stringSeqSeq
   : stringSeqSeq T_COMMA T_LBRACE stringSeq T_RBRACE { $$.stringListList = $1.stringListList; $$.stringListList.Add($4.stringList); }
   | T_LBRACE stringSeq T_RBRACE                      { $$.stringListList = new List<List<string>>(); $$.stringListList.Add($2.stringList); }
   ;
+*/
 
 stringSeq
   : stringSeq T_COMMA T_STRING { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }

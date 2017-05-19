@@ -24,7 +24,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public override NFAFragment CalculateNFAFragment(TriggerEvaluationContext context)
+    public override NFAFragment CalculateNFAFragment(EvaluationContext context)
     {
       NFANode node = NFANode.CreateLiteral(context, null);
       return new NFAFragment(node, node.Out);

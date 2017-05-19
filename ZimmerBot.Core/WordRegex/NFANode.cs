@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public static NFANode CreateLiteral(TriggerEvaluationContext context, string literal)
+    public static NFANode CreateLiteral(WRegexBase.EvaluationContext context, string literal)
     {
       NFANode n = new NFANode { Type = TypeEnum.Literal, Literal = literal };
       n.Out.Add(new NFAEdge(null));
@@ -39,7 +39,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public static NFANode CreateEntityLiteral(TriggerEvaluationContext context)
+    public static NFANode CreateEntityLiteral(WRegexBase.EvaluationContext context)
     {
       NFANode n = new NFANode { Type = TypeEnum.EntityLiteral };
       n.Out.Add(new NFAEdge(null));
@@ -48,7 +48,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public static NFANode CreateSplit(TriggerEvaluationContext context, IEnumerable<NFANode> choices)
+    public static NFANode CreateSplit(WRegexBase.EvaluationContext context, IEnumerable<NFANode> choices)
     {
       NFANode n = new NFANode { Type = TypeEnum.Split };
       n.Out.AddRange(choices.Select(c => new NFAEdge(c)));
@@ -56,7 +56,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public static NFANode CreateSplit(TriggerEvaluationContext context, params NFANode[] choices)
+    public static NFANode CreateSplit(WRegexBase.EvaluationContext context, params NFANode[] choices)
     {
       return CreateSplit(context, (IEnumerable<NFANode>)choices);
     }

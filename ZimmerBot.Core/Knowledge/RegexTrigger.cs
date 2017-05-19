@@ -106,7 +106,7 @@ namespace ZimmerBot.Core.Knowledge
       if (Regex != null)
       {
         if (context.InputContext.Input != null)
-          result = Regex.CalculateMatch(context);
+          result = Regex.CalculateMatch(new WRegexBase.EvaluationContext(context));
         else
           result = new MatchResult(0);
       }

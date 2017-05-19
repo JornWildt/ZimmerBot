@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -13,6 +15,8 @@ namespace ZimmerBot.Core.Knowledge
     public Dictionary<string, EntityClass> EntityClasses { get; protected set; }
 
     protected KnowledgeBase KnowledgeBase { get; set; }
+
+    static Regex LabelReducer = new Regex("[^\\w ]");
 
 
     public EntityManager(KnowledgeBase kb)
@@ -28,36 +32,28 @@ namespace ZimmerBot.Core.Knowledge
     {
       List<List<string>> names = new List<List<string>>();
       names.Add(entityNames.ToList());
-      RegisterEntityClass(className, names);
+      // FIXME RegisterEntityClass(className, names);
+      //for (int pos = 0; pos < entityNames.Count; ++pos)
+      //{
+      //  Condition.Requires(entityNames[pos], nameof(entityNames) + "[" + pos + "]").IsNotNull();
+
+      //  // List of list of entity names implies each name is exactly one word
+      //  foreach (string entityWord in entityNames[pos])
+      //    ec.AddEntityWord(entityWord, pos);
+      //}
+
     }
 
 
-    public void RegisterEntityClass(string className, List<List<string>> entityNames)
+    public void RegisterEntityClass(string className, List<WRegexBase> entityPatterns)
     {
       Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
-      Condition.Requires(entityNames, nameof(entityNames)).IsNotNull();
+      Condition.Requires(entityPatterns, nameof(entityPatterns)).IsNotNull();
 
       EntityClass ec = GetOrCreateClass(className);
 
-      if (entityNames.Count == 1)
-      {
-        Condition.Requires(entityNames[0], nameof(entityNames)+"[0]").IsNotNull();
-
-        // Single list of entity names implies each name contains multiple space separated words
-        foreach (string entityName in entityNames[0])
-          ec.AddEntity(entityName);
-      }
-      else
-      {
-        for (int pos = 0; pos < entityNames.Count; ++pos)
-        {
-          Condition.Requires(entityNames[pos], nameof(entityNames) + "[" + pos + "]").IsNotNull();
-
-          // List of list of entity names implies each name is exactly one word
-          foreach (string entityWord in entityNames[pos])
-            ec.AddEntityWord(entityWord, pos);
-        }
-      }
+      foreach (WRegexBase entityPatern in entityPatterns)
+        ec.AddEntity(entityPatern);
     }
 
 
@@ -67,13 +63,18 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(classNames, nameof(classNames)).IsNotNull();
       Condition.Requires(alternateNames, nameof(alternateNames)).IsNotNull();
 
+      entityName = LabelReducer.Replace(entityName, "");
+
       foreach (string className in classNames)
       {
         EntityClass ec = GetOrCreateClass(className);
-        ec.AddEntity(entityName);
+        ec.AddEntity(new LiteralWRegex(entityName));
 
         foreach (string alt in alternateNames)
-          ec.AddEntity(alt);
+        {
+          alt = LabelReducer.Replace(alt, "");
+          ec.AddEntity(new LiteralWRegex(alt));
+        }
       }
     }
 
@@ -143,6 +144,33 @@ namespace ZimmerBot.Core.Knowledge
       }
 
       return result;
+    }
+
+
+    public void FindEntities(ZTokenSequence input, List<ZTokenSequence> output)
+    {
+      FindEntities(input, 0, output);
+    }
+
+
+    protected void FindEntities(ZTokenSequence input, int start, List<ZTokenSequence> output)
+    {
+      for (int i = start; i < input.Count; ++i)
+      {
+        for (int j = input.Count; j > i; --j)
+        {
+          foreach (var ec in EntityClasses)
+          {
+            bool isEntity = ec.Value.IsEntityMatch(input, i, j);
+            if (isEntity)
+            {
+              ZTokenSequence result = input.CompactEntity(i, j, ec.Value.ClassName);
+              output.Add(result);
+              FindEntities(result, j, output);
+            }
+          }
+        }
+      }
     }
   }
 }

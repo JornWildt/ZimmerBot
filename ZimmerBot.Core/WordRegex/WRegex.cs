@@ -14,6 +14,16 @@ namespace ZimmerBot.Core.WordRegex
     public Type TypeOfExpr { get { return Expr.GetType(); } }
 
 
+    public static WRegexBase BuildFromSpaceSeparatedString(string s)
+    {
+      string[] words = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+      SequenceWRegex p = new SequenceWRegex();
+      foreach (string w in words)
+        p.Add(new LiteralWRegex(w));
+      return p;
+    }
+
+
     public WRegex(WRegexBase expr)
     {
       Condition.Requires(expr, nameof(expr)).IsNotNull();
@@ -39,7 +49,7 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public MatchResult CalculateMatch(TriggerEvaluationContext context)
+    public MatchResult CalculateMatch(WRegexBase.EvaluationContext context)
     {
       if (Root == null)
       {

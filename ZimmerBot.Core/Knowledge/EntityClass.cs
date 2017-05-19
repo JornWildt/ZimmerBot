@@ -5,7 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CuttingEdge.Conditions;
+using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
+using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -23,7 +25,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public double TotalNumberOfWords { get; protected set; }
 
-    protected List<List<string>> TokenizedEntityNames;
+    protected List<List<string>> TokenizedEntityNames { get; set; }
+
+    protected List<WRegexBase> EntityPatterns { get; set; }
 
     protected List<int> WordByPositionCount { get; set; }
 
@@ -38,26 +42,15 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
       ClassName = className;
       TokenizedEntityNames = new List<List<string>>();
+      EntityPatterns = new List<WRegexBase>();
       WordByPositionCount = new List<int>();
     }
 
 
-    public void AddEntity(string name)
+    public void AddEntity(WRegexBase pattern)
     {
-      // Remove punctuation and other ignored characters
-      name = LabelReducer.Replace(name, " ");
-
-      // Ignore repeated entities
-      //if (TokenizedEntityNames.ContainsKey(name))
-        //return;
-
-      string[] tokens = name.Split(' ').ToArray();
-      //TokenizedEntityNames[name] = tokens;
-
-      for (int pos = 0; pos < tokens.Length; ++pos)
-      {
-        RegisterWordToken(tokens[pos], pos);
-      }
+      Condition.Requires(pattern, nameof(pattern)).IsNotNull();
+      EntityPatterns.Add(pattern);
     }
 
 
@@ -134,5 +127,19 @@ namespace ZimmerBot.Core.Knowledge
         return 0.0;
     }
 
+
+    public bool IsEntityMatch(ZTokenSequence input, int i, int j)
+    {
+      WRegexBase.EvaluationContext context = new WRegexBase.EvaluationContext(input, i, j);
+
+      foreach (WRegexBase expr in EntityPatterns)
+      {
+        MatchResult result = expr.CalculateNFAMatch(context);
+        if (result.Score > 0)
+          return true;
+      }
+
+      return false;
+    }
   }
 }

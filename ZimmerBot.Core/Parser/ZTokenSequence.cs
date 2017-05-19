@@ -30,5 +30,25 @@ namespace ZimmerBot.Core.Parser
         return this.FirstOrDefault(t => t.Matches(s));
       }
     }
+
+
+    public ZTokenSequence CompactEntity(int i, int j, string entityClass)
+    {
+      ZTokenSequence result = new ZTokenSequence();
+      for (int x = 0; x < i; ++x)
+        result.Add(this[x]);
+      string s = "";
+      for (int x = i; x < j; ++x)
+      {
+        if (x > i)
+          s += " ";
+        s += this[x].OriginalText;
+      }
+      result.Add(new ZToken(s, entityClass));
+      for (int x = j; x < Count; ++x)
+        result.Add(this[x]);
+
+      return result;
+    }
   }
 }

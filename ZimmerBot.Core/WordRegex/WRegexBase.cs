@@ -12,11 +12,42 @@ namespace ZimmerBot.Core.WordRegex
 
     public abstract double CalculateSize();
 
+    public class EvaluationContext
+    {
+      public ZTokenSequence Input { get; protected set; }
 
-    public abstract NFAFragment CalculateNFAFragment(TriggerEvaluationContext context);
+      public int CurrentRepetitionIndex { get; set; }
+
+      public Stack<string> MatchNames { get; protected set; }
+
+      public int StartPosition { get; set; }
+
+      public int EndPosition { get; set; }
+
+      public EvaluationContext(TriggerEvaluationContext context)
+      {
+        Input = context.InputContext.Input;
+        CurrentRepetitionIndex = context.CurrentRepetitionIndex;
+        MatchNames = context.MatchNames;
+        StartPosition = 0;
+        EndPosition = 99999;
+      }
+
+      public EvaluationContext(ZTokenSequence input, int startPos, int endPos)
+      {
+        Input = input;
+        StartPosition = startPos;
+        EndPosition = endPos;
+        CurrentRepetitionIndex = 0;
+        MatchNames = new Stack<string>();
+      }
+    }
 
 
-    public NFANode CalculateNFA(TriggerEvaluationContext context)
+    public abstract NFAFragment CalculateNFAFragment(EvaluationContext context);
+
+
+    public NFANode CalculateNFA(EvaluationContext context)
     {
       NFAFragment f = CalculateNFAFragment(context);
       PatchNFAEdges(f.Out, NFANode.MatchNode);
@@ -35,22 +66,25 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
-    public MatchResult CalculateNFAMatch(TriggerEvaluationContext context)
+    public MatchResult CalculateNFAMatch(EvaluationContext context)
     {
       NFANode start = CalculateNFA(context);
       return CalculateNFAMatch(start, context);
     }
 
 
-    public MatchResult CalculateNFAMatch(NFANode start, TriggerEvaluationContext context)
+    public MatchResult CalculateNFAMatch(NFANode start, EvaluationContext context)
     {
       List<NFAMatchNode> clist = new List<NFAMatchNode>();
       List<NFAMatchNode> nlist = new List<NFAMatchNode>();
 
       AddNode(new NFAMatchNode(start), clist);
 
-      foreach (var inp in context.InputContext.Input)
+      int end = Math.Min(context.Input.Count, context.EndPosition);
+      for (int i=context.StartPosition; i<end; ++i)
       {
+        var inp = context.Input[i];
+
         Step(clist, inp, nlist);
 
         List<NFAMatchNode> tmp = clist;

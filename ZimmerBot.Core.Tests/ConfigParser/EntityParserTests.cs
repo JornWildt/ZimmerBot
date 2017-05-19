@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
@@ -143,9 +144,9 @@ namespace ZimmerBot.Core.Tests.ConfigParser
         new Tuple<string, ZTokenSequence>(
           "where is Blue whale located", 
           new ZTokenSequence { new ZToken("where"), new ZToken("is"), new ZToken("Blue whale", "organization"), new ZToken("located") }),
-        new Tuple<string, ZTokenSequence>(
-          "Zimmers inc is fun",
-          new ZTokenSequence { new ZToken("Zimmers inc", "organization"), new ZToken("is"), new ZToken("fun") }),
+        //new Tuple<string, ZTokenSequence>(
+        //  "Zimmers inc is fun",
+        //  new ZTokenSequence { new ZToken("Zimmers inc", "organization"), new ZToken("is"), new ZToken("fun") }),
         new Tuple<string, ZTokenSequence>(
           "Here is national health insurance",
           new ZTokenSequence { new ZToken("Here"), new ZToken("is"), new ZToken("national health insurance", "organization") }),
@@ -159,7 +160,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 {
   ""Zimmers"",
   ""Acme Inc."",
-  ""Blue-Whale"",
+  ""Blue Whale"",
   ""National Health"",
   ""National Health Insurance""
 }
@@ -171,14 +172,17 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       foreach (var src in x)
       {
         ZTokenSequence zinput = new ZTokenSequence(src.Item1.Split(' ').Select(i => new ZToken(i)));
-        ZTokenSequence result = kb.EntityManager.CalculateLabels(zinput);
+        List<ZTokenSequence> result = new List<ZTokenSequence>();
+        kb.EntityManager.FindEntities(zinput, result);
+
         ZTokenSequence expectedOutput = src.Item2;
 
-        Assert.AreEqual(expectedOutput.Count, result.Count);
+        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual(expectedOutput.Count, result[0].Count);
         for (int i = 0; i < expectedOutput.Count; ++i)
         {
-          Assert.AreEqual(expectedOutput[i].OriginalText, result[i].OriginalText, $"Testing: {src.Item1}");
-          Assert.AreEqual(expectedOutput[i].EntityClass, result[i].EntityClass, $"Testing: {src.Item1}");
+          Assert.AreEqual(expectedOutput[i].OriginalText, result[0][i].OriginalText, $"Testing: {src.Item1}");
+          Assert.AreEqual(expectedOutput[i].EntityClass, result[0][i].EntityClass, $"Testing: {src.Item1}");
         }
       }
     }
@@ -222,6 +226,28 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       Assert.AreEqual("Helle Jensen", result[0].OriginalText);
       Assert.AreEqual(ZToken.TokenType.Entity, result[0].Type);
       Assert.AreEqual("person", result[0].EntityClass);
+    }
+
+
+    [Test]
+    public void CanDefineEntitesUsingRegex()
+    {
+      // Arrange
+      string cfg = @"
+! concept surnames = Helle, Kaj
+! concept lastnames = Nielsen, Berg
+
+! entities (person)
+{
+  > %surnames %surnames? %lastnames %lastnames?
+}
+";
+      // Act
+      KnowledgeBase kb = ParseKnowledgeBase(cfg);
+      kb.SetupComplete();
+
+      // Assert
+      Assert.True(kb.EntityManager.EntityClasses.ContainsKey("person"));
     }
   }
 }
