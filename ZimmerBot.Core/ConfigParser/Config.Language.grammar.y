@@ -406,9 +406,6 @@ entityDefinition
   | inputSeq     { $$.regexList = $1.regexList; }
   ;
 
-  /*| stringSeqSeq { $$.stringListList = $1.stringListList; }*/
-
-
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
@@ -443,13 +440,6 @@ cword
   : T_WORD   { $$.s = $1.s; }
   | T_CWORD  { $$.s = $1.s; }
   ;
-
-/*
-stringSeqSeq
-  : stringSeqSeq T_COMMA T_LBRACE stringSeq T_RBRACE { $$.stringListList = $1.stringListList; $$.stringListList.Add($4.stringList); }
-  | T_LBRACE stringSeq T_RBRACE                      { $$.stringListList = new List<List<string>>(); $$.stringListList.Add($2.stringList); }
-  ;
-*/
 
 stringSeq
   : stringSeq T_COMMA T_STRING { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }

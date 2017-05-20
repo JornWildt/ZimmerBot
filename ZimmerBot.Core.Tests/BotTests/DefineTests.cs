@@ -168,5 +168,40 @@ ORDER BY ?name
 
       AssertDialog("show all", "person politician .");
     }
+
+    [Test]
+    public void WordAlternativesAreAddedAsEntities()
+    {
+      BuildBot(@"
+! define (person)
+{
+  ""John Benny Andersen"" (""John Ben""):.
+}
+
+! pattern (intent = who)
+{
+  > who is {a}
+}
+
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+
+>> { intent = who, a = * }
+! call RDF.Query(""
+SELECT ?name
+WHERE
+{
+  ?subj zp:knownby? ?knownby.
+  ?subj rdfs:label ?name
+  FILTER(?knownby = lcase(@a))
+}
+LIMIT 1
+"")
+: <result:{r |<r.name>}>
+");
+      AssertDialog("who is ben", "???");
+      AssertDialog("who is John Benny Andersen", "John Benny Andersen");
+      AssertDialog("who is John Ben", "John Benny Andersen");
+    }
   }
 }
