@@ -8,10 +8,6 @@ namespace ZimmerBot.Core.WordRegex
 {
   public abstract class WRegexBase
   {
-    public abstract void ExtractWordsForSpellChecker();
-
-    public abstract double CalculateSize();
-
     public class EvaluationContext
     {
       public ZTokenSequence Input { get; protected set; }
@@ -42,11 +38,15 @@ namespace ZimmerBot.Core.WordRegex
         Input = input;
         StartPosition = startPos;
         EndPosition = endPos;
-        CurrentRepetitionIndex = 0;
+        CurrentRepetitionIndex = 1;
         MatchNames = new Stack<string>();
       }
     }
 
+
+    public abstract void ExtractWordsForSpellChecker();
+
+    public abstract double CalculateSize();
 
     public abstract NFAFragment CalculateNFAFragment(EvaluationContext context);
 

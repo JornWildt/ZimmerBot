@@ -31,8 +31,8 @@ namespace ZimmerBot.Core.Tests.BotTests
 >> { intent = current_weather, type = question, loc = * }
 : The weather is good in '<loc>'
 
->> { intent = current_weather, type = question, loc = ""Smørum Ovre"" }
-: The weather is always fantastic in Smørum Ovre
+>> { intent = current_weather, type = question, loc = ""Smørum Nedre"" }
+: The weather is always fantastic in Smørum Nedre
 ";
       BuildBot(cfg);
 
@@ -46,7 +46,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("is it raining in new york", "The weather is good in 'new york'");
       AssertDialog("how raining is it in new york", "The weather is good in 'new york'");
 
-      AssertDialog("how is the weather in Smørum Ovre today", "The weather is always fantastic in Smørum Ovre");
+      AssertDialog("how is the weather in Smørum Nedre today", "The weather is always fantastic in Smørum Nedre");
 
       AssertDialog("is green your favorite color?", "???", "Make sure completely unknown inputs does not match");
       AssertDialog("grumph idugh yuckmay", "???", "Make sure completely unknown inputs does not match");

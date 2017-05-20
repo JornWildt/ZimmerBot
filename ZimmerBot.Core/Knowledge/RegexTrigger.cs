@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Quartz;
+using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
@@ -101,12 +102,19 @@ namespace ZimmerBot.Core.Knowledge
       double conditionModifier = CalculateConditionModifier(context);
 
       context.CurrentRepetitionIndex = 1;
-      MatchResult result;
+      MatchResult result = null;
 
       if (Regex != null)
       {
         if (context.InputContext.Input != null)
-          result = Regex.CalculateMatch(new WRegexBase.EvaluationContext(context));
+        {
+          foreach (ZTokenSequence input in context.InputContext.Input)
+          {
+            var subResult = Regex.CalculateMatch(new WRegexBase.EvaluationContext(input, 0, 99999));
+            if (result == null || subResult.Score > result.Score)
+              result = subResult;
+          }
+        }
         else
           result = new MatchResult(0);
       }

@@ -11,6 +11,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
   public class EntityParserTests : TestHelper
   {
     [Test]
+    [Ignore("Not using the probalistics anymore")]
     public void CanAddEntities()
     {
       // Arrange
@@ -18,9 +19,12 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 ! entities (city)
 {
   ""Århus"",
-  ""London"",
-  ""Søndre Omme"",
-  ""Nørre Omme""
+  ""London""
+}
+
+! entities (city)
+{
+  > (søndre|nørre) Omme
 }
 
 ! entities (person)
@@ -77,6 +81,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
+    [Ignore("Probabilities not used anymore")]
     public void EntityLookupIsCaseInsensitive()
     {
       // Arrange
@@ -103,11 +108,12 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
       EntityClass city = kb.EntityManager.EntityClasses["city"];
       Assert.That<double>(city.ProbabilityFor("århus", 0), Is.EqualTo(0.167).Within(0.001));
-      Assert.That<double>(city.ProbabilityFor("OmMe", 1), Is.EqualTo(0.333).Within(0.001));
+      Assert.That<double>(city.ProbabilityFor("SØNDRE OmMe", 1), Is.EqualTo(0.333).Within(0.001));
     }
 
 
     [Test]
+    [Ignore("Probabilities not used anymore")]
     public void EntityDefinitionIgnoresPunctuation()
     {
       // Arrange
@@ -137,17 +143,19 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     public void CanJoinEntityNames()
     {
       // Arrange
-      var x = new Tuple<string, ZTokenSequence>[]
+      var x = new Tuple<string, ZTokenSequence, int, int>[]
       {
-        new Tuple<string, ZTokenSequence>("zimmers", new ZTokenSequence { new ZToken("zimmers", "organization") }),
-        new Tuple<string, ZTokenSequence>("acme INC", new ZTokenSequence { new ZToken("acme INC", "organization") }),
-        new Tuple<string, ZTokenSequence>(
-          "where is Blue whale located", 
-          new ZTokenSequence { new ZToken("where"), new ZToken("is"), new ZToken("Blue whale", "organization"), new ZToken("located") }),
-        new Tuple<string, ZTokenSequence>(
+        new Tuple<string, ZTokenSequence, int, int>("zimmers", new ZTokenSequence { new ZToken("zimmers", "organization") }, 1, 0),
+        new Tuple<string, ZTokenSequence, int, int>("acme INC", new ZTokenSequence { new ZToken("acme INC", "organization") }, 1, 0),
+        new Tuple<string, ZTokenSequence, int, int>(
+          "where is Blue whale located",
+          new ZTokenSequence { new ZToken("where"), new ZToken("is"), new ZToken("Blue whale", "organization"), new ZToken("located") },
+          1, 0),
+        new Tuple<string, ZTokenSequence, int, int>(
           "Here is national health insurance",
-          new ZTokenSequence { new ZToken("Here"), new ZToken("is"), new ZToken("national health insurance", "organization") }),
-        new Tuple<string, ZTokenSequence>(
+          new ZTokenSequence { new ZToken("Here"), new ZToken("is"), new ZToken("national health insurance", "organization") },
+          1, 0),
+        new Tuple<string, ZTokenSequence, int, int>(
           "Here is national health insurance and national health and acme inc and some more",
           new ZTokenSequence {
             new ZToken("Here"),
@@ -159,7 +167,8 @@ namespace ZimmerBot.Core.Tests.ConfigParser
             new ZToken("acme inc", "organization"),
             new ZToken("and"),
             new ZToken("some"),
-            new ZToken("more")}),
+            new ZToken("more")},
+          7, 2),
       };
 
       string cfg = @"
@@ -184,55 +193,17 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
         ZTokenSequence expectedOutput = src.Item2;
 
-        Assert.AreEqual(1, result.Count, "Testing: " + zinput.ToString());
-        Assert.AreEqual(expectedOutput.Count, result[0].Count);
+        // Item3 is number of variations
+        Assert.AreEqual(src.Item3, result.Count, "Testing: " + zinput.ToString());
+        // Item4 indicates which of the alternative results that should be used
+        ZTokenSequence res = result[src.Item4];
+        Assert.AreEqual(expectedOutput.Count, res.Count);
         for (int i = 0; i < expectedOutput.Count; ++i)
         {
-          Assert.AreEqual(expectedOutput[i].OriginalText, result[0][i].OriginalText, $"Testing: {src.Item1}");
-          Assert.AreEqual(expectedOutput[i].EntityClass, result[0][i].EntityClass, $"Testing: {src.Item1}");
+          Assert.AreEqual(expectedOutput[i].OriginalText, res[i].OriginalText, $"Testing: {src.Item1}");
+          Assert.AreEqual(expectedOutput[i].EntityClass, res[i].EntityClass, $"Testing: {src.Item1}");
         }
       }
-    }
-
-
-    [Test]
-    public void CanDefineCartesianProductForEntities()
-    {
-      // Arrange
-      string cfg = @"
-! entities (person)
-{
-  {
-    ""Helle"",
-    ""Lars""
-  },
-  {
-    ""Hansen"",
-    ""Jensen""
-  }
-}
-";
-      // Act
-      KnowledgeBase kb = ParseKnowledgeBase(cfg);
-      kb.SetupComplete();
-
-      // Assert
-      Assert.True(kb.EntityManager.EntityClasses.ContainsKey("person"));
-
-      EntityClass ec = kb.EntityManager.EntityClasses["person"];
-      Assert.AreEqual(2, ec.LongestWordCount);
-
-      ZTokenSequence zinput = new ZTokenSequence(new ZToken[] { new ZToken("Helle"), new ZToken("Jensen") });
-
-      // Act
-      ZTokenSequence result = kb.EntityManager.CalculateLabels(zinput);
-
-      // Assert
-      Assert.AreEqual(1, result.Count);
-      Assert.IsNotNull(result[0]);
-      Assert.AreEqual("Helle Jensen", result[0].OriginalText);
-      Assert.AreEqual(ZToken.TokenType.Entity, result[0].Type);
-      Assert.AreEqual("person", result[0].EntityClass);
     }
 
 

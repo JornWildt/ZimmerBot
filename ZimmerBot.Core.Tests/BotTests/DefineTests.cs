@@ -52,6 +52,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       AssertDialog("echo horse", "Got 'horse'");
       AssertDialog("echo horses", "Got 'horses'");
+      AssertDialog("echo north America", "Got 'north America'");
       AssertDialog("echo walt disney", "Got 'walt disney'");
     }
 

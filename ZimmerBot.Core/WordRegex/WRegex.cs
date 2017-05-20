@@ -19,13 +19,12 @@ namespace ZimmerBot.Core.WordRegex
 
     public static WRegexBase BuildFromSpaceSeparatedString(string s, bool doStrip)
     {
+      s = LabelReducer.Replace(s, " ");
       string[] words = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
       SequenceWRegex p = new SequenceWRegex();
       foreach (string word in words)
       {
         string w = word;
-        if (doStrip)
-          w = LabelReducer.Replace(w, "");
         p.Add(new LiteralWRegex(w));
       }
       return p;

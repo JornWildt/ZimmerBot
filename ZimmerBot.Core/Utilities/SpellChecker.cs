@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using NHunspell;
 
@@ -50,6 +51,19 @@ namespace ZimmerBot.Core.Utilities
     }
 
 
+    static TextInfo _textInfo;
+
+    static TextInfo CurrentTextInfo
+    {
+      get
+      {
+        if (_textInfo == null)
+          _textInfo = new CultureInfo(AppSettings.Language.Value.Replace("_", "-"), false).TextInfo;
+        return _textInfo;
+      }
+    }
+
+
     public static string SpellCheck(string word)
     {
       if (!IsInitialized)
@@ -60,7 +74,9 @@ namespace ZimmerBot.Core.Utilities
 
       lock (SpellerLocker)
       {
-        bool ok = Speller.Spell(word);
+        // Try various casings, as NHunspell seems to be case-sensitive!
+        bool ok = Speller.Spell(word) || Speller.Spell(CurrentTextInfo.ToTitleCase(word));
+
         if (!ok)
         {
           List<string> suggestions = Speller.Suggest(word);

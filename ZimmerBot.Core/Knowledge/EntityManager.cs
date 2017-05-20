@@ -28,20 +28,16 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterEntityClass(string className, IEnumerable<string> entityNames)
+    public void RegisterEntityClass(string className, IList<string> entityNames)
     {
-      List<List<string>> names = new List<List<string>>();
-      names.Add(entityNames.ToList());
-      // FIXME RegisterEntityClass(className, names);
-      //for (int pos = 0; pos < entityNames.Count; ++pos)
-      //{
-      //  Condition.Requires(entityNames[pos], nameof(entityNames) + "[" + pos + "]").IsNotNull();
+      Condition.Requires(className, nameof(className)).IsNotNullOrWhiteSpace();
+      Condition.Requires(entityNames, nameof(entityNames)).IsNotNull();
 
-      //  // List of list of entity names implies each name is exactly one word
-      //  foreach (string entityWord in entityNames[pos])
-      //    ec.AddEntityWord(entityWord, pos);
-      //}
+      EntityClass ec = GetOrCreateClass(className);
 
+      // List of list of entity names implies each name is exactly one word
+      foreach (string entityWord in entityNames)
+        ec.AddEntity(WRegex.BuildFromSpaceSeparatedString(entityWord, true));
     }
 
 
@@ -63,12 +59,10 @@ namespace ZimmerBot.Core.Knowledge
       Condition.Requires(classNames, nameof(classNames)).IsNotNull();
       Condition.Requires(alternateNames, nameof(alternateNames)).IsNotNull();
 
-      entityName = LabelReducer.Replace(entityName, "");
-
       foreach (string className in classNames)
       {
         EntityClass ec = GetOrCreateClass(className);
-        ec.AddEntity(new LiteralWRegex(entityName));
+        ec.AddEntity(WRegex.BuildFromSpaceSeparatedString(entityName, true));
 
         foreach (string alt in alternateNames)
         {
@@ -167,8 +161,7 @@ namespace ZimmerBot.Core.Knowledge
               ZTokenSequence result = input.CompactEntity(i, j, ec.Value.ClassName);
               output.Add(result);
 
-              if (j != i+1)
-                FindEntities(result, j-1, output);
+              FindEntities(result, i+1, output);
 
               // This is a greedy algortihm, so do not try to match smaller combinations
               i = j;

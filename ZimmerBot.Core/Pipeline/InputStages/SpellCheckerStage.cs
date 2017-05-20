@@ -11,9 +11,9 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       if (!AppSettings.EnableSpellingCorrections)
         return;
 
-      foreach (var input in item.Context.Input)
+      if (item.Context.Input != null)
       {
-        if (input != null)
+        foreach (var input in item.Context.Input)
         {
           for (int i = 0; i < input.Count; ++i)
           {

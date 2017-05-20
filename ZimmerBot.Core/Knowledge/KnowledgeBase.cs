@@ -104,7 +104,7 @@ namespace ZimmerBot.Core.Knowledge
         Logger.DebugFormat("Found {0} records", result.Count);
 
         EntityManager.RegisterEntityClass("default", 
-          result.Where(item => item.ContainsKey("label")).Select(item => item["label"]));
+          result.Where(item => item.ContainsKey("label")).Select(item => item["label"]).ToList());
       }
 
       WordDefinitionManager.SetupComplete(MemoryStore);
