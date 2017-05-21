@@ -35,6 +35,8 @@ namespace ZimmerBot.Core.Statements
       ProcessorRegistration processor = ProcessorRegistry.GetProcessor(Function.FunctionName);
       ExpressionEvaluationContext ec = context.ResponseContext.BuildExpressionEvaluationContext();
 
+      ec.Variables["$_"] = context.LastValue;
+
       List<object> inputs = Function.CalculateInputValues(ec);
 
       ProcessorInput inp = new ProcessorInput(context.ResponseContext, inputs);
@@ -43,9 +45,16 @@ namespace ZimmerBot.Core.Statements
       context.LastValue = result;
 
       // Make the output values available to templates
-      if (result.Value is IDictionary<string, object>)
+      if (result.Value != null)
       {
-        context.ResponseContext.Variables.Push((IDictionary < string, object > )result.Value);
+        // Remove optional existing "last value" dictionary (and all other stuff "on top" of it)
+        while (context.ResponseContext.Variables.ContainsKey("####RESULT####"))
+          context.ResponseContext.Variables.Pop();
+
+        // Mark this dictionary as the special "last value" dictionary
+        result.Value["####RESULT####"] = true;
+
+        context.ResponseContext.Variables.Push(result.Value);
       }
     }
   }

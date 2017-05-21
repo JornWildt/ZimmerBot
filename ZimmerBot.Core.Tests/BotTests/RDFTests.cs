@@ -46,5 +46,97 @@ WHERE
       AssertDialog("what is croc", "Yes: Crocodile.");
       AssertDialog("what is CROCODILES", "Yes: Crocodile.");
     }
+
+
+    [Test]
+    public void CanStartTopicFromRdf()
+    {
+      BuildBot(@"
+! define (company)
+{
+  ""Bryan Sport"":
+    intro: ""Blah ..."";
+    topic: Bryan.
+}
+
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+
+! pattern (intent = what_is)
+{
+  > what is {subj}
+}
+
+>> { intent = what_is, subj = * }
+! call RDF.Query(""
+SELECT DISTINCT ?name ?topic
+WHERE
+{
+  ?subject rdfs:label ?name.
+  ?subject zp:knownby ?k.
+  ?subject zp:topic ?topic
+  FILTER ( ?k = lcase(@subj) )
+}
+"")
+! call RDF.TrySetTopic($_, ""topic"")
+: Yes: <result:{r |<r.name> (topic: <r.topic>)}>.
+
+! topic Bryan
+{
+  > help
+  : Bryan or Bruce - who cares?
+}
+");
+
+      AssertDialog("help", "???");
+      AssertDialog("what is bryan sport", "Yes: Bryan Sport (topic: Bryan).");
+      AssertDialog("help", "Bryan or Bruce - who cares?");
+    }
+
+
+    [Test]
+    public void CanStartTopicFromRdfWithDefaultNameForTopicParameter()
+    {
+      BuildBot(@"
+! define (company)
+{
+  ""Bryan Sport"":
+    intro: ""Blah ..."";
+    topic: Bryan.
+}
+
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+
+! pattern (intent = what_is)
+{
+  > what is {subj}
+}
+
+>> { intent = what_is, subj = * }
+! call RDF.Query(""
+SELECT DISTINCT ?name ?topic
+WHERE
+{
+  ?subject rdfs:label ?name.
+  ?subject zp:knownby ?k.
+  ?subject zp:topic ?topic
+  FILTER ( ?k = lcase(@subj) )
+}
+"")
+! call RDF.TrySetTopic($_)
+: Yes: <result:{r |<r.name> (topic: <r.topic>)}>.
+
+! topic Bryan
+{
+  > help
+  : Bryan or Bruce - who cares?
+}
+");
+
+      AssertDialog("help", "???");
+      AssertDialog("what is bryan sport", "Yes: Bryan Sport (topic: Bryan).");
+      AssertDialog("help", "Bryan or Bruce - who cares?");
+    }
   }
 }

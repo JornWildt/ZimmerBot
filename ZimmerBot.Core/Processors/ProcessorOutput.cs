@@ -1,4 +1,5 @@
-﻿using CuttingEdge.Conditions;
+﻿using System.Collections.Generic;
+using CuttingEdge.Conditions;
 
 
 namespace ZimmerBot.Core.Processors
@@ -7,16 +8,16 @@ namespace ZimmerBot.Core.Processors
   {
     public string TemplateName { get; protected set; }
 
-    public object Value { get; protected set; }
+    public IDictionary<string, object> Value { get; protected set; }
 
 
-    public ProcessorOutput(object value)
+    public ProcessorOutput(IDictionary<string, object> value)
       : this("default", value)
     {
     }
 
 
-    public ProcessorOutput(string templateName, object value)
+    public ProcessorOutput(string templateName, IDictionary<string, object> value)
     {
       Condition.Requires(templateName, nameof(templateName)).IsNotNullOrEmpty();
       TemplateName = templateName;

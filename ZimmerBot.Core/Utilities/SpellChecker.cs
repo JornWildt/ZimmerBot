@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.IO;
 using NHunspell;
 
@@ -75,7 +76,10 @@ namespace ZimmerBot.Core.Utilities
       lock (SpellerLocker)
       {
         // Try various casings, as NHunspell seems to be case-sensitive!
-        bool ok = Speller.Spell(word) || Speller.Spell(CurrentTextInfo.ToTitleCase(word));
+        bool ok = 
+          Speller.Spell(word) 
+          || Speller.Spell(CurrentTextInfo.ToTitleCase(word))
+          || word.Any(c => char.IsDigit(c));
 
         if (!ok)
         {

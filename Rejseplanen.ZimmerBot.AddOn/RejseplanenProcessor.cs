@@ -42,12 +42,12 @@ namespace Rejseplanen.ZimmerBot.AddOn
           }
         }
 
-        return new ProcessorOutput("empty", new object());
+        return new ProcessorOutput("empty", null);
       }
       catch (Exception ex)
       {
         Logger.Error("Failed to access Rejseplanen", ex);
-        return new ProcessorOutput("error", new object());
+        return new ProcessorOutput("error", null);
       }
     }
 
@@ -88,12 +88,12 @@ namespace Rejseplanen.ZimmerBot.AddOn
           }
         }
 
-        return new ProcessorOutput("empty", new object());
+        return new ProcessorOutput("empty", null);
       }
       catch (Exception ex)
       {
         Logger.Error("Failed to access Rejseplanen", ex);
-        return new ProcessorOutput("error", new object());
+        return new ProcessorOutput("error", null);
       }
     }
   }
