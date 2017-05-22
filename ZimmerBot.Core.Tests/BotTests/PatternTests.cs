@@ -242,5 +242,25 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       AssertDialog("what", "That!");
     }
+
+
+    [Test]
+    public void CanMatchPatternShortHand()
+    {
+      BuildBot(@"
+! pattern (intent = what)
+{
+  > what
+  > why that
+  > how come
+}
+
+>> what
+: That!
+");
+      AssertDialog("Hello", "???");
+      AssertDialog("why that", "That!");
+      AssertDialog("what", "That!");
+    }
   }
 }

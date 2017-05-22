@@ -140,7 +140,7 @@ rule
     { 
       $$.rule = AddRegexRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
     }
-  | ruleLabel T_GTGT T_LBRACE keyValueSeq T_RBRACE ruleModifierSeq statementSeq
+  | ruleLabel fuzzyTrigger ruleModifierSeq statementSeq
     { 
       $$.rule = AddFuzzyRule($1.s, $4.keyValueList, $6.ruleModifierList, $7.statementList);
     }
@@ -148,6 +148,10 @@ rule
     {
       $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
     }
+  ;
+
+fuzzyTrigger
+  : T_GTGT T_LBRACE keyValueSeq T_RBRACE
   ;
 
 ruleLabel
