@@ -9,6 +9,7 @@ namespace ZimmerBot.Core
     public static readonly AppSetting<string> Language = new AppSetting<string>("ZimmerBot.Language");
     public static readonly AppSetting<bool> EnableStemming = new AppSetting<bool>("ZimmerBot.EnableStemming", true);
     public static readonly AppSetting<bool> EnableSpellingCorrections = new AppSetting<bool>("ZimmerBot.EnableSpellingCorrections", true);
+    public static readonly AppSetting<string> IntentKey = new AppSetting<string>("ZimmerBot.IntentKey", "intent");
 
     public static readonly AppSetting<string> RDF_ImportDirectory = new AppSetting<string>("ZimmerBot.RDF.ImportDirectory");
     public static readonly AppSetting<string> RDF_DataDirectory = new AppSetting<string>("ZimmerBot.RDF.DataDirectory");

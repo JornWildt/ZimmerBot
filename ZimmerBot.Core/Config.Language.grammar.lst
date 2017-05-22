@@ -1,11 +1,11 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 17-05-2017 17:15:44>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-05-2017 08:07:48>
 // ==========================================================================
 //  Version:  1.5.2
-//  Machine:  JORN-PC
-//  DateTime: 17-05-2017 17:19:02
-//  UserName: Jorn
+//  Machine:  CBRAIN-PC412
+//  DateTime: 22-05-2017 08:07:49
+//  UserName: jw
 // ==========================================================================
 
 
@@ -86,8 +86,6 @@
 %token T_DOLLAR
 
 %%
-// Warning: NonTerminal symbol "stringSeqSeq" is unreachable
-// ---------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -118,8 +116,13 @@ configuration
     { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
-  | T_ENTITIES T_LPAR T_WORD T_RPAR T_LBRACE entityDefinition T_RBRACE
-      { RegisterEntities($3.s, $6.regexList); }
+  | T_ENTITIES T_LPAR T_WORD T_RPAR 
+      { DoStripRegexLiterals = true; }
+    T_LBRACE entityDefinition T_RBRACE
+      { 
+        DoStripRegexLiterals = false;
+        RegisterEntities($3.s, $7.regexList); 
+      }
   | T_DEFINE T_LPAR wordStringCommaSeq T_RPAR T_LBRACE definitionSeq T_RBRACE
       { RegisterDefinitions($3.stringList, $6.wordDefinitionList); }
   | T_PATTERN T_LPAR keyValueSeq T_RPAR
@@ -148,14 +151,21 @@ rule
     { 
       $$.rule = AddRegexRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
     }
-  | ruleLabel T_GTGT T_LBRACE keyValueSeq T_RBRACE ruleModifierSeq statementSeq
+  | ruleLabel fuzzyTrigger ruleModifierSeq statementSeq
     { 
-      $$.rule = AddFuzzyRule($1.s, $4.keyValueList, $6.ruleModifierList, $7.statementList);
+      $$.rule = AddFuzzyRule($1.s, $2.keyValueList, $3.ruleModifierList, $4.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
       $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
     }
+  ;
+
+fuzzyTrigger
+  : T_GTGT T_LBRACE keyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
+  : T_GTGT T_WORD { $$.keyValueList = new StringPairList(); $$.keyValueList.Add(new KeyValuePar<string,string>("intent", $2.s)); }
+// Error: Syntax error, unexpected ':'
+// -----------------------------------
   ;
 
 ruleLabel
@@ -189,7 +199,7 @@ inputPattern
   | T_LPAR inputPatternSeq T_RPAR
       { $$.regex = new GroupWRegex($2.regex); }
   | T_WORD
-      { $$.regex = new LiteralWRegex($1.s); }
+      { $$.regex = BuildLiteralWRegex($1.s); }
   | T_CWORD
       { $$.regex = BuildConceptWRegex($1.s); }
   | T_STAR
@@ -410,12 +420,9 @@ definitionDataValue
 ******************************************************************************/
 
 entityDefinition
-  : stringSeq    { $$.regexList = new List<WRegexBase>(); $$.regexList.AddRange($1.stringList.Select(s => WRegex.BuildFromSpaceSeparatedString(s))); }
+  : stringSeq    { $$.regexList = new List<WRegexBase>(); $$.regexList.AddRange($1.stringList.Select(s => WRegex.BuildFromSpaceSeparatedString(s, true))); }
   | inputSeq     { $$.regexList = $1.regexList; }
   ;
-
-  /*| stringSeqSeq { $$.stringListList = $1.stringListList; }*/
-
 
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
@@ -450,11 +457,6 @@ cwordSeq
 cword
   : T_WORD   { $$.s = $1.s; }
   | T_CWORD  { $$.s = $1.s; }
-  ;
-
-stringSeqSeq
-  : stringSeqSeq T_COMMA T_LBRACE stringSeq T_RBRACE { $$.stringListList = $1.stringListList; $$.stringListList.Add($4.stringList); }
-  | T_LBRACE stringSeq T_RBRACE                      { $$.stringListList = new List<List<string>>(); $$.stringListList.Add($2.stringList); }
   ;
 
 stringSeq
