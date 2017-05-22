@@ -25,6 +25,7 @@
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> stringListList;
+  public List<StringPairList> keyValueListList;
   public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
   public List<Pattern> patternList;
@@ -140,14 +141,19 @@ rule
     { 
       $$.rule = AddRegexRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
     }
-  | ruleLabel fuzzyTrigger ruleModifierSeq statementSeq
+  | ruleLabel fuzzyTriggerSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddFuzzyRule($1.s, $2.keyValueList, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddFuzzyRule($1.s, $2.keyValueListList, $3.ruleModifierList, $4.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
       $$.rule = AddTopicRule($1.s, $3.template, $4.statementList);
     }
+  ;
+
+fuzzyTriggerSeq
+  : fuzzyTriggerSeq fuzzyTrigger { $$.keyValueListList = $1.keyValueListList; $$.keyValueListList.Add($2.keyValueList); }
+  | fuzzyTrigger                 { $$.keyValueListList = new List<StringPairList>(); $$.keyValueListList.Add($1.keyValueList); }
   ;
 
 fuzzyTrigger

@@ -93,15 +93,17 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       FuzzyTrigger t1 = (FuzzyTrigger)kb.DefaultTopic.StandardRules[0].Trigger;
       FuzzyTrigger t2 = (FuzzyTrigger)kb.DefaultTopic.StandardRules[1].Trigger;
       FuzzyTrigger t3 = (FuzzyTrigger)kb.DefaultTopic.StandardRules[2].Trigger;
-      Assert.AreEqual(2, t1.KeyValuePattern.Count);
-      Assert.AreEqual("intent", t1.KeyValuePattern[0].Key);
-      Assert.AreEqual("current_weather", t1.KeyValuePattern[0].Value);
-      Assert.AreEqual("type", t1.KeyValuePattern[1].Key);
-      Assert.AreEqual("question", t1.KeyValuePattern[1].Value);
-      Assert.AreEqual("loc", t2.KeyValuePattern[2].Key);
-      Assert.AreEqual(Constants.StarValue, t2.KeyValuePattern[2].Value);
-      Assert.AreEqual("loc", t3.KeyValuePattern[2].Key);
-      Assert.AreEqual("Smørum Nedre", t3.KeyValuePattern[2].Value);
+
+      Assert.AreEqual(1, t1.KeyValuePatterns.Count);
+      Assert.AreEqual(2, t1.KeyValuePatterns[0].Count);
+      Assert.AreEqual("intent", t1.KeyValuePatterns[0][0].Key);
+      Assert.AreEqual("current_weather", t1.KeyValuePatterns[0][0].Value);
+      Assert.AreEqual("type", t1.KeyValuePatterns[0][1].Key);
+      Assert.AreEqual("question", t1.KeyValuePatterns[0][1].Value);
+      Assert.AreEqual("loc", t2.KeyValuePatterns[0][2].Key);
+      Assert.AreEqual(Constants.StarValue, t2.KeyValuePatterns[0][2].Value);
+      Assert.AreEqual("loc", t3.KeyValuePatterns[0][2].Key);
+      Assert.AreEqual("Smørum Nedre", t3.KeyValuePatterns[0][2].Value);
     }
 
 

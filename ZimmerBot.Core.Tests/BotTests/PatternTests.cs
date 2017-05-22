@@ -262,5 +262,29 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("why that", "That!");
       AssertDialog("what", "That!");
     }
+
+
+    [Test]
+    public void CanMatchMultiplePatterns()
+    {
+      BuildBot(@"
+! pattern (intent = what)
+{
+  > what
+}
+
+! pattern (intent = why)
+{
+  > why that
+}
+
+>> what
+>> why
+: That!
+");
+      AssertDialog("Hello", "???");
+      AssertDialog("why that", "That!");
+      AssertDialog("what", "That!");
+    }
   }
 }

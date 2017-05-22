@@ -27,10 +27,10 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public StandardRule(KnowledgeBase kb, string label, Topic topic, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    public StandardRule(KnowledgeBase kb, string label, Topic topic, List<StringPairList> patterns, List<RuleModifier> modifiers, List<Statement> statements)
       : base(kb, label, topic, statements)
     {
-      Trigger = new FuzzyTrigger(pattern);
+      Trigger = new FuzzyTrigger(patterns);
       HandleModifiers(modifiers);
     }
 

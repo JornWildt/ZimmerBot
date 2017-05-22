@@ -173,7 +173,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public StandardRule AddFuzzyRule(string label, string topicName, StringPairList pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    public StandardRule AddFuzzyRule(string label, string topicName, List<StringPairList> pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
       return AddRule(topicName, topic => new StandardRule(this, label, topic, pattern, modifiers, statements));
     }
