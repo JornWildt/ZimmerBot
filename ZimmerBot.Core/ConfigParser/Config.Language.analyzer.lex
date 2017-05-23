@@ -41,6 +41,7 @@ Space      [ \t]
 \}          { return (int)Token.T_RBRACE; }
 \*          { return (int)Token.T_STAR; }
 \+          { return (int)Token.T_PLUS; }
+-           { return (int)Token.T_MINUS; }
 &           { return (int)Token.T_AMP; }
 =           { return (int)Token.T_EQU; }
 $           { return (int)Token.T_DOLLAR; }

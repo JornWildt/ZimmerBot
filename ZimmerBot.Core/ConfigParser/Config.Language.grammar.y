@@ -68,7 +68,8 @@
 
 %left T_QUESTION
 %left T_EQU, T_LT, T_GT
-%left T_PLUS, T_STAR
+%left T_PLUS, T_MINUS
+%left T_STAR
 %left T_PIPE
 %left T_EXCL
 %left T_DOT
@@ -487,10 +488,11 @@ patternExprSeq
   ;
 
 patternExpr
-  : entityPatternExpr { $$.patternExpr = $1.patternExpr; }
-  | T_WORD            { $$.patternExpr = new WordPatternExpr($1.s); }
-  | T_CWORD           { $$.patternExpr = new ConceptPatternExpr($1.s); }
-  | T_STRING          { $$.patternExpr = new WordPatternExpr($1.s); }
+  : entityPatternExpr   { $$.patternExpr = $1.patternExpr; }
+  | T_WORD              { $$.patternExpr = new WordPatternExpr($1.s); }
+  | T_CWORD             { $$.patternExpr = new ConceptPatternExpr($1.s); }
+  | T_STRING            { $$.patternExpr = new WordPatternExpr($1.s); }
+  | T_MINUS patternExpr { $$.patternExpr = new NegationPatternExpr($2.patternExpr); }}
   ;
 
 entityPatternExpr

@@ -286,5 +286,32 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("why that", "That!");
       AssertDialog("what", "That!");
     }
+
+
+    [Test]
+    public void CanMatchStopWord()
+    {
+      BuildBot(@"
+! pattern (intent = my_name)
+{
+  > my name is -not
+}
+
+! pattern (intent = your_country)
+{
+  > your country is
+}
+
+>> my_name
+: NAME
+
+>> your_country
+: COUNTRY
+");
+
+      AssertDialog("my name is", "NAME");
+      AssertDialog("your country is", "COUNTRY");
+      AssertDialog("my name is not", "???");
+    }
   }
 }
