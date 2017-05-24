@@ -71,7 +71,7 @@
 %left T_PLUS, T_MINUS
 %left T_STAR
 %left T_PIPE
-%left T_EXCL
+%left T_EXCL, T_TILDE
 %left T_DOT
 
 %token T_DOLLAR
@@ -492,7 +492,7 @@ patternExpr
   | T_WORD              { $$.patternExpr = new WordPatternExpr($1.s); }
   | T_CWORD             { $$.patternExpr = new ConceptPatternExpr($1.s); }
   | T_STRING            { $$.patternExpr = new WordPatternExpr($1.s); }
-  | T_MINUS patternExpr { $$.patternExpr = new NegationPatternExpr($2.patternExpr); }}
+  | T_TILDE patternExpr { $$.patternExpr = new NegationPatternExpr($2.patternExpr); }
   ;
 
 entityPatternExpr

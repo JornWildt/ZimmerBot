@@ -24,26 +24,32 @@ namespace ZimmerBot.Core.Patterns
     {
       get
       {
-        throw new NotImplementedException();
+        return SubExpr.ToString();
       }
     }
+
 
     public override double Weight
     {
-      get
-      {
-        throw new NotImplementedException();
-      }
+      get { return -5; }
     }
+
 
     public override void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens)
     {
-      throw new NotImplementedException();
+      // Do nothing
     }
+
 
     public override void ExtractWordsForSpellChecker()
     {
-      throw new NotImplementedException();
+      SubExpr.ExtractWordsForSpellChecker();
+    }
+
+
+    public override string ToString()
+    {
+      return "~" + SubExpr.ToString();
     }
   }
 }

@@ -1,11 +1,11 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 22-05-2017 08:07:48>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-05-2017 09:02:50>
 // ==========================================================================
 //  Version:  1.5.2
-//  Machine:  CBRAIN-PC412
-//  DateTime: 22-05-2017 08:07:49
-//  UserName: jw
+//  Machine:  JORN-PC
+//  DateTime: 24-05-2017 09:04:49
+//  UserName: Jorn
 // ==========================================================================
 
 
@@ -36,6 +36,7 @@
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> stringListList;
+  public List<StringPairList> keyValueListList;
   public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
   public List<Pattern> patternList;
@@ -78,9 +79,10 @@
 
 %left T_QUESTION
 %left T_EQU, T_LT, T_GT
-%left T_PLUS, T_STAR
+%left T_PLUS, T_MINUS
+%left T_STAR
 %left T_PIPE
-%left T_EXCL
+%left T_EXCL, T_TILDE
 %left T_DOT
 
 %token T_DOLLAR
@@ -151,9 +153,9 @@ rule
     { 
       $$.rule = AddRegexRule($1.s, $2.regexList, $3.ruleModifierList, $4.statementList);
     }
-  | ruleLabel fuzzyTrigger ruleModifierSeq statementSeq
+  | ruleLabel fuzzyTriggerSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddFuzzyRule($1.s, $2.keyValueList, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddFuzzyRule($1.s, $2.keyValueListList, $3.ruleModifierList, $4.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
@@ -161,11 +163,14 @@ rule
     }
   ;
 
+fuzzyTriggerSeq
+  : fuzzyTriggerSeq fuzzyTrigger { $$.keyValueListList = $1.keyValueListList; $$.keyValueListList.Add($2.keyValueList); }
+  | fuzzyTrigger                 { $$.keyValueListList = new List<StringPairList>(); $$.keyValueListList.Add($1.keyValueList); }
+  ;
+
 fuzzyTrigger
   : T_GTGT T_LBRACE keyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
-  : T_GTGT T_WORD { $$.keyValueList = new StringPairList(); $$.keyValueList.Add(new KeyValuePar<string,string>("intent", $2.s)); }
-// Error: Syntax error, unexpected ':'
-// -----------------------------------
+  | T_GTGT T_WORD { $$.keyValueList = new StringPairList(); $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); }
   ;
 
 ruleLabel
@@ -494,10 +499,13 @@ patternExprSeq
   ;
 
 patternExpr
-  : entityPatternExpr { $$.patternExpr = $1.patternExpr; }
-  | T_WORD            { $$.patternExpr = new WordPatternExpr($1.s); }
-  | T_CWORD           { $$.patternExpr = new ConceptPatternExpr($1.s); }
-  | T_STRING          { $$.patternExpr = new WordPatternExpr($1.s); }
+  : entityPatternExpr   { $$.patternExpr = $1.patternExpr; }
+  | T_WORD              { $$.patternExpr = new WordPatternExpr($1.s); }
+  | T_CWORD             { $$.patternExpr = new ConceptPatternExpr($1.s); }
+  | T_STRING            { $$.patternExpr = new WordPatternExpr($1.s); }
+  | T_TILDE patternExpr { $$.patternExpr = new NegationPatternExpr($2.patternExpr); }}
+// Error: Syntax error, unexpected '}'
+// -----------------------------------
   ;
 
 entityPatternExpr

@@ -294,7 +294,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       BuildBot(@"
 ! pattern (intent = my_name)
 {
-  > my name is -not
+  > my name is ~not
 }
 
 ! pattern (intent = your_country)

@@ -134,6 +134,7 @@
     <Compile Include="Parser\ZTokenSequenceList.cs" />
     <Compile Include="Patterns\ConceptPatternExpr.cs" />
     <Compile Include="Patterns\EntityPatternExpr.cs" />
+    <Compile Include="Patterns\NegationPatternExpr.cs" />
     <Compile Include="Patterns\Pattern.cs" />
     <Compile Include="Patterns\PatternManager.cs" />
     <Compile Include="Patterns\PatternMatchResult.cs" />
