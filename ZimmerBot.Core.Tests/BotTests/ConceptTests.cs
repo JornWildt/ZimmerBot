@@ -49,5 +49,20 @@ namespace ZimmerBot.Core.Tests.BotTests
       string r2 = Invoke("What do you like?");
       Assert.AreEqual("I like beef", r2);
     }
+
+
+    [Test]
+    public void CanHandleStrings()
+    {
+      BuildBot(@"
+! concept names = Hans, ""Hans-Christian""
+
+> hi (%names)
+: Hello '<1>'
+");
+
+      AssertDialog("Hi Hans", "Hello 'Hans'");
+      AssertDialog("Hi \"Hans-Christian\"", "Hello 'Hans-Christian'");
+    }
   }
 }

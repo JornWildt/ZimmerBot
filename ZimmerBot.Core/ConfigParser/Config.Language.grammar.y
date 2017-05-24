@@ -451,6 +451,7 @@ cwordSeq
 cword
   : T_WORD   { $$.s = $1.s; }
   | T_CWORD  { $$.s = $1.s; }
+  | T_STRING { $$.s = $1.s; }
   ;
 
 stringSeq
