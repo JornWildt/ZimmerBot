@@ -159,7 +159,16 @@ fuzzyTriggerSeq
 
 fuzzyTrigger
   : T_GTGT T_LBRACE keyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
-  | T_GTGT T_WORD { $$.keyValueList = new StringPairList(); $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); }
+  | T_GTGT wordOrString
+      { 
+        $$.keyValueList = new StringPairList(); 
+        $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+      }
+  | T_GTGT wordOrString T_LPAR simpleKeyValueSeq T_RPAR
+      { 
+        $$.keyValueList = $4.keyValueList;
+        $$.keyValueList.Insert(0, new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+      }
   ;
 
 ruleLabel
@@ -457,6 +466,16 @@ cword
 stringSeq
   : stringSeq T_COMMA T_STRING { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_STRING                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+simpleKeyValueSeq
+  : simpleKeyValueSeq T_COMMA simpleKeyValue { $$.keyValueList = $1.keyValueList; $$.keyValueList.Add($3.keyValue); }
+  | simpleKeyValue                           { $$.keyValueList = new StringPairList(); $$.keyValueList.Add($1.keyValue); }
+  ;
+
+simpleKeyValue
+  : T_WORD             { $$.keyValue = new KeyValuePair<string,string>($1.s, Constants.StarValue); }
+  | T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
   ;
 
 keyValueSeq

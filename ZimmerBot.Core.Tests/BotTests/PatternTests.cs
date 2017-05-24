@@ -245,7 +245,28 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
-    public void CanMatchPatternShortHand()
+    public void ParameterNameIsCaseInsensitive()
+    {
+      BuildBot(@"
+! entities (names)
+{
+  > lisa
+}
+
+! pattern (intent = my_name)
+{
+  > my name is {name}
+}
+
+>> my_name (name = LISA)
+: Welcome <name>
+");
+      AssertDialog("my name is Lisa", "Welcome Lisa");
+    }
+
+
+    [Test]
+    public void CanMatchIntentShortHand()
     {
       BuildBot(@"
 ! pattern (intent = what)
@@ -261,6 +282,37 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("Hello", "???");
       AssertDialog("why that", "That!");
       AssertDialog("what", "That!");
+    }
+
+
+    [Test]
+    public void CanMatchIntentAndParameterShortHand()
+    {
+      BuildBot(@"
+! entities (names)
+{
+  > john
+  > peter
+  > lisa
+}
+
+! pattern (intent = my_name)
+{
+  > my name is {name}
+  > you can call me {name}
+}
+
+# This is equivalent to >> { intent = my_name, name = * }
+>> my_name (name)
+: Hi, <name>
+
+# This is equivalent to >> { intent = my_name, name = lisa }
+>> my_name (name = Lisa)
+: Welcome <name>
+");
+      AssertDialog("my name is john", "Hi, john");
+      AssertDialog("you can call me Peter", "Hi, Peter");
+      AssertDialog("my name is Lisa", "Welcome Lisa");
     }
 
 

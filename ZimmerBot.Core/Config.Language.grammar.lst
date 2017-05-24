@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-05-2017 09:02:50>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-05-2017 22:37:13>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 24-05-2017 09:04:49
+//  DateTime: 24-05-2017 22:37:15
 //  UserName: Jorn
 // ==========================================================================
 
@@ -88,6 +88,9 @@
 %token T_DOLLAR
 
 %%
+// Warning: NonTerminal symbol "simpleKeyValue" is unreachable
+// Warning: NonTerminal symbol "simpleKeyValueSeq" is unreachable
+// --------------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -170,7 +173,7 @@ fuzzyTriggerSeq
 
 fuzzyTrigger
   : T_GTGT T_LBRACE keyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
-  | T_GTGT T_WORD { $$.keyValueList = new StringPairList(); $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); }
+  | T_GTGT wordOrString { $$.keyValueList = new StringPairList(); $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); }
   ;
 
 ruleLabel
@@ -462,11 +465,22 @@ cwordSeq
 cword
   : T_WORD   { $$.s = $1.s; }
   | T_CWORD  { $$.s = $1.s; }
+  | T_STRING { $$.s = $1.s; }
   ;
 
 stringSeq
   : stringSeq T_COMMA T_STRING { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
   | T_STRING                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
+  ;
+
+simpleKeyValueSeq
+  : simpleKeyValueSeq T_COMMA simpleKeyValue { $$.keyValueList = $1.keyValueList; $$.keyValueList.Add($3.keyValue); }
+  | simpleKeyValue                           { $$.keyValueList = new StringPairList(); $$.keyValueList.Add($1.keyValue); }
+  ;
+
+simpleKeyValue
+  : T_WORD             { $$.keyValue = new KeyValuePair<string,string>($1.s, Constants.StarValue); }
+  | T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
   ;
 
 keyValueSeq
@@ -503,9 +517,7 @@ patternExpr
   | T_WORD              { $$.patternExpr = new WordPatternExpr($1.s); }
   | T_CWORD             { $$.patternExpr = new ConceptPatternExpr($1.s); }
   | T_STRING            { $$.patternExpr = new WordPatternExpr($1.s); }
-  | T_TILDE patternExpr { $$.patternExpr = new NegationPatternExpr($2.patternExpr); }}
-// Error: Syntax error, unexpected '}'
-// -----------------------------------
+  | T_TILDE patternExpr { $$.patternExpr = new NegationPatternExpr($2.patternExpr); }
   ;
 
 entityPatternExpr

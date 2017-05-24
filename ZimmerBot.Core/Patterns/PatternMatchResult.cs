@@ -20,7 +20,7 @@ namespace ZimmerBot.Core.Patterns
       Condition.Requires(pattern, nameof(pattern)).IsNotNull();
 
       MatchPattern = pattern;
-      MatchValues = new Dictionary<string, string>();
+      MatchValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
       foreach (var id in MatchPattern.ParentPatternSet.Identifiers)
       {

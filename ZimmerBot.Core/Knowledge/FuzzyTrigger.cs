@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
 using Quartz;
@@ -69,7 +70,7 @@ namespace ZimmerBot.Core.Knowledge
         if (matchValues.ContainsKey(pair.Key))
         {
           string value = matchValues[pair.Key];
-          if (pair.Value == Constants.StarValue || pair.Value == value)
+          if (pair.Value == Constants.StarValue || pair.Value.Equals(value, StringComparison.CurrentCultureIgnoreCase))
             pairOk = true;
         }
 

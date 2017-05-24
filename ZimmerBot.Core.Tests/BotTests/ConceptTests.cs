@@ -49,8 +49,11 @@ namespace ZimmerBot.Core.Tests.BotTests
       string r2 = Invoke("What do you like?");
       Assert.AreEqual("I like beef", r2);
     }
+  }
 
 
+  public class ConceptTests2 : TestHelper
+  {
     [Test]
     public void CanHandleStrings()
     {
