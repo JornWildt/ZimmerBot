@@ -10,6 +10,8 @@ namespace ZimmerBot.Core.Patterns
 
     public abstract double Weight { get; }
 
+    public abstract double ProbabilityFactor { get; }
+
     public abstract void ExtractWordsForSpellChecker();
 
     public abstract void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens);

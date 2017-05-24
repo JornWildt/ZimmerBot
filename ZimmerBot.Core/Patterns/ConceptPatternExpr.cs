@@ -33,6 +33,12 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
+    public override double ProbabilityFactor
+    {
+      get { return 1.0; }
+    }
+
+
     public override string ToString()
     {
       return "%" + Word;

@@ -31,7 +31,13 @@ namespace ZimmerBot.Core.Patterns
 
     public override double Weight
     {
-      get { return -5; }
+      get { return 0; }
+    }
+
+
+    public override double ProbabilityFactor
+    {
+      get { return 2.0; }
     }
 
 

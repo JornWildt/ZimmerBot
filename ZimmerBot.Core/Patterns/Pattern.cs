@@ -19,6 +19,8 @@ namespace ZimmerBot.Core.Patterns
 
     protected Dictionary<string, double> WordInPatternProbability { get; set; }
 
+    protected Dictionary<string, PatternExpr> RelatedExpression { get; set; }
+
     protected double TotalNumberOfWords { get; set; }
 
     protected double PatternProbability { get; set; }
@@ -32,6 +34,7 @@ namespace ZimmerBot.Core.Patterns
       Expressions = expressions;
 
       NumberOfWords = Expressions.Count;
+      RelatedExpression = new Dictionary<string, PatternExpr>(StringComparer.OrdinalIgnoreCase);
     }
 
 
@@ -108,6 +111,8 @@ namespace ZimmerBot.Core.Patterns
         if (!WordInPatternProbability.ContainsKey(key))
           WordInPatternProbability[key] = 0;
         WordInPatternProbability[key] += 1;
+
+        RelatedExpression[key] = expr;
       }
 
       // All patterns have equal probability since this system have no apriori knowledge of actual usage patterns
@@ -139,7 +144,11 @@ namespace ZimmerBot.Core.Patterns
           : token.OriginalText);
 
         if (WordInPatternProbability.ContainsKey(key))
+        {
           prob += WordInPatternProbability[key];
+          if (RelatedExpression.ContainsKey(key))
+            prob *= RelatedExpression[key].ProbabilityFactor;
+        }
         else if (WordInPatternProbability.ContainsKey(wildcardKey))
           prob += WordInPatternProbability[wildcardKey];
         else
