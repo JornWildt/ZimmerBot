@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-05-2017 22:37:13>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 27-05-2017 21:33:33>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 24-05-2017 22:37:15
+//  DateTime: 27-05-2017 21:33:43
 //  UserName: Jorn
 // ==========================================================================
 
@@ -39,6 +39,8 @@
   public List<StringPairList> keyValueListList;
   public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
+  public OperatorKeyValue opKeyValue;
+  public OperatorKeyValueList opKeyValueList;
   public List<Pattern> patternList;
   public Pattern pattern;
   public List<PatternExpr> patternExprList;
@@ -88,9 +90,6 @@
 %token T_DOLLAR
 
 %%
-// Warning: NonTerminal symbol "simpleKeyValue" is unreachable
-// Warning: NonTerminal symbol "simpleKeyValueSeq" is unreachable
-// --------------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -172,8 +171,17 @@ fuzzyTriggerSeq
   ;
 
 fuzzyTrigger
-  : T_GTGT T_LBRACE keyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
-  | T_GTGT wordOrString { $$.keyValueList = new StringPairList(); $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); }
+  : T_GTGT T_LBRACE opKeyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
+  | T_GTGT wordOrString
+      { 
+        $$.keyValueList = new StringPairList(); 
+        $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+      }
+  | T_GTGT wordOrString T_LPAR simpleKeyValueSeq T_RPAR
+      { 
+        $$.keyValueList = $4.keyValueList;
+        $$.keyValueList.Insert(0, new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+      }
   ;
 
 ruleLabel
@@ -490,6 +498,18 @@ keyValueSeq
 
 keyValue
   : T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
+  ;
+
+opKeyValueSeq
+  : opKeyValueSeq T_COMMA opKeyValue { $$.opKeyValueList = $1.opKeyValueList; $$.keyValueList.Add($3.keyValue); }
+  | opKeyValue                       { $$.opKeyValueList = new OperatorKeyValueList(); $$.opKeyValueList.Add($1.opKeyValue); }
+  ;
+
+opKeyValue
+  : T_WORD T_EQU value   { $$.opKeyValue = new OperatorKeyValuePair($1.s, "=", $3.s); }
+  : T_WORD T_COLON value { $$.opKeyValue = new OperatorKeyValuePair($1.s, ":", $3.s); }
+// Error: Syntax error, unexpected ':'
+// -----------------------------------
   ;
 
 value

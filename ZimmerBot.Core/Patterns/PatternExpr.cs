@@ -14,6 +14,6 @@ namespace ZimmerBot.Core.Patterns
 
     public abstract void ExtractWordsForSpellChecker();
 
-    public abstract void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens);
+    public abstract void ExtractMatchValues(Dictionary<string, ZToken> matchValues, Queue<ZToken> entityTokens);
   }
 }

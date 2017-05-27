@@ -12,7 +12,7 @@ namespace ZimmerBot.Core.Patterns
   {
     public Pattern MatchPattern { get; protected set; }
 
-    public Dictionary<string, string> MatchValues { get; protected set; }
+    public Dictionary<string, ZToken> MatchValues { get; protected set; }
 
 
     public PatternMatchResult(Pattern pattern, ZTokenSequence input)
@@ -20,11 +20,11 @@ namespace ZimmerBot.Core.Patterns
       Condition.Requires(pattern, nameof(pattern)).IsNotNull();
 
       MatchPattern = pattern;
-      MatchValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+      MatchValues = new Dictionary<string, ZToken>(StringComparer.OrdinalIgnoreCase);
 
       foreach (var id in MatchPattern.ParentPatternSet.Identifiers)
       {
-        MatchValues.Add(id.Key, id.Value);
+        MatchValues.Add(id.Key, new ZToken(id.Value));
       }
 
       Queue<ZToken> entityTokens = new Queue<ZToken>(input.Where(t => t.Type == ZToken.TokenType.Entity));

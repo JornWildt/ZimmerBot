@@ -143,7 +143,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected StandardRule AddFuzzyRule(string label, List<StringPairList> pattern, List<RuleModifier> modifiers, List<Statement> statements)
+    protected StandardRule AddFuzzyRule(string label, List<OperatorKeyValueList> pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
       return KnowledgeBase.AddFuzzyRule(label, CurrentTopic, pattern, modifiers, statements);
     }

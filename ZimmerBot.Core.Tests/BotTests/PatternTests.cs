@@ -365,5 +365,40 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("your country is", "COUNTRY");
       AssertDialog("my name is not", "???");
     }
+
+
+    [Test]
+    public void CanIncludeClassInParameterMatch()
+    {
+      BuildBot(@"
+! define (animal)
+{
+  elephant:.
+  bear:.
+}
+
+! define (place)
+{
+  copenhagen:.
+  stockholm:.
+}
+
+! pattern (intent = where_is)
+{
+  > where is {x}
+}
+
+>> { intent = where_is, x:animal }
+: The <x> is located in zoo.
+
+>> { intent = where_is, x:place }
+: <x> is in Scandinavia
+");
+
+      AssertDialog("where is the elephant", "The elephant is located in zoo.");
+      AssertDialog("where is the bear", "The bear is located in zoo.");
+      AssertDialog("where is copenhagen", "copenhagen is in Scandinavia");
+      AssertDialog("where is Stockholm", "Stockholm is in Scandinavia");
+    }
   }
 }

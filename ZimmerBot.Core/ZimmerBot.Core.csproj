@@ -205,6 +205,8 @@
     <Compile Include="Utilities\NullValueDictionary.cs" />
     <Compile Include="Utilities\DateRender.cs" />
     <Compile Include="Utilities\ErrorCollection.cs" />
+    <Compile Include="Utilities\OperatorKeyValue.cs" />
+    <Compile Include="Utilities\OperatorKeyValueList.cs" />
     <Compile Include="Utilities\ParserException.cs" />
     <Compile Include="Scheduler\ScheduledBotCallback.cs" />
     <Compile Include="Utilities\SpellChecker.cs" />

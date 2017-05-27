@@ -25,9 +25,11 @@
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> stringListList;
-  public List<StringPairList> keyValueListList;
+  public List<OperatorKeyValueList> opKeyValueListList;
   public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
+  public OperatorKeyValue opKeyValue;
+  public OperatorKeyValueList opKeyValueList;
   public List<Pattern> patternList;
   public Pattern pattern;
   public List<PatternExpr> patternExprList;
@@ -144,7 +146,7 @@ rule
     }
   | ruleLabel fuzzyTriggerSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddFuzzyRule($1.s, $2.keyValueListList, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddFuzzyRule($1.s, $2.opKeyValueListList, $3.ruleModifierList, $4.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
@@ -153,21 +155,21 @@ rule
   ;
 
 fuzzyTriggerSeq
-  : fuzzyTriggerSeq fuzzyTrigger { $$.keyValueListList = $1.keyValueListList; $$.keyValueListList.Add($2.keyValueList); }
-  | fuzzyTrigger                 { $$.keyValueListList = new List<StringPairList>(); $$.keyValueListList.Add($1.keyValueList); }
+  : fuzzyTriggerSeq fuzzyTrigger { $$.opKeyValueListList = $1.opKeyValueListList; $$.opKeyValueListList.Add($2.opKeyValueList); }
+  | fuzzyTrigger                 { $$.opKeyValueListList = new List<OperatorKeyValueList>(); $$.opKeyValueListList.Add($1.opKeyValueList); }
   ;
 
 fuzzyTrigger
-  : T_GTGT T_LBRACE keyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
+  : T_GTGT T_LBRACE opKeyValueSeq T_RBRACE { $$.opKeyValueList = $3.opKeyValueList; }
   | T_GTGT wordOrString
       { 
-        $$.keyValueList = new StringPairList(); 
-        $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+        $$.opKeyValueList = new OperatorKeyValueList(); 
+        $$.opKeyValueList.Add(new OperatorKeyValue(AppSettings.IntentKey, "=", $2.s)); 
       }
-  | T_GTGT wordOrString T_LPAR simpleKeyValueSeq T_RPAR
+  | T_GTGT wordOrString T_LPAR simpleOpKeyValueSeq T_RPAR
       { 
-        $$.keyValueList = $4.keyValueList;
-        $$.keyValueList.Insert(0, new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+        $$.opKeyValueList = $4.opKeyValueList;
+        $$.opKeyValueList.Insert(0, new OperatorKeyValue(AppSettings.IntentKey, "=", $2.s)); 
       }
   ;
 
@@ -468,14 +470,14 @@ stringSeq
   | T_STRING                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
-simpleKeyValueSeq
-  : simpleKeyValueSeq T_COMMA simpleKeyValue { $$.keyValueList = $1.keyValueList; $$.keyValueList.Add($3.keyValue); }
-  | simpleKeyValue                           { $$.keyValueList = new StringPairList(); $$.keyValueList.Add($1.keyValue); }
+simpleOpKeyValueSeq
+  : simpleOpKeyValueSeq T_COMMA simpleOpKeyValue { $$.opKeyValueList = $1.opKeyValueList; $$.opKeyValueList.Add($3.opKeyValue); }
+  | simpleOpKeyValue                             { $$.opKeyValueList = new OperatorKeyValueList(); $$.opKeyValueList.Add($1.opKeyValue); }
   ;
 
-simpleKeyValue
-  : T_WORD             { $$.keyValue = new KeyValuePair<string,string>($1.s, Constants.StarValue); }
-  | T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
+simpleOpKeyValue
+  : T_WORD             { $$.opKeyValue = new OperatorKeyValue($1.s, "=", Constants.StarValue); }
+  | T_WORD T_EQU value { $$.opKeyValue = new OperatorKeyValue($1.s, "=", $3.s); }
   ;
 
 keyValueSeq
@@ -485,6 +487,16 @@ keyValueSeq
 
 keyValue
   : T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
+  ;
+
+opKeyValueSeq
+  : opKeyValueSeq T_COMMA opKeyValue { $$.opKeyValueList = $1.opKeyValueList; $$.opKeyValueList.Add($3.opKeyValue); }
+  | opKeyValue                       { $$.opKeyValueList = new OperatorKeyValueList(); $$.opKeyValueList.Add($1.opKeyValue); }
+  ;
+
+opKeyValue
+  : T_WORD T_EQU value   { $$.opKeyValue = new OperatorKeyValue($1.s, "=", $3.s); }
+  | T_WORD T_COLON value { $$.opKeyValue = new OperatorKeyValue($1.s, ":", $3.s); }
   ;
 
 value

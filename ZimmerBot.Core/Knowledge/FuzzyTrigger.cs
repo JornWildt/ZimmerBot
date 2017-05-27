@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
 using Quartz;
+using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 using Cond = CuttingEdge.Conditions.Condition;
@@ -11,10 +12,10 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class FuzzyTrigger : Trigger
   {
-    public List<StringPairList> KeyValuePatterns { get; protected set; }
+    public List<OperatorKeyValueList> KeyValuePatterns { get; protected set; }
 
 
-    public FuzzyTrigger(List<StringPairList> patterns)
+    public FuzzyTrigger(List<OperatorKeyValueList> patterns)
     {
       Cond.Requires(patterns, nameof(patterns)).IsNotEmpty();
       KeyValuePatterns = patterns;
@@ -46,7 +47,7 @@ namespace ZimmerBot.Core.Knowledge
 
       MatchResult bestResult = null;
 
-      foreach (StringPairList pattern in KeyValuePatterns)
+      foreach (OperatorKeyValueList pattern in KeyValuePatterns)
       {
         MatchResult result = CalculateTriggerScore(context, pattern);
         if (bestResult == null || result.Score > bestResult.Score)
@@ -59,18 +60,21 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    protected MatchResult CalculateTriggerScore(TriggerEvaluationContext context, StringPairList pattern)
+    protected MatchResult CalculateTriggerScore(TriggerEvaluationContext context, OperatorKeyValueList pattern)
     {
       bool ok = true;
-      Dictionary<string, string> matchValues = context.MatchedPattern.MatchValues;
+      Dictionary<string, ZToken> matchValues = context.MatchedPattern.MatchValues;
 
-      foreach (var pair in pattern)
+      foreach (OperatorKeyValue pair in pattern)
       {
         bool pairOk = false;
         if (matchValues.ContainsKey(pair.Key))
         {
-          string value = matchValues[pair.Key];
-          if (pair.Value == Constants.StarValue || pair.Value.Equals(value, StringComparison.CurrentCultureIgnoreCase))
+          ZToken value = matchValues[pair.Key];
+          if (
+            pair.Value == Constants.StarValue 
+            || (pair.Operator == "=" && value.OriginalText.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
+            || (pair.Operator == ":" && value.Type == ZToken.TokenType.Entity && value.EntityClass.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase)))
             pairOk = true;
         }
 
@@ -89,7 +93,7 @@ namespace ZimmerBot.Core.Knowledge
 
       MatchResult result = new MatchResult(score);
       foreach (var item in matchValues)
-        result.Matches[item.Key] = item.Value;
+        result.Matches[item.Key] = item.Value.OriginalText;
 
       return result;
     }

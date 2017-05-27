@@ -49,7 +49,7 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public override void ExtractMatchValues(Dictionary<string, string> matchValues, Queue<ZToken> entityTokens)
+    public override void ExtractMatchValues(Dictionary<string, ZToken> matchValues, Queue<ZToken> entityTokens)
     {
       // Do nothing
     }
