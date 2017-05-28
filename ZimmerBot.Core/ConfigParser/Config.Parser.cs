@@ -52,10 +52,24 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void StartTopic(string name)
+    protected void BeginTopic(string name)
     {
       CurrentTopic = name;
       KnowledgeBase.AddTopic(name);
+    }
+
+
+    protected string CurrentTopicToStart = null;
+
+    protected void BeginTopicStarters(string topic)
+    {
+      CurrentTopicToStart = topic;
+    }
+
+
+    protected void EndTopicStarters()
+    {
+      CurrentTopicToStart = null;
     }
 
 
@@ -139,12 +153,16 @@ namespace ZimmerBot.Core.ConfigParser
 
     protected StandardRule AddRegexRule(string label, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
+      if (CurrentTopicToStart != null)
+        statements.Add(new StartTopicStatement(CurrentTopicToStart));
       return KnowledgeBase.AddRegexRule(label, CurrentTopic, patterns, modifiers, statements);
     }
 
 
     protected StandardRule AddFuzzyRule(string label, List<OperatorKeyValueList> pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
+      if (CurrentTopicToStart != null)
+        statements.Add(new StartTopicStatement(CurrentTopicToStart));
       return KnowledgeBase.AddFuzzyRule(label, CurrentTopic, pattern, modifiers, statements);
     }
 

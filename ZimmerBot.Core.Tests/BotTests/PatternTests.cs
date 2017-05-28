@@ -391,7 +391,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 >> { intent = where_is, x:animal }
 : The <x> is located in zoo.
 
->> { intent = where_is, x:place }
+>> where_is (x:place)
 : <x> is in Scandinavia
 ");
 

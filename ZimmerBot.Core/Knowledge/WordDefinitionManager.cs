@@ -48,6 +48,7 @@ namespace ZimmerBot.Core.Knowledge
       {
         DefineRdfsClass(word, store);
         RegisterRdfData(word, store);
+        RegisterSpellChecker(word);
       }
     }
 
@@ -104,6 +105,13 @@ namespace ZimmerBot.Core.Knowledge
         store.Update(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(RdfsClass));
         store.Update(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), c.ToLiteral(NodeFactory));
       }
+    }
+
+    private void RegisterSpellChecker(WordDefinition word)
+    {
+      SpellChecker.AddWord(word.Word);
+      foreach (string alt in word.Alternatives)
+        SpellChecker.AddWord(alt);
     }
   }
 }

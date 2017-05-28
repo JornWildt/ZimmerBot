@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.IO;
 using NHunspell;
+using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Utilities
 {

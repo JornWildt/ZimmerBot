@@ -61,6 +61,8 @@
 %token T_RPAR
 %token T_LBRACE
 %token T_RBRACE
+%token T_LBRACKET
+%token T_RBRACKET
 %token T_AMP
 %token T_OUTPUT
 %token T_WORD
@@ -99,14 +101,19 @@ item
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.stringListList); }
-  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
-    { StartTopic($2.s); } 
+/*  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
+      { StartTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
-    { FinalizeTopic($2.s); }
+      { FinalizeTopic($2.s); } */
   | T_TOPIC T_WORD
-    { StartTopic($2.s); } 
+      { BeginTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
-    { FinalizeTopic($2.s); }
+      { FinalizeTopic($2.s); }
+  | T_TOPIC T_WORD
+    T_LBRACKET { BeginTopicStarters($2.s); } ruleSeq { EndTopicStarters(); } T_RBRACKET
+      { BeginTopic($2.s); } 
+    T_LBRACE ruleSeq T_RBRACE 
+      { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
   | T_ENTITIES T_LPAR T_WORD T_RPAR 
@@ -476,8 +483,9 @@ simpleOpKeyValueSeq
   ;
 
 simpleOpKeyValue
-  : T_WORD             { $$.opKeyValue = new OperatorKeyValue($1.s, "=", Constants.StarValue); }
-  | T_WORD T_EQU value { $$.opKeyValue = new OperatorKeyValue($1.s, "=", $3.s); }
+  : T_WORD               { $$.opKeyValue = new OperatorKeyValue($1.s, "=", Constants.StarValue); }
+  | T_WORD T_EQU value   { $$.opKeyValue = new OperatorKeyValue($1.s, "=", $3.s); }
+  | T_WORD T_COLON value { $$.opKeyValue = new OperatorKeyValue($1.s, ":", $3.s); }
   ;
 
 keyValueSeq

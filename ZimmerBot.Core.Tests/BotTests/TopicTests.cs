@@ -267,39 +267,22 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
-    [Ignore("Not ready yet")]
-    public void CanSwitchBetweenTopics()
+    public void CanIncludeTopicStarters()
     {
-      // Arrange
       BuildBot(@"
-! topic Zombies (zombie, dead, rotten)
+! topic Weather
+[
+  > what a weather
+  : Is it raining?
+]
 {
-  > now what
-  : Run, you fools, run!
-
-  > *
-  ! weight 0.5
-  : The zombiecalypse is comming!
-}
-
-! topic Computers (pc, ipad, software)
-{
-  > now what
-  : Restart
-
-  > *
-  ! weight 0.5
-  : Pull the power and try again.
+  T> I love rain
 }
 ");
 
-      // Act
       AssertDialog("Xxx", "???");
-      AssertDialog("now what", "???");
-      AssertDialog("See, a zombie!", "The zombiecalypse is comming!");
-      AssertDialog("now what", "Run, you fools, run!");
-      AssertDialog("help me with my pc", "Pull the power and try again.");
-      AssertDialog("now what", "Restart");
+      AssertDialog("what a weather", "Is it raining?");
+      AssertDialog("Xxx", "I love rain");
     }
   }
 }

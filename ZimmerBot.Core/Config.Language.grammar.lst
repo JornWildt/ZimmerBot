@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 27-05-2017 21:33:33>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 28-05-2017 22:09:07>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 27-05-2017 21:33:43
+//  DateTime: 28-05-2017 22:10:11
 //  UserName: Jorn
 // ==========================================================================
 
@@ -36,7 +36,7 @@
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
   public List<List<string>> stringListList;
-  public List<StringPairList> keyValueListList;
+  public List<OperatorKeyValueList> opKeyValueListList;
   public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
   public OperatorKeyValue opKeyValue;
@@ -72,6 +72,8 @@
 %token T_RPAR
 %token T_LBRACE
 %token T_RBRACE
+%token T_LBRACKET
+%token T_RBRACKET
 %token T_AMP
 %token T_OUTPUT
 %token T_WORD
@@ -90,6 +92,8 @@
 %token T_DOLLAR
 
 %%
+// Warning: NonTerminal symbol "wordCommaSeq" is unreachable
+// ---------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -110,14 +114,19 @@ item
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.stringListList); }
-  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
-    { StartTopic($2.s); } 
+/*  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
+      { StartTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
-    { FinalizeTopic($2.s); }
+      { FinalizeTopic($2.s); } */
   | T_TOPIC T_WORD
-    { StartTopic($2.s); } 
+      { BeginTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
-    { FinalizeTopic($2.s); }
+      { FinalizeTopic($2.s); }
+  | T_TOPIC T_WORD
+    T_LBRACKET { BeginTopicStarters($2.s); } ruleSeq { EndTopicStarters(); } T_RBRACKET
+      { BeginTopic($2.s); } 
+    T_LBRACE ruleSeq T_RBRACE 
+      { FinalizeTopic($2.s); }
   | T_ON T_LPAR T_WORD T_RPAR T_LBRACE statementSeq T_RBRACE
       { RegisterEventHandler($3.s, $6.statementList); }
   | T_ENTITIES T_LPAR T_WORD T_RPAR 
@@ -157,7 +166,7 @@ rule
     }
   | ruleLabel fuzzyTriggerSeq ruleModifierSeq statementSeq
     { 
-      $$.rule = AddFuzzyRule($1.s, $2.keyValueListList, $3.ruleModifierList, $4.statementList);
+      $$.rule = AddFuzzyRule($1.s, $2.opKeyValueListList, $3.ruleModifierList, $4.statementList);
     }
   | ruleLabel T_TOPICRULE topicOutput topicStatementSeq
     {
@@ -166,21 +175,21 @@ rule
   ;
 
 fuzzyTriggerSeq
-  : fuzzyTriggerSeq fuzzyTrigger { $$.keyValueListList = $1.keyValueListList; $$.keyValueListList.Add($2.keyValueList); }
-  | fuzzyTrigger                 { $$.keyValueListList = new List<StringPairList>(); $$.keyValueListList.Add($1.keyValueList); }
+  : fuzzyTriggerSeq fuzzyTrigger { $$.opKeyValueListList = $1.opKeyValueListList; $$.opKeyValueListList.Add($2.opKeyValueList); }
+  | fuzzyTrigger                 { $$.opKeyValueListList = new List<OperatorKeyValueList>(); $$.opKeyValueListList.Add($1.opKeyValueList); }
   ;
 
 fuzzyTrigger
-  : T_GTGT T_LBRACE opKeyValueSeq T_RBRACE { $$.keyValueList = $3.keyValueList; }
+  : T_GTGT T_LBRACE opKeyValueSeq T_RBRACE { $$.opKeyValueList = $3.opKeyValueList; }
   | T_GTGT wordOrString
       { 
-        $$.keyValueList = new StringPairList(); 
-        $$.keyValueList.Add(new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+        $$.opKeyValueList = new OperatorKeyValueList(); 
+        $$.opKeyValueList.Add(new OperatorKeyValue(AppSettings.IntentKey, "=", $2.s)); 
       }
-  | T_GTGT wordOrString T_LPAR simpleKeyValueSeq T_RPAR
+  | T_GTGT wordOrString T_LPAR simpleOpKeyValueSeq T_RPAR
       { 
-        $$.keyValueList = $4.keyValueList;
-        $$.keyValueList.Insert(0, new KeyValuePair<string,string>(AppSettings.IntentKey, $2.s)); 
+        $$.opKeyValueList = $4.opKeyValueList;
+        $$.opKeyValueList.Insert(0, new OperatorKeyValue(AppSettings.IntentKey, "=", $2.s)); 
       }
   ;
 
@@ -481,14 +490,15 @@ stringSeq
   | T_STRING                   { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
-simpleKeyValueSeq
-  : simpleKeyValueSeq T_COMMA simpleKeyValue { $$.keyValueList = $1.keyValueList; $$.keyValueList.Add($3.keyValue); }
-  | simpleKeyValue                           { $$.keyValueList = new StringPairList(); $$.keyValueList.Add($1.keyValue); }
+simpleOpKeyValueSeq
+  : simpleOpKeyValueSeq T_COMMA simpleOpKeyValue { $$.opKeyValueList = $1.opKeyValueList; $$.opKeyValueList.Add($3.opKeyValue); }
+  | simpleOpKeyValue                             { $$.opKeyValueList = new OperatorKeyValueList(); $$.opKeyValueList.Add($1.opKeyValue); }
   ;
 
-simpleKeyValue
-  : T_WORD             { $$.keyValue = new KeyValuePair<string,string>($1.s, Constants.StarValue); }
-  | T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
+simpleOpKeyValue
+  : T_WORD               { $$.opKeyValue = new OperatorKeyValue($1.s, "=", Constants.StarValue); }
+  | T_WORD T_EQU value   { $$.opKeyValue = new OperatorKeyValue($1.s, "=", $3.s); }
+  | T_WORD T_COLON value { $$.opKeyValue = new OperatorKeyValue($1.s, ":", $3.s); }
   ;
 
 keyValueSeq
@@ -501,15 +511,13 @@ keyValue
   ;
 
 opKeyValueSeq
-  : opKeyValueSeq T_COMMA opKeyValue { $$.opKeyValueList = $1.opKeyValueList; $$.keyValueList.Add($3.keyValue); }
+  : opKeyValueSeq T_COMMA opKeyValue { $$.opKeyValueList = $1.opKeyValueList; $$.opKeyValueList.Add($3.opKeyValue); }
   | opKeyValue                       { $$.opKeyValueList = new OperatorKeyValueList(); $$.opKeyValueList.Add($1.opKeyValue); }
   ;
 
 opKeyValue
-  : T_WORD T_EQU value   { $$.opKeyValue = new OperatorKeyValuePair($1.s, "=", $3.s); }
-  : T_WORD T_COLON value { $$.opKeyValue = new OperatorKeyValuePair($1.s, ":", $3.s); }
-// Error: Syntax error, unexpected ':'
-// -----------------------------------
+  : T_WORD T_EQU value   { $$.opKeyValue = new OperatorKeyValue($1.s, "=", $3.s); }
+  | T_WORD T_COLON value { $$.opKeyValue = new OperatorKeyValue($1.s, ":", $3.s); }
   ;
 
 value

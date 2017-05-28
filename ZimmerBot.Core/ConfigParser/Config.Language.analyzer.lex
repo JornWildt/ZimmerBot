@@ -39,6 +39,8 @@ Space      [ \t]
 \)          { return (int)Token.T_RPAR; }
 \{          { return (int)Token.T_LBRACE; }
 \}          { return (int)Token.T_RBRACE; }
+\[          { return (int)Token.T_LBRACKET; }
+\]          { return (int)Token.T_RBRACKET; }
 \*          { return (int)Token.T_STAR; }
 \+          { return (int)Token.T_PLUS; }
 -           { return (int)Token.T_MINUS; }
