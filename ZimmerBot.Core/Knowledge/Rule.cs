@@ -83,7 +83,7 @@ namespace ZimmerBot.Core.Knowledge
         reactions.Add(new Reaction(new ResponseGenerationContext(context.InputContext, result), this, null));
 
       return reactions
-             .Where(s => s.Score >= 0.5) // FIXME: Why exactly 0.5?
+             .Where(s => s.Score > 0.0)
              .ToList();
     }
 

@@ -48,7 +48,8 @@ namespace ZimmerBot.Core.Knowledge
       {
         DefineRdfsClass(word, store);
         RegisterRdfData(word, store);
-        RegisterSpellChecker(word);
+        if (SpellChecker.IsInitialized)
+          RegisterSpellChecker(word);
       }
     }
 
