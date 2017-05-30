@@ -253,11 +253,11 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (context.InputContext.Input != null)
         {
-          PatternMatchResult matchingPattern = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
-          context.MatchedPattern = matchingPattern;
+          PatternMatchResultList matchingPatterns = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
+          context.MatchedPatterns = matchingPatterns;
 
-          if (matchingPattern != null)
-            BotUtility.EvaluationLogger.Debug($"Matched pattern: {matchingPattern.MatchPattern.ToString()}");
+          if (matchingPatterns != null)
+            BotUtility.EvaluationLogger.Debug($"Matched patterns: {matchingPatterns.ToString()}");
         }
 
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
@@ -300,10 +300,10 @@ namespace ZimmerBot.Core.Knowledge
     public bool SelectReactionsFromTopic(Topic topic, ReactionSet reactions, TriggerEvaluationContext context, double weight)
     {
       BotUtility.EvaluationLogger.Debug($"Select reactions from topic {topic.Name} with weight {weight}");
-      if (context.MatchedPattern != null && context.MatchedPattern.MatchValues != null)
-      {
-        BotUtility.EvaluationLogger.Debug("Match values: " + context.MatchedPattern.MatchValues.Select(v => v.Key + ":" + v.Value).Aggregate((a,b) => a + ", " + b));
-      }
+      //if (context.MatchedPatterns != null && context.MatchedPatterns != null && context.MatchedPatterns.Count > 0)
+      //{
+      //  BotUtility.EvaluationLogger.Debug("Match values: " + context.MatchedPatterns.MatchValues.Select(v => v.Key + ":" + v.Value).Aggregate((a,b) => a + ", " + b));
+      //}
 
       bool reactionsAdded = false;
       foreach (Rule r in topic.StandardRules)

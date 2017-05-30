@@ -8,7 +8,7 @@ namespace ZimmerBot.Core.Knowledge
   {
     public InputRequestContext InputContext { get; protected set; }
 
-    public PatternMatchResult MatchedPattern { get; set; }
+    public List<PatternMatchResult> MatchedPatterns { get; set; }
 
     public string RestrictToRuleId { get { return InputContext.Request.RuleId; } }
 

@@ -138,6 +138,7 @@
     <Compile Include="Patterns\Pattern.cs" />
     <Compile Include="Patterns\PatternManager.cs" />
     <Compile Include="Patterns\PatternMatchResult.cs" />
+    <Compile Include="Patterns\PatternMatchResultList.cs" />
     <Compile Include="Patterns\PatternSet.cs" />
     <Compile Include="Patterns\PatternExpr.cs" />
     <Compile Include="Patterns\WordPatternExpr.cs" />

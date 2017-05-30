@@ -54,29 +54,32 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public PatternMatchResult CalculateMostLikelyPattern(ZTokenSequenceList inputs)
+    public PatternMatchResultList CalculateMostLikelyPattern(ZTokenSequenceList inputs)
     {
       if (PatternSets.Count == 0)
         return null;
 
       BotUtility.EvaluationLogger.Debug($"Trying to match input: {inputs.ToString()}");
 
-      Pattern result = null;
-      ZTokenSequence resultInput = null;
+      PatternMatchResultList result = new PatternMatchResultList();
+      //Pattern result = null;
+      //ZTokenSequenceList resultInput = null;
+
+      int tokenCount = inputs.Min(inp => inp.Count);
+
+      // This value approximates the smallest probability for a match 
+      // (namely P(u)^N where N = number of un-matched words "u")
+      double minimalAllowedProb = tokenCount *
+        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + tokenCount));
+
+      minimalAllowedProb += Math.Log(tokenCount + 1);
+
+      // This value represents the best probability found so far - might as well start with the minimal allowed probability
+      double maxProb = minimalAllowedProb;
 
       // Try all possible variations/reductions of the input
       foreach (ZTokenSequence input in inputs)
       {
-        // This value approximates the smallest probability for a match 
-        // (namely P(u)^N where N = number of un-matched words "u")
-        double minimalAllowedProb = input.Count *
-          Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + input.Count));
-
-        minimalAllowedProb += Math.Log(input.Count);
-
-        // This value represents the best probability found so far - might as well start with the minimal allowed probability
-        double maxProb = minimalAllowedProb;
-
         foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
         {
           double pb = pt.CalculateProbability(input);
@@ -84,16 +87,29 @@ namespace ZimmerBot.Core.Patterns
           if (pb > maxProb)
           {
             maxProb = pb;
-            result = pt;
-            resultInput = input;
+            PatternMatchResult r = new PatternMatchResult(pt, input);
+            result.Add(r);
+            //result = pt;
+            //resultInput = input;
 
-            BotUtility.EvaluationLogger.Debug($"Probable match: {result.ToString()}");
+            BotUtility.EvaluationLogger.Debug($"Probable match: {r.ToString()}");
+          }
+          else
+          {
+            double difference = Math.Abs(pb / 100000);
+            // Are the values equal with respect to a small margin?
+            if (Math.Abs(pb - maxProb) <= difference)
+            {
+              PatternMatchResult r = new PatternMatchResult(pt, input);
+              result.Add(r);
+              BotUtility.EvaluationLogger.Debug($"Probable match: {r.ToString()}");
+            }
           }
         }
       }
 
       if (result != null)
-        return new PatternMatchResult(result, resultInput);
+        return result;// new PatternMatchResult(result, resultInput);
       else
         return null;
     }

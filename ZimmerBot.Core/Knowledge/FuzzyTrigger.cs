@@ -4,6 +4,7 @@ using System.Linq;
 using CuttingEdge.Conditions;
 using Quartz;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Patterns;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
 using Cond = CuttingEdge.Conditions.Condition;
@@ -42,7 +43,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public override MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
-      if (context.MatchedPattern == null)
+      if (context.MatchedPatterns == null)
         return new MatchResult(0);
 
       MatchResult bestResult = null;
@@ -62,38 +63,45 @@ namespace ZimmerBot.Core.Knowledge
 
     protected MatchResult CalculateTriggerScore(TriggerEvaluationContext context, OperatorKeyValueList pattern)
     {
-      bool ok = true;
-      Dictionary<string, ZToken> matchValues = context.MatchedPattern.MatchValues;
+      MatchResult result = new MatchResult(0.0);
 
-      foreach (OperatorKeyValue pair in pattern)
+      foreach (PatternMatchResult matchedPattern in context.MatchedPatterns)
       {
-        bool pairOk = false;
-        if (matchValues.ContainsKey(pair.Key))
+        bool ok = true;
+        Dictionary<string, ZToken> matchValues = matchedPattern.MatchValues;
+
+        foreach (OperatorKeyValue pair in pattern)
         {
-          ZToken value = matchValues[pair.Key];
-          if (
-            pair.Value == Constants.StarValue 
-            || (pair.Operator == "=" && value.OriginalText.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
-            || (pair.Operator == ":" && value.Type == ZToken.TokenType.Entity && value.EntityClass.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase)))
-            pairOk = true;
+          bool pairOk = false;
+          if (matchValues.ContainsKey(pair.Key))
+          {
+            ZToken value = matchValues[pair.Key];
+            if (
+              pair.Value == Constants.StarValue
+              || (pair.Operator == "=" && value.OriginalText.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
+              || (pair.Operator == ":" && value.Type == ZToken.TokenType.Entity && value.EntityClass.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase)))
+              pairOk = true;
+          }
+
+          if (!pairOk)
+            ok = false;
         }
 
-        if (!pairOk)
-          ok = false;
+        if (ok)
+        {
+          // Larger pattern sets are more difficult to match and thus prioritized higher
+          // - but wildcard matches weight less
+          double score = matchedPattern.MatchPattern.Expressions.Sum(expr => expr.Weight)
+            + pattern.Sum(p => p.Value == Constants.StarValue ? 0.5 : 1.0);
+
+          if (score > result.Score)
+          {
+            result = new MatchResult(score);
+            foreach (var item in matchValues)
+              result.Matches[item.Key] = item.Value.OriginalText;
+          }
+        }
       }
-
-      if (!ok)
-        return new MatchResult(0);
-
-      // Larger pattern sets are more difficult to match and thus prioritized higher
-      // - but wildcard matches weight less
-      double score = context.MatchedPattern.MatchPattern.Expressions.Sum(expr => expr.Weight) 
-        + pattern.Sum(p => p.Value == Constants.StarValue ? 0.5 : 1.0);
-      //double score = context.MatchedPattern.MatchPattern.Expressions.Sum(expr => expr.Weight);
-
-      MatchResult result = new MatchResult(score);
-      foreach (var item in matchValues)
-        result.Matches[item.Key] = item.Value.OriginalText;
 
       return result;
     }

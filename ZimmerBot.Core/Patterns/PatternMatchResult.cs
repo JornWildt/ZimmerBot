@@ -33,5 +33,12 @@ namespace ZimmerBot.Core.Patterns
         expr.ExtractMatchValues(MatchValues, entityTokens);
       }
     }
+
+
+    public override string ToString()
+    {
+      string values = MatchValues.Select(v => v.Key + ":" + v.Value).Aggregate((a, b) => a + ", " + b);
+      return MatchPattern.ToString() + " => " + values;
+    }
   }
 }
