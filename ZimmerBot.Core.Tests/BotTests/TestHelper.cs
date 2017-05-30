@@ -34,7 +34,7 @@ namespace ZimmerBot.Core.Tests.BotTests
     {
       Response response = b.Invoke(request);
       if (response.Output.Length == 0)
-        return "";
+        return "<empty>";
       return response.Output.Aggregate((x,y) => x + "\n" + y);
     }
 

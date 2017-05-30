@@ -62,8 +62,6 @@ namespace ZimmerBot.Core.Patterns
       BotUtility.EvaluationLogger.Debug($"Trying to match input: {inputs.ToString()}");
 
       PatternMatchResultList result = new PatternMatchResultList();
-      //Pattern result = null;
-      //ZTokenSequenceList resultInput = null;
 
       int tokenCount = inputs.Min(inp => inp.Count);
 
@@ -88,15 +86,14 @@ namespace ZimmerBot.Core.Patterns
           {
             maxProb = pb;
             PatternMatchResult r = new PatternMatchResult(pt, input);
+            result.Clear();
             result.Add(r);
-            //result = pt;
-            //resultInput = input;
 
             BotUtility.EvaluationLogger.Debug($"Probable match: {r.ToString()}");
           }
           else
           {
-            double difference = Math.Abs(pb / 100000);
+            double difference = Math.Abs(pb / 1000000);
             // Are the values equal with respect to a small margin?
             if (Math.Abs(pb - maxProb) <= difference)
             {
@@ -109,7 +106,7 @@ namespace ZimmerBot.Core.Patterns
       }
 
       if (result != null)
-        return result;// new PatternMatchResult(result, resultInput);
+        return result;
       else
         return null;
     }

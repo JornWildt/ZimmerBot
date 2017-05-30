@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 28-05-2017 22:10:11
+// DateTime: 30-05-2017 23:28:33
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 28-05-2017 22:09:07>
+// Input file <ConfigParser\Config.Language.grammar.y - 30-05-2017 23:26:06>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -885,7 +885,9 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 105: // definition -> definitionWord, definitionAlternatives, T_COLON, 
                 //               definitionDataSeq
-{ CurrentSemanticValue.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-3].stringList, ValueStack[ValueStack.Depth-1].rdfDefinitionList);}
+{ 
+        CurrentSemanticValue.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(ValueStack[ValueStack.Depth-4].s, ValueStack[ValueStack.Depth-3].stringList, ValueStack[ValueStack.Depth-1].rdfDefinitionList);
+      }
         break;
       case 106: // definitionWord -> T_WORD
 { CurrentSemanticValue.s = ValueStack[ValueStack.Depth-1].s; }

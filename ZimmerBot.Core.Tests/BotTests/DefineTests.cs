@@ -203,5 +203,18 @@ LIMIT 1
       AssertDialog("who is John Benny Andersen", "John Benny Andersen");
       AssertDialog("who is John Ben", "John Benny Andersen");
     }
+
+
+    [Test]
+    [Ignore("Error handling not really implemented yet")]
+    public void WhenSupplyingEmptyWordItThrows()
+    {
+      BuildBot(@"
+! define (x)
+{
+  """":.
+}
+");
+    }
   }
 }

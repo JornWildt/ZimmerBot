@@ -432,5 +432,42 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("where is oslo", "In Norway");
       AssertDialog("where is the horse", "In the field");
     }
+
+
+    [Test]
+    public void ItChecksTypes()
+    {
+      BuildBot(@"
+! define (city)
+{
+  Oslo:.
+  Stockholm:.
+
+  # Silly city name (but real in danish).
+  # It provokes having two city names in ""where is oslo"" and thus matching is_x_in_y.
+  # It is then handled correctly because the evaluation algorithm takes the word ordering into account.
+  Where:.
+}
+
+! pattern (intent = where_is)
+{
+  > where is {x}
+}
+
+! pattern (intent = is_x_in_y)
+{
+  > is {x} in {y}
+}
+
+>> where_is (x:city)
+: Here
+
+>> is_x_in_y (x:city, y:city)
+: No
+");
+
+      AssertDialog("where is oslo", "Here");
+      AssertDialog("is oslo in stockholm", "No");
+    }
   }
 }

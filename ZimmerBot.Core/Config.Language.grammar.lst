@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 28-05-2017 22:09:07>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 30-05-2017 23:26:06>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 28-05-2017 22:10:11
+//  DateTime: 30-05-2017 23:28:33
 //  UserName: Jorn
 // ==========================================================================
 
@@ -405,7 +405,9 @@ definitionSeq
 
 definition
   : definitionWord definitionAlternatives T_COLON definitionDataSeq
-      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);}
+      { 
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);
+      }
   ;
 
 definitionWord

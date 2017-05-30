@@ -8,7 +8,7 @@ namespace ZimmerBot.Core.Patterns
     public override string ToString()
     {
       if (Count == 0)
-        return "";
+        return "<empty>";
       return this.Select(item => item.ToString()).Aggregate((a, b) => a + " / " + b);
     }
   }

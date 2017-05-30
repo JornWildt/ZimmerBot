@@ -392,7 +392,9 @@ definitionSeq
 
 definition
   : definitionWord definitionAlternatives T_COLON definitionDataSeq
-      { $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);}
+      { 
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);
+      }
   ;
 
 definitionWord

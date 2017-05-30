@@ -5,6 +5,12 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class EmptyTrigger : Trigger
   {
+    public override string ToString()
+    {
+      return "<empty>";
+    }
+
+
     public override void ExtractWordsForSpellChecker()
     {
       // Do nothing
