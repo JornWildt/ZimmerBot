@@ -400,5 +400,37 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("where is copenhagen", "copenhagen is in Scandinavia");
       AssertDialog("where is Stockholm", "Stockholm is in Scandinavia");
     }
+
+
+    [Test]
+    public void SamePatternCanMatchMultipleClasses()
+    {
+      BuildBot(@"
+! define (place)
+{
+  Oslo:.
+}
+
+! define (animal)
+{
+  horse:.
+}
+
+! pattern (intent = where_is)
+{
+  > where is {x}
+}
+
+>> where_is (x:place)
+: In Norway
+
+>> where_is (x:animal)
+: In the field
+");
+
+      AssertDialog("why not", "???");
+      AssertDialog("where is oslo", "In Norway");
+      AssertDialog("where is the horse", "In the field");
+    }
   }
 }
