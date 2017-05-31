@@ -44,7 +44,8 @@ namespace ZimmerBot.Core.Tests.BotTests
 : welcome
 ! continue
 
->
+> *
+! weight 0.5
 : how are you doing?
 ! answer
 {

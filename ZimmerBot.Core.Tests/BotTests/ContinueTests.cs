@@ -13,7 +13,8 @@ namespace ZimmerBot.Core.Tests.BotTests
 : Hi
 ! continue
 
->
+> *
+! weight 0.5
 : What can I help you with?
 ");
       AssertDialog("Hello", "Hi\nWhat can I help you with?");

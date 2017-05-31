@@ -12,7 +12,9 @@ namespace ZimmerBot.Core.Statements
 
     public ContinueStatement()
     {
-      ContinuationChoice = new Continuation(Continuation.ContinuationEnum.Empty, null);
+      // Empty continuation means "continue and trigger all the "default" rules (topic rules or * rules).
+      // Empty does not mean "continue and match rules with empty triggers".
+      ContinuationChoice = new Continuation(Continuation.ContinuationEnum.Input, "somebogustextnoonewillenterhiwiqjedoih");
     }
 
 

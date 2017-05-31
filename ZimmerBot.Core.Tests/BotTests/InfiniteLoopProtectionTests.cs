@@ -39,7 +39,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 > hi
 ! continue
 
->
+> *
 ! continue with hi
 ");
       Assert.Throws<RepetitionException>(() => AssertDialog("hi", "x"));
