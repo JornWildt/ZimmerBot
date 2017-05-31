@@ -21,6 +21,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public List<Statement> Statements { get; protected set; }
 
+    public string StartingTopic { get; protected set; }
+
 
     public Rule(KnowledgeBase kb, string label, Topic topic, IList<Statement> statements)
     {
@@ -38,7 +40,11 @@ namespace ZimmerBot.Core.Knowledge
       Statements = new List<Statement>(statements);
       StatementInitializationContext context = new StatementInitializationContext(this);
       foreach (Statement o in Statements)
+      {
         o.Initialize(context);
+        if (o is StartTopicStatement)
+          StartingTopic = ((StartTopicStatement)o).Topic;
+      }
     }
 
 
@@ -66,6 +72,17 @@ namespace ZimmerBot.Core.Knowledge
     {
       Statement.RepatableMode repeatable = Statements.Max(s => s.Repeatable);
       List<Reaction> reactions = new List<Reaction>();
+
+      if (StartingTopic != null)
+      {
+        //Topic topic = context.InputContext.KnowledgeBase.Topics[StartingTopic];
+        //int topicRuleIndex = context.InputContext.Session.GetTopicRuleIndex(StartingTopic);
+        if (context.InputContext.Session.CurrentTopic() == StartingTopic)
+            //|| topicRuleIndex >= topic.TopicRules.Count)
+        {
+          return new List<Reaction>();
+        }
+      }
 
       if (repeatable != Statement.RepatableMode.AutomaticRepeatable && repeatable != Statement.RepatableMode.ForcedRepeatable)
       {

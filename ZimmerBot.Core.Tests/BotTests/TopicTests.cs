@@ -284,5 +284,64 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("what a weather", "Is it raining?");
       AssertDialog("Xxx", "I love rain");
     }
+
+
+    [Test]
+    public void TopicStartersDoNotTriggerWhenTopicIsActive()
+    {
+      BuildBot(@"
+> Go
+: Going
+
+! topic fun
+[
+  > Start
+  : Starting
+
+  > Stop
+  : Stopping
+]
+{
+  T> Fun
+  T> More fun
+}
+");
+      AssertDialog("Xxx", "???");
+      AssertDialog("Go", "Going");
+      AssertDialog("Start", "Starting");
+      AssertDialog("Stop", "Fun");
+      AssertDialog("Start", "More fun");
+    }
+
+
+#if false
+    // The problem here is that "topic is empty" is not possible to figure out! The topic might be relevant even if it has no T> rules ...
+
+    [Test]
+    public void TopicStartersDoNotTriggerWhenTopicIsEmpty()
+    {
+      BuildBot(@"
+> Go
+: Going
+
+! topic fun
+[
+  > Start
+  : Starting
+]
+{
+  T> Fun
+  T> More fun
+}
+");
+      AssertDialog("Xxx", "???");
+      AssertDialog("Go", "Going");
+      AssertDialog("Start", "Starting");
+      AssertDialog("Xxx", "Fun");
+      AssertDialog("Xxx", "More fun");
+      AssertDialog("Xxx", "???");
+      AssertDialog("Start", "???");
+    }
+#endif
   }
 }
