@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using System.Linq;
+using Quartz;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
@@ -25,10 +26,13 @@ namespace ZimmerBot.Core.Knowledge
 
     public override MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
-      if (context.InputContext.Input != null)
-        return new MatchResult(0);
+      if (context.InputContext.Input == null || context.InputContext.Input.All(inp => inp.Count == 0))
+      {
+        double conditionModifier = CalculateConditionModifier(context);
+        return new MatchResult(conditionModifier);
+      }
       else
-        return new MatchResult(1);
+        return new MatchResult(0);
     }
   }
 }

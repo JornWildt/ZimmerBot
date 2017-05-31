@@ -6,7 +6,7 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 30-05-2017 23:28:32
+//  DateTime: 31-05-2017 22:08:11
 //  UserName: Jorn
 //  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 28-05-2017 22:02:32>
 //  GPLEX frame file <embedded resource>

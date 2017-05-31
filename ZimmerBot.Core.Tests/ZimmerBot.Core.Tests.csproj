@@ -90,6 +90,7 @@
     <Compile Include="ConfigParser\TopicTests.cs" />
     <Compile Include="ConfigParser\UnicodeTests.cs" />
     <Compile Include="ConfigParser\BasicConceptTests.cs" />
+    <Compile Include="Expressions\ConverterTests.cs" />
     <Compile Include="SetupFixture.cs" />
     <Compile Include="TemplateParser\BasicTemplateParserTests.cs" />
     <Compile Include="TemplateParser\ErrorHandlingTests.cs" />

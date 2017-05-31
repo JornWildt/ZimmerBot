@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 30-05-2017 23:26:06>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 31-05-2017 22:08:09>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 30-05-2017 23:28:33
+//  DateTime: 31-05-2017 22:08:12
 //  UserName: Jorn
 // ==========================================================================
 
@@ -30,8 +30,8 @@
   public Expression expr;
   public List<Expression> exprList;
   public OutputTemplate template;
-  public RuleModifier ruleModifier;
-  public List<RuleModifier> ruleModifierList;
+  public ZimmerBot.Core.Knowledge.RuleModifier ruleModifier;
+  public List<ZimmerBot.Core.Knowledge.RuleModifier> ruleModifierList;
   public Knowledge.Rule rule;
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
@@ -239,7 +239,7 @@ inputPattern
 
 ruleModifierSeq
   : ruleModifierSeq ruleModifier  { $$.ruleModifierList.Add($2.ruleModifier); }
-  | /* empty */                   { $$.ruleModifierList = new List<RuleModifier>(); }
+  | /* empty */                   { $$.ruleModifierList = new List<ZimmerBot.Core.Knowledge.RuleModifier>(); }
   ;
 
 ruleModifier
@@ -249,15 +249,15 @@ ruleModifier
   ;
 
 condition
-  : T_WHEN expr { $$.ruleModifier = new ConditionRuleModifier($2.expr); }
+  : T_WHEN expr { $$.ruleModifier = new ZimmerBot.Core.Knowledge.ConditionRuleModifier($2.expr); }
   ;
 
 weight
-  : T_WEIGHT T_NUMBER { $$.ruleModifier = new WeightRuleModifier($2.n); }
+  : T_WEIGHT T_NUMBER { $$.ruleModifier = new ZimmerBot.Core.Knowledge.WeightRuleModifier($2.n); }
   ;
 
 schedule
-  : T_EVERY T_NUMBER { $$.ruleModifier = new ScheduleRuleModifier((int)$2.n); }
+  : T_EVERY T_NUMBER { $$.ruleModifier = new ZimmerBot.Core.Knowledge.ScheduleRuleModifier((int)$2.n); }
   ;
 
 /******************************************************************************

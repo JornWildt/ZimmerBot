@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC
-// DateTime: 30-05-2017 23:28:33
+// DateTime: 31-05-2017 22:08:12
 // UserName: Jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 30-05-2017 23:26:06>
+// Input file <ConfigParser\Config.Language.grammar.y - 31-05-2017 22:08:09>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -45,8 +45,8 @@ internal partial struct ValueType
   public Expression expr;
   public List<Expression> exprList;
   public OutputTemplate template;
-  public RuleModifier ruleModifier;
-  public List<RuleModifier> ruleModifierList;
+  public ZimmerBot.Core.Knowledge.RuleModifier ruleModifier;
+  public List<ZimmerBot.Core.Knowledge.RuleModifier> ruleModifierList;
   public Knowledge.Rule rule;
   public List<Knowledge.Rule> ruleList;
   public List<string> stringList;
@@ -715,7 +715,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.ruleModifierList.Add(ValueStack[ValueStack.Depth-1].ruleModifier); }
         break;
       case 49: // ruleModifierSeq -> /* empty */
-{ CurrentSemanticValue.ruleModifierList = new List<RuleModifier>(); }
+{ CurrentSemanticValue.ruleModifierList = new List<ZimmerBot.Core.Knowledge.RuleModifier>(); }
         break;
       case 50: // ruleModifier -> condition
 { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }
@@ -727,13 +727,13 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }
         break;
       case 53: // condition -> T_WHEN, expr
-{ CurrentSemanticValue.ruleModifier = new ConditionRuleModifier(ValueStack[ValueStack.Depth-1].expr); }
+{ CurrentSemanticValue.ruleModifier = new ZimmerBot.Core.Knowledge.ConditionRuleModifier(ValueStack[ValueStack.Depth-1].expr); }
         break;
       case 54: // weight -> T_WEIGHT, T_NUMBER
-{ CurrentSemanticValue.ruleModifier = new WeightRuleModifier(ValueStack[ValueStack.Depth-1].n); }
+{ CurrentSemanticValue.ruleModifier = new ZimmerBot.Core.Knowledge.WeightRuleModifier(ValueStack[ValueStack.Depth-1].n); }
         break;
       case 55: // schedule -> T_EVERY, T_NUMBER
-{ CurrentSemanticValue.ruleModifier = new ScheduleRuleModifier((int)ValueStack[ValueStack.Depth-1].n); }
+{ CurrentSemanticValue.ruleModifier = new ZimmerBot.Core.Knowledge.ScheduleRuleModifier((int)ValueStack[ValueStack.Depth-1].n); }
         break;
       case 56: // statementSeq -> statementSeq, statement
 { ValueStack[ValueStack.Depth-2].statementList.Add(ValueStack[ValueStack.Depth-1].statement); CurrentSemanticValue.statementList = ValueStack[ValueStack.Depth-2].statementList; }

@@ -107,6 +107,7 @@
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
+    <Compile Include="Knowledge\ConditionRuleModifier.cs" />
     <Compile Include="ConfigParser\RdfDefinition.cs" />
     <Compile Include="ConfigParser\RdfInternalUriValue.cs" />
     <Compile Include="ConfigParser\RdfNumberValue.cs" />
@@ -124,11 +125,13 @@
     <Compile Include="Knowledge\RegexTrigger.cs" />
     <Compile Include="Knowledge\Rule.cs" />
     <Compile Include="Knowledge\ScheduledTrigger.cs" />
+    <Compile Include="Knowledge\ScheduleRuleModifier.cs" />
     <Compile Include="Knowledge\SessionStateExtensions.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Knowledge\RequestContext.cs" />
     <Compile Include="Knowledge\Topic.cs" />
     <Compile Include="Knowledge\TopicRule.cs" />
+    <Compile Include="Knowledge\WeightRuleModifier.cs" />
     <Compile Include="Knowledge\WordDefinition.cs" />
     <Compile Include="Knowledge\WordDefinitionManager.cs" />
     <Compile Include="Parser\ZTokenSequenceList.cs" />
@@ -158,7 +161,7 @@
     <Compile Include="Statements\StatementExecutionContect.cs" />
     <Compile Include="Statements\StatementInitializationContext.cs" />
     <Compile Include="Statements\Statement.cs" />
-    <Compile Include="ConfigParser\RuleModifier.cs" />
+    <Compile Include="Knowledge\RuleModifier.cs" />
     <Compile Include="Statements\SetStatement.cs" />
     <Compile Include="Statements\OutputTemplateStatement.cs" />
     <Compile Include="ConsoleBotEnvironment.cs" />
