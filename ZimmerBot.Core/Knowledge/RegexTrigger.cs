@@ -120,10 +120,11 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        if (context.InputContext.Input != null)
-          result = new MatchResult(0);
-        else
-          result = new MatchResult(1);
+        throw new NotImplementedException("Why did we end up here?");
+        //if (context.InputContext.Input != null)
+        //  result = new MatchResult(0);
+        //else
+        //  result = new MatchResult(1);
       }
 
       double totalScore = conditionModifier * result.Score * Math.Max(RegexSize, 1);

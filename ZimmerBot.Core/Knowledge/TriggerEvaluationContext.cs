@@ -14,6 +14,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public string RestrictToRuleLabel { get { return InputContext.Request.RuleLabel; } }
 
+    public string StartingTopic { get; set; }
+
     public bool ExecuteScheduledRules { get; protected set; }
 
     public int CurrentRepetitionIndex { get; set; }

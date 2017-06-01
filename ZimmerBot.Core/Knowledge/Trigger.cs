@@ -49,18 +49,34 @@ namespace ZimmerBot.Core.Knowledge
           throw new InvalidCastException($"Could not convert value '{value}' to bool in condition.");
       }
 
+      bool isAnswer = false;
       if (RequiredPriorRuleId != null)
       {
         string lastRuleId = context.InputContext.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
         if (lastRuleId is string)
         {
           if (RequiredPriorRuleId == lastRuleId)
+          {
             conditionModifier *= 4;
+            isAnswer = true;
+          }
           else
             conditionModifier = 0;
         }
         else
           conditionModifier = 0;
+      }
+
+      // Do not trigge topic starters - unless input is an answer to a question in the topic starter
+      if (!isAnswer)
+      {
+        if (context.StartingTopic != null)
+        {
+          if (context.InputContext.Session.CurrentTopic() == context.StartingTopic)
+          {
+            conditionModifier = 0;
+          }
+        }
       }
 
       return conditionModifier;

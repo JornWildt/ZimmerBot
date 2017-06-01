@@ -235,7 +235,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
-    public void ItDoesNotCountTopicRulesAsusedWhenSelectingOtherRules()
+    public void ItDoesNotCountTopicRulesAsUsedWhenSelectingOtherRules()
     {
       // Arrange
       BuildBot(@"
@@ -311,6 +311,36 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("Start", "Starting");
       AssertDialog("Stop", "Fun");
       AssertDialog("Start", "More fun");
+    }
+
+
+    [Test]
+    public void CanAnswerTopicStarter()
+    {
+      BuildBot(@"
+! topic religion
+[
+  > now what
+  : do you belive in the great Umpf?
+  ! answer
+  {
+    > yes
+    : Good
+
+    > no
+    : Botchya!
+  }
+]
+{
+  T> The Umpf is great
+  T> Umpf is almighty
+}
+");
+
+      AssertDialog("Yes", "???");
+      AssertDialog("now what", "do you belive in the great Umpf?");
+      AssertDialog("Yes", "Good");
+      AssertDialog("Yes", "The Umpf is great");
     }
 
 
