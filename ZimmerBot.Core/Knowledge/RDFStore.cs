@@ -29,6 +29,8 @@ namespace ZimmerBot.Core.Knowledge
 
     protected InMemoryDataset Dataset { get; set; }
 
+    protected IGraph DatasetGraph { get; set; }
+
     protected ISparqlQueryProcessor Processor { get; set; }
 
     protected SparqlQueryParser SparqlParser { get; set; }
@@ -59,8 +61,8 @@ namespace ZimmerBot.Core.Knowledge
 
       Dataset.SetActiveGraph((Uri)null);
 
-      IGraph g = Dataset.GetModifiableGraph(null);
-      g.Changed += Data_Changed;
+      DatasetGraph = Dataset.GetModifiableGraph(null);
+      DatasetGraph.Changed += Data_Changed;
 
       RDFStoreRepository.Add(this);
     }
@@ -218,32 +220,28 @@ namespace ZimmerBot.Core.Knowledge
 
     public void Insert(INode s, INode p, INode o)
     {
-      IGraph g = Dataset.GetModifiableGraph(null);
-      g.Assert(s, p, o);
+      DatasetGraph.Assert(s, p, o);
     }
 
 
     public void Update(INode s, INode p, INode o)
     {
       Retract(s, p);
-      IGraph g = Dataset.GetModifiableGraph(null);
-      g.Assert(s, p, o);
+      DatasetGraph.Assert(s, p, o);
     }
 
 
     public Triple GetTripple(INode s, INode p)
     {
-      IGraph g = Dataset.GetModifiableGraph(null);
-      IEnumerable<Triple> tripples = g.GetTriplesWithSubjectPredicate(s, p);
+      IEnumerable<Triple> tripples = DatasetGraph.GetTriplesWithSubjectPredicate(s, p);
       return tripples.FirstOrDefault();
     }
 
 
     public void Retract(INode s, INode p)
     {
-      IGraph g = Dataset.GetModifiableGraph(null);
-      IEnumerable<Triple> tripples = g.GetTriplesWithSubjectPredicate(s, p).ToList();
-      g.Retract(tripples);
+      IEnumerable<Triple> tripples = DatasetGraph.GetTriplesWithSubjectPredicate(s, p).ToList();
+      DatasetGraph.Retract(tripples);
     }
 
 

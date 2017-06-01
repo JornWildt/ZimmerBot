@@ -103,8 +103,8 @@ namespace ZimmerBot.Core.Knowledge
       foreach (string c in word.Classes)
       {
         Uri subject = UrlConstants.ResourceUrl(c);
-        store.Update(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(RdfsClass));
-        store.Update(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), c.ToLiteral(NodeFactory));
+        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(RdfsClass));
+        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), c.ToLiteral(NodeFactory));
       }
     }
 
