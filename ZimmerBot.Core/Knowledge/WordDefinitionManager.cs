@@ -46,8 +46,11 @@ namespace ZimmerBot.Core.Knowledge
     {
       foreach (var word in Definitions)
       {
-        DefineRdfsClass(word, store);
-        RegisterRdfData(word, store);
+        if (!store.IsRestored)
+        {
+          DefineRdfsClass(word, store);
+          RegisterRdfData(word, store);
+        }
         if (SpellChecker.IsInitialized)
           RegisterSpellChecker(word);
       }
@@ -61,6 +64,17 @@ namespace ZimmerBot.Core.Knowledge
     static readonly Uri RdfsClass = UrlConstants.Rdfs("Class");
 
     static readonly Uri KnownBy = UrlConstants.PropertyUrl("knownby");
+
+
+    private void DefineRdfsClass(WordDefinition word, RDFStore store)
+    {
+      foreach (string c in word.Classes)
+      {
+        Uri subject = UrlConstants.ResourceUrl(c);
+        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(RdfsClass));
+        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), c.ToLiteral(NodeFactory));
+      }
+    }
 
 
     private void RegisterRdfData(WordDefinition word, RDFStore store)
@@ -94,17 +108,6 @@ namespace ZimmerBot.Core.Knowledge
         {
           store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(propUri), value.BuildRdfNode(NodeFactory));
         }
-      }
-    }
-
-
-    private void DefineRdfsClass(WordDefinition word, RDFStore store)
-    {
-      foreach (string c in word.Classes)
-      {
-        Uri subject = UrlConstants.ResourceUrl(c);
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(RdfsClass));
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), c.ToLiteral(NodeFactory));
       }
     }
 

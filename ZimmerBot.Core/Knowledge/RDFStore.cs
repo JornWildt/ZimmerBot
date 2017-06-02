@@ -21,6 +21,8 @@ namespace ZimmerBot.Core.Knowledge
     static ILog Logger = LogManager.GetLogger(typeof(RDFStore));
 
 
+    public bool IsRestored { get; protected set; }
+
     protected bool LoadFilesEnabled { get; set; }
 
     protected string ID { get; set; }
@@ -96,6 +98,7 @@ namespace ZimmerBot.Core.Knowledge
       TriGParser trigparser = new TriGParser();
       trigparser.Load(Store, dbFilename);
       LoadFilesEnabled = false;
+      IsRestored = true;
     }
 
 
