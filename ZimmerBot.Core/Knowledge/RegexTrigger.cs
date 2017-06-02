@@ -127,7 +127,7 @@ namespace ZimmerBot.Core.Knowledge
         //  result = new MatchResult(1);
       }
 
-      double totalScore = conditionModifier * result.Score * Math.Max(RegexSize, 1);
+      double totalScore = conditionModifier * result.Score * RegexSize;
 
       return new MatchResult(result, totalScore);
     }

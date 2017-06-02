@@ -435,6 +435,48 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void ItChoosesExactMatchOverSubMatch()
+    {
+      BuildBot(@"
+! pattern (intent = ab)
+{
+  > a b
+}
+
+! pattern (intent = abc)
+{
+  > a b c
+}
+
+! pattern (intent = abc_2)
+{
+  > a b {c}
+}
+
+! define (word)
+{
+  ccc:.
+}
+
+>> ab
+! weight 0.99
+: Got AB
+
+>> abc
+: Got ABC
+
+>> abc_2
+: Got ABC_2
+");
+
+      AssertDialog("a b", "Got AB");
+      AssertDialog("a b c", "Got ABC");
+      AssertDialog("a b ccc", "Got ABC");
+      AssertDialog("a b uuu", "???");
+    }
+
+
+    [Test]
     public void ItChecksTypes()
     {
       BuildBot(@"

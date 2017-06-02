@@ -89,7 +89,7 @@ namespace ZimmerBot.Core.Patterns
             result.Clear();
             result.Add(r);
 
-            BotUtility.EvaluationLogger.Debug($"Better match: {r.ToString()}");
+            BotUtility.EvaluationLogger.Debug($"Better match: {r.ToString()} ({pb})");
           }
           else
           {
@@ -99,7 +99,7 @@ namespace ZimmerBot.Core.Patterns
             {
               PatternMatchResult r = new PatternMatchResult(pt, input);
               result.Add(r);
-              BotUtility.EvaluationLogger.Debug($"Similar match: {r.ToString()}");
+              BotUtility.EvaluationLogger.Debug($"Similar match: {r.ToString()} ({pb})");
             }
           }
         }

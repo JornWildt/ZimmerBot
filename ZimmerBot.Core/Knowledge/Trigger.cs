@@ -49,7 +49,7 @@ namespace ZimmerBot.Core.Knowledge
           throw new InvalidCastException($"Could not convert value '{value}' to bool in condition.");
       }
 
-      bool isAnswer = false;
+      //bool isAnswer = false;
       if (RequiredPriorRuleId != null)
       {
         string lastRuleId = context.InputContext.State[StateKeys.SessionStore][StateKeys.LastRuleId] as string;
@@ -58,7 +58,7 @@ namespace ZimmerBot.Core.Knowledge
           if (RequiredPriorRuleId == lastRuleId)
           {
             conditionModifier *= 4;
-            isAnswer = true;
+            //isAnswer = true;
           }
           else
             conditionModifier = 0;
@@ -67,7 +67,9 @@ namespace ZimmerBot.Core.Knowledge
           conditionModifier = 0;
       }
 
-      // Do not trigge topic starters - unless input is an answer to a question in the topic starter
+#if false
+      // Do not trigger topic starters when already in topic
+      // - unless input is an answer to a question in the topic starter
       if (!isAnswer)
       {
         if (context.StartingTopic != null)
@@ -78,6 +80,7 @@ namespace ZimmerBot.Core.Knowledge
           }
         }
       }
+#endif
 
       return conditionModifier;
     }

@@ -12,7 +12,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 > help
 : It is okay
 
-> *
+> Help
 ! weight 0.999
 : It is done
 ");
@@ -58,7 +58,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! not_repeatable
 ! call General.Echo(""aaa"")
 
-> *
+> help
 ! weight 0.999
 : It is done
 ");

@@ -216,7 +216,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! not_repeatable
 ! start_topic Zombies
 
-> *
+> xxx
 ! weight 0.999
 : No more
 

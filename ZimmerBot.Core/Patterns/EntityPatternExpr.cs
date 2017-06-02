@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.Patterns
 
       ParameterName = parameterName;
       EntityClass = entityClass;
-      _weight = (EntityClass == Constants.StarValue ? 0.5 : 1.0);
+      _weight = (EntityClass == Constants.StarValue ? 0.5 : 0.75);
     }
 
 

@@ -131,6 +131,8 @@ namespace ZimmerBot.Core.Patterns
 
     public double CalculateProbability(ZTokenSequence input)
     {
+      // Probability is logarithmic! This means more negative values indicates smaller values between 0 and 1.
+      // Normally probabilitis are multipled (making the end result smaller), but in log-space we add the (negative) values.
       double prob = 0.0;
 
       foreach (var token in input)
@@ -154,6 +156,11 @@ namespace ZimmerBot.Core.Patterns
         else
           prob += UnknownWordProbability;
       }
+
+      // Unmatched words in pattern counts negative
+      //if (Expressions.Count > input.Count)
+      //  prob += (UnknownWordProbability/10) * (Expressions.Count - input.Count);
+
 
       return prob;
     }
