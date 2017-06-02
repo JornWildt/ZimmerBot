@@ -496,6 +496,35 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void ItIgnoresExtraUnknownWords()
+    {
+      // Unknown words agre ignored - to some extend
+      BuildBot(@"
+! pattern (intent = a)
+{
+  > a
+}
+
+! pattern (intent = ab)
+{
+  > a b
+}
+
+>> a
+: Got A
+
+>> ab
+: Got AB
+");
+
+      AssertDialog("a", "Got A");
+      AssertDialog("a x", "Got A");
+      AssertDialog("a b", "Got AB");
+      AssertDialog("a b x", "Got AB");
+    }
+
+
+    [Test]
     public void ItChecksTypes()
     {
       BuildBot(@"
