@@ -22,6 +22,27 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void NormalyOutputDoesNotRepeat_ForPatterns()
+    {
+      BuildBot(@"
+! pattern (intent = help)
+{
+  > help
+}
+
+>> help
+: It is okay
+
+>> Help
+! weight 0.999
+: It is done
+");
+      AssertDialog("help", "It is okay");
+      AssertDialog("help", "It is done");
+    }
+
+
+    [Test]
     public void CanMarkRuleAsRepeatable()
     {
       BuildBot(@"
