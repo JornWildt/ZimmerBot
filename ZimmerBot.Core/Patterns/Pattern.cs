@@ -158,8 +158,8 @@ namespace ZimmerBot.Core.Patterns
       }
 
       // Unmatched words in pattern counts negative
-      //if (Expressions.Count > input.Count)
-      //  prob += (UnknownWordProbability/10) * (Expressions.Count - input.Count);
+      if (Expressions.Count > input.Count)
+        prob += (UnknownWordProbability/10) * (Expressions.Count - input.Count);
 
 
       return prob;
