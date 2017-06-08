@@ -39,8 +39,8 @@ namespace ZimmerBot.Core.ConfigParser
 
     public void Parse(Stream s, string filename)
     {
-      this.Scanner = new ConfigScanner(s);
-      this.Parse();
+      Scanner = new ConfigScanner(s);
+      Parse();
       if (((ConfigScanner)Scanner).Errors != null && ((ConfigScanner)Scanner).Errors.Count > 0)
         throw new ParserException(filename, ((ConfigScanner)Scanner).Errors);
     }

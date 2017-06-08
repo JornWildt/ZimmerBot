@@ -329,7 +329,20 @@ namespace ZimmerBot.Core.Knowledge
       foreach (string filename in Directory.EnumerateFiles(path, pattern, option))
       {
         Logger.InfoFormat("Loading zbot file: {0}", filename);
-        cfg.ParseConfigurationFromFile(this, filename);
+        try
+        {
+          cfg.ParseConfigurationFromFile(this, filename);
+        }
+        catch (ParserException)
+        {
+          throw;
+        }
+        catch (Exception ex)
+        {
+          Logger.Error(ex);
+          ErrorCollection errors = new ErrorCollection { new ErrorCollection.Error(ex.Message, 0, 0) };
+          throw new ParserException(filename, errors);
+        }
       }
     }
   }
