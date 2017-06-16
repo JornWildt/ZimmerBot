@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CuttingEdge.Conditions;
 using log4net;
 using Quartz;
 using ZimmerBot.Core.ConfigParser;
-using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Patterns;
 using ZimmerBot.Core.Pipeline;
 using ZimmerBot.Core.Pipeline.InputStages;
-using ZimmerBot.Core.Processors;
-using ZimmerBot.Core.StandardProcessors;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
@@ -272,8 +268,11 @@ namespace ZimmerBot.Core.Knowledge
         int topicRuleIndex = context.InputContext.Session.GetTopicRuleIndex(topicName);
         if (reactions.Count == 0 && topic.TopicRules.Count > topicRuleIndex)
         {
-          foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context, 2.0))
+          foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context, 1.0))
+          {
+            BotUtility.EvaluationLogger.Debug($"Got '{reaction.Rule}' with score {reaction.Score}");
             reactions.Add(reaction);
+          }
 
           // No topic stories left => clear topic
           if (topicRuleIndex == topic.TopicRules.Count-1)

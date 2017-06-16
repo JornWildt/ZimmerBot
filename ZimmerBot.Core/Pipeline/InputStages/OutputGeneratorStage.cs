@@ -21,6 +21,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       {
         // Select a random reaction
         Reaction r = item.Reactions[Randomizer.Next(item.Reactions.Count)];
+        BotUtility.EvaluationLogger.Debug($"Selected reaction {r.Rule.ToString()}");
         List<string> response = r.GenerateResponse();
 
         output.AddRange(response);
