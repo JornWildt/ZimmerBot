@@ -21,10 +21,7 @@ namespace Rejseplanen.ZimmerBot.AddOn
 
     public RejseplanenAPI()
     {
-      if (ConfigurationManager.ConnectionStrings["Rejseplanen.Url"] == null)
-        throw new InvalidOperationException($"Missing connection string 'Rejseplanen.Url'");
-
-      string baseUrl = ConfigurationManager.ConnectionStrings["Rejseplanen.Url"].ConnectionString;
+      string baseUrl = RejseplanenAppSettings.RejseplanenUrl;
       RejseplanenService = RamoneConfiguration.NewService(new Uri(baseUrl));
 
       // This should rather have been in Ramone's standard codecs

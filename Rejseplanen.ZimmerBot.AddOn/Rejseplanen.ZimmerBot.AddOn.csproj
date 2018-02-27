@@ -69,6 +69,7 @@
     <Compile Include="RejseplanenAPI.cs" />
     <Compile Include="RejseplanenApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RejseplanenAppSettings.cs" />
     <Compile Include="RejseplanenProcessor.cs" />
     <Compile Include="Schemas\hafasRestDepartureBoard.cs">
       <DependentUpon>hafasRestDepartureBoard.xsd</DependentUpon>

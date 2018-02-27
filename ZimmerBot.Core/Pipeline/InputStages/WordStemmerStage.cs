@@ -11,6 +11,9 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       if (!AppSettings.EnableStemming)
         return;
 
+      if (item.Context.Input == null)
+        return;
+
       foreach (ZTokenSequence input in item.Context.Input)
       {
         if (input != null)
