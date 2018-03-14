@@ -138,5 +138,39 @@ WHERE
       AssertDialog("what is bryan sport", "Yes: Bryan Sport (topic: Bryan).");
       AssertDialog("help", "Bryan or Bruce - who cares?");
     }
+
+
+    [Test]
+    public void CanDefineAnonymousEntitites()
+    {
+      BuildBot(@"
+! define (registration)
+{
+  $:
+    intro: ""Blah"".
+}
+
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+
+! pattern (intent = what_is)
+{
+  > show it
+}
+
+>> { intent = what_is }
+! call RDF.Query(""
+SELECT DISTINCT ?name ?intro
+WHERE
+{
+  ?thing zp:intro ?intro.
+  OPTIONAL { ?thing rdfs:label ?name }
+}
+"")
+: Got: <result:{r |<r.name>/<r.intro>}>.
+");
+
+      AssertDialog("show it", "Got: /Blah.");
+    }
   }
 }

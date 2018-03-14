@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 31-05-2017 22:08:09>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 14-03-2018 21:59:47>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 31-05-2017 22:08:12
+//  DateTime: 14-03-2018 22:00:08
 //  UserName: Jorn
 // ==========================================================================
 
@@ -92,8 +92,6 @@
 %token T_DOLLAR
 
 %%
-// Warning: NonTerminal symbol "wordCommaSeq" is unreachable
-// ---------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -114,10 +112,6 @@ item
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.stringListList); }
-/*  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
-      { StartTopic($2.s); } 
-    T_LBRACE ruleSeq T_RBRACE 
-      { FinalizeTopic($2.s); } */
   | T_TOPIC T_WORD
       { BeginTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
@@ -408,6 +402,12 @@ definition
       { 
         $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);
       }
+  | T_DOLLAR T_COLON definitionDataSeq
+      { 
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition("$", $2.stringList, $4.rdfDefinitionList);
+// Error: Semantic action index is out of bounds
+// ---------------------------------------------
+      }
   ;
 
 definitionWord
@@ -454,11 +454,6 @@ entityDefinition
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
-  ;
-
-wordCommaSeq
-  : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
-  | T_WORD                       { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
 emptyWordStringCommaSeq

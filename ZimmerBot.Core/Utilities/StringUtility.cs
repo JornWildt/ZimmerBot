@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ZimmerBot.Core.Utilities
 {
@@ -14,6 +10,9 @@ namespace ZimmerBot.Core.Utilities
 
     public static string Word2Identifier(string word)
     {
+      if (word == null)
+        return Guid.NewGuid().ToString();
+
       return IdentifierRegex.Replace(word, "_");
     }
   }

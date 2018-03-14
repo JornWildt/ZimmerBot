@@ -91,12 +91,15 @@ namespace ZimmerBot.Core.Knowledge
       }
 
       // Define word as label for itself
-      store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), word.Word.ToLiteral(NodeFactory));
+      if (word.Word != null)
+      {
+        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), word.Word.ToLiteral(NodeFactory));
 
-      // Define word and alternatives as "knownby" for indexing
-      store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), word.Word.ToLower().ToLiteral(NodeFactory));
-      foreach (string alt in word.Alternatives)
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), alt.ToLower().ToLiteral(NodeFactory));
+        // Define word and alternatives as "knownby" for indexing
+        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), word.Word.ToLower().ToLiteral(NodeFactory));
+        foreach (string alt in word.Alternatives)
+          store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), alt.ToLower().ToLiteral(NodeFactory));
+      }
 
       // Define all properties associated with word
       foreach (var prop in word.RdfDefinitions)
@@ -113,9 +116,12 @@ namespace ZimmerBot.Core.Knowledge
 
     private void RegisterSpellChecker(WordDefinition word)
     {
-      SpellChecker.AddWord(word.Word);
-      foreach (string alt in word.Alternatives)
-        SpellChecker.AddWord(alt);
+      if (word.Word != null)
+      {
+        SpellChecker.AddWord(word.Word);
+        foreach (string alt in word.Alternatives)
+          SpellChecker.AddWord(alt);
+      }
     }
   }
 }

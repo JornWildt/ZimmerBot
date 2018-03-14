@@ -533,7 +533,7 @@ namespace ZimmerBot.Core.Tests.BotTests
   Oslo:.
   Stockholm:.
 
-  # Silly city name (but real in danish).
+  # Silly city name.
   # It provokes having two city names in ""where is oslo"" and thus matching is_x_in_y.
   # It is then handled correctly because the evaluation algorithm takes the word ordering into account.
   Where:.

@@ -149,7 +149,8 @@ namespace ZimmerBot.Core.Knowledge
       WordDefinitionManager.RegisterDefinitions(mainClasses, definitions);
       foreach (WordDefinition wd in definitions)
       {
-        EntityManager.RegisterEntity(wd.Word, wd.Alternatives, mainClasses);
+        if (wd.Word != null)
+          EntityManager.RegisterEntity(wd.Word, wd.Alternatives, mainClasses);
       }
     }
 

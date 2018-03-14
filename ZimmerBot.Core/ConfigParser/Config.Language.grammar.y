@@ -101,10 +101,6 @@ item
 configuration
   : T_CONCEPT T_WORD T_EQU conceptPatternSeq 
       { RegisterConcept($2.s, $4.stringListList); }
-/*  | T_TOPIC T_WORD T_LPAR wordCommaSeq T_RPAR
-      { StartTopic($2.s); } 
-    T_LBRACE ruleSeq T_RBRACE 
-      { FinalizeTopic($2.s); } */
   | T_TOPIC T_WORD
       { BeginTopic($2.s); } 
     T_LBRACE ruleSeq T_RBRACE 
@@ -395,6 +391,10 @@ definition
       { 
         $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);
       }
+  | T_DOLLAR T_COLON definitionDataSeq
+      { 
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(null, new List<string>(), $3.rdfDefinitionList);
+      }
   ;
 
 definitionWord
@@ -441,11 +441,6 @@ entityDefinition
 wordSeq
   : wordSeq T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($2.s); }
   | T_WORD          { $$.stringList = new List<string>(new string[] { $1.s }); }
-  ;
-
-wordCommaSeq
-  : wordCommaSeq T_COMMA T_WORD  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
-  | T_WORD                       { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
 emptyWordStringCommaSeq
