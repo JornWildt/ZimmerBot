@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 14-03-2018 21:59:47>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-03-2018 23:13:34>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 14-03-2018 22:00:08
+//  DateTime: 24-03-2018 23:15:37
 //  UserName: Jorn
 // ==========================================================================
 
@@ -92,6 +92,12 @@
 %token T_DOLLAR
 
 %%
+// Error: NonTerminal symbol "T_LTPROP" has no productions
+// Warning: Terminating T_LTPROP fixes the following size-1 NonTerminal set
+   // {T_LTPROP}
+// Error: There are 1 non-terminating NonTerminal Symbols
+   //  {T_LTPROP}
+// ------------------------------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -404,9 +410,7 @@ definition
       }
   | T_DOLLAR T_COLON definitionDataSeq
       { 
-        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition("$", $2.stringList, $4.rdfDefinitionList);
-// Error: Semantic action index is out of bounds
-// ---------------------------------------------
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(null, new List<string>(), $3.rdfDefinitionList);
       }
   ;
 
@@ -439,7 +443,8 @@ definitionDataValue
   : T_STRING          { $$.rdfValue = new RdfStringValue($1.s); }
   | T_WORD            { $$.rdfValue = new RdfStringValue($1.s); }
   | T_NUMBER          { $$.rdfValue = new RdfNumberValue($1.n); }
-  | T_LT wordSeq T_GT { $$.rdfValue = new RdfInternalUriValue($2.stringList); }
+  | T_LT wordSeq T_GT { $$.rdfValue = new RdfResourceUriValue($2.stringList); }
+  | T_LTPROP wordSeq T_GT { $$.rdfValue = new RdfPropertyUriValue($2.stringList); }
   ;
 
 /******************************************************************************

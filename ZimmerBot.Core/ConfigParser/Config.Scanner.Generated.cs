@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 14-03-2018 22:14:43
+//  DateTime: 26-03-2018 15:20:55
 //  UserName: Jorn
-//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 14-03-2018 21:50:54>
+//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 26-03-2018 08:37:57>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: unicode, verbose, parser, stack, minimize

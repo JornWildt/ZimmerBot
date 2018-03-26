@@ -172,5 +172,48 @@ WHERE
 
       AssertDialog("show it", "Got: /Blah.");
     }
+
+
+    [Test]
+    public void CanUsePrefixInDefines()
+    {
+      BuildBot(@"
+! define (verb)
+{
+  eat:
+    related_property: <zp:food>.
+}
+
+! define (animal)
+{
+  mouse (mice):
+    food: ""cheese"".
+}
+
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+
+! pattern (intent = what_eat)
+{
+  > what does {subj} eat
+}
+
+>> { intent = what_eat, subj = * }
+! call RDF.Query(""
+SELECT DISTINCT ?name ?food
+WHERE
+{
+  ?subject zp:knownby ?name.
+  ?verb zp:knownby ?verbname.
+  ?verb zp:related_property ?prop.
+  ?subject ?prop ?food.
+  FILTER (?name = lcase(@subj))
+  FILTER (?verbname = 'eat')
+}
+"")
+: <result:{r |<r.name> eats <r.food>}>.
+");
+      AssertDialog("what does mice eat", "mice eats cheese.");
+    }
   }
 }

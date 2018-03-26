@@ -181,6 +181,15 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public string LookupPrefix(string prefix)
+    {
+      if (Prefixes.ContainsKey(prefix))
+        return Prefixes[prefix];
+      else
+        return null;
+    }
+
+
     public RDFResultSet Query(string s, Dictionary<string, object> matches, IList<object> parameters)
     {
       Condition.Requires(s, nameof(s)).IsNotNull();

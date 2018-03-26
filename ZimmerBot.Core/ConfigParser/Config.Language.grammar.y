@@ -426,7 +426,8 @@ definitionDataValue
   : T_STRING          { $$.rdfValue = new RdfStringValue($1.s); }
   | T_WORD            { $$.rdfValue = new RdfStringValue($1.s); }
   | T_NUMBER          { $$.rdfValue = new RdfNumberValue($1.n); }
-  | T_LT wordSeq T_GT { $$.rdfValue = new RdfInternalUriValue($2.stringList); }
+  | T_LT wordSeq T_GT                { $$.rdfValue = RdfResourceUriValue($2.stringList, null); }
+  | T_LT T_WORD T_COLON wordSeq T_GT { $$.rdfValue = RdfResourceUriValue($4.stringList, $2.s); }
   ;
 
 /******************************************************************************

@@ -151,6 +151,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected RdfUriValue RdfResourceUriValue(List<string> names, string prefix)
+    {
+      return new RdfUriValue(names, KnowledgeBase.MemoryStore, prefix);
+    }
+
+
     protected StandardRule AddRegexRule(string label, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
       if (CurrentTopicToStart != null)
