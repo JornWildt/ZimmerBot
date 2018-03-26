@@ -9,6 +9,7 @@ namespace ZimmerBot.Core.StandardProcessors
     public static void Initialize()
     {
       ProcessorRegistry.RegisterProcessor("RDF.Query", Query);
+      ProcessorRegistry.RegisterProcessor("RDF.Single", Single);
       ProcessorRegistry.RegisterProcessor("RDF.TrySetTopic", TrySetTopic);
     }
 
@@ -27,6 +28,30 @@ namespace ZimmerBot.Core.StandardProcessors
       if (output.Count > 0)
       {
         result["result"] = output;
+        return new ProcessorOutput(result);
+      }
+      else
+      {
+        return new ProcessorOutput("empty", result);
+      }
+    }
+
+
+    public static ProcessorOutput Single(ProcessorInput input)
+    {
+      string query = input.GetParameter<string>(0);
+
+      Dictionary<string, object> result = new Dictionary<string, object>();
+
+      RDFResultSet output = input.Context.KnowledgeBase.MemoryStore.Query(
+        query,
+        input.Context.Match.Matches,
+        input.Inputs.GetRange(1, input.Inputs.Count - 1));
+
+      if (output.Count > 0)
+      {
+        foreach (var kv in output[0])
+          result[kv.Key] = kv.Value;
         return new ProcessorOutput(result);
       }
       else

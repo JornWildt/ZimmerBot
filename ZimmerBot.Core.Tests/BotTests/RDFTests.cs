@@ -215,5 +215,31 @@ WHERE
 ");
       AssertDialog("what does mice eat", "mice eats cheese.");
     }
+
+
+    [Test]
+    public void CanUseSingletonRdf()
+    {
+      BuildBot(@"
+! define (animal)
+{
+  cow:
+    weightClass: ""heavy"".
+}
+
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+
+> X
+! call RDF.Single(""
+SELECT ?weight
+WHERE
+{
+  ?x zp:weightClass ?weight.
+}
+"")
+: <weight>
+");
+      AssertDialog("X", "heavy");
+    }
   }
 }
