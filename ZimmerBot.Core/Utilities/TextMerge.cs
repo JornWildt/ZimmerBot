@@ -16,6 +16,7 @@ namespace ZimmerBot.Core.Utilities
     {
       Templates = new TemplateGroup();
       Templates.RegisterRenderer(typeof(DateTime), new DateRenderer());
+      Templates.RegisterRenderer(typeof(string), new ZimmerBot.Core.Utilities.StringRender());
     }
 
 

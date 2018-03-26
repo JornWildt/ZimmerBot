@@ -219,6 +219,7 @@
     <Compile Include="Scheduler\ScheduledBotCallback.cs" />
     <Compile Include="Utilities\SpellChecker.cs" />
     <Compile Include="Utilities\StringPairList.cs" />
+    <Compile Include="Utilities\StringRender.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Utilities\TimeSpanUtility.cs" />
     <Compile Include="WordRegex\ChoiceWRegex.cs" />

@@ -70,6 +70,7 @@
     <Compile Include="BotTests\DefineTests.cs" />
     <Compile Include="BotTests\EntityTest.cs" />
     <Compile Include="BotTests\EventTests.cs" />
+    <Compile Include="BotTests\FormatTests.cs" />
     <Compile Include="BotTests\InfiniteLoopProtectionTests.cs" />
     <Compile Include="BotTests\MultiTriggerRuleTests.cs" />
     <Compile Include="BotTests\OutputTests.cs" />
