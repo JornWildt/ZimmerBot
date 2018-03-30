@@ -559,5 +559,31 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("where is oslo", "Here");
       AssertDialog("is oslo in stockholm", "No");
     }
+
+
+    [Test]
+    public void ItPrefersParameterMatchesHigher()
+    {
+      BuildBot(@"
+! define (city)
+{
+  oslo:.
+}
+
+! pattern (intent = what_is)
+{
+  > what is {subj}
+}
+
+>> what_is
+: I do not know
+
+>> what_is (subj)
+: <subj> is a city
+");
+
+      AssertDialog("what is oslo", "oslo is a city");
+      AssertDialog("what is oil", "I do not know");
+    }
   }
 }

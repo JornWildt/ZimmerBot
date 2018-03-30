@@ -90,9 +90,11 @@ namespace ZimmerBot.Core.Knowledge
         if (ok)
         {
           // Larger pattern sets are more difficult to match and thus prioritized higher
-          // - but wildcard matches weight less
-          double score = matchedPattern.MatchPattern.Expressions.Sum(expr => expr.Weight)
-            ;// + pattern.Sum(p => p.Value == Constants.StarValue ? 0.5 : 1.0);
+          double score = matchedPattern.MatchPattern.Expressions.Sum(expr => expr.Weight);
+
+          // Larger pattern parameter sets are more difficult to match and thus prioritized higher
+          if (pattern.Count > 0)
+            score *= Math.Pow(1.1, pattern.Count-1);
 
           if (score > result.Score)
           {
