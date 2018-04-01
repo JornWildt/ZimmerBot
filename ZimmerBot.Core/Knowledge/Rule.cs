@@ -142,16 +142,18 @@ namespace ZimmerBot.Core.Knowledge
             IList<OutputTemplate> templates = ox_context.OutputTemplates[templateName];
             OutputTemplate selectedTemplate = SelectTemplate(templates, templateName, outputId, context.InputContext.Session);
 
-            string[] output = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context))).ToArray();
-            result.Add(AddMoreNotificationText(output[0], output.Length > 1));
+            var output1 = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context)));
+            List<string> output = SplitNewlinePlusToSeparateOutputStrings(output1);
+
+            result.Add(AddMoreNotificationText(output[0], output.Count > 1));
 
             // Schedule remaining outputs delayed
-            if (output.Length > 1)
+            if (output.Count > 1)
             {
               DateTime at = DateTime.Now;
-              for (int i = 1; i < output.Length; ++i)
+              for (int i = 1; i < output.Count; ++i)
               {
-                string o = AddMoreNotificationText(output[i], i < output.Length - 1);
+                string o = AddMoreNotificationText(output[i], i < output.Count - 1);
                 at += TimeSpan.FromSeconds(o.Length * AppSettings.MessageSequenceDelay.Value.TotalSeconds);
                 ScheduleHelper.AddDelayedMessage(at, o, context);
               }
@@ -186,6 +188,18 @@ namespace ZimmerBot.Core.Knowledge
       session.IncrementUsage(selectedTemplate.Id);
 
       return selectedTemplate;
+    }
+
+    private List<string> SplitNewlinePlusToSeparateOutputStrings(IEnumerable<string> response)
+    {
+      List<string> result = new List<string>();
+      foreach (string r in response)
+      {
+        string[] multiLines = r.Split(new string[] { "\n+" }, StringSplitOptions.RemoveEmptyEntries);
+        foreach (string line in multiLines)
+          result.Add(line);
+      }
+      return result;
     }
 
     protected string AddMoreNotificationText(string text, bool hasMore)
