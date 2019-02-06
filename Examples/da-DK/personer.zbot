@@ -1,4 +1,4 @@
-! rdf_import "da-DK\personer.ttl"
+! rdf_import "da-DK/personer.ttl"
 
 > Hvem er +
 ! call RDF.Query("

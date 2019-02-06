@@ -1,5 +1,5 @@
-! rdf_import "da-DK\citater.ttl"
-! rdf_import "da-DK\personer.ttl"
+! rdf_import "da-DK/citater.ttl"
+! rdf_import "da-DK/personer.ttl"
 
 > Giv et citat
 ! call RDF.Query("
