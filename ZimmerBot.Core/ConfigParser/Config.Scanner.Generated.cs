@@ -5,10 +5,10 @@
 //  See accompanying file GPLEXcopyright.rtf.
 //
 //  GPLEX Version:  1.2.2
-//  Machine:  JORN-PC
-//  DateTime: 26-03-2018 15:20:55
-//  UserName: Jorn
-//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 26-03-2018 08:37:57>
+//  Machine:  CBRAIN-PC412
+//  DateTime: 06-02-2019 08:37:14
+//  UserName: jw
+//  GPLEX input file <ConfigParser\Config.Language.analyzer.lex - 06-02-2019 08:36:53>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: unicode, verbose, parser, stack, minimize
