@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
+using log4net;
 using Quartz;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Patterns;
@@ -13,6 +14,8 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class FuzzyTrigger : Trigger
   {
+    private static ILog Logger = LogManager.GetLogger(typeof(FuzzyTrigger));
+
     public List<OperatorKeyValueList> KeyValuePatterns { get; protected set; }
 
 
@@ -95,6 +98,8 @@ namespace ZimmerBot.Core.Knowledge
           // Larger pattern parameter sets are more difficult to match and thus prioritized higher
           if (pattern.Count > 0)
             score *= Math.Pow(1.1, pattern.Count-1);
+
+          Logger.Debug($"Matched {pattern} with {matchedPattern}. Score = {score}");
 
           if (score > result.Score)
           {
