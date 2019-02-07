@@ -83,7 +83,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       if (request.Input != null)
       {
-        DiaLogger.InfoFormat("Invoke: {0}", request.Input);
+        DiaLogger.InfoFormat($"[{context.Session.SessionId}] > {request.Input}");
 
         if (context.Session.IsBusyWriting())
           context.Session.RegisterLatestInput(request.Input);
@@ -105,7 +105,7 @@ namespace ZimmerBot.Core.Knowledge
       }
       else
       {
-        DiaLogger.InfoFormat("Invoke without input");
+        DiaLogger.InfoFormat($"[{context.Session.SessionId}] Invoke without input");
         InputRequestContext inputContext = new InputRequestContext(context, request, null);
         InvokeWithInput(inputContext, output);
       }
