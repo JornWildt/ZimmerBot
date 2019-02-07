@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using log4net;
 using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Pipeline.InputStages
 {
   public class OutputGeneratorStage : IPipelineHandler<InputPipelineItem>
   {
-    static ILog DiaLogger = LogManager.GetLogger("DialogLogger");
-
     static Random Randomizer = new Random();
 
 
@@ -30,7 +27,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
         state[StateKeys.SessionStore][StateKeys.LastRuleId] = r.Rule.Id;
 
         foreach (string s in response)
-          DiaLogger.Info("Response: " + s);
+          BotUtility.DiaLogger.Info($"[{item.Context.Session.SessionId}] {s}");
       }
       else
       {
@@ -38,7 +35,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
         if (item.Context.Input != null)
           output.Add("???");
 
-        DiaLogger.Info("No suitable response found");
+        BotUtility.DiaLogger.Info($"[{item.Context.Session.SessionId}] No suitable response found");
         state[StateKeys.SessionStore][StateKeys.LastRuleId] = null;
       }
     }
