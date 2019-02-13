@@ -64,6 +64,7 @@
     <Compile Include="BotTests\AbbeviationTests.cs" />
     <Compile Include="BotTests\AnswerTests.cs" />
     <Compile Include="BotTests\BotMemoryTests.cs" />
+    <Compile Include="BotTests\ConceptOutputTests.cs" />
     <Compile Include="BotTests\ContinueTests.cs" />
     <Compile Include="BotTests\ConceptTests.cs" />
     <Compile Include="BotTests\ConditionTests.cs" />

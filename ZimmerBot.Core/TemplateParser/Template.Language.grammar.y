@@ -14,8 +14,13 @@
 %start main
 
 %token T_TEXT
-%token T_LTAG
-%token T_RTAG
+%token T_LPAR
+%token T_RPAR
+%token T_PIPE
+%token T_LRTAG /* Left redirect */
+%token T_RRTAG /* right redirect */
+%token T_LVTAG /* Left variant */
+%token T_RVTAG /* right variant */
 
 %%
 
@@ -29,9 +34,20 @@ tokenSeq
   ;
 
 token
-  : T_TEXT                  { $$.token = new TextTemplateToken($1.s); }
-  | T_LTAG tokenSeq T_RTAG  { $$.token = new RedirectTemplateToken($2.tokenSequence); }
+  : T_TEXT                    { $$.token = new TextTemplateToken($1.s); }
+  | T_LRTAG tokenSeq T_RRTAG  { $$.token = new RedirectTemplateToken($2.tokenSequence); }
+  | T_LVTAG  { ((TemplateScanner)Scanner).BEGIN(1); }
+    variantSeq
+    T_RVTAG   { $$.token = $3.token; ((TemplateScanner)Scanner).BEGIN(0); }
   ;
 
+variantSeq
+  : variantSeq T_PIPE variant { $$.token = ((ChooseTemplateToken)$1.token).Add($3.token); }
+  | variant                   { $$.token = new ChooseTemplateToken($1.token); }
+  ;
+
+variant
+  : T_TEXT                    { $$.token = new TextTemplateToken($1.s); }
+  ;
 
 %%

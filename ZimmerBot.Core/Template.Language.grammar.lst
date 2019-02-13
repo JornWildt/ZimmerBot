@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <TemplateParser\Template.Language.grammar.y - 27-03-2016 08:30:52>
+//  GPPG error listing for yacc source file <TemplateParser\Template.Language.grammar.y - 13-02-2019 22:48:39>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 27-03-2016 08:30:55
+//  DateTime: 13-02-2019 22:48:42
 //  UserName: Jorn
 // ==========================================================================
 
@@ -25,33 +25,44 @@
 %start main
 
 %token T_TEXT
-%token T_LTAG
-%token T_RTAG
+%token T_LPAR
+%token T_RPAR
+%token T_PIPE
+%token T_LRTAG /* Left redirect */
+%token T_RRTAG /* right redirect */
+%token T_LVTAG /* Left variant */
+%token T_RVTAG /* right variant */
 
 %%
-// Warning: NonTerminal symbol "tokenSeq" is unreachable
-// Warning: NonTerminal symbol "token" is unreachable
-// Error: NonTerminal symbol "tokenSequence" has no productions
-// Error: There are 3 non-terminating NonTerminal Symbols
-   //  {main, $accept, tokenSequence}
-// Warning: Terminating tokenSequence fixes the following size-3 NonTerminal set
-   // {main, $accept, tokenSequence}
-// -----------------------------------------------------------------------------
 
 main
-  : tokenSequence
+  : tokenSeq  { Result = $1.tokenSequence; }
   ;
 
 tokenSeq
-  : tokenSeq token { $1.tokenSequence.Add($2.token); $$.tokenSequence = $1.tokenSequence; }
+  : tokenSeq token { $$.tokenSequence = Combine($1.tokenSequence, $2.token); }
   | /* empty */    { $$.tokenSequence = new SequenceTemplateToken(); }
   ;
 
 token
-  : T_TEXT                       { $$.token = new TextTemplateToken($1.s); }
-  | T_LTAG tokenSequence T_RTAG  { $$.token = new RedirectTemplateToken($1.tokenSequence); }
+  : T_TEXT                    { $$.token = new TextTemplateToken($1.s); }
+  | T_LRTAG tokenSeq T_RRTAG  { $$.token = new RedirectTemplateToken($2.tokenSequence); }
+  | T_LVTAG  { ((TemplateScanner)Scanner).BEGIN(1); }
+    variant 
+    T_RVTAG   { $$.token = $3.token; ((TemplateScanner)Scanner).BEGIN(0); }
   ;
 
+variant
+  : T_TEXT                    { $$.token = new TextTemplateToken($1.s); }
+  | variantSeq
+  | T_LPAR variant T_RPAR     { $$.token = $2.token; }
+  ;
 
-%%// ==========================================================================
+variantSeq
+  : variant T_PIPE variantSeq
+  | variant
+
+%%// Error: Syntax error, unexpected %%
+// ----------------------------------
+// ==========================================================================
 

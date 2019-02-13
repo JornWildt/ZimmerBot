@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 31-03-2016 08:23:00
+//  DateTime: 13-02-2019 23:18:31
 //  UserName: Jorn
 // ==========================================================================
 
@@ -19,20 +19,26 @@
 %{
 %}
 
+%x variant
+
 %%
 
-\<\<[ \t]*   { return (int)Token.T_LTAG; }
-[ \t]*\>\>   { return (int)Token.T_RTAG; }
+\<\<[ \t]*   { return (int)Token.T_LRTAG; }
+[ \t]*\>\>   { return (int)Token.T_RRTAG; }
 [^<>]+       { yylval.s = yytext; return (int)Token.T_TEXT; }
-\<           { yytext); yylval.s = yytext; return (int)Token.T_TEXT; }
-//-----------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// Error: Invalid action
-// Error: Parser error <Syntax error, unexpected )> 
-// -------------------------------------------------
-\>           { yytext); yylval.s = yytext; return (int)Token.T_TEXT; }
-//-----------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// Error: Invalid action
-// ---------------------
+\<\(         { return (int)Token.T_LVTAG; }
+\<           { yylval.s = yytext; return (int)Token.T_TEXT; }
+\>           { yylval.s = yytext; return (int)Token.T_TEXT; }
+
+<variant>\|     { return (int)Token.T_PIPE; }
+<variant>[^\|]* { yylval.s = yytext; return (int)Token.T_TEXT; }
+//-------^^^^^^
+// Warning: This pattern always overrides "\)\>" 
+// ----------------------------------------------
+<variant>\)\>   { return (int)Token.T_RVTAG; }
+//-------^^^^
+// Warning: This pattern always overridden by "[^\|]*" 
+// ----------------------------------------------------
 
 %%// ==========================================================================
 

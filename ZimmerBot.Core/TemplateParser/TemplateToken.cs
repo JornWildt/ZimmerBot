@@ -73,4 +73,30 @@ namespace ZimmerBot.Core.TemplateParser
       return s;
     }
   }
+
+
+  public class ChooseTemplateToken : TemplateToken
+  {
+    static Random Randomizer = new Random();
+
+    public List<TemplateToken> Variants { get; set; }
+
+    public ChooseTemplateToken(TemplateToken initial)
+    {
+      Variants = new List<TemplateToken> { initial };
+    }
+
+
+    public ChooseTemplateToken Add(TemplateToken t)
+    {
+      Variants.Add(t);
+      return this;
+    }
+
+
+    public override string Instantiate(TemplateContext context)
+    {
+      return Variants[Randomizer.Next(Variants.Count)].Instantiate(context);
+    }
+  }
 }

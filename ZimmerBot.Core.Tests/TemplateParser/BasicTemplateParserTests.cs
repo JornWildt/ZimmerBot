@@ -108,5 +108,71 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       string output = tokens.Instantiate(context);
       Assert.AreEqual("(OK: Loop: <items:{i | <i.x>}>.)", output);
     }
+
+
+    [Test]
+    public void CanUseChoose_1()
+    {
+      SequenceTemplateToken tokens = ParseTemplate("X <(a)> Y");
+      Assert.IsNotNull(tokens);
+      Assert.AreEqual(3, tokens.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[0]);
+      Assert.AreEqual("X ", ((TextTemplateToken)tokens.Tokens[0]).Text);
+
+      Assert.IsInstanceOf<ChooseTemplateToken>(tokens.Tokens[1]);
+      var choose = (ChooseTemplateToken)tokens.Tokens[1];
+      Assert.AreEqual(1, choose.Variants.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[0]);
+      Assert.AreEqual("a", ((TextTemplateToken)choose.Variants[0]).Text);
+
+      Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[2]);
+      Assert.AreEqual(" Y", ((TextTemplateToken)tokens.Tokens[2]).Text);
+    }
+
+
+    [Test]
+    public void CanUseChoose_2()
+    {
+      SequenceTemplateToken tokens = ParseTemplate("X <(a | b)> Y");
+      Assert.IsNotNull(tokens);
+      Assert.AreEqual(3, tokens.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[0]);
+      Assert.AreEqual("X ", ((TextTemplateToken)tokens.Tokens[0]).Text);
+
+      Assert.IsInstanceOf<ChooseTemplateToken>(tokens.Tokens[1]);
+      var choose = (ChooseTemplateToken)tokens.Tokens[1];
+      Assert.AreEqual(2, choose.Variants.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[0]);
+      Assert.AreEqual("a ", ((TextTemplateToken)choose.Variants[0]).Text);
+      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[1]);
+      Assert.AreEqual(" b", ((TextTemplateToken)choose.Variants[1]).Text);
+
+      Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[2]);
+      Assert.AreEqual(" Y", ((TextTemplateToken)tokens.Tokens[2]).Text);
+    }
+
+
+    [Test]
+    public void CanUseChoose_3()
+    {
+      SequenceTemplateToken tokens = ParseTemplate("X <(a | b| c )> Y");
+      Assert.IsNotNull(tokens);
+      Assert.AreEqual(3, tokens.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[0]);
+      Assert.AreEqual("X ", ((TextTemplateToken)tokens.Tokens[0]).Text);
+
+      Assert.IsInstanceOf<ChooseTemplateToken>(tokens.Tokens[1]);
+      var choose = (ChooseTemplateToken)tokens.Tokens[1];
+      Assert.AreEqual(3, choose.Variants.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[0]);
+      Assert.AreEqual("a ", ((TextTemplateToken)choose.Variants[0]).Text);
+      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[1]);
+      Assert.AreEqual(" b", ((TextTemplateToken)choose.Variants[1]).Text);
+      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[2]);
+      Assert.AreEqual(" c ", ((TextTemplateToken)choose.Variants[2]).Text);
+
+      Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[2]);
+      Assert.AreEqual(" Y", ((TextTemplateToken)tokens.Tokens[2]).Text);
+    }
   }
 }

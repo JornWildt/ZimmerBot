@@ -6,13 +6,14 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 31-03-2016 08:23:11
+//  DateTime: 13-02-2019 23:19:51
 //  UserName: Jorn
-//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 31-03-2016 08:23:10>
+//  GPLEX input file <TemplateParser\Template.Language.analyzer.lex - 13-02-2019 23:18:47>
 //  GPLEX frame file <embedded resource>
 //
-//  Option settings: verbose, parser, stack, minimize
-//  Option settings: compressNext, persistBuffer, noEmbedBuffers
+//  Option settings: unicode, verbose, parser, stack, minimize
+//  Option settings: classes, compressMap, compressNext, persistBuffer, noEmbedBuffers
+//  Fallback code page: Target machine default
 //
 
 //
@@ -23,7 +24,6 @@
 #define BACKUP
 #define STACK
 #define PERSIST
-#define BYTEMODE
 
 using System;
 using System.IO;
@@ -126,11 +126,12 @@ namespace ZimmerBot.Core.TemplateParser
         
         enum Result {accept, noMatch, contextFound};
 
-        const int maxAccept = 6;
-        const int initial = 7;
+        const int maxAccept = 11;
+        const int initial = 12;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
+        const int variant = 1;
 
 #region user code
 #endregion user code
@@ -164,33 +165,61 @@ namespace ZimmerBot.Core.TemplateParser
         }
     };
 
-    static int[] startState = new int[] {7, 0};
+    static int[] startState = new int[] {12, 8, 0};
 
-    static Table[] NxS = new Table[9] {
+#region CompressedCharacterMap
+    //
+    // There are 7 equivalence classes
+    // There are 2 character sequence regions
+    // There are 1 tables, 125 entries
+    // There are 1 runs, 0 singletons
+    // Decision tree depth is 1
+    //
+    static sbyte[] mapC0 = new sbyte[125] {
+/*     '\0' */ 6, 6, 6, 6, 6, 6, 6, 6, 6, 2, 6, 6, 6, 6, 6, 6, 
+/*   '\x10' */ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
+/*   '\x20' */ 2, 6, 6, 6, 6, 6, 6, 6, 4, 0, 6, 6, 6, 6, 6, 6, 
+/*      '0' */ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 1, 6, 3, 6, 
+/*      '@' */ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
+/*      'P' */ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
+/*      '`' */ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
+/*      'p' */ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5 };
+
+    static sbyte MapC(int code)
+    { // '\0' <= code <= '\U0010FFFF'
+      if (code < 125) // '\0' <= code <= '|'
+        return mapC0[code - 0];
+      else // '}' <= code <= '\U0010FFFF'
+        return (sbyte)6;
+    }
+#endregion
+
+    static Table[] NxS = new Table[15] {
 /* NxS[   0] */ new Table(0, 0, 0, null), // Shortest string ""
-/* NxS[   1] */ // Shortest string "\x01"
-      new Table(60, 3, 1, new sbyte[] {-1, 1, -1}),
-/* NxS[   2] */ // Shortest string "\t"
-      new Table(9, 54, 1, new sbyte[] {2, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 8}),
-/* NxS[   3] */ // Shortest string "<"
-      new Table(60, 1, -1, new sbyte[] {6}),
+/* NxS[   1] */ // Shortest string "("
+      new Table(1, 3, 1, new sbyte[] {-1, 1, -1}),
+/* NxS[   2] */ // Shortest string "<"
+      new Table(1, 4, -1, new sbyte[] {6, -1, -1, 7}),
+/* NxS[   3] */ // Shortest string "\t"
+      new Table(1, 3, 1, new sbyte[] {-1, 3, 13}),
 /* NxS[   4] */ // Shortest string ">"
-      new Table(62, 1, -1, new sbyte[] {5}),
+      new Table(3, 1, -1, new sbyte[] {5}),
 /* NxS[   5] */ new Table(0, 0, -1, null), // Shortest string ">>"
 /* NxS[   6] */ // Shortest string "<<"
-      new Table(9, 24, -1, new sbyte[] {6, -1, -1, -1, -1, -1, 
-          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-          -1, 6}),
-/* NxS[   7] */ // Shortest string ""
-      new Table(9, 54, 1, new sbyte[] {2, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4}),
-/* NxS[   8] */ // Shortest string "\t>"
-      new Table(62, 1, -1, new sbyte[] {5}),
+      new Table(2, 1, -1, new sbyte[] {6}),
+/* NxS[   7] */ new Table(0, 0, -1, null), // Shortest string "<("
+/* NxS[   8] */ // Shortest string ""
+      new Table(5, 3, 9, new sbyte[] {10, 9, 14}),
+/* NxS[   9] */ // Shortest string "<"
+      new Table(5, 3, 9, new sbyte[] {-1, 9, -1}),
+/* NxS[  10] */ new Table(0, 0, -1, null), // Shortest string "|"
+/* NxS[  11] */ new Table(0, 0, -1, null), // Shortest string ""
+/* NxS[  12] */ // Shortest string ""
+      new Table(1, 3, 1, new sbyte[] {2, 3, 4}),
+/* NxS[  13] */ // Shortest string "\t>"
+      new Table(3, 1, -1, new sbyte[] {5}),
+/* NxS[  14] */ // Shortest string ""
+      new Table(3, 1, -1, new sbyte[] {11}),
     };
 
 int NextState() {
@@ -199,7 +228,8 @@ int NextState() {
     else
         unchecked {
             int rslt;
-            int idx = (byte)(code - NxS[state].min);
+            int idx = MapC(code) - NxS[state].min;
+            if (idx < 0) idx += 7;
             if ((uint)idx >= (uint)NxS[state].rng) rslt = NxS[state].dflt;
             else rslt = NxS[state].nxt[idx];
             return rslt;
@@ -274,7 +304,11 @@ int NextState() {
 
 #if !NOFILES
      internal TemplateScanner(Stream file) {
-            SetSource(file); // no unicode option
+            SetSource(file, 0); // unicode option
+        }
+
+        public TemplateScanner(Stream file, string codepage) {
+            SetSource(file, CodePageHandling.GetCodePage(codepage));
         }   
 #endif // !NOFILES
 
@@ -618,21 +652,34 @@ int NextState() {
             if (yywrap())
                 return (int)Token.EOF;
             break;
-        case 1: // Recognized '[^<>]+',	Shortest string "\x01"
-        case 2: // Recognized '[^<>]+',	Shortest string "\t"
+        case 1: // Recognized '[^<>]+',	Shortest string "("
+        case 3: // Recognized '[^<>]+',	Shortest string "\t"
 yylval.s = yytext; return (int)Token.T_TEXT;
             break;
-        case 3: // Recognized '\<',	Shortest string "<"
+        case 2: // Recognized '\<',	Shortest string "<"
 yylval.s = yytext; return (int)Token.T_TEXT;
             break;
         case 4: // Recognized '\>',	Shortest string ">"
 yylval.s = yytext; return (int)Token.T_TEXT;
             break;
         case 5: // Recognized '[ \t]*\>\>',	Shortest string ">>"
-return (int)Token.T_RTAG;
+return (int)Token.T_RRTAG;
             break;
         case 6: // Recognized '\<\<[ \t]*',	Shortest string "<<"
-return (int)Token.T_LTAG;
+return (int)Token.T_LRTAG;
+            break;
+        case 7: // Recognized '\<\(',	Shortest string "<("
+return (int)Token.T_LVTAG;
+            break;
+        case 8: // In <variant> Recognized '[^\|\)]*',	Shortest string ""
+        case 9: // In <variant> Recognized '[^\|\)]*',	Shortest string "<"
+yylval.s = yytext; return (int)Token.T_TEXT;
+            break;
+        case 10: // In <variant> Recognized '\|',	Shortest string "|"
+return (int)Token.T_PIPE;
+            break;
+        case 11: // In <variant> Recognized '\)\>',	Shortest string ""
+return (int)Token.T_RVTAG;
             break;
         default:
             break;
