@@ -5,6 +5,8 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
+Word       [[:IsLetter:]_]+[[:IsLetter:]0-9_]*
+
 %{
 %}
 
@@ -19,8 +21,9 @@
 \<           { yylval.s = yytext; return (int)Token.T_TEXT; }
 \>           { yylval.s = yytext; return (int)Token.T_TEXT; }
 
-<variant>\|     { return (int)Token.T_PIPE; }
-<variant>[^\|\)]* { yylval.s = yytext; return (int)Token.T_TEXT; }
-<variant>\)\>   { return (int)Token.T_RVTAG; }
+<variant>\|          { return (int)Token.T_PIPE; }
+<variant>\%{Word}    { yylval.s = yytext; return (int)Token.T_CWORD; }
+<variant>[^\|\)\%]*  { yylval.s = yytext; return (int)Token.T_TEXT; }
+<variant>\)\>        { return (int)Token.T_RVTAG; }
 
 %%

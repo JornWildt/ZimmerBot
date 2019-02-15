@@ -58,9 +58,14 @@ namespace ZimmerBot.Core.Tests.TemplateParser
 
     public class TX : ITemplateExpander
     {
-      public string ExpandPlaceholdes(string s)
+      public string ExpandPlaceholders(string s)
       {
         return $"(OK: {s})";
+      }
+
+      public string ExpandConcept(string concept)
+      {
+        throw new NotImplementedException();
       }
 
       public string Invoke(string s)
@@ -122,8 +127,11 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       Assert.IsInstanceOf<ChooseTemplateToken>(tokens.Tokens[1]);
       var choose = (ChooseTemplateToken)tokens.Tokens[1];
       Assert.AreEqual(1, choose.Variants.Count);
-      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[0]);
-      Assert.AreEqual("a", ((TextTemplateToken)choose.Variants[0]).Text);
+      Assert.IsInstanceOf<SequenceTemplateToken>(choose.Variants[0]);
+      var seq = (SequenceTemplateToken)choose.Variants[0];
+      Assert.AreEqual(1, seq.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(seq.Tokens[0]);
+      Assert.AreEqual("a", ((TextTemplateToken)seq.Tokens[0]).Text);
 
       Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[2]);
       Assert.AreEqual(" Y", ((TextTemplateToken)tokens.Tokens[2]).Text);
@@ -142,10 +150,17 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       Assert.IsInstanceOf<ChooseTemplateToken>(tokens.Tokens[1]);
       var choose = (ChooseTemplateToken)tokens.Tokens[1];
       Assert.AreEqual(2, choose.Variants.Count);
-      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[0]);
-      Assert.AreEqual("a ", ((TextTemplateToken)choose.Variants[0]).Text);
-      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[1]);
-      Assert.AreEqual(" b", ((TextTemplateToken)choose.Variants[1]).Text);
+
+      Assert.IsInstanceOf<SequenceTemplateToken>(choose.Variants[0]);
+      var seq1 = (SequenceTemplateToken)choose.Variants[0];
+      Assert.AreEqual(1, seq1.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(seq1.Tokens[0]);
+      Assert.AreEqual("a ", ((TextTemplateToken)seq1.Tokens[0]).Text);
+
+      var seq2 = (SequenceTemplateToken)choose.Variants[1];
+      Assert.AreEqual(1, seq2.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(seq2.Tokens[0]);
+      Assert.AreEqual(" b", ((TextTemplateToken)seq2.Tokens[0]).Text);
 
       Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[2]);
       Assert.AreEqual(" Y", ((TextTemplateToken)tokens.Tokens[2]).Text);
@@ -164,15 +179,46 @@ namespace ZimmerBot.Core.Tests.TemplateParser
       Assert.IsInstanceOf<ChooseTemplateToken>(tokens.Tokens[1]);
       var choose = (ChooseTemplateToken)tokens.Tokens[1];
       Assert.AreEqual(3, choose.Variants.Count);
-      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[0]);
-      Assert.AreEqual("a ", ((TextTemplateToken)choose.Variants[0]).Text);
-      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[1]);
-      Assert.AreEqual(" b", ((TextTemplateToken)choose.Variants[1]).Text);
-      Assert.IsInstanceOf<TextTemplateToken>(choose.Variants[2]);
-      Assert.AreEqual(" c ", ((TextTemplateToken)choose.Variants[2]).Text);
+
+      Assert.IsInstanceOf<SequenceTemplateToken>(choose.Variants[0]);
+      var seq1 = (SequenceTemplateToken)choose.Variants[0];
+      Assert.AreEqual(1, seq1.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(seq1.Tokens[0]);
+      Assert.AreEqual("a ", ((TextTemplateToken)seq1.Tokens[0]).Text);
+
+      var seq2 = (SequenceTemplateToken)choose.Variants[1];
+      Assert.AreEqual(1, seq2.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(seq2.Tokens[0]);
+      Assert.AreEqual(" b", ((TextTemplateToken)seq2.Tokens[0]).Text);
+
+      var seq3 = (SequenceTemplateToken)choose.Variants[2];
+      Assert.AreEqual(1, seq3.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(seq3.Tokens[0]);
+      Assert.AreEqual(" c ", ((TextTemplateToken)seq3.Tokens[0]).Text);
 
       Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[2]);
       Assert.AreEqual(" Y", ((TextTemplateToken)tokens.Tokens[2]).Text);
+    }
+
+
+    [Test]
+    public void CanUseConceptInOutput()
+    {
+      SequenceTemplateToken tokens = ParseTemplate("I like <(%fruit)>");
+      Assert.IsNotNull(tokens);
+      Assert.AreEqual(2, tokens.Tokens.Count);
+      Assert.IsInstanceOf<TextTemplateToken>(tokens.Tokens[0]);
+      Assert.AreEqual("I like ", ((TextTemplateToken)tokens.Tokens[0]).Text);
+
+      Assert.IsInstanceOf<ChooseTemplateToken>(tokens.Tokens[1]);
+      var choose = (ChooseTemplateToken)tokens.Tokens[1];
+      Assert.AreEqual(1, choose.Variants.Count);
+      Assert.IsInstanceOf<SequenceTemplateToken>(choose.Variants[0]);
+      var seq = (SequenceTemplateToken)choose.Variants[0];
+      Assert.AreEqual(1, seq.Tokens.Count);
+
+      Assert.IsInstanceOf<ConceptTemplateToken>(seq.Tokens[0]);
+      Assert.AreEqual("fruit", ((ConceptTemplateToken)seq.Tokens[0]).Concept);
     }
   }
 }

@@ -9,7 +9,9 @@ namespace ZimmerBot.Core.TemplateParser
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
-    string ExpandPlaceholdes(string s);
+    string ExpandPlaceholders(string s);
+
+    string ExpandConcept(string concept);
 
     /// <summary>
     /// Re-invoke bot on supplied string.

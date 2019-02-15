@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.TemplateParser;
@@ -8,6 +9,8 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class TemplateExpander : ITemplateExpander
   {
+    static Random Randomizer = new Random();
+
     protected ResponseGenerationContext ResponseContext { get; set; }
 
 
@@ -19,10 +22,22 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public string ExpandPlaceholdes(string s)
+    public string ExpandPlaceholders(string s)
     {
       string output = TextMerge.MergeTemplate(s, ResponseContext.Variables);
       return output;
+    }
+
+
+    public string ExpandConcept(string conceptId)
+    {
+      if (ResponseContext.KnowledgeBase.Concepts.TryGetValue(conceptId, out Concept concept))
+      {
+        List<string> words = concept.ExpandPatterns().ToList();
+        return words[Randomizer.Next(words.Count)];
+      }
+      else
+        return "UNDEFINED CONCEPT: " + conceptId;
     }
 
 

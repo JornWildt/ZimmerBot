@@ -49,7 +49,7 @@ namespace ZimmerBot.Core.TemplateParser
 
     public override string Instantiate(TemplateContext context)
     {
-      string s = context.Expander.ExpandPlaceholdes(Text);
+      string s = context.Expander.ExpandPlaceholders(Text);
       return s;
     }
   }
@@ -79,7 +79,7 @@ namespace ZimmerBot.Core.TemplateParser
   {
     static Random Randomizer = new Random();
 
-    public List<TemplateToken> Variants { get; set; }
+    public List<TemplateToken> Variants { get; protected set; }
 
     public ChooseTemplateToken(TemplateToken initial)
     {
@@ -97,6 +97,24 @@ namespace ZimmerBot.Core.TemplateParser
     public override string Instantiate(TemplateContext context)
     {
       return Variants[Randomizer.Next(Variants.Count)].Instantiate(context);
+    }
+  }
+
+
+  public class ConceptTemplateToken : TemplateToken
+  {
+    public string Concept { get; protected set; }
+
+
+    public ConceptTemplateToken(string concept)
+    {
+      Concept = concept.Substring(1);
+    }
+
+
+    public override string Instantiate(TemplateContext context)
+    {
+      return context.Expander.ExpandConcept(Concept);
     }
   }
 }

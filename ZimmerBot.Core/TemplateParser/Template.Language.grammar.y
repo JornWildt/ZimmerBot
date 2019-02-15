@@ -21,6 +21,7 @@
 %token T_RRTAG /* right redirect */
 %token T_LVTAG /* Left variant */
 %token T_RVTAG /* right variant */
+%token T_CWORD
 
 %%
 
@@ -42,12 +43,18 @@ token
   ;
 
 variantSeq
-  : variantSeq T_PIPE variant { $$.token = ((ChooseTemplateToken)$1.token).Add($3.token); }
-  | variant                   { $$.token = new ChooseTemplateToken($1.token); }
+  : variantSeq T_PIPE variant { $$.token = ((ChooseTemplateToken)$1.token).Add($3.tokenSequence); }
+  | variant                   { $$.token = new ChooseTemplateToken($1.tokenSequence); }
   ;
 
 variant
-  : T_TEXT                    { $$.token = new TextTemplateToken($1.s); }
+  : variant text  { $$.tokenSequence = Combine($1.tokenSequence, $2.token); }
+  | /* empty */   { $$.tokenSequence = new SequenceTemplateToken(); }
+  ;
+
+text
+  : T_TEXT        { $$.token = new TextTemplateToken($1.s); }
+  | T_CWORD       { $$.token = new ConceptTemplateToken($1.s); }
   ;
 
 %%
