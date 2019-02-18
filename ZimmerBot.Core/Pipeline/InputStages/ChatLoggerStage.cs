@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using VDS.RDF;
+using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Pipeline.InputStages
 {
@@ -34,25 +35,25 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
       INode p = NodeFactory.CreateUriNode(UrlConstants.Rdf("type"));
       INode o = NodeFactory.CreateUriNode(UrlConstants.ChatEntryTypeUrl);
-      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o, RDFStore.DynamicStoreName);
 
       p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("created"));
       o = DateTime.Now.ToLiteral(NodeFactory);
-      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o, RDFStore.DynamicStoreName);
 
       p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("creator"));
       o = NodeFactory.CreateUriNode(creator);
-      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o, RDFStore.DynamicStoreName);
 
-      p = NodeFactory.CreateUriNode(new Uri("http://chat"));
+      p = NodeFactory.CreateUriNode(UrlConstants.ChatReferenceTypeUrl);
       o = NodeFactory.CreateUriNode(UrlConstants.ChatsUrl(item.Context.Session.SessionId));
-      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o);
+      item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o, RDFStore.DynamicStoreName);
 
       if (text != null)
       {
         p = NodeFactory.CreateUriNode(UrlConstants.DcTerms("description"));
         o = text.ToLiteral(NodeFactory);
-        item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o);
+        item.Context.KnowledgeBase.MemoryStore.Insert(s, p, o, RDFStore.DynamicStoreName);
       }
     }
   }

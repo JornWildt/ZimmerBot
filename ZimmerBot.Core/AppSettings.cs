@@ -16,6 +16,8 @@ namespace ZimmerBot.Core
     public static readonly AppSetting<string> RDF_BaseUrl = new AppSetting<string>("ZimmerBot.RDF.BaseUrl", "http://zimmerbot.org/");
     public static readonly AppSetting<string> RDF_ResourceUrl = new AppSetting<string>("ZimmerBot.RDF.ResourceUrl", "http://zimmerbot.org/resource/");
     public static readonly AppSetting<string> RDF_PropertyUrl = new AppSetting<string>("ZimmerBot.RDF.PropertyUrl", "http://zimmerbot.org/property/");
+    public static readonly AppSetting<string> RDF_StaticStoreUrl = new AppSetting<string>("ZimmerBot.RDF.StaticStoreUrl", "http://zimmerbot.org/static-store/");
+    public static readonly AppSetting<string> RDF_DynamicStoreUrl = new AppSetting<string>("ZimmerBot.RDF.DynamicStoreUrl", "http://zimmerbot.org/dynamic-store/");
     public static readonly AppSetting<bool> RDF_EnableChatLog = new AppSetting<bool>("ZimmerBot.RDF.EnableChatLog", true);
     public static readonly AppSetting<TimeSpan> RDF_BackupInterval = new AppSetting<TimeSpan>("ZimmerBot.RDF.BackupInterval", TimeSpan.FromMinutes(5));
 

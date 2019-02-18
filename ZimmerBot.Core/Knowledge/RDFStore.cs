@@ -1,17 +1,13 @@
-﻿using System;
+﻿using CuttingEdge.Conditions;
+using log4net;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CuttingEdge.Conditions;
-using log4net;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query;
 using VDS.RDF.Query.Datasets;
-using VDS.RDF.Storage;
 using VDS.RDF.Writing;
 
 namespace ZimmerBot.Core.Knowledge
@@ -23,6 +19,9 @@ namespace ZimmerBot.Core.Knowledge
 
     public bool IsRestored { get; protected set; }
 
+    public static readonly string StaticStoreName = "static";
+    public static readonly string DynamicStoreName = "dynamic";
+
     protected bool LoadFilesEnabled { get; set; }
 
     protected string ID { get; set; }
@@ -31,7 +30,7 @@ namespace ZimmerBot.Core.Knowledge
 
     protected InMemoryDataset Dataset { get; set; }
 
-    protected IGraph DatasetGraph { get; set; }
+    protected Dictionary<string,IGraph> DatasetGraphs { get; set; }
 
     protected ISparqlQueryProcessor Processor { get; set; }
 
@@ -55,24 +54,36 @@ namespace ZimmerBot.Core.Knowledge
       LoadFilesEnabled = true;
       Store = new TripleStore();
       Dataset = new InMemoryDataset(Store, true);
+      DatasetGraphs = new Dictionary<string, IGraph>();
       Processor = new LeviathanQueryProcessor(Dataset);
       SparqlParser = new SparqlQueryParser();
       NodeFactory = new NodeFactory();
       Prefixes = new Dictionary<string, string>();
       LoadedFiles = new HashSet<string>();
 
+      CreateGraph(StaticStoreName, new Uri(AppSettings.RDF_StaticStoreUrl));
+      CreateGraph(DynamicStoreName, new Uri(AppSettings.RDF_DynamicStoreUrl));
       Dataset.SetActiveGraph((Uri)null);
-
-      DatasetGraph = Dataset.GetModifiableGraph(null);
-      DatasetGraph.Changed += Data_Changed;
 
       RDFStoreRepository.Add(this);
     }
+
+
+    private void CreateGraph(string name, Uri baseUri)
+    {
+      Graph g = new Graph();
+      g.BaseUri = baseUri;
+      Dataset.AddGraph(g);
+      DatasetGraphs[name] = g;
+      DatasetGraphs[name].Changed += Data_Changed;
+    }
+
 
     private void Data_Changed(object sender, GraphEventArgs args)
     {
       DataHasChanged = true;
     }
+
 
     public void Initialize(KnowledgeBase.InitializationMode mode)
     {
@@ -82,6 +93,12 @@ namespace ZimmerBot.Core.Knowledge
         Restore();
       else if (mode == KnowledgeBase.InitializationMode.RestoreIfExists)
         RestoreIfExists();
+    }
+
+
+    public void ClearStore(string name)
+    {
+      DatasetGraphs[name].Clear();
     }
 
 
@@ -95,8 +112,11 @@ namespace ZimmerBot.Core.Knowledge
     protected void Restore()
     {
       string dbFilename = GetDatabaseFilename();
-      TriGParser trigparser = new TriGParser();
-      trigparser.Load(Store, dbFilename);
+      using (var input = File.OpenText(dbFilename))
+      {
+        var r = new TurtleParser(TurtleSyntax.W3C);
+        r.Load(DatasetGraphs[DynamicStoreName], input);
+      }
       LoadFilesEnabled = false;
       IsRestored = true;
     }
@@ -162,8 +182,17 @@ namespace ZimmerBot.Core.Knowledge
       {
         string backupFilename = dbFilename + ".bak";
 
-        TriGWriter trigwriter = new TriGWriter();
-        trigwriter.Save(Store, backupFilename);
+        using (var output = File.CreateText(backupFilename))
+        {
+          var w = new CompressingTurtleWriter(TurtleSyntax.W3C);
+          w.DefaultNamespaces.AddNamespace("dc", UrlConstants.DcTerms(""));
+          w.DefaultNamespaces.AddNamespace("zbt", UrlConstants.TypeUrl(""));
+          w.DefaultNamespaces.AddNamespace("zbcs", UrlConstants.ChatsUrl(""));
+          w.DefaultNamespaces.AddNamespace("zbce", UrlConstants.ChatEntriesUrl(""));
+          w.DefaultNamespaces.AddNamespace("zu", UrlConstants.UsersUrl(""));
+          w.DefaultNamespaces.AddNamespace("zb", new Uri(AppSettings.RDF_BaseUrl));
+          w.Save(DatasetGraphs[DynamicStoreName], output);
+        }
         File.Delete(dbFilename);
         File.Move(backupFilename, dbFilename);
       }
@@ -230,30 +259,30 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void Insert(INode s, INode p, INode o)
+    public void Insert(INode s, INode p, INode o, string name)
     {
-      DatasetGraph.Assert(s, p, o);
+      DatasetGraphs[name].Assert(s, p, o);
     }
 
 
-    public void Update(INode s, INode p, INode o)
+    public void Update(INode s, INode p, INode o, string name)
     {
-      Retract(s, p);
-      DatasetGraph.Assert(s, p, o);
+      Retract(s, p, name);
+      DatasetGraphs[name].Assert(s, p, o);
     }
 
 
-    public Triple GetTripple(INode s, INode p)
+    public Triple GetTripple(INode s, INode p, string name)
     {
-      IEnumerable<Triple> tripples = DatasetGraph.GetTriplesWithSubjectPredicate(s, p);
+      IEnumerable<Triple> tripples = DatasetGraphs[name].GetTriplesWithSubjectPredicate(s, p);
       return tripples.FirstOrDefault();
     }
 
 
-    public void Retract(INode s, INode p)
+    public void Retract(INode s, INode p, string name)
     {
-      IEnumerable<Triple> tripples = DatasetGraph.GetTriplesWithSubjectPredicate(s, p).ToList();
-      DatasetGraph.Retract(tripples);
+      IEnumerable<Triple> tripples = DatasetGraphs[name].GetTriplesWithSubjectPredicate(s, p).ToList();
+      DatasetGraphs[name].Retract(tripples);
     }
 
 

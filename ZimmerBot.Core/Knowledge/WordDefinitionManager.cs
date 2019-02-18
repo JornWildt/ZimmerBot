@@ -71,8 +71,16 @@ namespace ZimmerBot.Core.Knowledge
       foreach (string c in word.Classes)
       {
         Uri subject = UrlConstants.ResourceUrl(c);
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(RdfsClass));
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), c.ToLiteral(NodeFactory));
+        store.Insert(
+          NodeFactory.CreateUriNode(subject), 
+          NodeFactory.CreateUriNode(RdfType), 
+          NodeFactory.CreateUriNode(RdfsClass),
+          RDFStore.StaticStoreName);
+        store.Insert(
+          NodeFactory.CreateUriNode(subject), 
+          NodeFactory.CreateUriNode(RdfsLabel), 
+          c.ToLiteral(NodeFactory),
+          RDFStore.StaticStoreName);
       }
     }
 
@@ -87,18 +95,35 @@ namespace ZimmerBot.Core.Knowledge
       foreach (string c in word.Classes)
       {
         Uri type = UrlConstants.ResourceUrl(c);
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfType), NodeFactory.CreateUriNode(type));
+        store.Insert(
+          NodeFactory.CreateUriNode(subject), 
+          NodeFactory.CreateUriNode(RdfType), 
+          NodeFactory.CreateUriNode(type),
+          RDFStore.StaticStoreName);
       }
 
       // Define word as label for itself
       if (word.Word != null)
       {
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(RdfsLabel), word.Word.ToLiteral(NodeFactory));
+        store.Insert(
+          NodeFactory.CreateUriNode(subject), 
+          NodeFactory.CreateUriNode(RdfsLabel), 
+          word.Word.ToLiteral(NodeFactory),
+          RDFStore.StaticStoreName);
 
         // Define word and alternatives as "knownby" for indexing
-        store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), word.Word.ToLower().ToLiteral(NodeFactory));
+        store.Insert(
+          NodeFactory.CreateUriNode(subject), 
+          NodeFactory.CreateUriNode(KnownBy), 
+          word.Word.ToLower().ToLiteral(NodeFactory),
+          RDFStore.StaticStoreName);
+
         foreach (string alt in word.Alternatives)
-          store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(KnownBy), alt.ToLower().ToLiteral(NodeFactory));
+          store.Insert(
+            NodeFactory.CreateUriNode(subject), 
+            NodeFactory.CreateUriNode(KnownBy), 
+            alt.ToLower().ToLiteral(NodeFactory),
+            RDFStore.StaticStoreName);
       }
 
       // Define all properties associated with word
@@ -109,7 +134,11 @@ namespace ZimmerBot.Core.Knowledge
 
         foreach (var value in prop.Values)
         {
-          store.Insert(NodeFactory.CreateUriNode(subject), NodeFactory.CreateUriNode(propUri), value.BuildRdfNode(NodeFactory));
+          store.Insert(
+            NodeFactory.CreateUriNode(subject), 
+            NodeFactory.CreateUriNode(propUri), 
+            value.BuildRdfNode(NodeFactory),
+            RDFStore.StaticStoreName);
         }
       }
     }

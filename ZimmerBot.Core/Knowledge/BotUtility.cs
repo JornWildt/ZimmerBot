@@ -27,24 +27,34 @@ namespace ZimmerBot.Core.Knowledge
       state[StateKeys.SessionStore] = session.Store;
 
       // Add user store
-      var userStore = new RDFDictionaryWrapper(kb.MemoryStore, UrlConstants.UsersUrl(request.UserId), UrlConstants.UserValuesUrl);
+      var userStore = new RDFDictionaryWrapper(
+        kb.MemoryStore, 
+        UrlConstants.UsersUrl(request.UserId), 
+        UrlConstants.UserValuesUrl,
+        RDFStore.DynamicStoreName);
       state[StateKeys.UserStore] = userStore;
 
       // Add bot store
-      var botStore = new RDFDictionaryWrapper(kb.MemoryStore, UrlConstants.BotUrl, UrlConstants.BotValuesUrl);
+      var botStore = new RDFDictionaryWrapper(
+        kb.MemoryStore, 
+        UrlConstants.BotUrl, 
+        UrlConstants.BotValuesUrl,
+        RDFStore.DynamicStoreName);
       state[StateKeys.BotStore] = botStore;
 
       // Register <user, is-a, user>
       kb.MemoryStore.Update(
         NodeFactory.CreateUriNode(UrlConstants.UsersUrl(request.UserId)),
         NodeFactory.CreateUriNode(UrlConstants.Rdf("type")),
-        NodeFactory.CreateUriNode(UrlConstants.UserTypeUrl));
+        NodeFactory.CreateUriNode(UrlConstants.UserTypeUrl),
+        RDFStore.DynamicStoreName);
 
       // Register <chat, is-a, chat>
       kb.MemoryStore.Update(
         NodeFactory.CreateUriNode(UrlConstants.ChatsUrl(request.SessionId)),
         NodeFactory.CreateUriNode(UrlConstants.Rdf("type")),
-        NodeFactory.CreateUriNode(UrlConstants.ChatTypeUrl));
+        NodeFactory.CreateUriNode(UrlConstants.ChatTypeUrl),
+        RDFStore.DynamicStoreName);
 
       RequestContext context = new RequestContext(kb, state, session);
 

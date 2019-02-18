@@ -21,16 +21,21 @@ namespace ZimmerBot.Core.Knowledge
 
     protected Uri PredicateBase { get; set; }
 
+    protected string StoreName { get; set; }
 
-    public RDFDictionaryWrapper(RDFStore store, Uri subject, Uri predicateBase)
+
+    public RDFDictionaryWrapper(RDFStore store, Uri subject, Uri predicateBase, string storeName)
     {
       Condition.Requires(store, nameof(store)).IsNotNull();
       Condition.Requires(subject, nameof(subject)).IsNotNull();
       Condition.Requires(predicateBase, nameof(predicateBase)).IsNotNull();
+      Condition.Requires(storeName, nameof(storeName)).IsNotNullOrEmpty();
 
       Store = store;
       Subject = subject;
       PredicateBase = predicateBase;
+      StoreName = storeName;
+
       NodeFactory = new NodeFactory();
     }
 
@@ -43,7 +48,7 @@ namespace ZimmerBot.Core.Knowledge
         {
           INode s = NodeFactory.CreateUriNode(Subject);
           INode p = NodeFactory.CreateUriNode(new Uri(PredicateBase, key));
-          Triple t = Store.GetTripple(s, p);
+          Triple t = Store.GetTripple(s, p, StoreName);
           if (t != null)
             Cache[key] = t.Object.ToString();
           else
@@ -60,8 +65,8 @@ namespace ZimmerBot.Core.Knowledge
         INode s = NodeFactory.CreateUriNode(Subject);
         INode p = NodeFactory.CreateUriNode(new Uri(PredicateBase, key));
         INode o = NodeFactory.CreateLiteralNode(value != null ? value.ToString() : "");
-        Store.Retract(s, p);
-        Store.Insert(s, p, o);
+        Store.Retract(s, p, StoreName);
+        Store.Insert(s, p, o, StoreName);
       }
     }
 
