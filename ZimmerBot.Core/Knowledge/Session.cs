@@ -1,8 +1,10 @@
 ﻿using CuttingEdge.Conditions;
+using System;
 using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Knowledge
 {
+  [Serializable]
   public class Session
   {
     public string SessionId { get; protected set; }

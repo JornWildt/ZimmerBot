@@ -86,6 +86,7 @@ namespace ZimmerBot.Core.Knowledge
     public void Initialize(InitializationMode mode)
     {
       MemoryStore.Initialize(mode);
+      SessionManager.Initialize(mode);
     }
 
 

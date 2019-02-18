@@ -48,7 +48,7 @@ namespace ZimmerBot.Core.AddOnHandling
       Logger.DebugFormat("Scanning '{0}' for addons", path);
 
       // Search for all DLLs and load each of them
-      foreach (string dll in Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories))
+      foreach (string dll in Directory.GetFiles(path, "*.AddOn.dll", SearchOption.AllDirectories))
       {
         try
         {

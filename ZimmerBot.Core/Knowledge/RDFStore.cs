@@ -134,7 +134,7 @@ namespace ZimmerBot.Core.Knowledge
 
     protected string GetDatabaseFilename()
     {
-      string filename = Path.Combine(AppSettings.RDF_DataDirectory, ID + ".trig");
+      string filename = Path.Combine(AppSettings.RDF_DataDirectory, ID + ".rdf");
       filename = AppSettings.MapServerPath(filename);
       return filename;
     }

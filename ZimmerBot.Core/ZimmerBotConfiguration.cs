@@ -40,6 +40,7 @@ namespace ZimmerBot.Core
           CryptoHelper.Shutdown();
           StdSchedulerFactory.GetDefaultScheduler().Shutdown();
           RDFStoreRepository.Shutdown();
+          SessionManager.Shutdown();
           AddOnHandling.AddOnLoader.ShutdownAddOns();
           IsInitialized = false;
         }

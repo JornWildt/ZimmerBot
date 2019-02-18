@@ -1,8 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ZimmerBot.Core.Utilities
 {
+  [Serializable]
   public class NullValueDictionary<TKey,TValue> : ConcurrentDictionary<TKey, TValue>, IDictionary<TKey, TValue>
     where TValue : new()
   {
