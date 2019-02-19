@@ -10,15 +10,10 @@ namespace ZimmerBot.Core.Knowledge
 
     static List<RDFStore> Stores { get; set; } = new List<RDFStore>();
 
-    static Timer BackupTimer { get; set; }
-
 
     public static void Add(RDFStore store)
     {
       Stores.Add(store);
-
-      if (BackupTimer == null)
-        InitializeBackgroundBackup();
     }
 
 
@@ -43,21 +38,6 @@ namespace ZimmerBot.Core.Knowledge
           store.FlushToDisk();
         }
       }
-    }
-
-
-    private static void InitializeBackgroundBackup()
-    {
-      BackupTimer = new Timer();
-      BackupTimer.AutoReset = true;
-      BackupTimer.Elapsed += BackupTimer_Elapsed; ;
-      BackupTimer.Interval = AppSettings.RDF_BackupInterval.Value.TotalMilliseconds;
-      BackupTimer.Start();
-    }
-
-    private static void BackupTimer_Elapsed(object sender, ElapsedEventArgs e)
-    {
-      Backup();
     }
   }
 }

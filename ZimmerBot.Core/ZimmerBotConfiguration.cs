@@ -24,6 +24,7 @@ namespace ZimmerBot.Core
           StdSchedulerFactory.GetDefaultScheduler().Start();
           CryptoHelper.Initialize();
           SpellChecker.Initialize();
+          BackupManager.Initialize();
           IsInitialized = true;
         }
       }

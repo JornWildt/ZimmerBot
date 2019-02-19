@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
+using System;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Statements;
 
