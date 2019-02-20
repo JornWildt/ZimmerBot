@@ -44,6 +44,39 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
 
     [Test]
+    public void CanCheckConditionWithTimespan()
+    {
+      StandardRule r = ParseRule(@"
+> aaa
+! when 00:10:55
+: bbb");
+
+      Assert.IsNotNull(r.Trigger.Condition);
+      Assert.IsInstanceOf<ConstantValueExpr>(r.Trigger.Condition);
+      ConstantValueExpr v = (ConstantValueExpr)r.Trigger.Condition;
+      Assert.AreEqual(new TimeSpan(0, 10, 55), v.Value);
+    }
+
+
+    [Test]
+    public void CanCheckConditionWithFunctionCall()
+    {
+      StandardRule r = ParseRule(@"
+> aaa
+! when silent(00:30:10)
+: bbb");
+
+      Assert.IsNotNull(r.Trigger.Condition);
+      Assert.IsInstanceOf<FunctionCallExpr>(r.Trigger.Condition);
+      FunctionCallExpr func = (FunctionCallExpr)r.Trigger.Condition;
+
+      Assert.AreEqual("silent", func.FunctionName);
+      ConstantValueExpr v = (ConstantValueExpr)func.Parameters[0];
+      Assert.AreEqual(new TimeSpan(0, 30, 10), v.Value);
+    }
+
+
+    [Test]
     public void CanIncludeWeight()
     {
       StandardRule r = ParseRule(@"

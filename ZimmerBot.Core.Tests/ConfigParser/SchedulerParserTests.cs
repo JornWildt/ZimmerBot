@@ -21,7 +21,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       var action = kb.ScheduledActions.First().Value;
       Assert.AreEqual("1 2 3 4 5", action.CronExpr);
       Assert.AreEqual(1, action.Statements.Count);
-      Assert.AreEqual(0, action.Modifiers.Count);
+      Assert.IsNull(action.Condition);
     }
   }
 }

@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Expressions
 
     public FunctionCallExpr(Expression functionReference, List<Expression> parameters)
     {
-      Condition.Requires(functionReference, nameof(functionReference)).IsNotNull().IsOfType(typeof(DotExpression));
+      Condition.Requires(functionReference, nameof(functionReference)).IsNotNull();
       Condition.Requires(parameters, nameof(parameters)).IsNotNull();
 
       FunctionName = functionReference.ToString();
@@ -27,7 +27,9 @@ namespace ZimmerBot.Core.Expressions
     {
       // FIXME: handle through some sort of registration system or maybe even reflection
       if (FunctionName == "probability")
-        return Invoke1(context, new Type[] { typeof(double) }, p => Probability(p), "probability");
+        return Invoke<double>(context, new Type[] { typeof(double) }, p => Probability(p), "probability");
+      if (FunctionName == "silent")
+        return Invoke<TimeSpan>(context, new Type[] { typeof(TimeSpan) }, p => Silent(p), "silent");
       else
         throw new InvalidOperationException(string.Format("Unknown function name '{0}'", FunctionName));
     }
@@ -39,11 +41,11 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    private object Invoke1(ExpressionEvaluationContext context, Type[] types, Func<object,object> f, string name)
+    private object Invoke<T>(ExpressionEvaluationContext context, Type[] types, Func<T,object> f, string name)
     {
       List<object> inputValues = CalculateInputValues(context);
       CheckParameters(types, inputValues, name);
-      return f(inputValues[0]);
+      return f((T)inputValues[0]);
     }
 
 
@@ -77,9 +79,16 @@ namespace ZimmerBot.Core.Expressions
     // FIXME: move to a separate utility class
     static Random Randomizer = new Random();
 
-    private bool Probability(object p)
+
+    private bool Probability(double p)
     {
       return Randomizer.NextDouble() < (double)p;
+    }
+
+
+    private bool Silent(TimeSpan t)
+    {
+      return true;
     }
   }
 }

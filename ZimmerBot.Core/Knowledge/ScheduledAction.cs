@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Statements;
 
 namespace ZimmerBot.Core.Knowledge
@@ -10,15 +11,27 @@ namespace ZimmerBot.Core.Knowledge
 
     public string CronExpr { get; protected set; }
 
-    public List<RuleModifier> Modifiers { get; protected set; }
+    public Expression Condition { get; protected set; }
 
 
     public ScheduledAction(KnowledgeBase kb, string cronExpr, List<RuleModifier> modifiers, List<Statement> statements)
-      : base(kb, statements)
+      : base(kb, modifiers, statements)
     {
       Id = Guid.NewGuid().ToString();
       CronExpr = cronExpr;
-      Modifiers = modifiers;
+    }
+
+
+    public override Executable WithCondition(Expression c)
+    {
+      Condition = c;
+      return this;
+    }
+
+
+    public override Executable WithWeight(double w)
+    {
+      return this;
     }
 
 

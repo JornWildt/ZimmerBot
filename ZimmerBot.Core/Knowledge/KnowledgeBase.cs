@@ -211,12 +211,12 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterEventHandler(string e, List<Statement> statements)
+    public void RegisterEventHandler(string e, List<Statement> statements, IEnumerable<RuleModifier> modifiers)
     {
       Request.EventEnum etype;
       if (Enum.TryParse(e, true, out etype))
       {
-        StandardRule rule = new StandardRule(this, statements);
+        StandardRule rule = new StandardRule(this, statements, modifiers);
         if (!EventHandlers.ContainsKey(etype))
           EventHandlers[etype] = new List<StandardRule>();
         EventHandlers[etype].Add(rule);

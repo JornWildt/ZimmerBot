@@ -42,6 +42,7 @@
   public RdfValue rdfValue;
   public string s;
   public double n;
+  public TimeSpan ts;
 }
 
 %start main
@@ -69,8 +70,10 @@
 %token T_CWORD
 %token T_STRING
 %token T_NUMBER
+%token T_TIMESPAN
 
 %left T_QUESTION
+%left T_AND, T_OR, T_NOT
 %left T_EQU, T_LT, T_GT
 %left T_PLUS, T_MINUS
 %left T_STAR
@@ -343,24 +346,36 @@ exprSeq
 
 exprSeq2
   : exprSeq2 T_COMMA expr { $1.exprList.Add($3.expr); $$ = $1; }
-  | expr                 { $$.exprList = new List<Expression>(); $$.exprList.Add($1.expr); }
+  | expr                  { $$.exprList = new List<Expression>(); $$.exprList.Add($1.expr); }
   ;
 
 expr
   : exprBinary { $$ = $1; }
   | exprUnary  { $$ = $1; }
+  | exprFunc   { $$ = $1; }
+  | exprAtomic { $$ = $1; }
   ;
 
 exprBinary
   : expr T_EQU expr { $$.expr = new BinaryOperatorExpr($1.expr, $3.expr, BinaryOperatorExpr.OperatorType.Equals); }
+  | expr T_AND expr { $$.expr = new BinaryOperatorExpr($1.expr, $3.expr, BinaryOperatorExpr.OperatorType.And); }
+  | expr T_OR expr  { $$.expr = new BinaryOperatorExpr($1.expr, $3.expr, BinaryOperatorExpr.OperatorType.Or); }
   ;
 
 exprUnary
   : T_LPAR expr T_RPAR { $$.expr = $2.expr; }
   | T_EXCL expr        { $$.expr = new UnaryOperatorExpr($2.expr, UnaryOperatorExpr.OperatorType.Negation); }
-  | exprIdentifier     { $$.expr = $1.expr; }
+  ;
+
+exprFunc
+  : exprReference T_LPAR exprSeq T_RPAR { $$.expr = new FunctionCallExpr($1.expr, $3.exprList); }
+  ;
+
+exprAtomic
+  : exprIdentifier     { $$.expr = $1.expr; }
   | T_STRING           { $$.expr = new ConstantValueExpr(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_NUMBER           { $$.expr = new ConstantValueExpr($1.n); }
+  | T_TIMESPAN         { $$.expr = new ConstantValueExpr($1.ts); }
   ;
 
 exprIdentifier
@@ -371,7 +386,7 @@ exprIdentifier
 
 exprReference
   : exprReference T_DOT T_WORD { $$.expr = new DotExpression($1.expr, $3.s); }
-  | T_WORD                     { $$.expr = new DotExpression($1.s); }
+  | T_WORD                     { $$.expr = new IdentifierExpr($1.s); }
   ;
 
 

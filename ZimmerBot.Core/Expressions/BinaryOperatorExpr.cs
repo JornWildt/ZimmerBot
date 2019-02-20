@@ -7,7 +7,7 @@ namespace ZimmerBot.Core.Expressions
 {
   public class BinaryOperatorExpr : Expression
   {
-    public enum OperatorType { Equals, NotEquals }
+    public enum OperatorType { Equals, NotEquals, And, Or }
 
     public Expression Left { get; protected set; }
 
@@ -38,6 +38,10 @@ namespace ZimmerBot.Core.Expressions
           return EqualsOp(a, b);
         case OperatorType.NotEquals:
           return !EqualsOp(a, b);
+        case OperatorType.And:
+          return AndOp(a, b);
+        case OperatorType.Or:
+          return OrOp(a, b);
       }
 
       throw new InvalidOperationException("Unhandled operator type: " + Operator);
@@ -52,6 +56,24 @@ namespace ZimmerBot.Core.Expressions
         return false;
 
       return a.Equals(b);
+    }
+
+
+    private bool AndOp(object a, object b)
+    {
+      bool aa = (a as bool?) ?? false;
+      bool bb = (b as bool?) ?? false;
+
+      return aa && bb;
+    }
+
+
+    private bool OrOp(object a, object b)
+    {
+      bool aa = (a as bool?) ?? false;
+      bool bb = (b as bool?) ?? false;
+
+      return aa || bb;
     }
 
 

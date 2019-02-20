@@ -13,9 +13,9 @@ namespace ZimmerBot.Core.Knowledge
       Expr = expr;
     }
 
-    public override void Invoke(StandardRule r)
+    public override void Invoke(Executable e)
     {
-      r.WithCondition(Expr);
+      e.WithCondition(Expr);
     }
   }
 }

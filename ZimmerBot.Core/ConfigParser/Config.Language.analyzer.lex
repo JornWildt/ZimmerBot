@@ -51,6 +51,9 @@ $           { return (int)Token.T_DOLLAR; }
 \?          { return (int)Token.T_QUESTION; }
 \!          { return (int)Token.T_EXCL; }
 T\>         { return (int)Token.T_TOPICRULE; }
+AND         { return (int)Token.T_AND; }
+OR          { return (int)Token.T_OR; }
+NOT         { return (int)Token.T_NOT; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
@@ -83,6 +86,8 @@ at { return (int)Token.T_AT; }
 
 \%{Word}  { yylval.s = yytext; return (int)Token.T_CWORD; }
 {Word}    { yylval.s = yytext; return (int)Token.T_WORD; }
+
+([0-9]{2}:)?[0-9]{2}:[0-9]{2} { yylval.ts = TryParseTimeSpan(yytext); return (int)Token.T_TIMESPAN; }
 
 {Comment}   { BEGIN(comment); }
 

@@ -17,35 +17,25 @@ namespace ZimmerBot.Core.Knowledge
 
 
     public StandardRule(KnowledgeBase kb, string label, Topic topic, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
-      : base(kb, label, topic, statements)
+      : base(kb, label, topic, modifiers, statements)
     {
       if (patterns == null || patterns.Count == 0 || patterns[0] == null)
         Trigger = new EmptyTrigger();
       else
         Trigger = new RegexTrigger(patterns);
-      HandleModifiers(modifiers);
     }
 
 
     public StandardRule(KnowledgeBase kb, string label, Topic topic, List<OperatorKeyValueList> patterns, List<RuleModifier> modifiers, List<Statement> statements)
-      : base(kb, label, topic, statements)
+      : base(kb, label, topic, modifiers, statements)
     {
       Trigger = new FuzzyTrigger(patterns);
-      HandleModifiers(modifiers);
     }
 
 
-    public StandardRule(KnowledgeBase kb, List<Statement> statements)
-      : base(kb, null, null, statements)
+    public StandardRule(KnowledgeBase kb, List<Statement> statements, IEnumerable<RuleModifier> modifiers)
+      : base(kb, null, null, modifiers, statements)
     {
-    }
-
-
-    private void HandleModifiers(List<RuleModifier> modifiers)
-    {
-      if (modifiers != null)
-        foreach (var m in modifiers)
-          m.Invoke(this);
     }
 
 
@@ -56,14 +46,14 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public StandardRule WithCondition(Expression c)
+    public override Executable WithCondition(Expression c)
     {
       Trigger.WithCondition(c);
       return this;
     }
 
 
-    public StandardRule WithWeight(double w)
+    public override Executable WithWeight(double w)
     {
       Weight = w;
       return this;

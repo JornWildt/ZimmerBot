@@ -2,6 +2,6 @@
 {
   public abstract class RuleModifier
   {
-    public abstract void Invoke(StandardRule r);
+    public abstract void Invoke(Executable e);
   }
 }

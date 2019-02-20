@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.WordRegex;
 
@@ -7,8 +8,21 @@ namespace ZimmerBot.Core.Knowledge
   public class TopicRule : Rule
   {
     public TopicRule(KnowledgeBase kb, string label, Topic topic, List<Statement> statements)
-      : base(kb, label, topic, statements)
+      : base(kb, label, topic, null, statements)
     {
+    }
+
+
+    public override Executable WithCondition(Expression c)
+    {
+      // Hmmm ... maybe conditions should be allowed on topics too?
+      return this;
+    }
+
+
+    public override Executable WithWeight(double w)
+    {
+      return this;
     }
 
 

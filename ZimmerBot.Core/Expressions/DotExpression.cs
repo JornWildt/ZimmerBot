@@ -6,25 +6,17 @@ namespace ZimmerBot.Core.Expressions
 {
   public class DotExpression : Expression
   {
-    public DotExpression Left { get; protected set; }
+    public Expression Left { get; protected set; }
 
     public string Right { get; protected set; }
 
 
-    public DotExpression(string right)
-    {
-      Condition.Requires(right, nameof(right)).IsNotNullOrEmpty();
-
-      Right = right;
-    }
-
-
     public DotExpression(Expression left, string right)
     {
-      Condition.Requires(left, nameof(left)).IsNotNull().IsOfType(typeof(DotExpression));
+      Condition.Requires(left, nameof(left)).IsNotNull();
       Condition.Requires(right, nameof(right)).IsNotNullOrEmpty();
 
-      Left = (DotExpression)left;
+      Left = left;
       Right = right;
     }
 
@@ -45,8 +37,6 @@ namespace ZimmerBot.Core.Expressions
         left = (IDictionary<string, object>)value;
       }
 
-      //if (!left.ContainsKey(Right))
-      //  return null;
       return left[Right];
     }
 

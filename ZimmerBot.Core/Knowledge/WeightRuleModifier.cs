@@ -9,9 +9,9 @@
       Weight = weight;
     }
 
-    public override void Invoke(StandardRule r)
+    public override void Invoke(Executable e)
     {
-      r.WithWeight(Weight);
+      e.WithWeight(Weight);
     }
   }
 }

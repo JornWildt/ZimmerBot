@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using ZimmerBot.Core.Utilities;
 
@@ -21,6 +22,15 @@ namespace ZimmerBot.Core.ConfigParser
       double result;
       if (!double.TryParse(s, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result))
         yyerror("The value '{0}' is not a valid number", s);
+      return result;
+    }
+
+
+    internal TimeSpan TryParseTimeSpan(string s)
+    {
+      TimeSpan result;
+      if (!TimeSpan.TryParse(s, out result))
+        yyerror("The value '{0}' is not a valid timespan", s);
       return result;
     }
 

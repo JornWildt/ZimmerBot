@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Scheduler;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.TemplateParser;
@@ -18,7 +19,7 @@ namespace ZimmerBot.Core.Knowledge
     public static Random Randomizer = new Random();
 
 
-    public Executable(KnowledgeBase kb, IEnumerable<Statement> statements)
+    public Executable(KnowledgeBase kb, IEnumerable<RuleModifier> modifiers, IEnumerable<Statement> statements)
     {
       Condition.Requires(kb, nameof(kb)).IsNotNull();
       Condition.Requires(statements, nameof(statements)).IsNotNull();
@@ -26,7 +27,23 @@ namespace ZimmerBot.Core.Knowledge
       KnowledgeBase = kb;
 
       Statements = new List<Statement>(statements);
+      RegisterModifiers(modifiers);
     }
+
+
+    public void RegisterModifiers(IEnumerable<RuleModifier> modifiers)
+    {
+      if (modifiers != null)
+        foreach (var m in modifiers)
+          m.Invoke(this);
+    }
+
+
+    public abstract Executable WithCondition(Expression c);
+
+
+    public abstract Executable WithWeight(double w);
+
 
 
     public override string ToString()

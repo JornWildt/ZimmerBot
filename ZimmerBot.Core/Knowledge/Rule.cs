@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CuttingEdge.Conditions;
-using ZimmerBot.Core.Scheduler;
 using ZimmerBot.Core.Statements;
-using ZimmerBot.Core.TemplateParser;
 using ZimmerBot.Core.WordRegex;
 
 namespace ZimmerBot.Core.Knowledge
@@ -20,8 +17,8 @@ namespace ZimmerBot.Core.Knowledge
     public string StartingTopic { get; protected set; }
 
 
-    public Rule(KnowledgeBase kb, string label, Topic topic, IList<Statement> statements)
-      : base(kb, statements)
+    public Rule(KnowledgeBase kb, string label, Topic topic, IEnumerable<RuleModifier> modifiers, IList<Statement> statements)
+      : base(kb, modifiers, statements)
     {
       Id = Guid.NewGuid().ToString();
       Label = label;

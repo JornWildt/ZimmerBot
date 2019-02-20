@@ -135,7 +135,7 @@ namespace ZimmerBot.Core.ConfigParser
 
     protected void RegisterEventHandler(string e, List<Statement> statements)
     {
-      KnowledgeBase.RegisterEventHandler(e, statements);
+      KnowledgeBase.RegisterEventHandler(e, statements, null);
     }
 
 

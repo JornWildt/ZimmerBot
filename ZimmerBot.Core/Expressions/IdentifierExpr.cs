@@ -28,5 +28,11 @@ namespace ZimmerBot.Core.Expressions
     {
       throw new NotImplementedException(); // FIXME
     }
+
+
+    public override string ToString()
+    {
+      return Identifier;
+    }
   }
 }

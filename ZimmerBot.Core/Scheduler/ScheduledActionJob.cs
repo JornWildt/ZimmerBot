@@ -1,6 +1,8 @@
 ﻿using log4net;
 using Quartz;
+using System;
 using System.Collections.Generic;
+using ZimmerBot.Core.Expressions;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Statements;
@@ -33,17 +35,30 @@ namespace ZimmerBot.Core.Scheduler
             BotId = botId,
           };
           RequestContext requestContext = BotUtility.BuildRequestContext(bot.KnowledgeBase, request);
-          ZTokenSequence input = new ZTokenSequence();
-          InputRequestContext inputContext = new InputRequestContext(requestContext, request, input);
-          ResponseGenerationContext responseContext = new ResponseGenerationContext(inputContext, new WordRegex.MatchResult(0.0));
 
-          List<string> output = action.Invoke(responseContext, null);
-
-          if (output.Count > 0)
+          bool canExecute = true;
+          if (action.Condition != null)
           {
-            string message = output[0];
-            Response response = new Response(new string[] { message }, null);
-            bot.SendResponse(response);
+            ExpressionEvaluationContext eec = new ExpressionEvaluationContext(requestContext.State.State);
+            object value = action.Condition.Evaluate(eec);
+            if (!Expression.TryConvertToBool(value, out canExecute))
+              throw new InvalidCastException($"Could not convert value '{value}' to bool in condition.");
+          }
+
+          if (canExecute)
+          {
+            ZTokenSequence input = new ZTokenSequence();
+            InputRequestContext inputContext = new InputRequestContext(requestContext, request, input);
+            ResponseGenerationContext responseContext = new ResponseGenerationContext(inputContext, new WordRegex.MatchResult(0.0));
+
+            List<string> output = action.Invoke(responseContext, null);
+
+            if (output.Count > 0)
+            {
+              string message = output[0];
+              Response response = new Response(new string[] { message }, null);
+              bot.SendResponse(response);
+            }
           }
         }
       }
