@@ -19,6 +19,7 @@ namespace ZimmerBot.Core.Knowledge
     {
       Id = Guid.NewGuid().ToString();
       CronExpr = cronExpr;
+      RegisterModifiers(modifiers);
     }
 
 

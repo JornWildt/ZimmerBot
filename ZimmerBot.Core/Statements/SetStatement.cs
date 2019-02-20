@@ -34,7 +34,7 @@ namespace ZimmerBot.Core.Statements
 
     public override void Execute(StatementExecutionContect context)
     {
-      ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Variables);
+      ExpressionEvaluationContext ec = new ExpressionEvaluationContext(context.ResponseContext.Session, context.ResponseContext.Variables);
       object value = ValueExpr.Evaluate(ec);
       Reference.AssignValue(ec, value);
     }

@@ -121,6 +121,8 @@ namespace ZimmerBot.Core
 
     public void SendResponse(Response response)
     {
+      if (response.Output != null && response.Output.Length > 0)
+        response.Session.Store[SessionKeys.LastMessageTimeStamp] = DateTime.Now;
       Environment.HandleResponse(response);
     }
   }

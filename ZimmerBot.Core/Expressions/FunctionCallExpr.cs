@@ -29,7 +29,7 @@ namespace ZimmerBot.Core.Expressions
       if (FunctionName == "probability")
         return Invoke<double>(context, new Type[] { typeof(double) }, p => Probability(p), "probability");
       if (FunctionName == "silent")
-        return Invoke<TimeSpan>(context, new Type[] { typeof(TimeSpan) }, p => Silent(p), "silent");
+        return Invoke<TimeSpan>(context, new Type[] { typeof(TimeSpan) }, p => Silent(context, p), "silent");
       else
         throw new InvalidOperationException(string.Format("Unknown function name '{0}'", FunctionName));
     }
@@ -86,8 +86,11 @@ namespace ZimmerBot.Core.Expressions
     }
 
 
-    private bool Silent(TimeSpan t)
+    private bool Silent(ExpressionEvaluationContext context, TimeSpan t)
     {
+      DateTime? last = context.Session.Store[SessionKeys.LastMessageTimeStamp] as DateTime?;
+      if (last != null)
+        return last.Value < DateTime.Now - t;
       return true;
     }
   }

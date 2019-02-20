@@ -39,7 +39,7 @@ namespace ZimmerBot.Core.Scheduler
           bool canExecute = true;
           if (action.Condition != null)
           {
-            ExpressionEvaluationContext eec = new ExpressionEvaluationContext(requestContext.State.State);
+            ExpressionEvaluationContext eec = new ExpressionEvaluationContext(requestContext.Session, requestContext.State.State);
             object value = action.Condition.Evaluate(eec);
             if (!Expression.TryConvertToBool(value, out canExecute))
               throw new InvalidCastException($"Could not convert value '{value}' to bool in condition.");
@@ -56,7 +56,7 @@ namespace ZimmerBot.Core.Scheduler
             if (output.Count > 0)
             {
               string message = output[0];
-              Response response = new Response(new string[] { message }, null);
+              Response response = new Response(new string[] { message }, null, session);
               bot.SendResponse(response);
             }
           }

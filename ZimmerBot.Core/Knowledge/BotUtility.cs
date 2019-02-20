@@ -82,11 +82,11 @@ namespace ZimmerBot.Core.Knowledge
         {
           context.State[StateKeys.SessionStore][StateKeys.ResponseCount] = context.State[StateKeys.SessionStore][StateKeys.ResponseCount] + 1;
 
-          return new Response(output, request.State);
+          return new Response(output, request.State, context.Session);
         }
         else
         {
-          return new Response(new string[0], request.State);
+          return new Response(new string[0], request.State, context.Session);
         }
       }
       catch (Exception ex)

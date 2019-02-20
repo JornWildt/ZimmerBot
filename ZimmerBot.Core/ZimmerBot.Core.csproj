@@ -156,6 +156,7 @@
     <Compile Include="Pipeline\InputStages\WordStemmerStage.cs" />
     <Compile Include="Scheduler\ScheduledActionJob.cs" />
     <Compile Include="Scheduler\ScheduleHelper.cs" />
+    <Compile Include="SessionKeys.cs" />
     <Compile Include="Statements\AnswerStatement.cs" />
     <Compile Include="Statements\CallStatment.cs" />
     <Compile Include="ConfigParser\ConfigurationParser.cs" />

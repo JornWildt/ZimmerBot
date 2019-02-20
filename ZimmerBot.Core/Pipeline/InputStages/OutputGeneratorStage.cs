@@ -32,6 +32,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
       else
       {
         // Only add "???" for unrecognized input when there actually is some input
+        // - "???" is hard coded because you can always add a "> *" rule to catch all and generate your own output.
         if (item.Context.Input != null)
           output.Add("???");
 

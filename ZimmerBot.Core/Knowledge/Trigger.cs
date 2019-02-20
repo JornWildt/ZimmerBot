@@ -39,7 +39,7 @@ namespace ZimmerBot.Core.Knowledge
 
       if (Condition != null)
       {
-        ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.InputContext.State.State);
+        ExpressionEvaluationContext eec = new ExpressionEvaluationContext(context.InputContext.Session, context.InputContext.State.State);
         object value = Condition.Evaluate(eec);
         bool b;
         if (Expression.TryConvertToBool(value, out b))

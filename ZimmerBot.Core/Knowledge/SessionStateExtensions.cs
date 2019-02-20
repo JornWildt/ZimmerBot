@@ -1,4 +1,5 @@
 ﻿using CuttingEdge.Conditions;
+using System;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -45,17 +46,23 @@ namespace ZimmerBot.Core.Knowledge
 
     #region Latest input handling
 
-    const string LatestInput_SessionKey = "LatestInput";
-
     public static void RegisterLatestInput(this Session session, string input)
     {
-      session.Store[LatestInput_SessionKey] = input;
+      session.Store[SessionKeys.LatestInput] = input;
+      session.Store[SessionKeys.LastMessageTimeStamp] = DateTime.Now;
     }
 
 
     public static string GetLatestInput(this Session session)
     {
-      return session.Store[LatestInput_SessionKey];
+      return session.Store[SessionKeys.LatestInput];
+    }
+
+
+    public static void RegisterLatestOutput(this Session session, string output)
+    {
+      session.Store[SessionKeys.LatestOutput] = output;
+      session.Store[SessionKeys.LastMessageTimeStamp] = DateTime.Now;
     }
 
     #endregion
@@ -63,23 +70,21 @@ namespace ZimmerBot.Core.Knowledge
 
     #region Busy handling
 
-    const string IsBusyWriting_SessionKey = "IsBusyWriting";
-
     public static void MarkAsBusyWritingAndNotReadyForInput(this Session session)
     {
-      session.Store[IsBusyWriting_SessionKey] = true;
+      session.Store[SessionKeys.IsBusyWriting] = true;
     }
 
 
     public static bool IsBusyWriting(this Session session)
     {
-      return session.Store.ContainsKey(IsBusyWriting_SessionKey) && session.Store[IsBusyWriting_SessionKey];
+      return session.Store.ContainsKey(SessionKeys.IsBusyWriting) && session.Store[SessionKeys.IsBusyWriting];
     }
 
 
     public static void MarkAsReadyForInput(this Session session)
     {
-      session.Store[IsBusyWriting_SessionKey] = false;
+      session.Store[SessionKeys.IsBusyWriting] = false;
     }
 
     #endregion

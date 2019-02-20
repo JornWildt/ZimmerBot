@@ -23,6 +23,7 @@ namespace ZimmerBot.Core.Knowledge
         Trigger = new EmptyTrigger();
       else
         Trigger = new RegexTrigger(patterns);
+      RegisterModifiers(modifiers);
     }
 
 
@@ -30,12 +31,14 @@ namespace ZimmerBot.Core.Knowledge
       : base(kb, label, topic, modifiers, statements)
     {
       Trigger = new FuzzyTrigger(patterns);
+      RegisterModifiers(modifiers);
     }
 
 
     public StandardRule(KnowledgeBase kb, List<Statement> statements, IEnumerable<RuleModifier> modifiers)
       : base(kb, null, null, modifiers, statements)
     {
+      RegisterModifiers(modifiers);
     }
 
 
@@ -48,7 +51,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public override Executable WithCondition(Expression c)
     {
-      Trigger.WithCondition(c);
+      if (Trigger != null)
+        Trigger.WithCondition(c);
       return this;
     }
 

@@ -27,6 +27,8 @@ namespace ZimmerBot.Core.Knowledge
       if (label != null)
         KnowledgeBase.RegisterRuleLabel(label, this);
 
+      RegisterModifiers(modifiers);
+
       StatementInitializationContext context = new StatementInitializationContext(this);
       foreach (Statement o in Statements)
       {

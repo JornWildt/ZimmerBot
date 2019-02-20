@@ -48,7 +48,7 @@ namespace ZimmerBot.Core.Knowledge
 
     public ExpressionEvaluationContext BuildExpressionEvaluationContext()
     {
-      return new ExpressionEvaluationContext(InputContext.Variables);
+      return new ExpressionEvaluationContext(InputContext.Session, InputContext.Variables);
     }
 
 

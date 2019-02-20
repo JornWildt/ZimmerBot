@@ -27,11 +27,10 @@ namespace ZimmerBot.Core.Knowledge
       KnowledgeBase = kb;
 
       Statements = new List<Statement>(statements);
-      RegisterModifiers(modifiers);
     }
 
 
-    public void RegisterModifiers(IEnumerable<RuleModifier> modifiers)
+    protected void RegisterModifiers(IEnumerable<RuleModifier> modifiers)
     {
       if (modifiers != null)
         foreach (var m in modifiers)
