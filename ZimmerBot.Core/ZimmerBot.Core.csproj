@@ -124,12 +124,12 @@
     <Compile Include="Knowledge\Entity.cs" />
     <Compile Include="Knowledge\EntityClass.cs" />
     <Compile Include="Knowledge\EntityManager.cs" />
+    <Compile Include="Knowledge\Executable.cs" />
     <Compile Include="Knowledge\InputRequestContext.cs" />
     <Compile Include="Knowledge\FuzzyTrigger.cs" />
     <Compile Include="Knowledge\RegexTrigger.cs" />
     <Compile Include="Knowledge\Rule.cs" />
-    <Compile Include="Knowledge\ScheduledTrigger.cs" />
-    <Compile Include="Knowledge\ScheduleRuleModifier.cs" />
+    <Compile Include="Knowledge\ScheduledAction.cs" />
     <Compile Include="Knowledge\SessionStateExtensions.cs" />
     <Compile Include="Knowledge\RepetitionException.cs" />
     <Compile Include="Knowledge\RequestContext.cs" />
@@ -154,6 +154,7 @@
     <Compile Include="Pipeline\InputStages\SpellCheckerStage.cs" />
     <Compile Include="Pipeline\InputStages\TopicAssigningStage.cs" />
     <Compile Include="Pipeline\InputStages\WordStemmerStage.cs" />
+    <Compile Include="Scheduler\ScheduledActionJob.cs" />
     <Compile Include="Scheduler\ScheduleHelper.cs" />
     <Compile Include="Statements\AnswerStatement.cs" />
     <Compile Include="Statements\CallStatment.cs" />
@@ -218,7 +219,7 @@
     <Compile Include="Utilities\OperatorKeyValue.cs" />
     <Compile Include="Utilities\OperatorKeyValueList.cs" />
     <Compile Include="Utilities\ParserException.cs" />
-    <Compile Include="Scheduler\ScheduledBotCallback.cs" />
+    <Compile Include="Scheduler\ScheduledMessageJob.cs" />
     <Compile Include="Utilities\SpellChecker.cs" />
     <Compile Include="Utilities\StringPairList.cs" />
     <Compile Include="Utilities\StringRender.cs" />

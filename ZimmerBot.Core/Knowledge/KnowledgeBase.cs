@@ -8,6 +8,7 @@ using ZimmerBot.Core.ConfigParser;
 using ZimmerBot.Core.Patterns;
 using ZimmerBot.Core.Pipeline;
 using ZimmerBot.Core.Pipeline.InputStages;
+using ZimmerBot.Core.Scheduler;
 using ZimmerBot.Core.Statements;
 using ZimmerBot.Core.Utilities;
 using ZimmerBot.Core.WordRegex;
@@ -39,6 +40,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public IDictionary<Request.EventEnum, List<StandardRule>> EventHandlers { get; protected set; }
 
+    public IDictionary<string,ScheduledAction> ScheduledActions { get; protected set; }
+
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
     protected IDictionary<string, Rule> LabelToRuleMap { get; set; }
@@ -68,6 +71,7 @@ namespace ZimmerBot.Core.Knowledge
       WordDefinitionManager = new WordDefinitionManager(this);
       SparqlForEntities = new List<string>();
       PatternManager = new PatternManager(this);
+      ScheduledActions = new Dictionary<string, ScheduledAction>();
 
       Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
 
@@ -110,7 +114,7 @@ namespace ZimmerBot.Core.Knowledge
         r.SetupComplete();
 
       EntityManager.SetupComplete();
-      PatternManager.SetupComplete();
+      PatternManager.SetupComplete();      
     }
 
 
@@ -156,12 +160,16 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterScheduledJobs(IScheduler scheduler, string botId)
+    public void RegisterScheduledAction(string cronExpr, List<RuleModifier> modifiers, List<Statement> statements)
     {
-      foreach (StandardRule r in AllRules)
-      {
-        r.RegisterScheduledJobs(scheduler, botId);
-      }
+      var action = new ScheduledAction(this, cronExpr, modifiers, statements);
+      ScheduledActions.Add(action.Id, action);
+    }
+
+
+    public ScheduledAction GetScheduledAction(string id)
+    {
+      return ScheduledActions[id];
     }
 
 

@@ -29,7 +29,6 @@ namespace ZimmerBot.Core.Knowledge
 
     public abstract void ExtractWordsForSpellChecker();
 
-    public abstract void RegisterScheduledJobs(IScheduler scheduler, string botId, string ruleId);
 
     public abstract MatchResult CalculateTriggerScore(TriggerEvaluationContext context);
 

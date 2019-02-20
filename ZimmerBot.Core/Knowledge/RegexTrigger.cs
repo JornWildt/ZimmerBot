@@ -91,12 +91,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public override void RegisterScheduledJobs(IScheduler scheduler, string botId, string ruleId)
-    {
-      // Ignore
-    }
-
-
     public override MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
       double conditionModifier = CalculateConditionModifier(context);

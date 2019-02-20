@@ -70,12 +70,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterScheduledJobs(IScheduler scheduler, string botId)
-    {
-      Trigger.RegisterScheduledJobs(scheduler, botId, Id);
-    }
-
-
     public override void RegisterParentRule(Rule parentRule)
     {
       Trigger.RegisterParentRule(parentRule);

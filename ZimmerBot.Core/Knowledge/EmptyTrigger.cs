@@ -18,12 +18,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public override void RegisterScheduledJobs(IScheduler scheduler, string botId, string ruleId)
-    {
-      // Do nothing
-    }
-
-
     public override MatchResult CalculateTriggerScore(TriggerEvaluationContext context)
     {
       if (context.InputContext.Input == null || context.InputContext.Input.All(inp => inp.Count == 0))

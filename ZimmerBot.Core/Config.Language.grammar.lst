@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 24-03-2018 23:13:34>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 19-02-2019 20:07:27>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 24-03-2018 23:15:37
+//  DateTime: 19-02-2019 20:08:18
 //  UserName: Jorn
 // ==========================================================================
 
@@ -92,12 +92,8 @@
 %token T_DOLLAR
 
 %%
-// Error: NonTerminal symbol "T_LTPROP" has no productions
-// Warning: Terminating T_LTPROP fixes the following size-1 NonTerminal set
-   // {T_LTPROP}
-// Error: There are 1 non-terminating NonTerminal Symbols
-   //  {T_LTPROP}
-// ------------------------------------------------------------------------
+// Warning: NonTerminal symbol "starNum" is unreachable
+// ----------------------------------------------------
 
 /* "item" aint the best word ... waiting for a better to popup ("statement" is already used) */
 
@@ -147,6 +143,8 @@ configuration
       { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_ENTITIES T_LPAR T_STRING T_RPAR
       { RDFEntities($4.s); }
+  | T_EVERY T_STRING ruleModifierSeq statementSeq
+      { RegisterScheduledAction($2.s, $3.ruleModifierList, $3.statementList); }
   ;
 
 conceptPatternSeq
@@ -245,7 +243,6 @@ ruleModifierSeq
 ruleModifier
   : condition { $$ = $1; }
   | weight    { $$ = $1; }
-  | schedule  { $$ = $1; }
   ;
 
 condition
@@ -256,9 +253,6 @@ weight
   : T_WEIGHT T_NUMBER { $$.ruleModifier = new ZimmerBot.Core.Knowledge.WeightRuleModifier($2.n); }
   ;
 
-schedule
-  : T_EVERY T_NUMBER { $$.ruleModifier = new ZimmerBot.Core.Knowledge.ScheduleRuleModifier((int)$2.n); }
-  ;
 
 /******************************************************************************
   STATEMENT
@@ -443,8 +437,8 @@ definitionDataValue
   : T_STRING          { $$.rdfValue = new RdfStringValue($1.s); }
   | T_WORD            { $$.rdfValue = new RdfStringValue($1.s); }
   | T_NUMBER          { $$.rdfValue = new RdfNumberValue($1.n); }
-  | T_LT wordSeq T_GT { $$.rdfValue = new RdfResourceUriValue($2.stringList); }
-  | T_LTPROP wordSeq T_GT { $$.rdfValue = new RdfPropertyUriValue($2.stringList); }
+  | T_LT wordSeq T_GT                { $$.rdfValue = RdfResourceUriValue($2.stringList, null); }
+  | T_LT T_WORD T_COLON wordSeq T_GT { $$.rdfValue = RdfResourceUriValue($4.stringList, $2.s); }
   ;
 
 /******************************************************************************
@@ -485,6 +479,11 @@ cword
   : T_WORD   { $$.s = $1.s; }
   | T_CWORD  { $$.s = $1.s; }
   | T_STRING { $$.s = $1.s; }
+  ;
+
+starNum
+  : T_NUMBER { $$.nn = $1.n; }
+  | T_STAR   { $$.nn = null; }
   ;
 
 stringSeq

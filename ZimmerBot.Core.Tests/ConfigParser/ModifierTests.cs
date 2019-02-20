@@ -54,23 +54,5 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       IList<Reaction> reactions = CalculateReactions(r, "aaa");
       Assert.AreEqual(0.5, reactions[0].Score);
     }
-
-
-#if false
-    [Test]
-    public void CanIncludeSchedule()
-    {
-      StandardRule r = ParseRule(@"
-> aaa
-! every 30
-: Another 30 seconds.");
-
-      Assert.IsInstanceOf<ScheduledTrigger>(r.Trigger);
-
-      ScheduledTrigger trigger = (ScheduledTrigger)r.Trigger;
-      Assert.IsNotNull(trigger.Schedule);
-      Assert.AreEqual(TimeSpan.FromSeconds(30), trigger.Schedule.Value);
-    }
-#endif
   }
 }

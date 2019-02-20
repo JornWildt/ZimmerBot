@@ -9,9 +9,9 @@ using ZimmerBot.Core.Knowledge;
 
 namespace ZimmerBot.Core.Scheduler
 {
-  public class ScheduledBotCallback : IJob
+  public class ScheduledMessageJob : IJob
   {
-    static ILog Logger = LogManager.GetLogger(typeof(ScheduledBotCallback));
+    static ILog Logger = LogManager.GetLogger(typeof(ScheduledMessageJob));
 
 
     public void Execute(IJobExecutionContext context)

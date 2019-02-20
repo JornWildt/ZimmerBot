@@ -130,6 +130,8 @@ configuration
       { RDFPrefix($2.s, ((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_ENTITIES T_LPAR T_STRING T_RPAR
       { RDFEntities($4.s); }
+  | T_EVERY T_STRING ruleModifierSeq statementSeq
+      { RegisterScheduledAction($2.s, $3.ruleModifierList, $4.statementList); }
   ;
 
 conceptPatternSeq
@@ -228,7 +230,6 @@ ruleModifierSeq
 ruleModifier
   : condition { $$ = $1; }
   | weight    { $$ = $1; }
-  | schedule  { $$ = $1; }
   ;
 
 condition
@@ -239,9 +240,6 @@ weight
   : T_WEIGHT T_NUMBER { $$.ruleModifier = new ZimmerBot.Core.Knowledge.WeightRuleModifier($2.n); }
   ;
 
-schedule
-  : T_EVERY T_NUMBER { $$.ruleModifier = new ZimmerBot.Core.Knowledge.ScheduleRuleModifier((int)$2.n); }
-  ;
 
 /******************************************************************************
   STATEMENT

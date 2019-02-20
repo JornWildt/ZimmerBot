@@ -32,12 +32,6 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public override void RegisterScheduledJobs(IScheduler scheduler, string botId, string ruleId)
-    {
-      // Do nothing
-    }
-
-
     public override string ToString()
     {
       return KeyValuePatterns.Select(p => p.ToString()).Aggregate((a,b) => a + "|" + b);

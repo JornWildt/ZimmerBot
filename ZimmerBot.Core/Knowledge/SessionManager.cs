@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -109,6 +110,12 @@ namespace ZimmerBot.Core.Knowledge
       if (!Sessions.ContainsKey(sessionId))
         throw new InvalidOperationException($"No session with ID '{sessionId}' found.");
       return Sessions[sessionId];
+    }
+
+
+    public static IEnumerable<Session> GetSessions()
+    {
+      return Sessions.Values;
     }
   }
 }

@@ -18,7 +18,14 @@ namespace ZimmerBot.Core.Knowledge
     static INodeFactory NodeFactory = new NodeFactory();
 
 
-    public static Response Invoke(KnowledgeBase kb, Request request, bool executeScheduledRules = false)
+    public static Response Invoke(KnowledgeBase kb, Request request)
+    {
+      RequestContext context = BuildRequestContext(kb, request);
+      return Invoke(context, request, false);
+    }
+
+
+    public static RequestContext BuildRequestContext(KnowledgeBase kb, Request request)
     {
       RequestState state = new RequestState();
 
@@ -28,16 +35,16 @@ namespace ZimmerBot.Core.Knowledge
 
       // Add user store
       var userStore = new RDFDictionaryWrapper(
-        kb.MemoryStore, 
-        UrlConstants.UsersUrl(request.UserId), 
+        kb.MemoryStore,
+        UrlConstants.UsersUrl(request.UserId),
         UrlConstants.UserValuesUrl,
         RDFStore.DynamicStoreName);
       state[StateKeys.UserStore] = userStore;
 
       // Add bot store
       var botStore = new RDFDictionaryWrapper(
-        kb.MemoryStore, 
-        UrlConstants.BotUrl, 
+        kb.MemoryStore,
+        UrlConstants.BotUrl,
         UrlConstants.BotValuesUrl,
         RDFStore.DynamicStoreName);
       state[StateKeys.BotStore] = botStore;
@@ -58,11 +65,12 @@ namespace ZimmerBot.Core.Knowledge
 
       RequestContext context = new RequestContext(kb, state, session);
 
-      return Invoke(context, request, executeScheduledRules, false);
+      return context;
     }
 
 
-    internal static Response Invoke(RequestContext context, Request request, bool executeScheduledRules, bool fromTemplate)
+
+    internal static Response Invoke(RequestContext context, Request request, bool fromTemplate)
     {
       try
       {

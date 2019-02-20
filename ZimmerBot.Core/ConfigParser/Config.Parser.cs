@@ -98,6 +98,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RegisterScheduledAction(string cronExpr, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      KnowledgeBase.RegisterScheduledAction(cronExpr, modifiers, statements);
+    }
+
+
     protected bool DoStripRegexLiterals = false;
 
     static Regex LabelReducer = new Regex("[^\\w ]");

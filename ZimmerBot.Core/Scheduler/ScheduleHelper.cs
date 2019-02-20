@@ -18,6 +18,23 @@ namespace ZimmerBot.Core.Scheduler
       }
     }
 
+
+    public static void AddScheduledAction(ScheduledAction action, string botId)
+    {
+      var trigger = TriggerBuilder.Create()
+        .WithIdentity(action.Id)
+        .WithCronSchedule(action.CronExpr)
+        .Build();
+
+      IJobDetail job = JobBuilder.Create<ScheduledActionJob>()
+        .UsingJobData("BotId", botId)
+        .UsingJobData("ActionId", action.Id)
+        .Build();
+
+      DefaultScheduler.ScheduleJob(job, trigger);
+    }
+
+
     public static void AddDelayedMessage(
       DateTime at,
       string message,
@@ -25,7 +42,7 @@ namespace ZimmerBot.Core.Scheduler
     {
       string stateJson = (context.Request.State != null ? JsonConvert.SerializeObject(context.Request.State) : null);
 
-      IJobDetail job = JobBuilder.Create<ScheduledBotCallback>()
+      IJobDetail job = JobBuilder.Create<ScheduledMessageJob>()
         .WithIdentity(Guid.NewGuid().ToString(), context.Request.SessionId)
         .UsingJobData("Message", message)
         .UsingJobData("State", stateJson)

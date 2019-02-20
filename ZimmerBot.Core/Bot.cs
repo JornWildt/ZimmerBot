@@ -6,6 +6,7 @@ using log4net;
 using Quartz.Impl;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Scheduler;
 using ZimmerBot.Core.Utilities;
 
 
@@ -17,7 +18,7 @@ namespace ZimmerBot.Core
 
     private object StateLock = new object();
 
-    protected KnowledgeBase KnowledgeBase { get; set; }
+    public KnowledgeBase KnowledgeBase { get; protected set; }
 
     protected IBotEnvironment Environment { get; set; }
 
@@ -58,18 +59,13 @@ namespace ZimmerBot.Core
         botThread.IsBackground = true;
         botThread.Start();
 
-        InitializeScheduler();
-
         BotHandle bh = new BotHandle(this, WorkQueue, botThread);
+
+        foreach (ScheduledAction action in KnowledgeBase.ScheduledActions.Values)
+          ScheduleHelper.AddScheduledAction(action, Id);
 
         return bh;
       }
-    }
-
-
-    private void InitializeScheduler()
-    {
-      KnowledgeBase.RegisterScheduledJobs(StdSchedulerFactory.GetDefaultScheduler(), Id);
     }
 
 
@@ -109,11 +105,11 @@ namespace ZimmerBot.Core
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    public Response Invoke(Request req, bool executeScheduledRules = false, bool callbackToEnvironment = false)
+    public Response Invoke(Request req, bool callbackToEnvironment = false)
     {
       lock (StateLock)
       {
-        Response response = BotUtility.Invoke(KnowledgeBase, req, executeScheduledRules);
+        Response response = BotUtility.Invoke(KnowledgeBase, req);
 
         if (callbackToEnvironment)
           SendResponse(response);
