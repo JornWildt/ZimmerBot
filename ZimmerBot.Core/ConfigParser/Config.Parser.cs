@@ -166,7 +166,7 @@ namespace ZimmerBot.Core.ConfigParser
     protected StandardRule AddRegexRule(string label, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
       if (CurrentTopicToStart != null)
-        statements.Add(new StartTopicStatement(CurrentTopicToStart));
+        statements.Add(new StartTopicStatement(CurrentTopicToStart, false));
       return KnowledgeBase.AddRegexRule(label, CurrentTopic, patterns, modifiers, statements);
     }
 
@@ -174,7 +174,7 @@ namespace ZimmerBot.Core.ConfigParser
     protected StandardRule AddFuzzyRule(string label, List<OperatorKeyValueList> pattern, List<RuleModifier> modifiers, List<Statement> statements)
     {
       if (CurrentTopicToStart != null)
-        statements.Add(new StartTopicStatement(CurrentTopicToStart));
+        statements.Add(new StartTopicStatement(CurrentTopicToStart, false));
       return KnowledgeBase.AddFuzzyRule(label, CurrentTopic, pattern, modifiers, statements);
     }
 

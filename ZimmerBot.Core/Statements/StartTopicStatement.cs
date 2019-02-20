@@ -9,17 +9,23 @@ namespace ZimmerBot.Core.Statements
 
     public string Topic { get; protected set; }
 
-    public StartTopicStatement(string topic)
+    public bool Restart { get; protected set; }
+
+
+    public StartTopicStatement(string topic, bool restart)
     {
       Condition.Requires(topic, nameof(topic)).IsNotNullOrEmpty();
 
       Topic = topic;
+      Restart = restart;
     }
 
 
     public override void Execute(StatementExecutionContect context)
     {
       context.ResponseContext.Session.SetCurrentTopic(Topic);
+      if (Restart)
+        context.ResponseContext.Session.SetTopicRuleIndex(Topic, 0);
     }
 
 

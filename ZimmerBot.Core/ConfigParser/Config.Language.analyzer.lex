@@ -67,7 +67,8 @@ NOT         { return (int)Token.T_NOT; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*topic       { return (int)Token.T_TOPIC; }
 ![ ]*start_topic { return (int)Token.T_STARTTOPIC; }
-![ ]*stop_output { return (int)Token.T_STOPOUTPUT; }
+![ ]*restart_topic { return (int)Token.T_RESTARTTOPIC; }
+![ ]*stop_output   { return (int)Token.T_STOPOUTPUT; }
 ![ ]*repeatable        { return (int)Token.T_REPEATABLE; }
 ![ ]*not_repeatable    { return (int)Token.T_NOTREPEATABLE; }
 ![ ]*continue          { return (int)Token.T_CONTINUE; }
