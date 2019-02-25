@@ -24,7 +24,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
         output.AddRange(response);
 
         // Remember last used rule for handling of answers
-        state[StateKeys.SessionStore][StateKeys.LastRuleId] = r.Rule.Id;
+        state[StateKeys.SessionStore][SessionKeys.LastRuleId] = r.Rule.Id;
       }
       else
       {
@@ -33,7 +33,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
         if (item.Context.Input != null)
           output.Add("???");
 
-        state[StateKeys.SessionStore][StateKeys.LastRuleId] = null;
+        state[StateKeys.SessionStore][SessionKeys.LastRuleId] = null;
       }
     }
   }

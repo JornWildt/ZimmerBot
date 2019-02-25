@@ -12,14 +12,16 @@ namespace ZimmerBot.Core.Knowledge
     public NullValueDictionary<string,dynamic> Store { get; protected set; }
 
 
-    public Session(string id)
+    public Session(string id, string userId)
     {
       Condition.Requires(id, nameof(id)).IsNotNullOrEmpty();
+      Condition.Requires(userId, nameof(userId)).IsNotNullOrEmpty();
 
       SessionId = id;
       Store = new NullValueDictionary<string, object>();
 
-      Store[StateKeys.ResponseCount] = 0;
+      Store[SessionKeys.UserId] = userId;
+      Store[SessionKeys.ResponseCount] = 0;
 
       this.MarkAsReadyForInput();
     }

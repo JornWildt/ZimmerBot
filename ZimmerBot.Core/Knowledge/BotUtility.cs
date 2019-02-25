@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.Knowledge
       RequestState state = new RequestState();
 
       // Add session store
-      Session session = SessionManager.GetOrCreateSession(request.SessionId);
+      Session session = SessionManager.GetOrCreateSession(request.SessionId, request.UserId);
       state[StateKeys.SessionStore] = session.Store;
 
       // Add user store
@@ -80,7 +80,7 @@ namespace ZimmerBot.Core.Knowledge
 
         if (output.Count > 0)
         {
-          context.State[StateKeys.SessionStore][StateKeys.ResponseCount] = context.State[StateKeys.SessionStore][StateKeys.ResponseCount] + 1;
+          context.State[StateKeys.SessionStore][SessionKeys.ResponseCount] = context.State[StateKeys.SessionStore][SessionKeys.ResponseCount] + 1;
 
           return new Response(output, request.State, context.Session);
         }
@@ -146,7 +146,7 @@ namespace ZimmerBot.Core.Knowledge
         if (inputContext.ContinuationChoice.ContinuationType == Continuation.ContinuationEnum.Answer)
         {
           // Set last-rule-id as the rule of the answer
-          inputContext.State[StateKeys.SessionStore][StateKeys.LastRuleId]
+          inputContext.State[StateKeys.SessionStore][SessionKeys.LastRuleId]
             = inputContext.KnowledgeBase.GetRuleFromLabel(inputContext.ContinuationChoice.Text).Id;
         }
         else

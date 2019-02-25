@@ -55,7 +55,7 @@ namespace ZimmerBot.Core.Tests
       ZTokenSequence input = sequence.Statements[0];
 
       RequestState state = new RequestState();
-      Session session = new Session("default");
+      Session session = new Session("default", "default");
       TriggerEvaluationContext context = 
         new TriggerEvaluationContext(
           new InputRequestContext(
@@ -152,7 +152,7 @@ namespace ZimmerBot.Core.Tests
 
     protected MatchResult CalculateMatch(WRegexBase x, string s)
     {
-      Session session = new Session("default");
+      Session session = new Session("default", "default");
       RequestState state = new RequestState();
       ZTokenizer tokenizer = new ZTokenizer();
       ZStatementSequence stm = tokenizer.Tokenize(s);

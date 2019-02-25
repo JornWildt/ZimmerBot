@@ -30,7 +30,7 @@ namespace ZimmerBot.Core.Scheduler
 
         foreach (var session in SessionManager.GetSessions())
         {
-          Request request = new Request(session.SessionId, "default") // FIXME: not "default"!
+          Request request = new Request(session.SessionId, session.Store[SessionKeys.UserId])
           {
             BotId = botId,
           };

@@ -97,10 +97,10 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public static Session GetOrCreateSession(string sessionId)
+    public static Session GetOrCreateSession(string sessionId, string userId)
     {
       if (!Sessions.ContainsKey(sessionId))
-        Sessions[sessionId] = new Session(sessionId);
+        Sessions[sessionId] = new Session(sessionId, userId);
       return Sessions[sessionId];
     }
 
