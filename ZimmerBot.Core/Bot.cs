@@ -122,7 +122,11 @@ namespace ZimmerBot.Core
     public void SendResponse(Response response)
     {
       if (response.Output != null && response.Output.Length > 0)
+      {
         response.Session.Store[SessionKeys.LastMessageTimeStamp] = DateTime.Now;
+        foreach (string s in response.Output)
+          BotUtility.DiaLogger.Info($"[{response.Session.SessionId}] {s}");
+      }
       Environment.HandleResponse(response);
     }
   }

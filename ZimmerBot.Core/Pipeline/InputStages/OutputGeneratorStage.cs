@@ -25,9 +25,6 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
         // Remember last used rule for handling of answers
         state[StateKeys.SessionStore][StateKeys.LastRuleId] = r.Rule.Id;
-
-        foreach (string s in response)
-          BotUtility.DiaLogger.Info($"[{item.Context.Session.SessionId}] {s}");
       }
       else
       {
@@ -36,7 +33,6 @@ namespace ZimmerBot.Core.Pipeline.InputStages
         if (item.Context.Input != null)
           output.Add("???");
 
-        BotUtility.DiaLogger.Info($"[{item.Context.Session.SessionId}] No suitable response found");
         state[StateKeys.SessionStore][StateKeys.LastRuleId] = null;
       }
     }
