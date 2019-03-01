@@ -14,6 +14,16 @@ namespace ZimmerBot.Core.Utilities
   public class AppSetting
   {
     public enum TrimSetting { NoTrim, EnableTrim }
+
+    protected virtual string GetValueFromSource(string key)
+    {
+      return ConfigurationManager.AppSettings[key];
+    }
+
+    protected virtual void SetValueInSource(string key, string value)
+    {
+      ConfigurationManager.AppSettings[key] = value;
+    }
   }
 
 
@@ -194,7 +204,7 @@ namespace ZimmerBot.Core.Utilities
         if (HasOverrideValue)
           return OverrideValue;
 
-        string value = ConfigurationManager.AppSettings[AppSettingKey];
+        string value = GetValueFromSource(AppSettingKey);
 
         if (value == null || (EmptyIsDefault && value == ""))
         {
@@ -234,7 +244,7 @@ namespace ZimmerBot.Core.Utilities
 
     public string Raw()
     {
-      return ConfigurationManager.AppSettings[AppSettingKey];
+      return GetValueFromSource(AppSettingKey);
     }
 
     public override string ToString()
@@ -272,6 +282,56 @@ namespace ZimmerBot.Core.Utilities
     public AppSetting(string appSettingKey, T defaultValue, bool emptyIsDefault = false, AppSettingParseFailedHandler onParseFailed = null, TrimSetting trim = TrimSetting.EnableTrim)
       : base(appSettingKey, x => x, defaultValue, false, emptyIsDefault, null, onParseFailed, trim)
     {
+    }
+  }
+
+
+  public class ConnectionString<T> : AppSetting<T, T>
+  {
+    /// <summary>
+    /// Construct required connection string setting (with no default value).
+    /// </summary>
+    /// <param name="appSettingKey"></param>
+    /// <param name="onMissing"></param>
+    /// <param name="onParseFailed"></param>
+    public ConnectionString(string appSettingKey, AppSettingMissingHandler onMissing = null, AppSettingParseFailedHandler onParseFailed = null, TrimSetting trim = TrimSetting.EnableTrim)
+      : base(appSettingKey, x => x, default(T), true, false, onMissing, onParseFailed, trim)
+    {
+    }
+
+
+    /// <summary>
+    /// Construct optional connection string setting (with default value)
+    /// </summary>
+    /// <param name="appSettingKey"></param>
+    /// <param name="defaultValue"></param>
+    /// <param name="emptyIsDefault"></param>
+    /// <param name="onParseFailed"></param>
+    public ConnectionString(string appSettingKey, T defaultValue, bool emptyIsDefault = false, AppSettingParseFailedHandler onParseFailed = null, TrimSetting trim = TrimSetting.EnableTrim)
+      : base(appSettingKey, x => x, defaultValue, false, emptyIsDefault, null, onParseFailed, trim)
+    {
+    }
+
+
+    protected override string GetValueFromSource(string key)
+    {
+      ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[key];
+
+      // If found, return the connection string.
+      if (settings != null)
+        return settings.ConnectionString;
+
+      return null;
+    }
+
+
+    protected override void SetValueInSource(string key, string value)
+    {
+      ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[key];
+
+      // If found, set the connection string.
+      if (settings != null)
+        settings.ConnectionString = value;
     }
   }
 }
