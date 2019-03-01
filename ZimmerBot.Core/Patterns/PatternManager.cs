@@ -59,18 +59,16 @@ namespace ZimmerBot.Core.Patterns
       if (PatternSets.Count == 0)
         return null;
 
-      BotUtility.EvaluationLogger.Debug($"Trying to match input: {inputs.ToString()}");
-
       PatternMatchResultList result = new PatternMatchResultList();
 
-      int tokenCount = inputs.Min(inp => inp.Count);
+      int inputTokenCount = inputs.Min(inp => inp.Count);
 
       // This value approximates the smallest probability for a match 
       // (namely P(u)^N where N = number of un-matched words "u")
-      double minimalAllowedProb = tokenCount *
-        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + tokenCount));
+      double minimalAllowedProb = inputTokenCount *
+        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + inputTokenCount));
 
-      minimalAllowedProb += Math.Log(tokenCount + 1);
+      minimalAllowedProb += Math.Log(inputTokenCount + 1);
 
       // This value represents the best probability found so far - might as well start with the minimal allowed probability
       double maxProb = minimalAllowedProb;
@@ -78,9 +76,11 @@ namespace ZimmerBot.Core.Patterns
       // Try all possible variations/reductions of the input
       foreach (ZTokenSequence input in inputs)
       {
+        BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}. MinP = {minimalAllowedProb}.");
+
         foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
         {
-          double pb = pt.CalculateProbability(input);
+          double pb = pt.CalculateProbability(input, out List<string> reason);
 
           if (pb > maxProb)
           {
@@ -90,6 +90,7 @@ namespace ZimmerBot.Core.Patterns
             result.Add(r);
 
             BotUtility.EvaluationLogger.Debug($"Better match: {r.ToString()} ({pb})");
+            BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
           }
           else
           {
@@ -100,15 +101,13 @@ namespace ZimmerBot.Core.Patterns
               PatternMatchResult r = new PatternMatchResult(pt, input);
               result.Add(r);
               BotUtility.EvaluationLogger.Debug($"Similar match: {r.ToString()} ({pb})");
+              BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
             }
           }
         }
       }
 
-      if (result != null)
-        return result;
-      else
-        return null;
+      return result;
     }
   }
 }

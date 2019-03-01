@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
@@ -11,6 +10,8 @@ namespace ZimmerBot.Core.Patterns
     public abstract double Weight { get; }
 
     public abstract double ProbabilityFactor { get; }
+
+    public virtual void UpdateEntityNumber(ref int entityNumber) { }
 
     public abstract void ExtractWordsForSpellChecker();
 

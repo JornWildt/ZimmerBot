@@ -489,6 +489,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("a b", "Got AB");
       AssertDialog("a b c", "Got ABC");
       AssertDialog("a b ccc", "Got AB_C");
+      AssertDialog("a b ddd", "Got AB_C");
       AssertDialog("a b ccc ddd", "Got AB_CD");
       AssertDialog("x", "???");
       AssertDialog("ccc", "Got CCC");

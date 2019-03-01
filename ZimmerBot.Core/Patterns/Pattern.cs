@@ -34,6 +34,11 @@ namespace ZimmerBot.Core.Patterns
       Expressions = expressions;
 
       NumberOfWords = Expressions.Count;
+
+      int entityNum = 1;
+      foreach (var expr in Expressions)
+        expr.UpdateEntityNumber(ref entityNum);
+
       RelatedExpression = new Dictionary<string, PatternExpr>(StringComparer.OrdinalIgnoreCase);
     }
 
@@ -46,7 +51,7 @@ namespace ZimmerBot.Core.Patterns
 
     public override string ToString()
     {
-      return Expressions.Select(e => e.ToString()).Aggregate((a,b) => a + ", " + b);
+      return Expressions.Select(e => $"{e}(P:{this.WordInPatternProbability[e.Identifier]})").Aggregate((a,b) => a + ", " + b);
     }
 
 
@@ -125,36 +130,46 @@ namespace ZimmerBot.Core.Patterns
           = Math.Log(PatternProbability * (WordInPatternProbability[key] + 1) / (NumberOfWords + totalNumberOfWords));
       }
 
+      // Probability for completely unknown words
       UnknownWordProbability = Math.Log(PatternProbability * 1 / (NumberOfWords + TotalNumberOfWords));
     }
 
 
-    public double CalculateProbability(ZTokenSequence input)
+    public double CalculateProbability(ZTokenSequence input, out List<string> explanation)
     {
       // Probability is logarithmic! This means more negative values indicates smaller values between 0 and 1.
       // Normally probabilitis are multipled (making the end result smaller), but in log-space we add the (negative) values.
       double prob = 0.0;
+      explanation = new List<string>();
 
       foreach (var token in input)
       {
         string key = (token.Type == ZToken.TokenType.Entity
-          ? EntityPatternExpr.GetIdentifier(token.EntityClass)
+          ? EntityPatternExpr.GetIdentifier(token.EntityClass, token.EntityNumber)
           : token.OriginalText);
 
         string wildcardKey = (token.Type == ZToken.TokenType.Entity
-          ? EntityPatternExpr.GetIdentifier("")
+          ? EntityPatternExpr.GetIdentifier("", token.EntityNumber)
           : token.OriginalText);
 
         if (WordInPatternProbability.ContainsKey(key))
         {
           prob += WordInPatternProbability[key];
+          explanation.Add($"Matched '{key}':{WordInPatternProbability[key]}");
+
           if (RelatedExpression.ContainsKey(key))
             prob *= RelatedExpression[key].ProbabilityFactor;
         }
         else if (WordInPatternProbability.ContainsKey(wildcardKey))
+        {
           prob += WordInPatternProbability[wildcardKey];
+          explanation.Add($"Matched '{wildcardKey}':{WordInPatternProbability[wildcardKey]}");
+        }
         else
+        {
           prob += UnknownWordProbability;
+          explanation.Add($"No match on '{key}':{UnknownWordProbability}");
+        }
       }
 
       // Unmatched words in pattern counts negative

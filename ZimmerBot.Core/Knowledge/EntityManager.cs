@@ -85,11 +85,11 @@ namespace ZimmerBot.Core.Knowledge
 
     public void FindEntities(ZTokenSequence input, ZTokenSequenceList output)
     {
-      FindEntities(input, 0, output);
+      FindEntities(input, 0, output, 1);
     }
 
 
-    protected void FindEntities(ZTokenSequence input, int start, List<ZTokenSequence> output)
+    protected void FindEntities(ZTokenSequence input, int start, List<ZTokenSequence> output, int entityNumber)
     {
       foreach (var ec in EntityClasses)
       {
@@ -100,10 +100,10 @@ namespace ZimmerBot.Core.Knowledge
             bool isEntity = ec.Value.IsEntityMatch(input, i, j);
             if (isEntity)
             {
-              ZTokenSequence result = input.CompactEntity(i, j, ec.Value.ClassName);
+              ZTokenSequence result = input.CompactEntity(i, j, ec.Value.ClassName, entityNumber);
               output.Add(result);
 
-              FindEntities(result, i+1, output);
+              FindEntities(result, i+1, output, entityNumber+1);
 
               // This is a greedy algortihm, so do not try to match smaller combinations
               i = j;

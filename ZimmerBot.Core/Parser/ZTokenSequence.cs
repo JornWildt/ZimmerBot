@@ -34,7 +34,7 @@ namespace ZimmerBot.Core.Parser
     }
 
 
-    public ZTokenSequence CompactEntity(int i, int j, string entityClass)
+    public ZTokenSequence CompactEntity(int i, int j, string entityClass, int entityNumber)
     {
       ZTokenSequence result = new ZTokenSequence();
       for (int x = 0; x < i; ++x)
@@ -46,7 +46,7 @@ namespace ZimmerBot.Core.Parser
           s += " ";
         s += this[x].OriginalText;
       }
-      result.Add(new ZToken(s, entityClass));
+      result.Add(new ZToken(s, entityClass, entityNumber));
       for (int x = j; x < Count; ++x)
         result.Add(this[x]);
 

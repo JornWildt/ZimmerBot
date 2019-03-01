@@ -9,7 +9,37 @@ namespace ZimmerBot.Core.Patterns
   {
     public string ParameterName { get; protected set; }
 
-    public string EntityClass { get; protected set; }
+    private string _entityClass;
+    public string EntityClass
+    {
+      get
+      {
+        return _entityClass;
+      }
+      set
+      {
+        _entityClass = value;
+        _identifier = GetIdentifier(value, EntityNumber);
+      }
+    }
+
+    private int _entityNumber;
+
+    // EntityNumber is the index of the Entity in the expression list it is
+    // included in. This avoids two entities (number one and two) in a token input to 
+    // match a single input in a pattern with only one entity.
+    public int EntityNumber
+    {
+      get
+      {
+        return _entityNumber;
+      }
+      set
+      {
+        _entityNumber = value;
+        _identifier = GetIdentifier(EntityClass, value);
+      }
+    }
 
 
     public EntityPatternExpr(string parameterName, string entityClass)
@@ -22,10 +52,15 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public override string Identifier
+    public override void UpdateEntityNumber(ref int entityNumber)
     {
-      get { return GetIdentifier(EntityClass); }
+      EntityNumber = entityNumber++;
     }
+
+
+    private string _identifier;
+
+    public override string Identifier => _identifier;
 
 
     protected double _weight;
@@ -41,9 +76,9 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public static string GetIdentifier(string name)
+    public static string GetIdentifier(string name, int index)
     {
-      return "Entity:" + name;
+      return "Entity-" + index + ":" + name;
     }
 
 
