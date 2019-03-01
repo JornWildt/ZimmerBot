@@ -61,7 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OpenWeatherMapAPI.cs" />
     <Compile Include="OpenWeatherMapApplication.cs" />
+    <Compile Include="OpenWeatherMapAppSettings.cs" />
     <Compile Include="OpenWeatherMapProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

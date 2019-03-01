@@ -16,7 +16,10 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
 
       var parameters = new Dictionary<string, object>();
 
-      parameters["result"] = "DA " + location;
+      OpenWeatherMapAPI api = new OpenWeatherMapAPI();
+      OpenWeatherMapAPI.Forecast result = api.GetForecast(location);
+
+      parameters["result"] = $"Temp: {result.list[0].main.temp}";
 
       return new ProcessorOutput(parameters);
     }
