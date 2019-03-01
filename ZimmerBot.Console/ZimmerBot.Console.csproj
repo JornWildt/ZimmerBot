@@ -58,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OpenWeatherMap.ZimmerBot.AddOn\OpenWeatherMap.ZimmerBot.AddOn.csproj">
+      <Project>{2ee9fc87-7a7c-4dba-942b-4ef0aaa5b4b5}</Project>
+      <Name>OpenWeatherMap.ZimmerBot.AddOn</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rejseplanen.ZimmerBot.AddOn\Rejseplanen.ZimmerBot.AddOn.csproj">
       <Project>{5d3573ae-ad9f-4cca-8779-f117077b7eae}</Project>
       <Name>Rejseplanen.ZimmerBot.AddOn</Name>

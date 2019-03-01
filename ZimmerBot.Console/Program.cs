@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using log4net;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
-using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Console
 {
