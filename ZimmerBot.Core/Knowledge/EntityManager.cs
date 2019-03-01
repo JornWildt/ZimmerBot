@@ -100,6 +100,8 @@ namespace ZimmerBot.Core.Knowledge
             bool isEntity = ec.Value.IsEntityMatch(input, i, j);
             if (isEntity)
             {
+              // entityNumber is the index of the found entities.
+              // See also "EntityNumber" in "EntityPatternExpr".
               ZTokenSequence result = input.CompactEntity(i, j, ec.Value.ClassName, entityNumber);
               output.Add(result);
 
