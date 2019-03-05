@@ -45,9 +45,10 @@ namespace ZimmerBot.Core
       State = src.State;
       SessionId = src.SessionId;
       UserId = src.UserId;
-      State = src.State;
       RuleId = src.RuleId;
       RuleLabel = src.RuleLabel;
+      EventType = src.EventType;
+      BotId = src.BotId;
     }
   }
 }
