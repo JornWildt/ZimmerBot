@@ -139,6 +139,44 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void CanUseAnswerWithPatternStarter()
+    {
+      // Arrange
+      BuildBot(@"
+! pattern (intent = start)
+{
+  > start
+}
+
+>> start
+: Start - green or red?
+! answer
+{
+  > green
+  : Green!
+
+  > red
+  : Red!
+}
+
+> *
+: Default
+
+");
+      // Act+Assert
+      AssertDialog("X", "Default");
+      AssertDialog("green", "Default");
+      AssertDialog("red", "Default");
+      AssertDialog("start", "Start - green or red?");
+      AssertDialog("red", "Red!");
+      AssertDialog("green", "Default");
+      AssertDialog("red", "Default");
+      AssertDialog("start", "Start - green or red?");
+      AssertDialog("green", "Green!");
+    }
+
+
+    [Test]
     public void PatternRulesAndRegexRulesAreTriggeredEqualyInAnswers()
     {
       // Arrange
