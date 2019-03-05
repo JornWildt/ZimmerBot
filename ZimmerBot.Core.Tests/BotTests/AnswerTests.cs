@@ -149,7 +149,6 @@ namespace ZimmerBot.Core.Tests.BotTests
 }
 
 >> start
-: Start - green or red?
 ! answer
 {
   > green
@@ -158,6 +157,7 @@ namespace ZimmerBot.Core.Tests.BotTests
   > red
   : Red!
 }
+: Start - green or red?
 
 > *
 : Default
@@ -168,6 +168,55 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("green", "Default");
       AssertDialog("red", "Default");
       AssertDialog("start", "Start - green or red?");
+      AssertDialog("red", "Red!");
+      AssertDialog("green", "Default");
+      AssertDialog("red", "Default");
+      AssertDialog("start", "Start - green or red?");
+      AssertDialog("green", "Green!");
+    }
+
+
+
+
+    [Test]
+    public void CanUseAnswerWithPatternAndEntityStarter()
+    {
+      // Arrange
+      BuildBot(@"
+! define (T)
+{
+  O:.
+}
+
+! pattern (intent = start)
+{
+  > start {x}
+  > start
+}
+
+>> start
+! continue with start O
+
+>> start (x:*)
+! answer
+{
+  > green
+  : Green!
+
+  > red
+  : Red!
+}
+: Start - green or red?
+
+> *
+: Default
+
+");
+      // Act+Assert
+      AssertDialog("X", "Default");
+      AssertDialog("green", "Default");
+      AssertDialog("red", "Default");
+      AssertDialog("start O", "Start - green or red?");
       AssertDialog("red", "Red!");
       AssertDialog("green", "Default");
       AssertDialog("red", "Default");
