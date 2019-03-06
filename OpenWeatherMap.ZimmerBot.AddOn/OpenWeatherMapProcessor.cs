@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using log4net;
 using ZimmerBot.Core.Processors;
 
@@ -10,12 +12,45 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
   {
     static ILog Logger = LogManager.GetLogger(typeof(OpenWeatherMapProcessor));
 
+    class CacheEntry
+    {
+      public DateTime Timestamp { get; set; }
+      public ProcessorOutput Output { get; set; }
+    }
+
+    static ConcurrentDictionary<string, CacheEntry> Cache = new ConcurrentDictionary<string, CacheEntry>();
+
 
     public static ProcessorOutput Forecast(ProcessorInput input)
     {
       string location = input.GetParameter<string>(0);
       Logger.Debug($"Lookup weather forecast for '{location}' at Open Weather Map.");
 
+      try
+      {
+        if (!Cache.ContainsKey(location) || Cache[location].Timestamp < DateTime.Now.AddHours(-1))
+        {
+          Dictionary<string, object> parameters = GetForecast(location);
+
+          Cache[location] = new CacheEntry
+          {
+            Timestamp = DateTime.Now,
+            Output = new ProcessorOutput(parameters)
+          };
+        }
+
+        return Cache[location].Output;
+      }
+      catch (Exception ex)
+      {
+        Logger.Debug(ex);
+        return new ProcessorOutput("error", null);
+      }
+    }
+
+
+    private static Dictionary<string, object> GetForecast(string location)
+    {
       var parameters = new Dictionary<string, object>();
 
       OpenWeatherMapAPI api = new OpenWeatherMapAPI();
@@ -26,14 +61,13 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
 
       parameters["today"] = restOfDay;
       parameters["tomorrow"] = tomorrow;
-
-      return new ProcessorOutput(parameters);
+      return parameters;
     }
 
 
     private static Dictionary<string,string> ForecastRestOfDay(OpenWeatherMapAPI.Forecast forecast)
     {
-      int firstTomorrowIndex = FindFirstTomorrow(forecast);
+      int firstTomorrowIndex = FindFirstTomorrow(forecast, 0);
 
       Dictionary<string, string> data = CalcForecastData(forecast, 0, firstTomorrowIndex);
       data["period"] = "Resten af dagen";
@@ -44,7 +78,7 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
 
     private static Dictionary<string, string> ForecastTomorrow(OpenWeatherMapAPI.Forecast forecast)
     {
-      int firstTomorrowIndex = FindFirstTomorrow(forecast);
+      int firstTomorrowIndex = FindFirstTomorrow(forecast, 6);
 
       Dictionary<string, string> data = CalcForecastData(forecast, firstTomorrowIndex, forecast.List.Count);
       data["period"] = "I morgen";
@@ -53,14 +87,14 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
     }
 
 
-    private static int FindFirstTomorrow(OpenWeatherMapAPI.Forecast forecast)
+    private static int FindFirstTomorrow(OpenWeatherMapAPI.Forecast forecast, int timeOfDay)
     {
       int today = DateTime.Now.DayOfYear;
       int firstTomorrowIndex = 0;
 
       for (int i = 0; i < forecast.List.Count; ++i)
       {
-        if (forecast.List[i].From.DayOfYear != today)
+        if (forecast.List[i].From.DayOfYear != today && forecast.List[i].From.Hour >= timeOfDay)
         {
           firstTomorrowIndex = i;
           break;
