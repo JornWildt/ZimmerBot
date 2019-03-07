@@ -92,7 +92,10 @@ namespace ZimmerBot.Core.Knowledge
             var output1 = selectedTemplate.Outputs.Select(t => TemplateUtility.Merge(t, new TemplateExpander(context)));
             List<string> output = SplitNewlinePlusToSeparateOutputStrings(output1);
 
-            result.Add(AddMoreNotificationText(output[0], output.Count > 1));
+            if (output.Count > 0)
+              result.Add(AddMoreNotificationText(output[0], output.Count > 1));
+            else
+              result.Add("");
 
             // Schedule remaining outputs delayed
             if (output.Count > 1)
