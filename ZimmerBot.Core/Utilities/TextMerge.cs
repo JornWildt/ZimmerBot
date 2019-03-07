@@ -1,22 +1,36 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Antlr4.StringTemplate;
-
+using log4net;
 
 namespace ZimmerBot.Core.Utilities
 {
   public static class TextMerge
   {
+    private static ILog Logger = LogManager.GetLogger(typeof(TextMerge));
+
     private static TemplateGroup Templates { get; set; }
 
 
-    static TextMerge()
+    public static void Initialize()
     {
       Templates = new TemplateGroup();
       Templates.RegisterRenderer(typeof(DateTime), new DateRenderer());
       Templates.RegisterRenderer(typeof(string), new ZimmerBot.Core.Utilities.StringRender());
+    }
+
+
+    public static void LoadFromFiles(string directory)
+    {
+      Logger.Debug($"Scanning for *.stg files in '{directory}'");
+      foreach (string filename in Directory.EnumerateFiles(directory, "*.stg", SearchOption.AllDirectories))
+      {
+        TemplateGroup tg = new TemplateGroupFile(filename);
+        Templates.ImportTemplates(tg);
+      }
     }
 
 
@@ -35,7 +49,7 @@ namespace ZimmerBot.Core.Utilities
 
     public static string MergeTemplate(string template, IDictionary source)
     {
-      Template t = new Template(Templates,template);
+      Template t = new Template(Templates, template);
 
       if (source != null)
       {
@@ -56,7 +70,7 @@ namespace ZimmerBot.Core.Utilities
       if (source is IDictionary)
         return MergeTemplate(template, (IDictionary)source);
 
-      Template t = new Template(template);
+      Template t = new Template(Templates, template);
 
       if (source != null)
       {

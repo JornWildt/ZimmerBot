@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using log4net;
 using NUnit.Framework;
 using ZimmerBot.Core.Knowledge;
@@ -32,6 +33,9 @@ namespace ZimmerBot.Core.Tests
       RDFProcessor.Initialize();
       CryptoHelper.Initialize();
       SpellChecker.Initialize();
+      TextMerge.Initialize();
+
+      TextMerge.LoadFromFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\BotTests"));
 
       Initialized = true;
     }

@@ -94,6 +94,7 @@
     <Compile Include="BotTests\RDFTests.cs" />
     <Compile Include="BotTests\RepeatableTests.cs" />
     <Compile Include="BotTests\RepetitionAvoidanceTests.cs" />
+    <Compile Include="BotTests\StringTemplateLoaderTests.cs" />
     <Compile Include="BotTests\TestHelper.cs" />
     <Compile Include="BotTests\TopicTests.cs" />
     <Compile Include="BotTests\UserMemoryTests.cs" />
@@ -131,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="BotTests\Test.stg" />
     <None Include="ConfigParser\EntityNames.ttl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

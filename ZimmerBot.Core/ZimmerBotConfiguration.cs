@@ -25,6 +25,7 @@ namespace ZimmerBot.Core
           CryptoHelper.Initialize();
           SpellChecker.Initialize();
           BackupManager.Initialize();
+          TextMerge.Initialize();
           IsInitialized = true;
         }
       }

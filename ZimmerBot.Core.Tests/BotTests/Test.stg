@@ -1,0 +1,16 @@
+﻿CanUseGroupTemplate() ::= <<
+Success 1
+>>
+
+CanUseGroupTemplate2(p) ::= <<
+Riding my <p>
+>>
+
+Map ::=
+[
+  "aaa" : "!aaa!",
+  "bbb" : "!bbb!",
+  default: "!default!"
+]
+
+MapThis(a) ::= "<Map.(a)>"

@@ -2,6 +2,7 @@
 using log4net;
 using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Console
 {
@@ -42,8 +43,13 @@ namespace ZimmerBot.Console
         else
         {
           foreach (string path in args)
+          {
             if (!path.StartsWith("-"))
+            {
               kb.LoadFromFiles(path);
+              TextMerge.LoadFromFiles(path);
+            }
+          }
         }
 
         kb.SetupComplete();
