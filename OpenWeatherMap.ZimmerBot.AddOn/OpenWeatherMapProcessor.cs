@@ -110,6 +110,7 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
       decimal minTemp = 100;
       decimal maxTemp = -100;
       Dictionary<string, int> weatherTypeCount = new Dictionary<string, int>();
+      Dictionary<string, int> windDirCodeCount = new Dictionary<string, int>();
 
       for (int i = start; i<end; ++i)
       {
@@ -122,15 +123,21 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
         if (!weatherTypeCount.ContainsKey(f.Symbol.Name))
           weatherTypeCount[f.Symbol.Name] = 0;
         weatherTypeCount[f.Symbol.Name]++;
+
+        if (!windDirCodeCount.ContainsKey(f.WindDirection.Code))
+          windDirCodeCount[f.WindDirection.Code] = 0;
+        windDirCodeCount[f.WindDirection.Code]++;
       }
 
       var mostUsedWeatherType = weatherTypeCount.OrderBy(i => i.Value > i.Value).FirstOrDefault();
+      var mostUsedWindDirCode = windDirCodeCount.OrderBy(i => i.Value > i.Value).FirstOrDefault();
 
       return new Dictionary<string, string>
       {
         ["minTemp"] = Math.Round(minTemp).ToString(),
         ["maxTemp"] = Math.Round(maxTemp).ToString(),
-        ["weather"] = mostUsedWeatherType.Key
+        ["weather"] = mostUsedWeatherType.Key,
+        ["windDir"] = mostUsedWindDirCode.Key
       };
     }
   }
