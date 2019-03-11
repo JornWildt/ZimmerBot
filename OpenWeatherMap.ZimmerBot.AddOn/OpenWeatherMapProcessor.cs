@@ -109,16 +109,28 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
     {
       decimal minTemp = 100;
       decimal maxTemp = -100;
+      decimal minWind = 100;
+      decimal maxWind = -100;
+      decimal precipation = 0;
+      decimal clouds = 0;
+      bool isRain = false;
+      bool isSnow = false;
       Dictionary<string, int> weatherTypeCount = new Dictionary<string, int>();
       Dictionary<string, int> windDirCodeCount = new Dictionary<string, int>();
 
       for (int i = start; i<end; ++i)
       {
         var f = forecast.List[i];
+
         if (f.Temperature.Min < minTemp)
           minTemp = f.Temperature.Min;
         if (f.Temperature.Max > maxTemp)
           maxTemp = f.Temperature.Max;
+
+        if (f.WindSpeed.MetersPerSecond < minWind)
+          minWind = f.WindSpeed.MetersPerSecond;
+        if (f.WindSpeed.MetersPerSecond > maxWind)
+          maxWind = f.WindSpeed.MetersPerSecond;
 
         if (!weatherTypeCount.ContainsKey(f.Symbol.Name))
           weatherTypeCount[f.Symbol.Name] = 0;
@@ -127,17 +139,42 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
         if (!windDirCodeCount.ContainsKey(f.WindDirection.Code))
           windDirCodeCount[f.WindDirection.Code] = 0;
         windDirCodeCount[f.WindDirection.Code]++;
+
+        clouds += f.Clouds.all;
+
+        precipation += f.Precipation?.Value ?? 0m;
+        isRain = f.Precipation?.type?.Contains("rain") ?? false;
+        isSnow = f.Precipation?.type?.Contains("snow") ?? false;
       }
 
+      var averageWind = (minWind + maxWind) / 2.0m;
       var mostUsedWeatherType = weatherTypeCount.OrderBy(i => i.Value > i.Value).FirstOrDefault();
       var mostUsedWindDirCode = windDirCodeCount.OrderBy(i => i.Value > i.Value).FirstOrDefault();
+
+      bool isStrongBreeze = maxWind >= 10.8m;
+      bool isGale = maxWind >= 13.9m;
+      bool isStorm = maxWind >= 24.5m;
+
+      decimal averageClouds = clouds / (end - start);
+      bool isSunny = averageClouds < 15;
+      bool isCloudy = averageClouds > 85;
 
       return new Dictionary<string, string>
       {
         ["minTemp"] = Math.Round(minTemp).ToString(),
         ["maxTemp"] = Math.Round(maxTemp).ToString(),
         ["weather"] = mostUsedWeatherType.Key,
-        ["windDir"] = mostUsedWindDirCode.Key
+        ["windDir"] = mostUsedWindDirCode.Key,
+        ["windMin"] = Math.Round(minWind).ToString(),
+        ["windMax"] = Math.Round(maxWind).ToString(),
+        ["windSpeed"] = Math.Round(averageWind).ToString(),
+        ["isStrongBreeze"] = isStrongBreeze ? "1" : null,
+        ["isGale"] = isGale ? "1" : null,
+        ["isStorm"] = isStorm ? "1" : null,
+        ["isRain"] = isRain ? "1" : null,
+        ["isSnow"] = isSnow ? "1" : null,
+        ["isSunny"] = isSunny ? "1" : null,
+        ["isCloudy"] = isCloudy ? "1" : null
       };
     }
   }

@@ -93,6 +93,9 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
 
       [XmlElement("clouds")]
       public ForecastClouds Clouds { get; set; }
+
+      [XmlElement("precipation")]
+      public ForecastPrecipation Precipation { get; set; }
     }
 
 
@@ -152,6 +155,16 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
 
       [XmlAttribute("all")]
       public decimal all { get; set; }
+    }
+
+
+    public class ForecastPrecipation
+    {
+      [XmlAttribute("value")]
+      public decimal Value { get; set; }
+
+      [XmlAttribute("type")]
+      public string type { get; set; }
     }
   }
 }
