@@ -92,5 +92,22 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       AssertDialog("test", $"XXX\nisWednesday = {isWednesday}");
     }
+
+
+    [Test]
+    public void CanUsePipelineValueInCondition()
+    {
+      BuildBot($@"
+! pipeline start
+! set tmp.ok = 1
+: XXX
+
+> test
+! when tmp.ok = 1
+: OK
+");
+
+      AssertDialog("test", $"XXX\nOK");
+    }
   }
 }

@@ -45,8 +45,10 @@ namespace ZimmerBot.Core.Expressions
           foreach (object key in dict.Keys)
             left[key.ToString()] = dict[key];
         }
+        else if (value == null)
+          throw new InvalidOperationException($"Could not evaluate '{Right}' from null value in dot-operator.");
         else
-          throw new InvalidOperationException($"Could not evaluate '{Right}' from '{value?.GetType()}' - expected dictionary<string,object>.");
+        throw new InvalidOperationException($"Could not evaluate '{Right}' from '{value?.GetType()}' in dot-operator - expected dictionary<string,object>.");
       }
 
       return left[Right];

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Knowledge
 {
   public class RequestState
   {
-    public Dictionary<string, dynamic> State { get; protected set; }
+    public NullValueDictionary<string, dynamic> State { get; protected set; }
 
 
     public RequestState()
     {
-      State = new Dictionary<string, dynamic>();
+      State = new NullValueDictionary<string, dynamic>();
     }
 
 

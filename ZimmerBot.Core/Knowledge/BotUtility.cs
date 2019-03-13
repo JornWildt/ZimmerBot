@@ -4,6 +4,7 @@ using log4net;
 using VDS.RDF;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.Pipeline.InputStages;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Knowledge
 {
@@ -49,7 +50,7 @@ namespace ZimmerBot.Core.Knowledge
         RDFStore.DynamicStoreName);
       state[StateKeys.BotStore] = botStore;
 
-      state[StateKeys.Tmp] = new Dictionary<string, object>();
+      state[StateKeys.Tmp] = new NullValueDictionary<string, object>();
 
       // Register <user, is-a, user>
       kb.MemoryStore.Update(
