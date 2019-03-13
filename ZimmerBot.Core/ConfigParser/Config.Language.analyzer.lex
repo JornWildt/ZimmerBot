@@ -63,6 +63,7 @@ NOT         { return (int)Token.T_NOT; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
 ![ ]*when        { return (int)Token.T_WHEN; }
 ![ ]*every       { return (int)Token.T_EVERY; }
+![ ]*pipeline    { return (int)Token.T_PIPELINE; }
 ![ ]*on          { return (int)Token.T_ON; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*topic       { return (int)Token.T_TOPIC; }

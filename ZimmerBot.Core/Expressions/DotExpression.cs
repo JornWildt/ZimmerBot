@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using CuttingEdge.Conditions;
+using System.Collections;
 
 namespace ZimmerBot.Core.Expressions
 {
@@ -32,9 +34,19 @@ namespace ZimmerBot.Core.Expressions
       else
       {
         object value = Left.Evaluate(context);
-        if (!(value is IDictionary<string, object>))
-          throw new InvalidOperationException($"Could not evaluate '{Right}' from '{value?.GetType()}' - expected dictionary.");
-        left = (IDictionary<string, object>)value;
+        if (value is IDictionary<string, object>)
+        {
+          left = (IDictionary<string, object>)value;
+        }
+        else if (value is System.Collections.IDictionary)
+        {
+          var dict = (System.Collections.IDictionary)value;
+          left = new Dictionary<string, object>();
+          foreach (object key in dict.Keys)
+            left[key.ToString()] = dict[key];
+        }
+        else
+          throw new InvalidOperationException($"Could not evaluate '{Right}' from '{value?.GetType()}' - expected dictionary<string,object>.");
       }
 
       return left[Right];

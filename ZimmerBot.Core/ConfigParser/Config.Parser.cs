@@ -104,6 +104,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RegisterPipelineItem(string stage, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      KnowledgeBase.RegisterPipelineItem(stage, modifiers, statements);
+    }
+
+
     protected bool DoStripRegexLiterals = false;
 
     static Regex LabelReducer = new Regex("[^\\w ]");

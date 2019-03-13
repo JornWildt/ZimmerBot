@@ -49,6 +49,8 @@ namespace ZimmerBot.Core.Knowledge
         RDFStore.DynamicStoreName);
       state[StateKeys.BotStore] = botStore;
 
+      state["tmp"] = new Dictionary<string, object>();
+
       // Register <user, is-a, user>
       kb.MemoryStore.Update(
         NodeFactory.CreateUriNode(UrlConstants.UsersUrl(request.UserId)),

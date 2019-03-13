@@ -15,7 +15,7 @@ namespace ZimmerBot.Core.Knowledge
 
 
     public ScheduledAction(KnowledgeBase kb, string cronExpr, List<RuleModifier> modifiers, List<Statement> statements)
-      : base(kb, modifiers, statements)
+      : base(kb, statements)
     {
       Id = Guid.NewGuid().ToString();
       CronExpr = cronExpr;

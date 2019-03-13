@@ -44,6 +44,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
+    protected PipelineActionStage StartActionStage { get; set; }
+
     protected IDictionary<string, Rule> LabelToRuleMap { get; set; }
 
     public EntityManager EntityManager { get; protected set; }
@@ -75,7 +77,10 @@ namespace ZimmerBot.Core.Knowledge
 
       Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
 
+      StartActionStage = new PipelineActionStage();
+
       InputPipeline = new Pipeline<InputPipelineItem>();
+      InputPipeline.AddHandler(StartActionStage);
       InputPipeline.AddHandler(new SpellCheckerStage());
       InputPipeline.AddHandler(new WordStemmerStage());
       InputPipeline.AddHandler(new WordTaggingStage());
@@ -170,6 +175,15 @@ namespace ZimmerBot.Core.Knowledge
     public ScheduledAction GetScheduledAction(string id)
     {
       return ScheduledActions[id];
+    }
+
+
+    public void RegisterPipelineItem(string stage, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      if (stage == "start")
+        StartActionStage.RegisterPipelineAction(new PipelineAction(this, modifiers, statements));
+      else
+        throw new ApplicationException($"Unknown pipeline stage '{stage}'.");
     }
 
 

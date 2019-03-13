@@ -13,6 +13,42 @@ namespace ZimmerBot.Core.StandardProcessors
       ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekDay", IsItWeekDay);
       ProcessorRegistry.RegisterProcessor("DateTime.IsItMonth", IsItMonth);
       ProcessorRegistry.RegisterProcessor("DateTime.Time", Time);
+      ProcessorRegistry.RegisterProcessor("DateTime.Details", Details);
+    }
+
+
+    public static ProcessorOutput Time(ProcessorInput input)
+    {
+      var answer = DateTime.Now;//.ToShortTimeString();
+
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["answer"] = answer;
+      return new ProcessorOutput(result);
+    }
+
+
+    public static ProcessorOutput Details(ProcessorInput input)
+    {
+      var now = DateTime.Now;
+      var weekDay = now.DayOfWeek;
+
+      Dictionary<string, object> result = new Dictionary<string, object>();
+      result["now"] = now;
+      result["isMonday"] = weekDay == DayOfWeek.Monday;
+      result["isTuesday"] = weekDay == DayOfWeek.Tuesday;
+      result["isWednesday"] = weekDay == DayOfWeek.Wednesday;
+      result["isThursday"] = weekDay == DayOfWeek.Thursday;
+      result["isFriday"] = weekDay == DayOfWeek.Friday;
+      result["isSaturday"] = weekDay == DayOfWeek.Saturday;
+      result["isSunday"] = weekDay == DayOfWeek.Monday;
+      result["isWeekend"] = weekDay == DayOfWeek.Saturday || weekDay == DayOfWeek.Sunday;
+      result["isMorning"] = now.Hour >= 5 && now.Hour < 9;
+      result["isNoon"] = now.Hour >= 11 && now.Hour < 13;
+      result["isAfternoon"] = now.Hour >= 13 && now.Hour <= 17;
+      result["isEvening"] = now.Hour > 17 && now.Hour <= 21;
+      result["isNight"] = now.Hour > 21 || now.Hour < 5;
+
+      return new ProcessorOutput(result);
     }
 
 
@@ -25,16 +61,6 @@ namespace ZimmerBot.Core.StandardProcessors
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["day"] = day;
-      result["answer"] = answer;
-      return new ProcessorOutput(result);
-    }
-
-
-    public static ProcessorOutput Time(ProcessorInput input)
-    {
-      var answer = DateTime.Now;//.ToShortTimeString();
-
-      Dictionary<string, object> result = new Dictionary<string, object>();
       result["answer"] = answer;
       return new ProcessorOutput(result);
     }

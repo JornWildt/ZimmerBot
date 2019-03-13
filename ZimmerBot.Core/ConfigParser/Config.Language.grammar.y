@@ -49,7 +49,8 @@
 
 %token T_COLON, T_SEMICOLON
 
-%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_TOPIC, T_STARTTOPIC, T_RESTARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
+%token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_PIPELINE
+%token T_TOPIC, T_STARTTOPIC, T_RESTARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
 %token T_ENTITIES, T_PATTERN, T_DEFINE
 %token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES
 %token T_WHEN, T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
@@ -135,6 +136,8 @@ configuration
       { RDFEntities($4.s); }
   | T_EVERY T_STRING ruleModifierSeq statementSeq
       { RegisterScheduledAction($2.s, $3.ruleModifierList, $4.statementList); }
+  | T_PIPELINE T_WORD ruleModifierSeq statementSeq
+      { RegisterPipelineItem($2.s, $3.ruleModifierList, $4.statementList); }
   ;
 
 conceptPatternSeq
