@@ -7,9 +7,9 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
   {
     public void Initialize()
     {
-      // Register processor functions available for use in rules
-      ProcessorRegistry
-        .RegisterProcessor("OWM.Forecast", OpenWeatherMapProcessor.Forecast);
+      // Register processor functions available for use in scripts
+      ProcessorRegistry.RegisterProcessor("OWM.Forecast", OpenWeatherMapProcessor.Forecast);
+      ProcessorRegistry.RegisterProcessor("OWM.Weather", OpenWeatherMapProcessor.Weather);
     }
 
 

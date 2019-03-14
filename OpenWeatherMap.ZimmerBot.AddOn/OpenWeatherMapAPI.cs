@@ -28,6 +28,26 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
     }
 
 
+    public Current GetWeather(string input)
+    {
+      ISession session = NewSession();
+
+      WebRequest request = session.Bind("weather", new
+      {
+        q = input,
+        appid = OpenWeatherMapAppSettings.Key.Value,
+        units = "metric",
+        lang = "da",
+        mode = "xml"
+      });
+
+      using (var response = request.AcceptXml().Get<Current>())
+      {
+        return response.Body;
+      }
+    }
+
+
     public Forecast GetForecast(string input, int hours)
     {
       ISession session = NewSession();
@@ -46,6 +66,101 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
       {
         return response.Body;
       }
+    }
+
+
+    [XmlRoot("current")]
+    public class Current
+    {
+      [XmlElement("city")]
+      public CurrentCity City { get; set; }
+
+      [XmlElement("temperature")]
+      public ForecastTemperature Temperature { get; set; }
+
+      [XmlElement("wind")]
+      public CurrentWind Wind { get; set; }
+
+      [XmlElement("clouds")]
+      public CurrentClouds Clouds { get; set; }
+
+      [XmlElement("precipitation")]
+      public CurrentPrecipitation Precipitation { get; set; }
+
+      [XmlElement("weather")]
+      public CurrentWeather Weather { get; set; }
+    }
+
+
+    public class CurrentCity
+    {
+      [XmlElement("sun")]
+      public ForecastSun Sun { get; set; }
+    }
+
+    public class CurrentWind
+    {
+      [XmlElement("speed")]
+      public CurrentWindSpeed Speed { get; set; }
+
+      [XmlElement("direction")]
+      public CurrentWindDirection Direction { get; set; }
+    }
+
+
+    public class CurrentWindSpeed
+    {
+      [XmlAttribute("value")]
+      public decimal MetersPerSecond { get; set; }
+
+      [XmlAttribute("name")]
+      public string Name { get; set; }
+    }
+
+
+    public class CurrentWindDirection
+    {
+      [XmlAttribute("value")]
+      public string Value { get; set; }
+
+      [XmlAttribute("code")]
+      public string Code { get; set; }
+
+      [XmlAttribute("name")]
+      public string Name { get; set; }
+    }
+
+
+    public class CurrentClouds
+    {
+      [XmlAttribute("value")]
+      public decimal Value { get; set; }
+
+      [XmlAttribute("name")]
+      public string Name { get; set; }
+    }
+
+
+    public class CurrentWeather
+    {
+      [XmlAttribute("number")]
+      public decimal Number { get; set; }
+
+      [XmlAttribute("value")]
+      public string Value { get; set; }
+    }
+
+
+    public class CurrentPrecipitation
+    {
+      [XmlAttribute("unit")]
+      public string Unit { get; set; }
+
+      [XmlAttribute("value")]
+      public decimal Value { get; set; }
+
+      [XmlAttribute("mode")]
+      public string Mode { get; set; }
     }
 
 
