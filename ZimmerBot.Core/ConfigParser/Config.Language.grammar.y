@@ -51,7 +51,7 @@
 
 %token T_CONCEPT, T_CALL, T_SET, T_WEIGHT, T_EVERY, T_ANSWER, T_PIPELINE
 %token T_TOPIC, T_STARTTOPIC, T_RESTARTTOPIC, T_REPEATABLE, T_NOTREPEATABLE
-%token T_ENTITIES, T_PATTERN, T_DEFINE
+%token T_ENTITIES, T_PATTERN, T_DEFINE, T_IGNORE
 %token T_RDF_IMPORT, T_RDF_PREFIX, T_RDF_ENTITIES
 %token T_WHEN, T_CONTINUE, T_CONTINUE_AT, T_CONTINUE_WITH, T_ON, T_AT, T_STOPOUTPUT
 
@@ -122,6 +122,13 @@ configuration
       { 
         DoStripRegexLiterals = false;
         RegisterEntities($3.s, $7.regexList); 
+      }
+  | T_IGNORE
+      { DoStripRegexLiterals = true; }
+    T_LBRACE entityDefinition T_RBRACE
+      { 
+        DoStripRegexLiterals = false;
+        RegisterIgnorable($4.regexList); 
       }
   | T_DEFINE T_LPAR wordStringCommaSeq T_RPAR T_LBRACE definitionSeq T_RBRACE
       { RegisterDefinitions($3.stringList, $6.wordDefinitionList); }

@@ -46,7 +46,8 @@ namespace ZimmerBot.Core.Parser
           s += " ";
         s += this[x].OriginalText;
       }
-      result.Add(new ZToken(s, entityClass, entityNumber));
+      if (entityClass != Constants.IgnoreValue)
+        result.Add(new ZToken(s, entityClass, entityNumber));
       for (int x = j; x < Count; ++x)
         result.Add(this[x]);
 

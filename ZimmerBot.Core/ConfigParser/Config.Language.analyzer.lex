@@ -78,6 +78,7 @@ NOT         { return (int)Token.T_NOT; }
 ![ ]*entities          { return (int)Token.T_ENTITIES; }
 ![ ]*define            { return (int)Token.T_DEFINE; }
 ![ ]*pattern           { return (int)Token.T_PATTERN; }
+![ ]*ignore            { return (int)Token.T_IGNORE; }
 ![ ]*rdf_import        { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix        { return (int)Token.T_RDF_PREFIX; }
 ![ ]*rdf_entities      { return (int)Token.T_RDF_ENTITIES; }

@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  JORN-PC
-//  DateTime: 07-05-2017 13:50:59
+//  DateTime: 15-03-2019 21:41:58
 //  UserName: Jorn
 // ==========================================================================
 
@@ -50,14 +50,21 @@ Space      [ \t]
 \)          { return (int)Token.T_RPAR; }
 \{          { return (int)Token.T_LBRACE; }
 \}          { return (int)Token.T_RBRACE; }
+\[          { return (int)Token.T_LBRACKET; }
+\]          { return (int)Token.T_RBRACKET; }
 \*          { return (int)Token.T_STAR; }
 \+          { return (int)Token.T_PLUS; }
+-           { return (int)Token.T_MINUS; }
+~           { return (int)Token.T_TILDE; }
 &           { return (int)Token.T_AMP; }
 =           { return (int)Token.T_EQU; }
 $           { return (int)Token.T_DOLLAR; }
 \?          { return (int)Token.T_QUESTION; }
 \!          { return (int)Token.T_EXCL; }
 T\>         { return (int)Token.T_TOPICRULE; }
+AND         { return (int)Token.T_AND; }
+OR          { return (int)Token.T_OR; }
+NOT         { return (int)Token.T_NOT; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
@@ -67,11 +74,13 @@ T\>         { return (int)Token.T_TOPICRULE; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
 ![ ]*when        { return (int)Token.T_WHEN; }
 ![ ]*every       { return (int)Token.T_EVERY; }
+![ ]*pipeline    { return (int)Token.T_PIPELINE; }
 ![ ]*on          { return (int)Token.T_ON; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*topic       { return (int)Token.T_TOPIC; }
 ![ ]*start_topic { return (int)Token.T_STARTTOPIC; }
-![ ]*stop_output { return (int)Token.T_STOPOUTPUT; }
+![ ]*restart_topic { return (int)Token.T_RESTARTTOPIC; }
+![ ]*stop_output   { return (int)Token.T_STOPOUTPUT; }
 ![ ]*repeatable        { return (int)Token.T_REPEATABLE; }
 ![ ]*not_repeatable    { return (int)Token.T_NOTREPEATABLE; }
 ![ ]*continue          { return (int)Token.T_CONTINUE; }
@@ -79,7 +88,14 @@ T\>         { return (int)Token.T_TOPICRULE; }
 ![ ]*continue[ ]+with  { return (int)Token.T_CONTINUE_WITH; }
 ![ ]*entities          { return (int)Token.T_ENTITIES; }
 ![ ]*define            { return (int)Token.T_DEFINE; }
-![ ]*pattern           { return (int)Token.T_PATTERN; }
+//^^^^^^^^^
+// Warning: This pattern always overrides "![ ]*define" 
+// -----------------------------------------------------
+![ ]*ignore            { return (int)Token.T_IGNORE; }
+![ ]*define            { return (int)Token.T_DEFINE; }
+//^^^^^^^^^
+// Warning: This pattern always overridden by "![ ]*define" 
+// ---------------------------------------------------------
 ![ ]*rdf_import        { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix        { return (int)Token.T_RDF_PREFIX; }
 ![ ]*rdf_entities      { return (int)Token.T_RDF_ENTITIES; }
@@ -91,19 +107,18 @@ at { return (int)Token.T_AT; }
 \%{Word}  { yylval.s = yytext; return (int)Token.T_CWORD; }
 {Word}    { yylval.s = yytext; return (int)Token.T_WORD; }
 
+([0-9]{2}:)?[0-9]{2}:[0-9]{2} { yylval.ts = TryParseTimeSpan(yytext); return (int)Token.T_TIMESPAN; }
+
 {Comment}   { BEGIN(comment); }
 
 {Space}+		/* skip */
 
 
-<str>[^\n\"]* { StringInput.Append(yytext); }
-<str>\\"      { StringInput.Append(yytext[1]); }
-// Error: Literal string terminated by end of line
-// -----------------------------------------------
-<str>\"       { BEGIN(INITIAL); yylval.s = StringInput.ToString(); return (int)Token.T_STRING; }
-// Error: Invalid production rule
-// Error: Parser error <Syntax error, unexpected <, expecting pattern, or {> 
-// --------------------------------------------------------------------------
+<str>[^\\"]*    { StringInput.Append(yytext); }
+<str>\\\\       { StringInput.Append(yytext[1]); }
+<str>\\\"       { StringInput.Append(yytext[1]); }
+<str>\\n        { StringInput.Append("\n"); }
+<str>\"         { BEGIN(INITIAL); yylval.s = StringInput.ToString(); return (int)Token.T_STRING; }
 
 <comment>[^\r\n]* /* skip */
 <comment>\r|\n    { BEGIN(INITIAL); }

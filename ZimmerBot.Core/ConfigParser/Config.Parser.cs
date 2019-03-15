@@ -86,6 +86,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected void RegisterIgnorable(List<WRegexBase> entityPatterns)
+    {
+      KnowledgeBase.RegisterEntityClass(Constants.IgnoreValue, entityPatterns);
+    }
+
+
     protected void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
     {
       KnowledgeBase.RegisterPatternSet(identifiers, patterns);
