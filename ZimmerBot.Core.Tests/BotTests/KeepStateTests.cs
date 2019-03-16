@@ -33,13 +33,18 @@ namespace ZimmerBot.Core.Tests.BotTests
   > what about {topic}
 }
 
+>> do_you_like_x
+: How would I know?
+
 >> do_you_like_x (topic:car)
 : Yes, <topic> is a great car!
 
 >> do_you_have_x (topic:car)
 : No, I do not own <topic>
 ");
+      AssertDialog("do you like Porche", "How would I know?");
       AssertDialog("do you like the Volvo", "Yes, Volvo is a great car!");
+      //AssertDialog("do you like playing golf", "How would I know?");
       AssertDialog("what about a Ford", "Yes, Ford is a great car!");
       AssertDialog("do you have one", "No, I do not own Ford");
       AssertDialog("do you have a Toyota", "No, I do not own Toyota");

@@ -35,6 +35,12 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
+    public bool HasPatternWithParameter(string p)
+    {
+      return MatchPattern.HasParameterNamed(p);
+    }
+
+
     public override string ToString()
     {
       string values = MatchValues.Select(v => v.Key + ":" + v.Value).Aggregate((a, b) => a + ", " + b);

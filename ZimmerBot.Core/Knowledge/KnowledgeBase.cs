@@ -279,14 +279,14 @@ namespace ZimmerBot.Core.Knowledge
           MatchResult previousMatch = context.InputContext.Session.Store[SessionKeys.LatestMatch] as MatchResult;
           if (previousMatch != null && matchingPatterns != null)
           {
-            foreach (var p in matchingPatterns)
+            foreach (var curr in matchingPatterns)
             {
-              foreach (var v in previousMatch.Matches)
+              foreach (var prev in previousMatch.Matches)
               {
-                if (!p.MatchValues.ContainsKey(v.Key))
+                if (!curr.MatchValues.ContainsKey(prev.Key) && !curr.HasPatternWithParameter(prev.Key))
                 {
-                  BotUtility.EvaluationLogger.Debug($"Add previous '{v.Key}' = '{v.Value}' to matched pattern.");
-                  p.MatchValues[v.Key] = v.Value;
+                  BotUtility.EvaluationLogger.Debug($"Add previous '{prev.Key}' = '{prev.Value}' to matched pattern.");
+                  curr.MatchValues[prev.Key] = prev.Value;
                 }
               }
             }
