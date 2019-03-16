@@ -6,6 +6,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
   {
     public void Handle(InputPipelineItem item)
     {
+      // It would be cool to have something here :-)
     }
   }
 }

@@ -61,7 +61,7 @@ namespace ZimmerBot.Core.Knowledge
         // Push new set of variables for matches $1...$N
         context.Variables.Push(new Dictionary<string, object>());
 
-        foreach (var m in context.Match.Matches)
+        foreach (var m in context.Match.MatchedTexts)
         {
           context.Variables[m.Key] = m.Value;
           context.Variables["$" + m.Key] = m.Value;

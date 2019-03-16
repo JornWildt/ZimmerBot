@@ -103,11 +103,11 @@ namespace ZimmerBot.Core.WordRegex
 
       // Make sure all match groups exists
       for (int i = 1; i < context.CurrentRepetitionIndex; ++i)
-        result.Matches[i.ToString()] = "";
+        result.Matches[i.ToString()] = new ZToken("");
 
       if (matchNode != null)
         foreach (var m in matchNode.Matches)
-          result.Matches[m.Key] = m.Value;
+          result.Matches[m.Key] = new ZToken(m.Value);
 
       return result;
     }

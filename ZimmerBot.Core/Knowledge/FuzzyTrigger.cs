@@ -98,7 +98,7 @@ namespace ZimmerBot.Core.Knowledge
           {
             result = new MatchResult(score);
             foreach (var item in matchValues)
-              result.Matches[item.Key] = item.Value.OriginalText;
+              result.Matches[item.Key] = item.Value;
           }
         }
       }

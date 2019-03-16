@@ -10,8 +10,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
   {
     public void Handle(InputPipelineItem item)
     {
-      // FIXME Unused
-      //item.Context.KnowledgeBase.FindCurrentTopic(item.EvaluationContext);
+      // It would be cool to have something here :-)
     }
   }
 }
