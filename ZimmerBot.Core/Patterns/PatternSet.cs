@@ -10,7 +10,9 @@ namespace ZimmerBot.Core.Patterns
 {
   public class PatternSet
   {
-    public List<KeyValuePair<string,string>> Identifiers { get; protected set; }
+    public List<KeyValuePair<string,List<string>>> Identifiers { get; protected set; }
+
+    public List<List<KeyValuePair<string, string>>> UnfoldedIdentifiers { get; protected set; }
 
     public List<Pattern> Patterns { get; protected set; }
 
@@ -29,7 +31,7 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public PatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    public PatternSet(List<KeyValuePair<string, List<string>>> identifiers, List<Pattern> patterns)
     {
       Condition.Requires(identifiers, nameof(identifiers)).IsNotNull();
       Condition.Requires(patterns, nameof(patterns)).IsNotNull();
@@ -39,6 +41,13 @@ namespace ZimmerBot.Core.Patterns
 
       foreach (Pattern p in Patterns)
         p.RegisterParent(this);
+    }
+
+
+    public void SetupComplete(KnowledgeBase kb)
+    {
+      ExpandPatterns(kb);
+      UnfoldIdentifiers();
     }
 
 
@@ -52,6 +61,36 @@ namespace ZimmerBot.Core.Patterns
         p.ExpandExpressions(kb, Patterns);
       }
     }
+
+
+    public void UnfoldIdentifiers()
+    {
+      UnfoldedIdentifiers = new List<List<KeyValuePair<string, string>>>();
+
+      UnfoldIdentifiers(0, new Stack<KeyValuePair<string,string>>(), UnfoldedIdentifiers);
+    }
+
+
+    private void UnfoldIdentifiers(
+      int i,
+      Stack<KeyValuePair<string, string>> set,
+      List<List<KeyValuePair<string, string>>> result)
+    {
+      if (i < Identifiers.Count)
+      {
+        foreach (string id in Identifiers[i].Value)
+        {
+          set.Push(new KeyValuePair<string, string>(Identifiers[i].Key, id));
+          UnfoldIdentifiers(i+1, set, result);
+          set.Pop();
+        }
+      }
+      else
+      {
+        result.Add(new List<KeyValuePair<string, string>>(set));
+      }
+    }
+
 
     public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {

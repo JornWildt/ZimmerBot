@@ -92,7 +92,7 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    protected void RegisterPatternSet(List<KeyValuePair<string, List<string>>> identifiers, List<Pattern> patterns)
     {
       KnowledgeBase.RegisterPatternSet(identifiers, patterns);
     }

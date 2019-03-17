@@ -28,6 +28,8 @@
   public List<OperatorKeyValueList> opKeyValueListList;
   public StringPairList keyValueList;
   public KeyValuePair<string,string> keyValue;
+  public List<KeyValuePair<string,List<string>>> keyListValueList;
+  public KeyValuePair<string,List<string>> keyListValue;
   public OperatorKeyValue opKeyValue;
   public OperatorKeyValueList opKeyValueList;
   public List<Pattern> patternList;
@@ -132,9 +134,9 @@ configuration
       }
   | T_DEFINE T_LPAR wordStringCommaSeq T_RPAR T_LBRACE definitionSeq T_RBRACE
       { RegisterDefinitions($3.stringList, $6.wordDefinitionList); }
-  | T_PATTERN T_LPAR keyValueSeq T_RPAR
+  | T_PATTERN T_LPAR keyListValueSeq T_RPAR
     T_LBRACE patternSeq T_RBRACE
-      { RegisterPatternSet($3.keyValueList, $6.patternList); }
+      { RegisterPatternSet($3.keyListValueList, $6.patternList); }
   | T_RDF_IMPORT T_STRING            
       { RDFImport(((ConfigScanner)Scanner).StringInput.ToString()); }
   | T_RDF_PREFIX T_WORD T_STRING     
@@ -517,6 +519,20 @@ keyValueSeq
 
 keyValue
   : T_WORD T_EQU value { $$.keyValue = new KeyValuePair<string,string>($1.s, $3.s); }
+  ;
+
+keyListValueSeq
+  : keyListValueSeq T_COMMA keyListValue { $$.keyListValueList = $1.keyListValueList; $$.keyListValueList.Add($3.keyListValue); }
+  | keyListValue                         { $$.keyListValueList = new List<KeyValuePair<string,List<string>>>(); $$.keyListValueList.Add($1.keyListValue); }
+  ;
+
+keyListValue
+  : T_WORD T_EQU listValue { $$.keyListValue = new KeyValuePair<string,List<string>>($1.s, $3.stringList); }
+  ;
+
+listValue
+  : listValue T_COLON value  { $$.stringList = $1.stringList; $$.stringList.Add($3.s); }
+  | value                    { $$.stringList = new List<string>(); $$.stringList.Add($1.s); }
   ;
 
 opKeyValueSeq

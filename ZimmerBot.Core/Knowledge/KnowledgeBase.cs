@@ -147,7 +147,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    public void RegisterPatternSet(List<KeyValuePair<string, List<string>>> identifiers, List<Pattern> patterns)
     {
       PatternSet set = new PatternSet(identifiers, patterns);
       PatternManager.AddPatternSet(set);

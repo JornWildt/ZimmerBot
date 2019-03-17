@@ -15,14 +15,14 @@ namespace ZimmerBot.Core.Patterns
     public Dictionary<string, ZToken> MatchValues { get; protected set; }
 
 
-    public PatternMatchResult(Pattern pattern, ZTokenSequence input)
+    public PatternMatchResult(Pattern pattern, ZTokenSequence input, IEnumerable<KeyValuePair<string,string>> identifiers)
     {
       Condition.Requires(pattern, nameof(pattern)).IsNotNull();
 
       MatchPattern = pattern;
       MatchValues = new Dictionary<string, ZToken>(StringComparer.OrdinalIgnoreCase);
 
-      foreach (var id in MatchPattern.ParentPatternSet.Identifiers)
+      foreach (var id in identifiers)
       {
         MatchValues.Add(id.Key, new ZToken(id.Value));
       }

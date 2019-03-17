@@ -39,7 +39,7 @@ namespace ZimmerBot.Core.Patterns
     public void SetupComplete()
     {
       foreach (var entry in PatternSets)
-        entry.ExpandPatterns(KnowledgeBase);
+        entry.SetupComplete(KnowledgeBase);
 
       TotalNumberOfPatterns = PatternSets.Sum(p => p.Patterns.Count); ;
       TotalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);
@@ -85,11 +85,15 @@ namespace ZimmerBot.Core.Patterns
           if (pb > maxProb)
           {
             maxProb = pb;
-            PatternMatchResult r = new PatternMatchResult(pt, input);
             result.Clear();
-            result.Add(r);
+            // Add possible combinations of pattern identifiers as result
+            foreach (var identifiers in pt.ParentPatternSet.UnfoldedIdentifiers)
+            {
+              PatternMatchResult r = new PatternMatchResult(pt, input, identifiers);
+              result.Add(r);
+              BotUtility.EvaluationLogger.Debug($"Better match: {r.ToString()} ({pb})");
+            }
 
-            BotUtility.EvaluationLogger.Debug($"Better match: {r.ToString()} ({pb})");
             BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
           }
           else
@@ -98,9 +102,13 @@ namespace ZimmerBot.Core.Patterns
             // Are the values equal with respect to a small margin?
             if (Math.Abs(pb - maxProb) <= difference)
             {
-              PatternMatchResult r = new PatternMatchResult(pt, input);
-              result.Add(r);
-              BotUtility.EvaluationLogger.Debug($"Similar match: {r.ToString()} ({pb})");
+              // Add possible combinations of pattern identifiers as result
+              foreach (var identifiers in pt.ParentPatternSet.UnfoldedIdentifiers)
+              {
+                PatternMatchResult r = new PatternMatchResult(pt, input, identifiers);
+                result.Add(r);
+                BotUtility.EvaluationLogger.Debug($"Similar match: {r.ToString()} ({pb})");
+              }
               BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
             }
           }

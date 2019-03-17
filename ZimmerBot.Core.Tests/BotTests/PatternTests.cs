@@ -621,5 +621,49 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("what is oslo", "oslo is a city");
       AssertDialog("what is oil", "I do not know");
     }
+
+
+    [Test]
+    public void CanHaveMultipleIntent()
+    {
+      BuildBot(@"
+! pattern (intent = disagree:no)
+{
+  > Certainly not
+  > no
+  > forget it
+}
+
+> Monkey
+: Monkeys are pink
+! answer
+{
+  >> disagree
+  : Right
+}
+
+> Elephant
+: Elephants are pink
+! answer
+{
+  >> no
+  : Okay
+}
+
+> Now what
+: Let's party
+! answer
+{
+  >> no
+  : Too bad
+}
+");
+      AssertDialog("Monkey", "Monkeys are pink");
+      AssertDialog("Certainly not", "Right");
+      AssertDialog("Elephant", "Elephants are pink");
+      AssertDialog("No", "Okay");
+      AssertDialog("Now what", "Let's party");
+      AssertDialog("Forget it", "Too bad");
+    }
   }
 }
