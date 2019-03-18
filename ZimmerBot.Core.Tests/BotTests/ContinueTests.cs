@@ -55,5 +55,20 @@ namespace ZimmerBot.Core.Tests.BotTests
 ");
       AssertDialog("Yo!", "Yaj!\nis it fun");
     }
+
+
+    [Test]
+    public void CanContinueWithParameters()
+    {
+      BuildBot(@"
+> Yo +
+: Yaj!
+! continue with Some <1>
+
+> Some +
+: Love '<1>'
+");
+      AssertDialog("Yo Mouse", "Yaj!\nLove 'Mouse'");
+    }
   }
 }
