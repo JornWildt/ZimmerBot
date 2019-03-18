@@ -317,6 +317,40 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void CanMatchEntitiesFromConceptAndWRegex()
+    {
+      BuildBot(@"
+! concept firstName = Maria, Lars, Sue, Peter
+! concept lastName = Nielsen, Peterson, RagnhildsDottir
+
+! entities (name)
+{
+  > %firstName %firstName? %lastName? %lastName?
+  > %firstName? %firstName? %lastName? %lastName
+}
+
+! pattern (intent = my_name)
+{
+  > my name is {name}
+}
+
+>> my_name (name:*)
+: Hi ""<name>""!
+
+> *
+! weight 0.5
+: What?
+");
+
+      AssertDialog("My name is Maria", "Hi \"Maria\"!");
+      AssertDialog("My name is Lars RagnhildsDottir", "Hi \"Lars RagnhildsDottir\"!");
+      AssertDialog("My name is Lars Peter Nielsen", "Hi \"Lars Peter Nielsen\"!");
+      AssertDialog("My name is Sue Lars Peter Nielsen", "Hi \"Sue Lars\"!");
+      AssertDialog("My name is unknown", "What?");
+    }
+
+
+    [Test]
     public void CanMatchMultiplePatterns()
     {
       BuildBot(@"
@@ -586,6 +620,50 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       AssertDialog("what is oslo", "oslo is a city");
       AssertDialog("what is oil", "I do not know");
+    }
+
+
+    [Test]
+    public void CanHaveMultipleIntent()
+    {
+      BuildBot(@"
+! pattern (intent = disagree:no)
+{
+  > Certainly not
+  > no
+  > forget it
+}
+
+> Monkey
+: Monkeys are pink
+! answer
+{
+  >> disagree
+  : Right
+}
+
+> Elephant
+: Elephants are pink
+! answer
+{
+  >> no
+  : Okay
+}
+
+> Now what
+: Let's party
+! answer
+{
+  >> no
+  : Too bad
+}
+");
+      AssertDialog("Monkey", "Monkeys are pink");
+      AssertDialog("Certainly not", "Right");
+      AssertDialog("Elephant", "Elephants are pink");
+      AssertDialog("No", "Okay");
+      AssertDialog("Now what", "Let's party");
+      AssertDialog("Forget it", "Too bad");
     }
   }
 }

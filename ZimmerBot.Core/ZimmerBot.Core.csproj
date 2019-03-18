@@ -140,9 +140,11 @@
     <Compile Include="Patterns\WordPatternExpr.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />
+    <Compile Include="Pipeline\InputStages\PipelineActionStage.cs" />
     <Compile Include="Pipeline\InputStages\SpellCheckerStage.cs" />
     <Compile Include="Pipeline\InputStages\TopicAssigningStage.cs" />
     <Compile Include="Pipeline\InputStages\WordStemmerStage.cs" />
+    <Compile Include="Pipeline\PipelineAction.cs" />
     <Compile Include="Scheduler\ScheduledActionJob.cs" />
     <Compile Include="Scheduler\ScheduleHelper.cs" />
     <Compile Include="SessionKeys.cs" />

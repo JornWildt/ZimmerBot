@@ -63,6 +63,7 @@ NOT         { return (int)Token.T_NOT; }
 ![ ]*weight      { return (int)Token.T_WEIGHT; }
 ![ ]*when        { return (int)Token.T_WHEN; }
 ![ ]*every       { return (int)Token.T_EVERY; }
+![ ]*pipeline    { return (int)Token.T_PIPELINE; }
 ![ ]*on          { return (int)Token.T_ON; }
 ![ ]*answer      { return (int)Token.T_ANSWER; }
 ![ ]*topic       { return (int)Token.T_TOPIC; }
@@ -77,6 +78,7 @@ NOT         { return (int)Token.T_NOT; }
 ![ ]*entities          { return (int)Token.T_ENTITIES; }
 ![ ]*define            { return (int)Token.T_DEFINE; }
 ![ ]*pattern           { return (int)Token.T_PATTERN; }
+![ ]*ignore            { return (int)Token.T_IGNORE; }
 ![ ]*rdf_import        { return (int)Token.T_RDF_IMPORT; }
 ![ ]*rdf_prefix        { return (int)Token.T_RDF_PREFIX; }
 ![ ]*rdf_entities      { return (int)Token.T_RDF_ENTITIES; }

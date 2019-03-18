@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 
 namespace ZimmerBot.Core.Tests.BotTests
 {
@@ -83,6 +84,47 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("", "Hi, I remember you have a dog");
       AssertDialog("I have a cat", "Nice");
       AssertDialog("", "Hi, I remember you have a cat");
+    }
+
+
+    [Test]
+    public void CanUseNonExistingValues()
+    {
+      BuildBot(@"
+> A
+! when !tmp.Unknown
+: OK-A
+
+> B
+! when !session.Unknown
+: OK-B
+
+> C
+! when !user.Unknown
+: OK-C
+
+> D
+! when !bot.Unknown
+: OK-D
+");
+
+      AssertDialog("A", "OK-A");
+      AssertDialog("B", "OK-B");
+      AssertDialog("C", "OK-C");
+      AssertDialog("D", "OK-D");
+    }
+
+
+    [Test]
+    public void ItThrowsWhenAccessingUnknownRootIdentifier()
+    {
+      BuildBot(@"
+> E
+! when !Unknown.Unknown
+: ERROR
+");
+
+      Assert.Throws<InvalidOperationException>(() => AssertDialog("E", ""));
     }
   }
 }

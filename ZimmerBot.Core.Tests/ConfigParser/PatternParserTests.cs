@@ -11,7 +11,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
     public void CanParsePatternDefinition()
     {
       string cfg = @"
-! pattern (intent = current_weather, type = ""question"")
+! pattern (intent = current_weather, type = ""question"", other=a:b)
 {
   > is it snowing
   > is it raining in {l:location}
@@ -26,11 +26,14 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       PatternSet set = kb.PatternManager.PatternSets[0];
 
       Assert.IsNotNull(set.Identifiers);
-      Assert.AreEqual(2, set.Identifiers.Count);
+      Assert.AreEqual(3, set.Identifiers.Count);
       Assert.AreEqual("intent", set.Identifiers[0].Key);
-      Assert.AreEqual("current_weather", set.Identifiers[0].Value);
+      Assert.AreEqual("current_weather", set.Identifiers[0].Value[0]);
       Assert.AreEqual("type", set.Identifiers[1].Key);
-      Assert.AreEqual("question", set.Identifiers[1].Value);
+      Assert.AreEqual("question", set.Identifiers[1].Value[0]);
+      Assert.AreEqual("other", set.Identifiers[2].Key);
+      Assert.AreEqual("a", set.Identifiers[2].Value[0]);
+      Assert.AreEqual("b", set.Identifiers[2].Value[1]);
 
       Assert.IsNotNull(set.Patterns);
       Assert.AreEqual(3, set.Patterns.Count);

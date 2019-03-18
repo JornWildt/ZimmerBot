@@ -9,5 +9,6 @@
     public const string LastMessageTimeStamp = "LastMessageTimeStamp";
     public const string LatestInput = "LatestInput";
     public const string LatestOutput = "LatestOutput";
+    public const string LatestMatch = "LatestMatch";
   }
 }

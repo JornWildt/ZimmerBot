@@ -18,7 +18,7 @@ namespace ZimmerBot.Core.Knowledge
 
 
     public Rule(KnowledgeBase kb, string label, Topic topic, IEnumerable<RuleModifier> modifiers, IList<Statement> statements)
-      : base(kb, modifiers, statements)
+      : base(kb, statements)
     {
       Id = Guid.NewGuid().ToString();
       Label = label;

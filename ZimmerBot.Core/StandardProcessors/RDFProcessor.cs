@@ -22,7 +22,7 @@ namespace ZimmerBot.Core.StandardProcessors
 
       RDFResultSet output = input.Context.KnowledgeBase.MemoryStore.Query(
         query,
-        input.Context.Match.Matches,
+        input.Context.Match.MatchedTexts,
         input.Inputs.GetRange(1, input.Inputs.Count - 1));
 
       if (output.Count > 0)
@@ -45,7 +45,7 @@ namespace ZimmerBot.Core.StandardProcessors
 
       RDFResultSet output = input.Context.KnowledgeBase.MemoryStore.Query(
         query,
-        input.Context.Match.Matches,
+        input.Context.Match.MatchedTexts,
         input.Inputs.GetRange(1, input.Inputs.Count - 1));
 
       if (output.Count > 0)

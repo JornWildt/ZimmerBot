@@ -26,8 +26,8 @@ namespace ZimmerBot.Core.Patterns
     private int _entityNumber;
 
     // EntityNumber is the index of the Entity in the expression list it is
-    // included in. This avoids two entities (number one and two) in a token input to 
-    // match a single input in a pattern with only one entity.
+    // included in. This avoids two entities (number one and two) in a token input
+    // matching a single input in a pattern with only one entity.
     public int EntityNumber
     {
       get
@@ -101,6 +101,12 @@ namespace ZimmerBot.Core.Patterns
         ZToken entity = entityTokens.Dequeue();
         matchValues[ParameterName] = entity;
       }
+    }
+
+
+    public override bool HasParameterNamed(string p)
+    {
+      return p == ParameterName;
     }
   }
 }

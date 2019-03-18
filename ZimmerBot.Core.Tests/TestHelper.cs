@@ -137,7 +137,7 @@ namespace ZimmerBot.Core.Tests
         foreach (var item in expectedMatches)
         {
           Assert.IsTrue(result.Matches.ContainsKey(item.Key), $"The key {item.Key} was not found in matches");
-          Assert.AreEqual(expectedMatches[item.Key], result.Matches[item.Key], $"Wrong value for key {item.Key}" );
+          Assert.AreEqual(expectedMatches[item.Key], result.Matches[item.Key].OriginalText, $"Wrong value for key {item.Key}" );
         }
       }
     }

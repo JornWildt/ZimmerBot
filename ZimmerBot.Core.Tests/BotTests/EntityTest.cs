@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using ZimmerBot.Core.Knowledge;
+﻿using NUnit.Framework;
 
 namespace ZimmerBot.Core.Tests.BotTests
 {

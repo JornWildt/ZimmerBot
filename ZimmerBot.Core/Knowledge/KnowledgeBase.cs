@@ -44,6 +44,8 @@ namespace ZimmerBot.Core.Knowledge
 
     public Pipeline<InputPipelineItem> InputPipeline { get; protected set; }
 
+    protected PipelineActionStage StartActionStage { get; set; }
+
     protected IDictionary<string, Rule> LabelToRuleMap { get; set; }
 
     public EntityManager EntityManager { get; protected set; }
@@ -75,7 +77,10 @@ namespace ZimmerBot.Core.Knowledge
 
       Topics[DefaultTopicName] = new Topic(DefaultTopicName, isAutomaticallySelectable: false);
 
+      StartActionStage = new PipelineActionStage();
+
       InputPipeline = new Pipeline<InputPipelineItem>();
+      InputPipeline.AddHandler(StartActionStage);
       InputPipeline.AddHandler(new SpellCheckerStage());
       InputPipeline.AddHandler(new WordStemmerStage());
       InputPipeline.AddHandler(new WordTaggingStage());
@@ -142,7 +147,7 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
-    public void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    public void RegisterPatternSet(List<KeyValuePair<string, List<string>>> identifiers, List<Pattern> patterns)
     {
       PatternSet set = new PatternSet(identifiers, patterns);
       PatternManager.AddPatternSet(set);
@@ -170,6 +175,15 @@ namespace ZimmerBot.Core.Knowledge
     public ScheduledAction GetScheduledAction(string id)
     {
       return ScheduledActions[id];
+    }
+
+
+    public void RegisterPipelineItem(string stage, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      if (stage == "start")
+        StartActionStage.RegisterPipelineAction(new PipelineAction(this, modifiers, statements));
+      else
+        throw new ApplicationException($"Unknown pipeline stage '{stage}'.");
     }
 
 
@@ -260,6 +274,24 @@ namespace ZimmerBot.Core.Knowledge
         if (context.InputContext.Input != null)
         {
           PatternMatchResultList matchingPatterns = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
+
+          // Add match values from previous match
+          MatchResult previousMatch = context.InputContext.Session.Store[SessionKeys.LatestMatch] as MatchResult;
+          if (previousMatch != null && matchingPatterns != null)
+          {
+            foreach (var curr in matchingPatterns)
+            {
+              foreach (var prev in previousMatch.Matches)
+              {
+                if (!curr.MatchValues.ContainsKey(prev.Key) && !curr.HasPatternWithParameter(prev.Key))
+                {
+                  BotUtility.EvaluationLogger.Debug($"Add previous '{prev.Key}' = '{prev.Value}' to matched pattern.");
+                  curr.MatchValues[prev.Key] = prev.Value;
+                }
+              }
+            }
+          }
+
           context.MatchedPatterns = matchingPatterns;
 
           if (matchingPatterns != null)
@@ -309,10 +341,6 @@ namespace ZimmerBot.Core.Knowledge
     public bool SelectReactionsFromTopic(Topic topic, ReactionSet reactions, TriggerEvaluationContext context, double weight)
     {
       BotUtility.EvaluationLogger.Debug($"Select reactions from topic {topic.Name} with weight {weight}");
-      //if (context.MatchedPatterns != null && context.MatchedPatterns != null && context.MatchedPatterns.Count > 0)
-      //{
-      //  BotUtility.EvaluationLogger.Debug("Match values: " + context.MatchedPatterns.MatchValues.Select(v => v.Key + ":" + v.Value).Aggregate((a,b) => a + ", " + b));
-      //}
 
       bool reactionsAdded = false;
       foreach (Rule r in topic.StandardRules)

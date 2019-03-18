@@ -86,7 +86,13 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
-    protected void RegisterPatternSet(List<KeyValuePair<string, string>> identifiers, List<Pattern> patterns)
+    protected void RegisterIgnorable(List<WRegexBase> entityPatterns)
+    {
+      KnowledgeBase.RegisterEntityClass(Constants.IgnoreValue, entityPatterns);
+    }
+
+
+    protected void RegisterPatternSet(List<KeyValuePair<string, List<string>>> identifiers, List<Pattern> patterns)
     {
       KnowledgeBase.RegisterPatternSet(identifiers, patterns);
     }
@@ -101,6 +107,12 @@ namespace ZimmerBot.Core.ConfigParser
     protected void RegisterScheduledAction(string cronExpr, List<RuleModifier> modifiers, List<Statement> statements)
     {
       KnowledgeBase.RegisterScheduledAction(cronExpr, modifiers, statements);
+    }
+
+
+    protected void RegisterPipelineItem(string stage, List<RuleModifier> modifiers, List<Statement> statements)
+    {
+      KnowledgeBase.RegisterPipelineItem(stage, modifiers, statements);
     }
 
 

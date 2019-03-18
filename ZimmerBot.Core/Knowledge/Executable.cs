@@ -19,7 +19,7 @@ namespace ZimmerBot.Core.Knowledge
     public static Random Randomizer = new Random();
 
 
-    public Executable(KnowledgeBase kb, IEnumerable<RuleModifier> modifiers, IEnumerable<Statement> statements)
+    public Executable(KnowledgeBase kb, IEnumerable<Statement> statements)
     {
       Condition.Requires(kb, nameof(kb)).IsNotNull();
       Condition.Requires(statements, nameof(statements)).IsNotNull();
@@ -61,7 +61,7 @@ namespace ZimmerBot.Core.Knowledge
         // Push new set of variables for matches $1...$N
         context.Variables.Push(new Dictionary<string, object>());
 
-        foreach (var m in context.Match.Matches)
+        foreach (var m in context.Match.MatchedTexts)
         {
           context.Variables[m.Key] = m.Value;
           context.Variables["$" + m.Key] = m.Value;
@@ -116,6 +116,9 @@ namespace ZimmerBot.Core.Knowledge
       finally
       {
         // Remove variables containing matches $1...$N for this rule invocation
+        // FIXME: This is really nonsense - call statements add their own variable
+        // on top of the expected, so the result is to pop a random call statement's
+        // result values
         context.Variables.Pop();
       }
     }

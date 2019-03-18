@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace ZimmerBot.Core.Parser
 {
+  [Serializable]
   public class ZToken
   {
     public enum TokenType { Word, Number, EMail, Entity }

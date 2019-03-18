@@ -21,31 +21,85 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
     static ConcurrentDictionary<string, CacheEntry> Cache = new ConcurrentDictionary<string, CacheEntry>();
 
 
+    public static ProcessorOutput Weather(ProcessorInput input)
+    {
+      string location = input.GetParameter<string>(0);
+      Logger.Debug($"Lookup current weather for '{location}' at Open Weather Map.");
+
+      return GetCached(
+        CacheKey("weather", location),
+        () =>
+        {
+          Dictionary<string, object> result = GetWeather(location);
+          return new ProcessorOutput(result);
+        });
+    }
+
+
     public static ProcessorOutput Forecast(ProcessorInput input)
     {
       string location = input.GetParameter<string>(0);
       Logger.Debug($"Lookup weather forecast for '{location}' at Open Weather Map.");
 
+      return GetCached(
+        CacheKey("weather", location),
+        () =>
+        {
+          Dictionary<string, object> result = GetForecast(location);
+          return new ProcessorOutput(result);
+        });
+    }
+
+
+    private static ProcessorOutput GetCached(string key, Func<ProcessorOutput> action)
+    {
       try
       {
-        if (!Cache.ContainsKey(location) || Cache[location].Timestamp < DateTime.Now.AddHours(-1))
+        if (!Cache.ContainsKey(key) || Cache[key].Timestamp < DateTime.Now.AddHours(-1))
         {
-          Dictionary<string, object> parameters = GetForecast(location);
+          ProcessorOutput result = action();
 
-          Cache[location] = new CacheEntry
+          Cache[key] = new CacheEntry
           {
             Timestamp = DateTime.Now,
-            Output = new ProcessorOutput(parameters)
+            Output = result
           };
         }
 
-        return Cache[location].Output;
+        return Cache[key].Output;
       }
       catch (Exception ex)
       {
         Logger.Debug(ex);
         return new ProcessorOutput("error", null);
       }
+    }
+
+
+    private static string CacheKey(string function, string location) => function + ":" + location;
+
+
+    private static Dictionary<string, object> GetWeather(string location)
+    {
+      OpenWeatherMapAPI api = new OpenWeatherMapAPI();
+      OpenWeatherMapAPI.Current result = api.GetWeather(location);
+
+      var weatherData = new Dictionary<string, object>
+      {
+        ["temp"] = Math.Round(result.Temperature.Value).ToString(),
+        ["weather"] = result.Weather.Value,
+        ["windDir"] = result.Wind.Direction.Name,
+        ["windSpeed"] = Math.Round(result.Wind.Speed.MetersPerSecond).ToString(),
+      };
+
+      bool isRain = result.Precipitation?.Mode?.Contains("rain") ?? false;
+      bool isSnow = result.Precipitation?.Mode?.Contains("snow") ?? false;
+
+      CalculateState(weatherData, result.Wind.Speed.MetersPerSecond, result.Clouds.Value, 
+        isRain, isSnow, 
+        result.City.Sun.Rise, result.City.Sun.Set);
+
+      return weatherData;
     }
 
 
@@ -65,22 +119,22 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
     }
 
 
-    private static Dictionary<string,string> ForecastRestOfDay(OpenWeatherMapAPI.Forecast forecast)
+    private static Dictionary<string, object> ForecastRestOfDay(OpenWeatherMapAPI.Forecast forecast)
     {
       int firstTomorrowIndex = FindFirstTomorrow(forecast, 0);
 
-      Dictionary<string, string> data = CalcForecastData(forecast, 0, firstTomorrowIndex);
+      Dictionary<string, object> data = CalcForecastData(forecast, 0, firstTomorrowIndex);
       data["period"] = "Resten af dagen";
 
       return data;
     }
 
 
-    private static Dictionary<string, string> ForecastTomorrow(OpenWeatherMapAPI.Forecast forecast)
+    private static Dictionary<string, object> ForecastTomorrow(OpenWeatherMapAPI.Forecast forecast)
     {
       int firstTomorrowIndex = FindFirstTomorrow(forecast, 6);
 
-      Dictionary<string, string> data = CalcForecastData(forecast, firstTomorrowIndex, forecast.List.Count);
+      Dictionary<string, object> data = CalcForecastData(forecast, firstTomorrowIndex, forecast.List.Count);
       data["period"] = "I morgen";
 
       return data;
@@ -105,7 +159,7 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
     }
 
 
-    private static Dictionary<string, string> CalcForecastData(OpenWeatherMapAPI.Forecast forecast, int start, int end)
+    private static Dictionary<string, object> CalcForecastData(OpenWeatherMapAPI.Forecast forecast, int start, int end)
     {
       decimal minTemp = 100;
       decimal maxTemp = -100;
@@ -143,23 +197,17 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
         clouds += f.Clouds.all;
 
         precipation += f.Precipation?.Value ?? 0m;
-        isRain = f.Precipation?.type?.Contains("rain") ?? false;
-        isSnow = f.Precipation?.type?.Contains("snow") ?? false;
+        isRain = isRain || (f.Precipation?.type?.Contains("rain") ?? false);
+        isSnow = isSnow || (f.Precipation?.type?.Contains("snow") ?? false);
       }
 
       var averageWind = (minWind + maxWind) / 2.0m;
       var mostUsedWeatherType = weatherTypeCount.OrderBy(i => i.Value > i.Value).FirstOrDefault();
       var mostUsedWindDirCode = windDirCodeCount.OrderBy(i => i.Value > i.Value).FirstOrDefault();
 
-      bool isStrongBreeze = maxWind >= 10.8m;
-      bool isGale = maxWind >= 13.9m;
-      bool isStorm = maxWind >= 24.5m;
-
       decimal averageClouds = clouds / (end - start);
-      bool isSunny = averageClouds < 15;
-      bool isCloudy = averageClouds > 85;
 
-      return new Dictionary<string, string>
+      var forecastData = new Dictionary<string, object>
       {
         ["minTemp"] = Math.Round(minTemp).ToString(),
         ["maxTemp"] = Math.Round(maxTemp).ToString(),
@@ -167,15 +215,38 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
         ["windDir"] = mostUsedWindDirCode.Key,
         ["windMin"] = Math.Round(minWind).ToString(),
         ["windMax"] = Math.Round(maxWind).ToString(),
-        ["windSpeed"] = Math.Round(averageWind).ToString(),
-        ["isStrongBreeze"] = isStrongBreeze ? "1" : null,
-        ["isGale"] = isGale ? "1" : null,
-        ["isStorm"] = isStorm ? "1" : null,
-        ["isRain"] = isRain ? "1" : null,
-        ["isSnow"] = isSnow ? "1" : null,
-        ["isSunny"] = isSunny ? "1" : null,
-        ["isCloudy"] = isCloudy ? "1" : null
+        ["windSpeed"] = Math.Round(averageWind).ToString()
       };
+
+      CalculateState(forecastData, maxWind, averageClouds, isRain, isSnow, forecast.Sun.Rise, forecast.Sun.Set);
+
+      return forecastData;
+    }
+
+
+    private static void CalculateState(
+      Dictionary<string, object> output, decimal wind, decimal clouds, 
+      bool isRain, bool isSnow,
+      DateTime sunrise, DateTime sunset)
+    {
+      bool isStrongBreeze = wind >= 10.8m;
+      bool isGale = wind >= 13.9m;
+      bool isStorm = wind >= 24.5m;
+
+      bool isCloudy = clouds > 75;
+      bool isClear = clouds < 15;
+
+      DateTime now = DateTime.Now;
+      bool isSunny = isClear && sunrise < now && now < sunset;
+
+      output["isStrongBreeze"] = isStrongBreeze ? "1" : null;
+      output["isGale"] = isGale ? "1" : null;
+      output["isStorm"] = isStorm ? "1" : null;
+      output["isRain"] = isRain ? "1" : null;
+      output["isSnow"] = isSnow ? "1" : null;
+      output["isClear"] = isClear ? "1" : null;
+      output["isCloudy"] = isCloudy ? "1" : null;
+      output["isSunny"] = isSunny ? "1" : null;
     }
   }
 }

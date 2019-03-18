@@ -1,6 +1,6 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
-using Quartz;
 using ZimmerBot.Core.Parser;
 using ZimmerBot.Core.WordRegex;
 
@@ -8,6 +8,8 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class RegexTrigger : Trigger
   {
+    private static ILog Logger = LogManager.GetLogger(typeof(RegexTrigger));
+
     public WRegex Regex { get; protected set; }
 
     public double RegexSize { get; protected set; }
@@ -104,6 +106,8 @@ namespace ZimmerBot.Core.Knowledge
         {
           foreach (ZTokenSequence input in context.InputContext.Input)
           {
+            BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}.");
+
             var subResult = Regex.CalculateMatch(new WRegexBase.EvaluationContext(input, 0, 99999));
             if (result == null || subResult.Score > result.Score)
               result = subResult;
@@ -115,13 +119,12 @@ namespace ZimmerBot.Core.Knowledge
       else
       {
         throw new NotImplementedException("Why did we end up here?");
-        //if (context.InputContext.Input != null)
-        //  result = new MatchResult(0);
-        //else
-        //  result = new MatchResult(1);
       }
 
       double totalScore = conditionModifier * result.Score * RegexSize;
+
+      if (result.Score > 0)
+        Logger.Debug($"Matched {Regex}. Score = {totalScore}");
 
       return new MatchResult(result, totalScore);
     }

@@ -1,9 +1,7 @@
-﻿using System;
+﻿using CuttingEdge.Conditions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Parser;
 
@@ -52,6 +50,15 @@ namespace ZimmerBot.Core.Patterns
     public override string ToString()
     {
       return Expressions.Select(e => $"{e}(P:{this.WordInPatternProbability[e.Identifier]})").Aggregate((a,b) => a + ", " + b);
+    }
+
+
+    public bool HasParameterNamed(string p)
+    {
+      foreach (var expr in Expressions)
+        if (expr.HasParameterNamed(p))
+          return true;
+      return false;
     }
 
 

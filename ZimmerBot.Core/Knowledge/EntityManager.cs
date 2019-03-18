@@ -105,7 +105,10 @@ namespace ZimmerBot.Core.Knowledge
               ZTokenSequence result = input.CompactEntity(i, j, ec.Value.ClassName, entityNumber);
               output.Add(result);
 
-              FindEntities(result, i+1, output, entityNumber+1);
+              // Ignored entities are stripped from output, so do not advance index
+              int next = ec.Value.ClassName == Constants.IgnoreValue ? i : i + 1;
+
+              FindEntities(result, next, output, entityNumber+1);
 
               // This is a greedy algortihm, so do not try to match smaller combinations
               i = j;

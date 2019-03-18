@@ -25,6 +25,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
 
         // Remember last used rule for handling of answers
         state[StateKeys.SessionStore][SessionKeys.LastRuleId] = r.Rule.Id;
+        state[StateKeys.SessionStore][SessionKeys.LatestMatch] = r.Context.Match;
       }
       else
       {
