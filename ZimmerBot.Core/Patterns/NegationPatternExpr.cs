@@ -57,11 +57,5 @@ namespace ZimmerBot.Core.Patterns
     {
       return "~" + SubExpr.ToString();
     }
-
-
-    public override bool HasParameterNamed(string p)
-    {
-      return false;
-    }
   }
 }

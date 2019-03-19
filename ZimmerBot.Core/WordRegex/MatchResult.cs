@@ -20,7 +20,7 @@ namespace ZimmerBot.Core.WordRegex
       get
       {
         if (_matchedTexts == null)
-          _matchedTexts = Matches.ToDictionary(item => item.Key, item => (object)item.Value.OriginalText);
+          _matchedTexts = Matches.Where(item => item.Value != null).ToDictionary(item => item.Key, item => (object)item.Value.OriginalText);
         return _matchedTexts;
       }
     }

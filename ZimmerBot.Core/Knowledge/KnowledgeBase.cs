@@ -283,7 +283,8 @@ namespace ZimmerBot.Core.Knowledge
             {
               foreach (var prev in previousMatch.Matches)
               {
-                if (!curr.MatchValues.ContainsKey(prev.Key) && !curr.HasPatternWithParameter(prev.Key))
+                if (   curr.MatchValues.ContainsKey(prev.Key) && curr.MatchValues[prev.Key] == null
+                    && !curr.HasPatternWithParameter(prev.Key))
                 {
                   BotUtility.EvaluationLogger.Debug($"Add previous '{prev.Key}' = '{prev.Value}' to matched pattern.");
                   curr.MatchValues[prev.Key] = prev.Value;

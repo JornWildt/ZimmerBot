@@ -104,9 +104,9 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public override bool HasParameterNamed(string p)
+    public override void RegisterReferencedParameter(HashSet<string> p)
     {
-      return p == ParameterName;
+      p.Add(ParameterName);
     }
   }
 }

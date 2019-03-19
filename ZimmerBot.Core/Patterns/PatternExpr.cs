@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ZimmerBot.Core.Parser;
 
 namespace ZimmerBot.Core.Patterns
@@ -17,6 +18,6 @@ namespace ZimmerBot.Core.Patterns
 
     public abstract void ExtractMatchValues(Dictionary<string, ZToken> matchValues, Queue<ZToken> entityTokens);
 
-    public abstract bool HasParameterNamed(string p);
+    public virtual void RegisterReferencedParameter(HashSet<string> p) { }
   }
 }

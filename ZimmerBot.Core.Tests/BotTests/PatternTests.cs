@@ -668,7 +668,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
-    public void CanIncludeParamatersWithoutMatch()
+    public void CanIncludeParametersWithoutMatch()
     {
       BuildBot(@"
 ! pattern (intent = X, v = a)
@@ -690,8 +690,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("Y", "Yv = ECHO: ()");
       AssertDialog("X", "Xv = 'a'");
 
-      // Currently this fails as the value of v (='a') is inherited from the previous operation.
-      // - This needs to be fixed somehow
+      // Verify that it does not remember the previous value of 'v' (since we did not ask for that)
       AssertDialog("Y", "Yv = ECHO: ()");
     }
   }

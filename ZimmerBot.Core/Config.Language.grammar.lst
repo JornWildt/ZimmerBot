@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 17-03-2019 22:23:56>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 19-03-2019 19:57:02>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC
-//  DateTime: 17-03-2019 22:24:06
+//  DateTime: 19-03-2019 19:57:49
 //  UserName: Jorn
 // ==========================================================================
 
@@ -542,6 +542,7 @@ keyListValueSeq
 
 keyListValue
   : T_WORD T_EQU listValue { $$.keyListValue = new KeyValuePair<string,List<string>>($1.s, $3.stringList); }
+  | T_WORD T_QUESTION      { $$.keyListValue = new KeyValuePair<string,List<string>>($1.s, null); }
   ;
 
 listValue

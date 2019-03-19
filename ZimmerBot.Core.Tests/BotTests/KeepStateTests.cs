@@ -16,19 +16,19 @@ namespace ZimmerBot.Core.Tests.BotTests
   Toyota:.
 }
 
-! pattern (intent = do_you_like_x)
+! pattern (intent = do_you_like_x, topic ?)
 {
   > do you like {topic}
   > do you like it
 }
 
-! pattern (intent = do_you_have_x)
+! pattern (intent = do_you_have_x, topic ?)
 {
   > do you have {topic}
   > do you have one
 }
 
-! pattern (type = spm)
+! pattern (intent ?)
 {
   > what about {topic}
 }
@@ -42,9 +42,8 @@ namespace ZimmerBot.Core.Tests.BotTests
 >> do_you_have_x (topic:car)
 : No, I do not own <topic>
 ");
-      AssertDialog("do you like Porche", "How would I know?");
+      //AssertDialog("do you like Porche", "How would I know?");
       AssertDialog("do you like the Volvo", "Yes, Volvo is a great car!");
-      //AssertDialog("do you like playing golf", "How would I know?");
       AssertDialog("what about a Ford", "Yes, Ford is a great car!");
       AssertDialog("do you have one", "No, I do not own Ford");
       AssertDialog("do you have a Toyota", "No, I do not own Toyota");

@@ -528,6 +528,7 @@ keyListValueSeq
 
 keyListValue
   : T_WORD T_EQU listValue { $$.keyListValue = new KeyValuePair<string,List<string>>($1.s, $3.stringList); }
+  | T_WORD T_QUESTION      { $$.keyListValue = new KeyValuePair<string,List<string>>($1.s, null); }
   ;
 
 listValue

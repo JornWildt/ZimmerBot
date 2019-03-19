@@ -13,6 +13,8 @@ namespace ZimmerBot.Core.Patterns
 
     public List<PatternExpr> Expressions { get; protected set; }
 
+    public HashSet<string> ReferencedParameters { get; protected set; }
+
     public double NumberOfWords { get; protected set; }
 
     protected Dictionary<string, double> WordInPatternProbability { get; set; }
@@ -32,10 +34,14 @@ namespace ZimmerBot.Core.Patterns
       Expressions = expressions;
 
       NumberOfWords = Expressions.Count;
+      ReferencedParameters = new HashSet<string>();
 
       int entityNum = 1;
       foreach (var expr in Expressions)
+      {
         expr.UpdateEntityNumber(ref entityNum);
+        expr.RegisterReferencedParameter(ReferencedParameters);
+      }
 
       RelatedExpression = new Dictionary<string, PatternExpr>(StringComparer.OrdinalIgnoreCase);
     }
@@ -55,10 +61,7 @@ namespace ZimmerBot.Core.Patterns
 
     public bool HasParameterNamed(string p)
     {
-      foreach (var expr in Expressions)
-        if (expr.HasParameterNamed(p))
-          return true;
-      return false;
+      return ReferencedParameters.Contains(p);
     }
 
 

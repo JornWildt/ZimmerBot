@@ -24,7 +24,10 @@ namespace ZimmerBot.Core.Patterns
 
       foreach (var id in identifiers)
       {
-        MatchValues.Add(id.Key, new ZToken(id.Value));
+        if (id.Value != null)
+          MatchValues.Add(id.Key, new ZToken(id.Value));
+        else
+          MatchValues.Add(id.Key, null);
       }
 
       Queue<ZToken> entityTokens = new Queue<ZToken>(input.Where(t => t.Type == ZToken.TokenType.Entity));

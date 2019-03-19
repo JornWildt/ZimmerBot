@@ -14,6 +14,8 @@ namespace ZimmerBot.Core.Patterns
 
     public List<List<KeyValuePair<string, string>>> UnfoldedIdentifiers { get; protected set; }
 
+    //public HashSet<String> ReferencedIdentifiers { get; protected set; }
+
     public List<Pattern> Patterns { get; protected set; }
 
 
@@ -60,6 +62,13 @@ namespace ZimmerBot.Core.Patterns
       {
         p.ExpandExpressions(kb, Patterns);
       }
+
+      //ReferencedIdentifiers = new HashSet<string>();
+      //foreach (Pattern p in Patterns)
+      //{
+      //  foreach (string id in p.ReferencedParameters)
+      //    ReferencedIdentifiers.Add(id);
+      //}
     }
 
 
@@ -78,10 +87,19 @@ namespace ZimmerBot.Core.Patterns
     {
       if (i < Identifiers.Count)
       {
-        foreach (string id in Identifiers[i].Value)
+        if (Identifiers[i].Value != null)
         {
-          set.Push(new KeyValuePair<string, string>(Identifiers[i].Key, id));
-          UnfoldIdentifiers(i+1, set, result);
+          foreach (string id in Identifiers[i].Value)
+          {
+            set.Push(new KeyValuePair<string, string>(Identifiers[i].Key, id));
+            UnfoldIdentifiers(i + 1, set, result);
+            set.Pop();
+          }
+        }
+        else
+        {
+          set.Push(new KeyValuePair<string, string>(Identifiers[i].Key, null));
+          UnfoldIdentifiers(i + 1, set, result);
           set.Pop();
         }
       }

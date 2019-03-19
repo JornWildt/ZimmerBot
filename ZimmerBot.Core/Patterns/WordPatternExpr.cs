@@ -53,11 +53,5 @@ namespace ZimmerBot.Core.Patterns
     {
       // Do nothing
     }
-
-
-    public override bool HasParameterNamed(string p)
-    {
-      return false;
-    }
   }
 }
