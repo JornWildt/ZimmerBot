@@ -72,12 +72,15 @@ namespace ZimmerBot.Core.Knowledge
           if (matchValues.ContainsKey(pair.Key))
           {
             ZToken value = matchValues[pair.Key];
-            if (
-              value == null
-              || pair.Value == Constants.StarValue
-              || (pair.Operator == "=" && value.OriginalText.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
-              || (pair.Operator == ":" && value.Type == ZToken.TokenType.Entity && value.EntityClass.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase)))
+            if (value != null &&
+              (
+                pair.Value == Constants.StarValue
+                || (pair.Operator == "=" && value.OriginalText.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
+                || (pair.Operator == ":" && value.Type == ZToken.TokenType.Entity && value.EntityClass.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
+              ))
+            {
               pairOk = true;
+            }
           }
 
           if (!pairOk)
