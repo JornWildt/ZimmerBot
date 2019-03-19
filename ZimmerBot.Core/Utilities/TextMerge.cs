@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Antlr4.StringTemplate;
+using Antlr4.StringTemplate.Misc;
 using log4net;
 
 namespace ZimmerBot.Core.Utilities
@@ -20,6 +21,7 @@ namespace ZimmerBot.Core.Utilities
       Templates = new TemplateGroup();
       Templates.RegisterRenderer(typeof(DateTime), new DateRenderer());
       Templates.RegisterRenderer(typeof(string), new ZimmerBot.Core.Utilities.StringRender());
+      Templates.ErrorManager = new ErrorManager(new StringTemplateErrorHandler());
     }
 
 

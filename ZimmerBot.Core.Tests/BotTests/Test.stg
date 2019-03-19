@@ -14,3 +14,6 @@ Map ::=
 ]
 
 MapThis(a) ::= "<Map.(a)>"
+
+
+Echo(a) ::= "ECHO: (<a>)"
