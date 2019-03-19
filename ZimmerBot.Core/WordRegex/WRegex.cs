@@ -38,9 +38,13 @@ namespace ZimmerBot.Core.WordRegex
     }
 
 
+    private string _toString;
+
     public override string ToString()
     {
-      return Expr.ToString();
+      if (_toString == null)
+        _toString = Expr.ToString();
+      return _toString;
     }
 
 

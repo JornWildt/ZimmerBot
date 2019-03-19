@@ -81,9 +81,13 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    private string _toString;
+
     public override string ToString()
     {
-      return Regex.ToString() + $" [Size: {RegexSize}]";
+      if (_toString == null)
+        _toString = Regex.ToString() + $" [Size: {RegexSize}]";
+      return _toString;
     }
 
 
@@ -106,8 +110,6 @@ namespace ZimmerBot.Core.Knowledge
         {
           foreach (ZTokenSequence input in context.InputContext.Input)
           {
-            BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}.");
-
             var subResult = Regex.CalculateMatch(new WRegexBase.EvaluationContext(input, 0, 99999));
             if (result == null || subResult.Score > result.Score)
               result = subResult;
@@ -124,7 +126,7 @@ namespace ZimmerBot.Core.Knowledge
       double totalScore = conditionModifier * result.Score * RegexSize;
 
       if (result.Score > 0)
-        Logger.Debug($"Matched {Regex}. Score = {totalScore}");
+        BotUtility.EvaluationLogger.Debug($"Matched {Regex}. Score = {totalScore}");
 
       return new MatchResult(result, totalScore);
     }

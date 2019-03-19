@@ -41,6 +41,7 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
         mode = "xml"
       });
 
+      Logger.Debug("GET weather online");
       using (var response = request.AcceptXml().Get<Current>())
       {
         return response.Body;
@@ -52,6 +53,7 @@ namespace OpenWeatherMap.ZimmerBot.AddOn
     {
       ISession session = NewSession();
 
+      Logger.Debug("GET forecast online");
       WebRequest request = session.Bind("forecast", new
       {
         q = input,

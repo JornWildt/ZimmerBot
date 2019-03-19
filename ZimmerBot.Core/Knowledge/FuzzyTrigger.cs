@@ -93,7 +93,7 @@ namespace ZimmerBot.Core.Knowledge
           if (pattern.Count > 0)
             score *= Math.Pow(1.1, pattern.Count-1);
 
-          Logger.Debug($"Matched {pattern} with {matchedPattern}. Score = {score}");
+          BotUtility.EvaluationLogger.Debug($"Matched {pattern} with {matchedPattern}. Score = {score}");
 
           if (score > result.Score)
           {

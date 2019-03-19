@@ -53,9 +53,13 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
+    private string _toString = null;
+
     public override string ToString()
     {
-      return Expressions.Select(e => $"{e}(P:{this.WordInPatternProbability[e.Identifier]})").Aggregate((a,b) => a + ", " + b);
+      if (_toString == null)
+        _toString = Expressions.Select(e => $"{e}").Aggregate((a,b) => a + ", " + b);
+      return _toString;
     }
 
 
@@ -165,7 +169,7 @@ namespace ZimmerBot.Core.Patterns
         if (WordInPatternProbability.ContainsKey(key))
         {
           prob += WordInPatternProbability[key];
-          explanation.Add($"Matched '{key}':{WordInPatternProbability[key]}");
+          explanation.Add($"+'{key}'");
 
           if (RelatedExpression.ContainsKey(key))
             prob *= RelatedExpression[key].ProbabilityFactor;
@@ -173,12 +177,12 @@ namespace ZimmerBot.Core.Patterns
         else if (WordInPatternProbability.ContainsKey(wildcardKey))
         {
           prob += WordInPatternProbability[wildcardKey];
-          explanation.Add($"Matched '{wildcardKey}':{WordInPatternProbability[wildcardKey]}");
+          explanation.Add($"+'{wildcardKey}'");
         }
         else
         {
           prob += UnknownWordProbability;
-          explanation.Add($"No match on '{key}':{UnknownWordProbability}");
+          explanation.Add($"('{key}')");
         }
       }
 
