@@ -300,26 +300,27 @@ namespace ZimmerBot.Core.Knowledge
         }
 
         string topicName = context.InputContext.Session.CurrentTopic() ?? DefaultTopicName;
-        if (!Topics.ContainsKey(topicName))
-          throw new InvalidOperationException($"Current topic was '{topicName}' but no topics with that name could be found.");
-        Topic topic = Topics[topicName];
-
-        // Does user input match anything in current topic?
-        SelectReactionsFromTopic(topic, reactions, context, 2.0);
-
-        // No match in current topic - use topic story reaction
-        int topicRuleIndex = context.InputContext.Session.GetTopicRuleIndex(topicName);
-        if (reactions.Count == 0 && topic.TopicRules.Count > topicRuleIndex)
+        if (Topics.ContainsKey(topicName))
         {
-          foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context, 1.0))
-          {
-            BotUtility.EvaluationLogger.Debug($"Got '{reaction.Rule}' with score {reaction.Score}");
-            reactions.Add(reaction);
-          }
+          Topic topic = Topics[topicName];
 
-          // No topic stories left => clear topic
-          if (topicRuleIndex == topic.TopicRules.Count-1)
-            context.InputContext.Session.SetCurrentTopic(null);
+          // Does user input match anything in current topic?
+          SelectReactionsFromTopic(topic, reactions, context, 2.0);
+
+          // No match in current topic - use topic story reaction
+          int topicRuleIndex = context.InputContext.Session.GetTopicRuleIndex(topicName);
+          if (reactions.Count == 0 && topic.TopicRules.Count > topicRuleIndex)
+          {
+            foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context, 1.0))
+            {
+              BotUtility.EvaluationLogger.Debug($"Got '{reaction.Rule}' with score {reaction.Score}");
+              reactions.Add(reaction);
+            }
+
+            // No topic stories left => clear topic
+            if (topicRuleIndex == topic.TopicRules.Count - 1)
+              context.InputContext.Session.SetCurrentTopic(null);
+          }
         }
 
         // Try default topic with a smaller weight applied
