@@ -116,6 +116,30 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    public void CanUseAndOrNot()
+    {
+      BuildBot(@"
+> START
+! set user.A = 'X'
+: GO
+
+> A
+! when user.A
+: OK-1
+
+> B
+! when NOT user.B
+: OK-2
+
+");
+
+      AssertDialog("START", "GO");
+      AssertDialog("A", "OK-1");
+      AssertDialog("B", "OK-2");
+    }
+
+
+    [Test]
     public void ItThrowsWhenAccessingUnknownRootIdentifier()
     {
       BuildBot(@"
