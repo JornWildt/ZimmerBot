@@ -53,7 +53,6 @@ $           { return (int)Token.T_DOLLAR; }
 T\>         { return (int)Token.T_TOPICRULE; }
 AND         { return (int)Token.T_AND; }
 OR          { return (int)Token.T_OR; }
-NOT         { return (int)Token.T_NOT; }
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 

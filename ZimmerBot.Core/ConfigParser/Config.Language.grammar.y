@@ -76,7 +76,8 @@
 %token T_TIMESPAN
 
 %left T_QUESTION
-%left T_AND, T_OR, T_NOT
+%left T_AND
+%left T_OR
 %left T_EQU, T_LT, T_GT
 %left T_PLUS, T_MINUS
 %left T_STAR

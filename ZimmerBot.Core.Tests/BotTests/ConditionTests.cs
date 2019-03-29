@@ -120,7 +120,7 @@ namespace ZimmerBot.Core.Tests.BotTests
     {
       BuildBot(@"
 > START
-! set user.A = 'X'
+! set user.A = ""X""
 : GO
 
 > A
@@ -128,14 +128,28 @@ namespace ZimmerBot.Core.Tests.BotTests
 : OK-1
 
 > B
-! when NOT user.B
+! when !user.B
 : OK-2
 
+> C1
+! when ! user.A AND user.B
+: OK-C1
+
+> C2
+! when ! (user.A AND user.B)
+: OK-C2
+
+> C3
+! when (! user.A) AND user.B
+: OK-C3
 ");
 
       AssertDialog("START", "GO");
       AssertDialog("A", "OK-1");
       AssertDialog("B", "OK-2");
+      AssertDialog("C1", "???");
+      AssertDialog("C2", "OK-C2");
+      AssertDialog("C3", "???");
     }
 
 

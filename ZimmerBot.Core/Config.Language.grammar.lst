@@ -1,11 +1,11 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 19-03-2019 19:57:02>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 29-03-2019 13:23:34>
 // ==========================================================================
 //  Version:  1.5.2
-//  Machine:  JORN-PC
-//  DateTime: 19-03-2019 19:57:49
-//  UserName: Jorn
+//  Machine:  CBRAIN-PC412
+//  DateTime: 29-03-2019 13:23:49
+//  UserName: jw
 // ==========================================================================
 
 
@@ -87,7 +87,8 @@
 %token T_TIMESPAN
 
 %left T_QUESTION
-%left T_AND, T_OR, T_NOT
+%left T_AND
+%left T_OR
 %left T_EQU, T_LT, T_GT
 %left T_PLUS, T_MINUS
 %left T_STAR
