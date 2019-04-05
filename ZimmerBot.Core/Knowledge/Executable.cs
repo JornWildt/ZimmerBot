@@ -148,9 +148,9 @@ namespace ZimmerBot.Core.Knowledge
       List<string> result = new List<string>();
       foreach (string r in response)
       {
-        string[] multiLines = r.Split(new string[] { "\n+" }, StringSplitOptions.RemoveEmptyEntries);
+        string[] multiLines = r.Split(new string[] { "\r\n+", "\n+" }, StringSplitOptions.RemoveEmptyEntries);
         foreach (string line in multiLines)
-          result.Add(line);
+          result.Add(line.Trim('\n', '\r')); // Remove leading and trailing newlines
       }
       return result;
     }
