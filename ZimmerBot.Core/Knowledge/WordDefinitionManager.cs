@@ -46,11 +46,9 @@ namespace ZimmerBot.Core.Knowledge
     {
       foreach (var word in Definitions)
       {
-        if (!store.IsRestored)
-        {
-          DefineRdfsClass(word, store);
-          RegisterRdfData(word, store);
-        }
+        DefineRdfsClass(word, store);
+        RegisterRdfData(word, store);
+
         if (SpellChecker.IsInitialized)
           RegisterSpellChecker(word);
       }
