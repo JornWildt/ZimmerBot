@@ -11,6 +11,7 @@ namespace ZimmerBot.Core.StandardProcessors
     public static void Initialize()
     {
       ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekDay", IsItWeekDay);
+      ProcessorRegistry.RegisterProcessor("DateTime.IsItWeekend", IsItWeekend);
       ProcessorRegistry.RegisterProcessor("DateTime.IsItMonth", IsItMonth);
       ProcessorRegistry.RegisterProcessor("DateTime.Time", Time);
       ProcessorRegistry.RegisterProcessor("DateTime.Details", Details);
@@ -61,6 +62,16 @@ namespace ZimmerBot.Core.StandardProcessors
 
       Dictionary<string, object> result = new Dictionary<string, object>();
       result["day"] = day;
+      result["answer"] = answer;
+      return new ProcessorOutput(result);
+    }
+
+
+    public static ProcessorOutput IsItWeekend(ProcessorInput input)
+    {
+      bool answer = DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday;
+
+      Dictionary<string, object> result = new Dictionary<string, object>();
       result["answer"] = answer;
       return new ProcessorOutput(result);
     }

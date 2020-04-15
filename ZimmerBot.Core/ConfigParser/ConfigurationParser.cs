@@ -25,7 +25,7 @@ namespace ZimmerBot.Core.ConfigParser
       Condition.Requires(kb, nameof(kb)).IsNotNull();
       Condition.Requires(filename, nameof(filename)).IsNotNull();
 
-      using (Stream s = new FileStream(filename, FileMode.Open))
+      using (Stream s = new FileStream(filename, FileMode.Open, FileAccess.Read))
       {
         ConfigParser parser = new ConfigParser(kb);
         parser.Parse(s, filename);

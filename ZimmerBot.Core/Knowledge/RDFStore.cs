@@ -292,6 +292,9 @@ namespace ZimmerBot.Core.Knowledge
       {
         SparqlResultSet rs = (SparqlResultSet)result;
         var output = new RDFResultSet(rs.Select(r => r.ToDictionary(v => v.Key, v => FormatINode(v.Value))));
+        Logger.Debug($"RDF query returned {output.Count} items.");
+        if (output.Count > 0)
+          Logger.Debug($"First RDF item is {output[0].Select(i => $"{i.Key} = {i.Value}").Aggregate((a,b) => a + " / " + b)}");
         return output;
       }
       else
