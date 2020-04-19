@@ -17,4 +17,5 @@ ConnectionStrings.config
 SciTE.session
 TinyVirtuoso/
 Languages/
+DB/
 .vs/
