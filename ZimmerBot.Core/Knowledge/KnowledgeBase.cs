@@ -307,8 +307,9 @@ namespace ZimmerBot.Core.Knowledge
           // Does user input match anything in current topic?
           SelectReactionsFromTopic(topic, reactions, context, 2.0);
 
-          // No match in current topic - use topic story reaction
           int topicRuleIndex = context.InputContext.Session.GetTopicRuleIndex(topicName);
+
+          // No match in current topic - use topic story reaction
           if (reactions.Count == 0 && topic.TopicRules.Count > topicRuleIndex)
           {
             foreach (Reaction reaction in topic.TopicRules[topicRuleIndex].CalculateReactions(context, 1.0))
@@ -320,6 +321,11 @@ namespace ZimmerBot.Core.Knowledge
             // No topic stories left => clear topic
             if (topicRuleIndex == topic.TopicRules.Count - 1)
               context.InputContext.Session.SetCurrentTopic(null);
+          }
+          else if (reactions.Count == 0 && topic.TopicRules.Count == 0)
+          {
+            // Clear topic if there are no matches and no topic stories
+            context.InputContext.Session.SetCurrentTopic(null);
           }
         }
 

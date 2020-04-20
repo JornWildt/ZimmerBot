@@ -179,7 +179,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
-    public void ItDoesNotActivateDefaultTopicAutomatically()
+    public void ItDoesNotActivateDefaultTopicAutomaticallyWhenHavingTopicStory()
     {
       BuildBot(@"
 > Zombie
@@ -199,10 +199,12 @@ namespace ZimmerBot.Core.Tests.BotTests
 {
   > yyy
   : Still zombies
+
+  T> Run!
 }
 ");
       AssertDialog("Zombie", "Run!", "Start topic");
-      AssertDialog("xxx", "Not a zombie", "Match default topic - but do not make it current");
+      AssertDialog("xxx", "Not a zombie", "Match default topic - but do not make it current since there is a story to be told");
       AssertDialog("yyy", "Still zombies", "Match in topic");
     }
 
