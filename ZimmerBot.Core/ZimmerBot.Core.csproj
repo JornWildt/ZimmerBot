@@ -100,6 +100,7 @@
     <Compile Include="AddOnHandling\IZimmerBotAddOn.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="Bot.cs" />
+    <Compile Include="ConfigParser\RdfZPropertyValue.cs" />
     <Compile Include="Knowledge\ConditionRuleModifier.cs" />
     <Compile Include="ConfigParser\RdfDefinition.cs" />
     <Compile Include="ConfigParser\RdfUriValue.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Knowledge\Executable.cs" />
     <Compile Include="Knowledge\InputRequestContext.cs" />
     <Compile Include="Knowledge\FuzzyTrigger.cs" />
+    <Compile Include="Knowledge\RDFStoreExtensions.cs" />
     <Compile Include="Knowledge\RegexTrigger.cs" />
     <Compile Include="Knowledge\Rule.cs" />
     <Compile Include="Knowledge\ScheduledAction.cs" />

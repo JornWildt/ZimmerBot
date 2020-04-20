@@ -12,19 +12,19 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! define (animal)
 {
   ""Elefant"" (""elefants""):
-    ""description"": ""Big animal"";
-    ""class"": ""mamal"";
-    ""location"": <India>, <Africa>.
+    ""description"" ""Big animal"";
+    ""class"" ""mamal"";
+    ""location"" <India>, <Africa>.
 
   Horse (horses):
-    description: ""Large animal with four legs"";
-    class: mamal;
-    location: <Earth>.
+    description ""Large animal with four legs"";
+    class mamal;
+    location <Earth>.
 
   Bison (bisons):
-    description: ""Large animal with four legs"";
-    class: mamal;
-    location: <North America>.
+    description ""Large animal with four legs"";
+    class mamal;
+    location <North America>.
 }
 
 ! define (country)
@@ -37,8 +37,8 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! define (person)
 {
   ""Walt Disney"":
-    description: ""Well known person"";
-    born: 1901.
+    description ""Well known person"";
+    born 1901.
 }
 
 ! pattern (intent = echo)
@@ -64,22 +64,22 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! define (animal)
 {
   ""Elephant"" (""elephants""):
-    ""description"": ""Big animal"";
-    ""class"": ""mamal"";
-    ""location"": <India>, <Africa>;
-    ""color"": ""gray"".
+    ""description"" ""Big animal"";
+    ""class"" ""mamal"";
+    ""location"" <India>, <Africa>;
+    ""color"" ""gray"".
 
   Horse (horses):
-    description: ""Large animal with four legs"";
-    class: mamal;
-    location: <Earth>;
-    color: brown.
+    description ""Large animal with four legs"";
+    class  mamal;
+    location <Earth>;
+    color brown.
 
   Bison (bisons):
-    description: ""Large animal with four legs"";
-    class: mamal;
-    color: brown;
-    location: <North America>.
+    description ""Large animal with four legs"";
+    class mamal;
+    color brown;
+    location <North America>.
 }
 
 ! define (country)

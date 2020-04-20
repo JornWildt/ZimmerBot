@@ -414,19 +414,19 @@ definitionSeq
   ;
 
 definition
-  : definitionWord definitionAlternatives T_COLON definitionDataSeq
+  : wordOrString definitionId definitionAlternatives T_COLON definitionDataSeq
       { 
-        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.s, $3.stringList, $5.rdfDefinitionList);
       }
   | T_DOLLAR T_COLON definitionDataSeq
       { 
-        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(null, new List<string>(), $3.rdfDefinitionList);
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(null, null, new List<string>(), $3.rdfDefinitionList);
       }
   ;
 
-definitionWord
-  : T_WORD    { $$.s = $1.s; }
-  | T_STRING  { $$.s = $1.s; }
+definitionId
+  : T_LBRACKET wordOrString T_RBRACKET { $$.s = $2.s; }
+  | /* empty */                        { $$.s = null; }
   ;
 
 definitionAlternatives
@@ -441,7 +441,13 @@ definitionDataSeq
   ;
 
 definitionData
-  : wordOrString T_COLON definitionDataValueSeq { $$.rdfDefinition = new RdfDefinition($1.s, $3.rdfValueList); }
+  : definitionKey definitionDataValueSeq { $$.rdfDefinition = new RdfDefinition($1.rdfValue, $2.rdfValueList); }
+  ;
+
+definitionKey
+  : T_WORD                { $$.rdfValue = RdfProperty($1.s); }
+  | T_STRING              { $$.rdfValue = RdfProperty($1.s); }
+  | T_WORD T_COLON T_WORD { $$.rdfValue = RdfResourceUriValue(new List<string>{$3.s}, $1.s); }
   ;
 
 definitionDataValueSeq

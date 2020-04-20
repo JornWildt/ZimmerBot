@@ -55,8 +55,8 @@ WHERE
 ! define (company)
 {
   ""Bryan Sport"":
-    intro: ""Blah ..."";
-    topic: Bryan.
+    intro ""Blah ..."";
+    topic Bryan.
 }
 
 ! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
@@ -101,8 +101,8 @@ WHERE
 ! define (company)
 {
   ""Bryan Sport"":
-    intro: ""Blah ..."";
-    topic: Bryan.
+    intro ""Blah ..."";
+    topic Bryan.
 }
 
 ! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
@@ -147,11 +147,11 @@ WHERE
 ! define (registration)
 {
   $:
-    intro: ""Blah"".
+    intro ""Blah"".
 }
 
 ! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
-! rdf_prefix zp ""http://zimmerbot.org/property/""
+! rdf_prefix zpxx ""http://zimmerbot.org/property/""
 
 ! pattern (intent = what_is)
 {
@@ -163,7 +163,7 @@ WHERE
 SELECT DISTINCT ?name ?intro
 WHERE
 {
-  ?thing zp:intro ?intro.
+  ?thing zpxx:intro ?intro.
   OPTIONAL { ?thing rdfs:label ?name }
 }
 "")
@@ -181,13 +181,13 @@ WHERE
 ! define (verb)
 {
   eat:
-    related_property: <zp:food>.
+    related_property <zp:food>.
 }
 
 ! define (animal)
 {
   mouse (mice):
-    food: ""cheese"".
+    food ""cheese"".
 }
 
 ! rdf_prefix zp ""http://zimmerbot.org/property/""
@@ -224,7 +224,7 @@ WHERE
 ! define (animal)
 {
   cow:
-    weightClass: ""heavy"".
+    weightClass ""heavy"".
 }
 
 ! rdf_prefix zp ""http://zimmerbot.org/property/""
@@ -240,6 +240,65 @@ WHERE
 : <weight>
 ");
       AssertDialog("X", "heavy");
+    }
+
+
+    [Test]
+    public void CanSetPrefixedPredicate()
+    {
+      BuildBot(@"
+! define (person)
+{
+  ""1234"":
+    rdfs:label ""Jenny"";
+    age ""35"".
+}
+
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+
+> X
+! call RDF.Single(""
+SELECT ?label
+WHERE
+{
+  ?x rdfs:label ?label.
+  FILTER(?label = 'Jenny')
+}
+"")
+: <label>
+");
+      AssertDialog("X", "Jenny");
+    }
+
+
+
+
+    [Test]
+    public void CanAssignSubjectId()
+    {
+      BuildBot(@"
+! define (person)
+{
+  ""Johny"" [P100]:
+    age ""35"".
+}
+
+! rdf_prefix rdfs ""http://www.w3.org/2000/01/rdf-schema#""
+! rdf_prefix zp ""http://zimmerbot.org/property/""
+
+> X
+! call RDF.Single(""
+SELECT ?subj
+WHERE
+{
+  ?subj rdfs:label ?label.
+  FILTER(?label = 'Johny')
+}
+"")
+: <subj>
+");
+      AssertDialog("X", "http://zimmerbot.org/resource/P100");
     }
   }
 }

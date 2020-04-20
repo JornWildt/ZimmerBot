@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 29-03-2019 13:23:34>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 20-04-2020 17:31:58>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  CBRAIN-PC412
-//  DateTime: 29-03-2019 13:23:49
+//  DateTime: 20-04-2020 17:31:59
 //  UserName: jw
 // ==========================================================================
 
@@ -428,19 +428,19 @@ definitionSeq
   ;
 
 definition
-  : definitionWord definitionAlternatives T_COLON definitionDataSeq
+  : wordOrString definitionId definitionAlternatives T_COLON definitionDataSeq
       { 
-        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.stringList, $4.rdfDefinitionList);
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition($1.s, $2.s, $3.stringList, $5.rdfDefinitionList);
       }
   | T_DOLLAR T_COLON definitionDataSeq
       { 
-        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(null, new List<string>(), $3.rdfDefinitionList);
+        $$.wordDefinition = new ZimmerBot.Core.Knowledge.WordDefinition(null, null, new List<string>(), $3.rdfDefinitionList);
       }
   ;
 
-definitionWord
-  : T_WORD    { $$.s = $1.s; }
-  | T_STRING  { $$.s = $1.s; }
+definitionId
+  : T_LBRACKET wordOrString T_RBRACKET { $$.s = $2.s; }
+  | /* empty */                        { $$.s = null; }
   ;
 
 definitionAlternatives
@@ -455,7 +455,13 @@ definitionDataSeq
   ;
 
 definitionData
-  : wordOrString T_COLON definitionDataValueSeq { $$.rdfDefinition = new RdfDefinition($1.s, $3.rdfValueList); }
+  : definitionKey definitionDataValueSeq { $$.rdfDefinition = new RdfDefinition($1.rdfValue, $2.rdfValueList); }
+  ;
+
+definitionKey
+  : T_WORD                { $$.rdfValue = RdfProperty($1.s); }
+  | T_STRING              { $$.rdfValue = RdfProperty($1.s); }
+  | T_WORD T_COLON T_WORD { $$.rdfValue = RdfResourceUriValue(new List<string>{$3.s}, $1.s); }
   ;
 
 definitionDataValueSeq

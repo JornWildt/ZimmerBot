@@ -49,7 +49,8 @@ namespace ZimmerBot.Core.Utilities
       if (Speller == null)
         return;
 
-      Speller.Add(word);
+      foreach (var w in word.Split(new char[] { ' '  }, StringSplitOptions.RemoveEmptyEntries))
+        Speller.Add(w);
     }
 
 

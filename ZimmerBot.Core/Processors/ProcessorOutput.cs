@@ -17,6 +17,12 @@ namespace ZimmerBot.Core.Processors
     }
 
 
+    public ProcessorOutput(string templateName)
+      : this(templateName, new Dictionary<string, object>())
+    {
+    }
+
+
     public ProcessorOutput(string templateName, IDictionary<string, object> value)
     {
       Condition.Requires(templateName, nameof(templateName)).IsNotNullOrEmpty();

@@ -175,6 +175,12 @@ namespace ZimmerBot.Core.ConfigParser
     }
 
 
+    protected RdfZPropertyValue RdfProperty(string name)
+    {
+      return new RdfZPropertyValue(name);
+    }
+
+
     protected StandardRule AddRegexRule(string label, List<WRegexBase> patterns, List<RuleModifier> modifiers, List<Statement> statements)
     {
       if (CurrentTopicToStart != null)

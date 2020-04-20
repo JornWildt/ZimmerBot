@@ -32,7 +32,7 @@ namespace ZimmerBot.Core.StandardProcessors
       }
       else
       {
-        return new ProcessorOutput("empty", result);
+        return new ProcessorOutput("empty");
       }
     }
 

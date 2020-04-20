@@ -86,7 +86,7 @@ namespace ZimmerBot.Core.Knowledge
     private void RegisterRdfData(WordDefinition word, RDFStore store)
     {
       // Create subject identifier from word
-      string propId = StringUtility.Word2Identifier(word.Word);
+      string propId = StringUtility.Word2Identifier(word.Id);
       Uri subject = UrlConstants.ResourceUrl(propId);
 
       // Define word as of type classes
@@ -127,14 +127,11 @@ namespace ZimmerBot.Core.Knowledge
       // Define all properties associated with word
       foreach (var prop in word.RdfDefinitions)
       {
-        propId = StringUtility.Word2Identifier(prop.Name);
-        Uri propUri = UrlConstants.PropertyUrl(propId);
-
         foreach (var value in prop.Values)
         {
           store.Insert(
             NodeFactory.CreateUriNode(subject), 
-            NodeFactory.CreateUriNode(propUri), 
+            prop.Key.BuildRdfNode(NodeFactory),
             value.BuildRdfNode(NodeFactory),
             RDFStore.StaticStoreName);
         }
