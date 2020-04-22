@@ -47,7 +47,7 @@ namespace ZimmerBot.Core.Patterns
 
     public override void ExtractWordsForSpellChecker()
     {
-      // Do nothing (concepts are handled them selves)
+      // Do nothing (concepts are handled themselves)
     }
 
 

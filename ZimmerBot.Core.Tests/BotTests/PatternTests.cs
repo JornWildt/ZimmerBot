@@ -149,7 +149,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 ! concept kill = kill, murder
 ! pattern ( intent = how_to_kill )
 {
-  > how do you kill {something}
+  > how do you %kill {something}
 }
 
 >> { intent = how_to_kill }
@@ -159,6 +159,30 @@ namespace ZimmerBot.Core.Tests.BotTests
       BuildBot(cfg);
 
       AssertDialog("how do you kill a zombie", "With an axe");
+      AssertDialog("how you kill a zombie", "With an axe");
+      AssertDialog("how you hug a zombie", "???");
+    }
+
+
+    [Test]
+    public void CanMatchConceptsWithMultipleWord()
+    {
+      string cfg = @"
+! concept a_bird = a robin, a black bird
+! pattern ( intent = see_bird )
+{
+  > %a_bird
+}
+
+>> { intent = see_bird }
+: Wow
+";
+
+      BuildBot(cfg);
+
+      AssertDialog("a robin", "Wow");
+      AssertDialog("a black bird", "Wow");
+      AssertDialog("perplexed blue raggore", "???");
     }
 
 
@@ -171,7 +195,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 ! pattern ( intent = how_to_kill )
 {
-  > how do you kill {something}
+  > %kill
 }
 
 >> { intent = how_to_kill }
@@ -180,8 +204,9 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       BuildBot(cfg);
 
-      AssertDialog("how do you kill a zombie", "With an axe");
-      AssertDialog("how do you murder a zombie", "With an axe");
+      AssertDialog("kill", "With an axe");
+      AssertDialog("murder", "With an axe");
+      AssertDialog("squish", "???");
     }
 
 

@@ -3,9 +3,9 @@
 //  GPLEX error listing for lex source file <Chat.Language.analyzer.lex>
 // ==========================================================================
 //  Version:  1.2.2
-//  Machine:  JORN-PC
-//  DateTime: 24-03-2016 09:15:47
-//  UserName: Jorn
+//  Machine:  CBRAIN-PC412
+//  DateTime: 22-04-2020 22:12:33
+//  UserName: jw
 // ==========================================================================
 
 
@@ -17,10 +17,10 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [[:isLetter:]]+
-//------------^^^^^^^^
-// Error: Unknown character predicate <isLetter> 
-// ----------------------------------------------
+Word       [[:IsLetter:]_]+[[:IsLetter:]0-9_-]*
+//-----------------------------------------^^
+// Warning: No upper bound to range, "'_','-'" included as set class members
+// -------------------------------------------------------------------------
 Number     [0-9]+(\.[0-9]+)?
 EMail      [a-zA-Z0-9+-_]+(\.[a-zA-Z0-9+-_])*@([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9]([a-z0-9\-]*[a-z0-9])?
 URL        (https?:\/\/|www\.)[a-zA-Z+&@#/%=~_?!:;,.]*[a-zA-Z+&@#/%=~_?!:;]+
@@ -41,7 +41,7 @@ Other      .
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-{Word}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.Word); Console.WriteLine("["+yytext+"]"); return (int)Token.T_WORD; }
+{Word}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.Word); return (int)Token.T_WORD; }
 
 {Number}		{ yylval.t = new ZToken(yytext, ZToken.TokenType.Number); return (int)Token.T_NUMBER; }
 

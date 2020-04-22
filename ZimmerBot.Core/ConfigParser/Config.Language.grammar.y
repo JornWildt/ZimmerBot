@@ -82,7 +82,7 @@
 %left T_PLUS, T_MINUS
 %left T_STAR
 %left T_PIPE
-%left T_EXCL, T_TILDE
+%left T_EXCL, T_NOT, T_TILDE
 %left T_DOT
 
 %token T_DOLLAR
@@ -379,6 +379,7 @@ exprBinary
 exprUnary
   : T_LPAR expr T_RPAR { $$.expr = $2.expr; }
   | T_EXCL expr        { $$.expr = new UnaryOperatorExpr($2.expr, UnaryOperatorExpr.OperatorType.Negation); }
+  | T_NOT expr         { $$.expr = new UnaryOperatorExpr($2.expr, UnaryOperatorExpr.OperatorType.Negation); }
   ;
 
 exprFunc

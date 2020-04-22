@@ -26,7 +26,7 @@ namespace ZimmerBot.Core.Expressions
       else if (a is int)
         b = (int)a != 0;
       else if (a is double)
-        b = (int)a != 0d;
+        b = (double)a != 0d;
       else if (a is string)
         b = !string.IsNullOrEmpty((string)a);
       else if (a == null)

@@ -6,7 +6,7 @@
 
 %option stack, minimize, parser, verbose, persistbuffer, noembedbuffers 
 
-Word       [[:IsLetter:]_]+[[:IsLetter:]0-9_]*
+Word       [[:IsLetter:]_]+[[:IsLetter:]0-9_-]*
 Number     [0-9]+(\.[0-9]+)?
 EMail      [a-zA-Z0-9+-_]+(\.[a-zA-Z0-9+-_])*@([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9]([a-z0-9\-]*[a-z0-9])?
 URL        (https?:\/\/|www\.)[a-zA-Z+&@#/%=~_?!:;,.]*[a-zA-Z+&@#/%=~_?!:;]+
