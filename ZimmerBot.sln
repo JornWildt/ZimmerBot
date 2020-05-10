@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2018
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimmerBot.Core", "ZimmerBot.Core\ZimmerBot.Core.csproj", "{8EC30AE6-170E-4621-AE14-4A3985E3D062}"
 EndProject
@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "da-DK", "da-DK", "{EF8EBC4A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenWeatherMap.ZimmerBot.AddOn", "OpenWeatherMap.ZimmerBot.AddOn\OpenWeatherMap.ZimmerBot.AddOn.csproj", "{2EE9FC87-7A7C-4DBA-942B-4EF0AAA5B4B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holidays.ZimmerBot.AddOn", "Holidays.ZimmerBot.AddOn\Holidays.ZimmerBot.AddOn.csproj", "{F254DC75-4928-4970-B2F2-FA193D312950}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{2EE9FC87-7A7C-4DBA-942B-4EF0AAA5B4B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EE9FC87-7A7C-4DBA-942B-4EF0AAA5B4B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EE9FC87-7A7C-4DBA-942B-4EF0AAA5B4B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F254DC75-4928-4970-B2F2-FA193D312950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F254DC75-4928-4970-B2F2-FA193D312950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F254DC75-4928-4970-B2F2-FA193D312950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F254DC75-4928-4970-B2F2-FA193D312950}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{5D3573AE-AD9F-4CCA-8779-F117077B7EAE} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
 		{EF8EBC4A-F8D7-4FD1-B690-B8E37A197033} = {F07C2A81-66BD-49CE-B605-42D78B85AB9F}
 		{2EE9FC87-7A7C-4DBA-942B-4EF0AAA5B4B5} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
+		{F254DC75-4928-4970-B2F2-FA193D312950} = {DA18A7CE-7F59-4CDD-9221-3D97866581B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E08B51A-A1EF-4158-912F-178976F52088}
