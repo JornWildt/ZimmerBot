@@ -1,4 +1,5 @@
 ﻿using CuttingEdge.Conditions;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace ZimmerBot.Core.Knowledge
 {
   public abstract class Executable
   {
+    static ILog Logger = LogManager.GetLogger(typeof(Executable));
+
     public KnowledgeBase KnowledgeBase { get; protected set; }
 
     public List<Statement> Statements { get; protected set; }
@@ -110,6 +113,8 @@ namespace ZimmerBot.Core.Knowledge
             }
           }
         }
+        else
+          Logger.Debug("Bot is busy writing. Did not output response");
 
         return result;
       }

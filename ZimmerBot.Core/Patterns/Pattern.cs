@@ -86,18 +86,19 @@ namespace ZimmerBot.Core.Patterns
         return;
       }
 
-      if (Expressions[pos] is ConceptPatternExpr)
+      if (Expressions[pos] is ConceptPatternExpr cexpr)
       {
-        ConceptPatternExpr cexpr = (ConceptPatternExpr)Expressions[pos];
-        if (!kb.Concepts.ContainsKey(cexpr.Word))
+        if (!kb.Concepts.TryGetValue(cexpr.Word, out Concept c))
           throw new InvalidOperationException($"Could not find concept '{cexpr.Word}' for pattern '{this.ToString()}'");
-        Concept c = kb.Concepts[cexpr.Word];
 
         foreach (string word in c.ExpandPatterns())
         {
-          prefix.Push(new WordPatternExpr(word));
+          string[] whitespace_expanded = word.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+          foreach (string subw in whitespace_expanded)
+            prefix.Push(new WordPatternExpr(subw));
           ExpandExpressions(kb, output, prefix, pos + 1);
-          prefix.Pop();
+          foreach (string subw in whitespace_expanded)
+            prefix.Pop();
         }
       }
       else

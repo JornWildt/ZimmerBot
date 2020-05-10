@@ -22,27 +22,27 @@ namespace ZimmerBot.Core.Knowledge
     public static readonly string StaticStoreName = "static";
     public static readonly string DynamicStoreName = "dynamic";
 
-    protected bool LoadFilesEnabled { get; set; }
+    public bool LoadFilesEnabled { get; protected set; }
 
-    protected string ID { get; set; }
+    public string ID { get; protected set; }
 
-    protected TripleStore Store { get; set; }
+    public TripleStore Store { get; protected set; }
 
-    protected InMemoryDataset Dataset { get; set; }
+    public InMemoryDataset Dataset { get; protected set; }
 
-    protected Dictionary<string,IGraph> DatasetGraphs { get; set; }
+    public Dictionary<string,IGraph> DatasetGraphs { get; protected set; }
 
-    protected ISparqlQueryProcessor Processor { get; set; }
+    public ISparqlQueryProcessor Processor { get; protected set; }
 
-    protected SparqlQueryParser SparqlParser { get; set; }
+    public SparqlQueryParser SparqlParser { get; protected set; }
 
-    protected NodeFactory NodeFactory { get; set; }
+    public NodeFactory NodeFactory { get; protected set; }
 
-    protected Dictionary<string,string> Prefixes { get; set; }
+    public Dictionary<string,string> Prefixes { get; protected set; }
 
-    protected HashSet<string> LoadedFiles { get; set; }
+    public HashSet<string> LoadedFiles { get; protected set; }
 
-    protected bool DataHasChanged { get; set; }
+    public bool DataHasChanged { get; protected set; }
 
 
     public RDFStore(string id)
@@ -234,7 +234,10 @@ namespace ZimmerBot.Core.Knowledge
       {
         foreach (var match in matches)
         {
-          queryString.SetParameter(match.Key, NodeFactory.CreateLiteralNode(match.Value.ToString()));
+          if (match.Value is INode node)
+            queryString.SetParameter(match.Key, node);
+          else
+            queryString.SetParameter(match.Key, NodeFactory.CreateLiteralNode(match.Value.ToString()));
           Logger.Debug($"Add parameter @{match.Key} with '{match.Value}'");
         }
       }
@@ -246,7 +249,10 @@ namespace ZimmerBot.Core.Knowledge
           if (parameters[i] != null)
           {
             string pname = "p" + (i + 1);
-            queryString.SetParameter(pname, NodeFactory.CreateLiteralNode(parameters[i].ToString()));
+            if (parameters[i] is INode node)
+              queryString.SetParameter(pname, node);
+            else
+              queryString.SetParameter(pname, NodeFactory.CreateLiteralNode(parameters[i].ToString()));
             Logger.Debug($"Add parameter @{pname} with '{parameters[i]}'");
           }
         }
@@ -293,7 +299,7 @@ namespace ZimmerBot.Core.Knowledge
         SparqlResultSet rs = (SparqlResultSet)result;
         var output = new RDFResultSet(rs.Select(r => r.ToDictionary(v => v.Key, v => FormatINode(v.Value))));
         Logger.Debug($"RDF query returned {output.Count} items.");
-        if (output.Count > 0)
+        if (output.Count > 0 && output[0].Count > 0)
           Logger.Debug($"First RDF item is {output[0].Select(i => $"{i.Key} = {i.Value}").Aggregate((a,b) => a + " / " + b)}");
         return output;
       }

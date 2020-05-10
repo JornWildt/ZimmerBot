@@ -13,6 +13,9 @@ namespace ZimmerBot.Core.Knowledge
     // Null word means "no word" = anonymous definition
     public string Word { get; protected set; }
 
+    /* Optional ID */
+    public string Id { get; protected set; }
+
     public List<string> Alternatives { get; protected set; }
 
     public List<RdfDefinition> RdfDefinitions { get; protected set; }
@@ -20,12 +23,13 @@ namespace ZimmerBot.Core.Knowledge
     public List<string> Classes { get; set; }
 
 
-    public WordDefinition(string word, List<string> alternatives, List<RdfDefinition> rdf)
+    public WordDefinition(string word, string id, List<string> alternatives, List<RdfDefinition> rdf)
     {
       Condition.Requires(alternatives, nameof(alternatives)).IsNotNull();
       Condition.Requires(rdf, nameof(rdf)).IsNotNull();
 
       Word = word;
+      Id = id ?? word;
       Alternatives = alternatives;
       RdfDefinitions = rdf;
     }

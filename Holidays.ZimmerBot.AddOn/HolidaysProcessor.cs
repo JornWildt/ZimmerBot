@@ -4,6 +4,7 @@ using System.Linq;
 using Humanizer;
 using log4net;
 using Nager.Date;
+using ZimmerBot.Core;
 using ZimmerBot.Core.Knowledge;
 using ZimmerBot.Core.Processors;
 
@@ -26,23 +27,9 @@ namespace Holidays.ZimmerBot.AddOn
 
       Logger.Debug($"Test for '{publicHolidays.Select(h => h.LocalName).Aggregate((a,b) => a + ", " + b)}'");
 
-      // Get primary name ... should be a utility function somewhere
-      string query = @"
-select ?name
-where
-{
-  ?subj rdfs:label ?name.
-  ?subj zp:knownby ?knownby.
-  FILTER (?knownby = lcase(@name))
-}";
-
-      RDFResultSet output = input.Context.KnowledgeBase.MemoryStore.Query(
-        query,
-        new Dictionary<string, object> { ["name"] = name },
-        new List<object>());
-
-      if (output.Count > 0)
-        name = output[0]["name"] as string ?? name;
+      // Get primary name
+      var label = input.Context.KnowledgeBase.MemoryStore.GetSingleAttributeOfEntityKnownBy(name, UrlConstants.Rdfs("label")) as string;
+      name = label ?? name;
 
       foreach (var publicHoliday in publicHolidays)
       {

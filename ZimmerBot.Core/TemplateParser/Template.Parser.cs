@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.TemplateParser
@@ -12,7 +10,8 @@ namespace ZimmerBot.Core.TemplateParser
 
     public void Parse(string s)
     {
-      byte[] inputBuffer = System.Text.Encoding.Default.GetBytes(s);
+      // Add UTF BOM to make sure scanner works with UTF
+      byte[] inputBuffer = System.Text.Encoding.UTF8.GetBytes('\uFEFF' + s);
       MemoryStream stream = new MemoryStream(inputBuffer);
       this.Scanner = new TemplateScanner(stream);
       this.Parse();

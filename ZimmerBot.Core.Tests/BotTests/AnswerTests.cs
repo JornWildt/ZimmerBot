@@ -254,5 +254,38 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("What", "Yes or No?");
       AssertDialog("Yes", "Great!");
     }
+
+
+    [Test]
+    public void CanHavePatternTrees()
+    {
+      // Arrange
+      BuildBot(@"
+> A
+: Aaaa
+! answer
+{
+  > B
+  : Bbbb
+
+  > C
+  : Cccc
+  ! answer
+  {
+    > Q
+    : Qqqq
+
+    > W + Z
+    : WXZ
+  }
+}");
+      AssertDialog("A", "Aaaa");
+      AssertDialog("C", "Cccc");
+      AssertDialog("Q", "Qqqq");
+
+      AssertDialog("A", "Aaaa");
+      AssertDialog("C", "Cccc");
+      AssertDialog("W x Z", "WXZ");
+    }
   }
 }

@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  CBRAIN-PC412
-//  DateTime: 06-02-2019 08:37:13
+//  DateTime: 22-04-2020 22:12:33
 //  UserName: jw
-//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 06-02-2019 08:37:08>
+//  GPLEX input file <Parser\Chat.Language.analyzer.lex - 22-04-2020 22:12:29>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: unicode, verbose, parser, stack, minimize
@@ -178,10 +178,10 @@ StringBuilder StringInput = null;
     static sbyte[] mLo0 = new sbyte[256] {
 /*     '\0' */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 22, 0, 0, 21, 0, 0, 
 /*   '\x10' */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-/*   '\x20' */ 25, 18, 1, 18, 0, 18, 18, 0, 0, 0, 0, 20, 19, 9, 4, 16, 
-/*      '0' */ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 15, 24, 5, 20, 5, 23, 
-/*      '@' */ 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
-/*      'P' */ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 5, 5, 5, 5, 6, 
+/*   '\x20' */ 25, 18, 1, 18, 0, 18, 18, 0, 0, 0, 0, 20, 19, 3, 5, 16, 
+/*      '0' */ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 15, 24, 6, 20, 6, 23, 
+/*      '@' */ 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+/*      'P' */ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 6, 6, 6, 6, 7, 
 /*      '`' */ 0, 10, 10, 10, 10, 10, 10, 10, 11, 10, 10, 10, 10, 10, 10, 10, 
 /*      'p' */ 13, 10, 10, 14, 12, 10, 10, 17, 10, 10, 10, 0, 0, 0, 18, 0, 
 /*   '\x80' */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -1171,118 +1171,117 @@ StringBuilder StringInput = null;
 /* NxS[   1] */ new Table(0, 0, -1, null), // Shortest string "!"
 /* NxS[   2] */ new Table(0, 0, -1, null), // Shortest string "\""
 /* NxS[   3] */ // Shortest string "\xAA"
-      new Table(2, 16, -1, new sbyte[] {3, 3, -1, -1, 3, -1, 
-          3, -1, 3, 3, 3, 3, 3, -1, -1, 3}),
-/* NxS[   4] */ // Shortest string "0"
-      new Table(18, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
-          30, -1, -1, -1, -1, 4, 41, 30, 30, 31}),
-/* NxS[   5] */ // Shortest string "."
-      new Table(18, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
-          30, -1, -1, -1, -1, 30, 30, 30, 30, 31}),
-/* NxS[   6] */ // Shortest string "<"
-      new Table(18, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
-          30, -1, -1, -1, -1, 30, 30, 30, 30, 31}),
+      new Table(2, 16, -1, new sbyte[] {3, 3, 3, -1, -1, 3, 
+          -1, 3, 3, 3, 3, 3, 3, -1, -1, 3}),
+/* NxS[   4] */ // Shortest string "-"
+      new Table(18, 17, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
+          30, -1, -1, -1, -1, 30, 30, 30, 30, 30, 31}),
+/* NxS[   5] */ // Shortest string "0"
+      new Table(18, 17, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
+          30, -1, -1, -1, -1, 30, 5, 41, 30, 30, 31}),
+/* NxS[   6] */ // Shortest string "."
+      new Table(18, 17, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
+          30, -1, -1, -1, -1, 30, 30, 30, 30, 30, 31}),
 /* NxS[   7] */ // Shortest string "_"
-      new Table(15, 21, 7, new sbyte[] {30, 30, 7, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 7, 30}),
+      new Table(15, 20, 7, new sbyte[] {30, 30, 7, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 31}),
 /* NxS[   8] */ // Shortest string "h"
-      new Table(2, 23, -1, new sbyte[] {3, 7, 30, 30, 7, 31, 
-          7, 30, 7, 7, 21, 7, 7, 30, 30, 7, -1, 30, 30, -1, -1, 30, 
-          30}),
+      new Table(12, 23, 7, new sbyte[] {21, 7, 7, 30, 30, 7, 
+          -1, 30, 30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 
+          31}),
 /* NxS[   9] */ // Shortest string "w"
-      new Table(15, 21, 7, new sbyte[] {30, 30, 14, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 7, 30}),
+      new Table(15, 20, 7, new sbyte[] {30, 30, 14, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 31}),
 /* NxS[  10] */ // Shortest string "\r"
       new Table(22, 1, -1, new sbyte[] {11}),
 /* NxS[  11] */ new Table(0, 0, -1, null), // Shortest string "\n"
 /* NxS[  12] */ // Shortest string "\t"
       new Table(25, 1, -1, new sbyte[] {12}),
-/* NxS[  13] */ // Shortest string "0@0.0"
+/* NxS[  13] */ // Shortest string "-@0.0"
       new Table(15, 21, 13, new sbyte[] {30, 30, 13, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, -1, 13, 33, 30, 30, 31, 32, 35}),
+          -1, -1, 30, 30, -1, -1, -1, -1, 35, 13, 34, 30, 30, 31, 32}),
 /* NxS[  14] */ // Shortest string "ww"
-      new Table(15, 21, 7, new sbyte[] {30, 30, 15, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 7, 30}),
+      new Table(15, 20, 7, new sbyte[] {30, 30, 15, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 31}),
 /* NxS[  15] */ // Shortest string "www"
-      new Table(15, 21, 7, new sbyte[] {30, 30, 7, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 7, 36, 30, 7, 31, 7, 30}),
+      new Table(15, 20, 7, new sbyte[] {30, 30, 7, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 36, 30, 7, 31}),
 /* NxS[  16] */ // Shortest string "www._"
-      new Table(18, 18, 16, new sbyte[] {18, 36, 16, -1, -1, 16, 
-          16, -1, -1, -1, -1, 30, 36, 30, 16, 17, 16, 30}),
+      new Table(18, 17, 16, new sbyte[] {18, 36, 16, -1, -1, 16, 
+          16, -1, -1, -1, -1, 30, 30, 36, 30, 16, 17}),
 /* NxS[  17] */ // Shortest string "www.@"
-      new Table(15, 21, 19, new sbyte[] {16, 16, 19, 18, 36, 16, 
-          -1, -1, 16, 16, -1, -1, -1, -1, 32, 36, 30, 16, 17, 19, 30}),
+      new Table(15, 20, 19, new sbyte[] {16, 16, 19, 18, 36, 16, 
+          -1, -1, 16, 16, -1, -1, -1, -1, 30, 32, 36, 30, 16, 17}),
 /* NxS[  18] */ // Shortest string "www.!"
-      new Table(19, 17, 18, new sbyte[] {37, 18, -1, -1, 18, 18, 
-          -1, -1, -1, -1, -1, 37, -1, 18, 18, 18, -1}),
+      new Table(19, 14, 18, new sbyte[] {37, 18, -1, -1, 18, 18, 
+          -1, -1, -1, -1, -1, -1, 37, -1}),
 /* NxS[  19] */ // Shortest string "www.@A"
-      new Table(15, 21, 19, new sbyte[] {16, 16, 19, 18, 36, 16, 
-          -1, -1, 16, 16, -1, -1, -1, -1, 32, 38, 30, 16, 17, 19, 34}),
+      new Table(15, 20, 19, new sbyte[] {16, 16, 19, 18, 36, 16, 
+          -1, -1, 16, 16, -1, -1, -1, -1, 33, 32, 38, 30, 16, 17}),
 /* NxS[  20] */ // Shortest string "www.@A.A"
       new Table(15, 21, 20, new sbyte[] {16, 16, 20, 18, 36, 16, 
-          -1, -1, 16, 16, -1, -1, -1, -1, 13, 38, 30, 16, 17, 19, 35}),
+          -1, -1, 16, 16, -1, -1, -1, -1, 35, 13, 38, 30, 16, 17, 19}),
 /* NxS[  21] */ // Shortest string "ht"
-      new Table(2, 23, -1, new sbyte[] {3, 7, 30, 30, 7, 31, 
-          7, 30, 7, 7, 22, 7, 7, 30, 30, 7, -1, 30, 30, -1, -1, 30, 
-          30}),
+      new Table(12, 23, 7, new sbyte[] {22, 7, 7, 30, 30, 7, 
+          -1, 30, 30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 
+          31}),
 /* NxS[  22] */ // Shortest string "htt"
-      new Table(13, 23, 7, new sbyte[] {23, 7, 30, 30, 7, -1, 
-          30, 30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 7, 
-          30}),
+      new Table(13, 22, 7, new sbyte[] {23, 7, 30, 30, 7, -1, 
+          30, 30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 31}),
 /* NxS[  23] */ // Shortest string "http"
-      new Table(14, 22, 7, new sbyte[] {24, 39, 30, 7, -1, 30, 
-          30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 7, 30}),
+      new Table(14, 21, 7, new sbyte[] {24, 39, 30, 7, -1, 30, 
+          30, -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 31}),
 /* NxS[  24] */ // Shortest string "https"
-      new Table(15, 21, 7, new sbyte[] {39, 30, 7, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, 3, 7, 30, 30, 7, 31, 7, 30}),
+      new Table(15, 20, 7, new sbyte[] {39, 30, 7, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, 3, 7, 7, 30, 30, 7, 31}),
 /* NxS[  25] */ // Shortest string "0.0"
-      new Table(18, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
-          30, -1, -1, -1, -1, 25, 30, 30, 30, 31}),
+      new Table(18, 17, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
+          30, -1, -1, -1, -1, 30, 25, 30, 30, 30, 31}),
 /* NxS[  26] */ // Shortest string ""
       new Table(22, 6, 27, new sbyte[] {-1, 27, 27, 27, 27, 28}),
 /* NxS[  27] */ // Shortest string "\xAA"
       new Table(22, 6, 27, new sbyte[] {-1, 27, 27, 27, 27, -1}),
 /* NxS[  28] */ new Table(0, 0, -1, null), // Shortest string "\""
 /* NxS[  29] */ // Shortest string ""
-      new Table(15, 23, 7, new sbyte[] {5, 6, 9, 1, 6, 6, 
-          10, 11, 5, 5, 12, 1, 2, 3, 4, 5, 6, 7, 6, 7, 6, 7, 
+      new Table(15, 23, 7, new sbyte[] {6, 4, 9, 1, 4, 4, 
+          10, 11, 6, 6, 12, 1, 2, 3, 4, 5, 6, 4, 7, 4, 7, 7, 
           8}),
-/* NxS[  30] */ // Shortest string "0<"
-      new Table(18, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
-          30, -1, -1, -1, -1, 30, 30, 30, 30, 31}),
-/* NxS[  31] */ // Shortest string "0@"
-      new Table(15, 21, 32, new sbyte[] {30, 30, 32, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, -1, 32, 30, 30, 30, 31, 32, 30}),
-/* NxS[  32] */ // Shortest string "0@0"
-      new Table(15, 21, 32, new sbyte[] {30, 30, 32, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, -1, 32, 33, 30, 30, 31, 32, 34}),
-/* NxS[  33] */ // Shortest string "0@0."
+/* NxS[  30] */ // Shortest string "--"
+      new Table(18, 17, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
+          30, -1, -1, -1, -1, 30, 30, 30, 30, 30, 31}),
+/* NxS[  31] */ // Shortest string "-@"
+      new Table(15, 20, 32, new sbyte[] {30, 30, 32, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, -1, 30, 32, 30, 30, 30, 31}),
+/* NxS[  32] */ // Shortest string "-@0"
+      new Table(15, 20, 32, new sbyte[] {30, 30, 32, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, -1, 33, 32, 34, 30, 30, 31}),
+/* NxS[  33] */ // Shortest string "-@0-"
+      new Table(15, 20, 32, new sbyte[] {30, 30, 32, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, -1, 33, 32, 30, 30, 30, 31}),
+/* NxS[  34] */ // Shortest string "-@0."
+      new Table(15, 20, 13, new sbyte[] {30, 30, 13, -1, 30, 30, 
+          -1, -1, 30, 30, -1, -1, -1, -1, 30, 13, 30, 30, 30, 31}),
+/* NxS[  35] */ // Shortest string "-@0.0-"
       new Table(15, 21, 13, new sbyte[] {30, 30, 13, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, -1, 13, 30, 30, 30, 31, 13, 30}),
-/* NxS[  34] */ // Shortest string "0@0-"
-      new Table(15, 21, 32, new sbyte[] {30, 30, 32, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, -1, 32, 30, 30, 30, 31, 32, 34}),
-/* NxS[  35] */ // Shortest string "0@0.0-"
-      new Table(15, 21, 13, new sbyte[] {30, 30, 13, -1, 30, 30, 
-          -1, -1, 30, 30, -1, -1, -1, -1, 13, 30, 30, 30, 31, 32, 35}),
+          -1, -1, 30, 30, -1, -1, -1, -1, 35, 13, 30, 30, 30, 31, 32}),
 /* NxS[  36] */ // Shortest string "www."
-      new Table(18, 18, 16, new sbyte[] {18, 36, 16, -1, -1, 16, 
-          16, -1, -1, -1, -1, 30, 36, 30, 16, 17, 16, 30}),
+      new Table(18, 17, 16, new sbyte[] {18, 36, 16, -1, -1, 16, 
+          16, -1, -1, -1, -1, 30, 30, 36, 30, 16, 17}),
 /* NxS[  37] */ // Shortest string "www.!."
-      new Table(19, 17, 18, new sbyte[] {37, 18, -1, -1, 18, 18, 
-          -1, -1, -1, -1, -1, 37, -1, 18, 18, 18, -1}),
+      new Table(19, 14, 18, new sbyte[] {37, 18, -1, -1, 18, 18, 
+          -1, -1, -1, -1, -1, -1, 37, -1}),
 /* NxS[  38] */ // Shortest string "www.@A."
-      new Table(15, 21, 20, new sbyte[] {16, 16, 20, 18, 36, 16, 
-          -1, -1, 16, 16, -1, -1, -1, -1, 13, 36, 30, 16, 17, 20, 30}),
+      new Table(15, 20, 20, new sbyte[] {16, 16, 20, 18, 36, 16, 
+          -1, -1, 16, 16, -1, -1, -1, -1, 30, 13, 36, 30, 16, 17}),
 /* NxS[  39] */ // Shortest string "http:"
-      new Table(16, 18, 30, new sbyte[] {40, 30, -1, 30, 30, -1, 
-          -1, 30, 30, -1, -1, -1, -1, 30, 30, 30, 30, 31}),
+      new Table(16, 19, 30, new sbyte[] {40, 30, -1, 30, 30, -1, 
+          -1, 30, 30, -1, -1, -1, -1, 30, 30, 30, 30, 30, 31}),
 /* NxS[  40] */ // Shortest string "http:/"
-      new Table(16, 18, 30, new sbyte[] {36, 30, -1, 30, 30, -1, 
-          -1, 30, 30, -1, -1, -1, -1, 30, 30, 30, 30, 31}),
+      new Table(16, 19, 30, new sbyte[] {36, 30, -1, 30, 30, -1, 
+          -1, 30, 30, -1, -1, -1, -1, 30, 30, 30, 30, 30, 31}),
 /* NxS[  41] */ // Shortest string "0."
-      new Table(18, 16, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
-          30, -1, -1, -1, -1, 25, 30, 30, 30, 31}),
+      new Table(18, 17, 30, new sbyte[] {-1, 30, 30, -1, -1, 30, 
+          30, -1, -1, -1, -1, 30, 25, 30, 30, 30, 31}),
     };
 
 int NextState() {
@@ -1716,7 +1715,7 @@ int NextState() {
                 return (int)Token.EOF;
             break;
         case 1: // Recognized '{Other}',	Shortest string "!"
-        case 6: // Recognized '{Other}',	Shortest string "<"
+        case 4: // Recognized '{Other}',	Shortest string "-"
 /* skip */
             break;
         case 2: // Recognized '\"',	Shortest string "\""
@@ -1734,11 +1733,11 @@ StringInput = new StringBuilder(); BEGIN(str);
         case 24: // Recognized '{Word}',	Shortest string "https"
 yylval.t = new ZToken(yytext, ZToken.TokenType.Word); return (int)Token.T_WORD;
             break;
-        case 4: // Recognized '{Number}',	Shortest string "0"
+        case 5: // Recognized '{Number}',	Shortest string "0"
         case 25: // Recognized '{Number}',	Shortest string "0.0"
 yylval.t = new ZToken(yytext, ZToken.TokenType.Number); return (int)Token.T_NUMBER;
             break;
-        case 5: // Recognized '{Delimiter}',	Shortest string "."
+        case 6: // Recognized '{Delimiter}',	Shortest string "."
         case 10: // Recognized '{Delimiter}',	Shortest string "\r"
         case 11: // Recognized '{Delimiter}',	Shortest string "\n"
 yylval.t = new ZToken(yytext); return (int)Token.T_DELIMITER;
@@ -1746,7 +1745,7 @@ yylval.t = new ZToken(yytext); return (int)Token.T_DELIMITER;
         case 12: // Recognized '{Space}+',	Shortest string "\t"
 /* skip */
             break;
-        case 13: // Recognized '{EMail}',	Shortest string "0@0.0"
+        case 13: // Recognized '{EMail}',	Shortest string "-@0.0"
         case 20: // Recognized '{EMail}',	Shortest string "www.@A.A"
 yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_EMAIL;
             break;
