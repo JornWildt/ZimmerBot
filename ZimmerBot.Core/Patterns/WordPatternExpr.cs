@@ -53,5 +53,22 @@ namespace ZimmerBot.Core.Patterns
     {
       // Do nothing
     }
+
+
+    public override double CalculateMatch(ZTokenSequence input, int myPos, List<PatternExpr> expressions)
+    {
+      for (int i = 0; i < input.Count; ++i)
+      {
+        if (input[i].Type == ZToken.TokenType.Word && input[i].Matches(Word))
+        {
+          double maxSize = Math.Max(expressions.Count, input.Count);
+          int dist = i - myPos;
+          return (double)(maxSize - Math.Abs(dist)) / maxSize;
+        }
+      }
+
+      // No match found - make sure total score is reduced (avoids input "a" matching pattern "a b" perfectly).
+      return -0.5;
+    }
   }
 }

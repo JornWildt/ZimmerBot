@@ -569,15 +569,20 @@ patternExprSeq
 
 patternExpr
   : entityPatternExpr   { $$.patternExpr = $1.patternExpr; }
+  | patternWildcardExpr { $$.patternExpr = $1.patternExpr; }
   | T_WORD              { $$.patternExpr = new WordPatternExpr($1.s); }
   | T_CWORD             { $$.patternExpr = new ConceptPatternExpr($1.s); }
   | T_STRING            { $$.patternExpr = new WordPatternExpr($1.s); }
-  | T_TILDE patternExpr { $$.patternExpr = new NegationPatternExpr($2.patternExpr); }
+  | T_TILDE T_WORD      { $$.patternExpr = new NegationPatternExpr($2.s); }
   ;
 
 entityPatternExpr
   : T_LBRACE T_WORD T_COLON T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, $4.s); }
   | T_LBRACE T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, null); }
+  ;
+
+patternWildcardExpr
+  : T_LT T_WORD T_GT { $$.patternExpr = new WildcardPatternExpr($2.s); }
   ;
 
 %%

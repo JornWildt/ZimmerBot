@@ -137,6 +137,7 @@
     <Compile Include="Patterns\PatternMatchResultList.cs" />
     <Compile Include="Patterns\PatternSet.cs" />
     <Compile Include="Patterns\PatternExpr.cs" />
+    <Compile Include="Patterns\WildcardPatternExpr.cs" />
     <Compile Include="Patterns\WordPatternExpr.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />

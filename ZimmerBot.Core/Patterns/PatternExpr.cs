@@ -19,5 +19,7 @@ namespace ZimmerBot.Core.Patterns
     public abstract void ExtractMatchValues(Dictionary<string, ZToken> matchValues, Queue<ZToken> entityTokens);
 
     public virtual void RegisterReferencedParameter(HashSet<string> p) { }
+
+    public abstract double CalculateMatch(ZTokenSequence input, int myPos, List<PatternExpr> expressions);
   }
 }

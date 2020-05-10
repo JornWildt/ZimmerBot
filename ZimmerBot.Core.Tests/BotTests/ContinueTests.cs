@@ -58,6 +58,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
+    // THIS IS NOT WORKING YET ...cannot pass <1> to "continue" statement.
     public void CanContinueWithParameters()
     {
       BuildBot(@"

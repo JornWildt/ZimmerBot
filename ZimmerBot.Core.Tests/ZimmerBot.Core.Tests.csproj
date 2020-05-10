@@ -90,6 +90,7 @@
     <Compile Include="BotTests\IgnoreTests.cs" />
     <Compile Include="BotTests\FormatTests.cs" />
     <Compile Include="BotTests\InfiniteLoopProtectionTests.cs" />
+    <Compile Include="BotTests\IntentWildcardTests.cs" />
     <Compile Include="BotTests\KeepStateTests.cs" />
     <Compile Include="BotTests\MultiTriggerRuleTests.cs" />
     <Compile Include="BotTests\OutputTests.cs" />
