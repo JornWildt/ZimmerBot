@@ -8,7 +8,7 @@ namespace ZimmerBot.Core.Parser
   [Serializable]
   public class ZToken
   {
-    public enum TokenType { Word, Number, EMail, Entity }
+    public enum TokenType { Word, Number, EMail, Entity, Wildcard }
 
     public string OriginalText { get; protected set; }
 
@@ -62,6 +62,8 @@ namespace ZimmerBot.Core.Parser
     {
       if (Type == TokenType.Entity)
         return $"{OriginalText}[E:{EntityClass}]";
+      if (Type == TokenType.Wildcard)
+        return $"<{OriginalText}>";
       return OriginalText;
     }
   }

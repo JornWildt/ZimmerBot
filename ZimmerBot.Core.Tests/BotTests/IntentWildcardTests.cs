@@ -39,6 +39,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       AssertDialog("find all about cats and dogs in photo", "Searching (photo) about: cats and dogs.");
       AssertDialog("what photo related to white water rafting are you able to find", "Searching (photo) about: white water rafting.");
       AssertDialog("find dungeons and dragons in photo", "Searching (photo) about: dungeons and dragons.");
+      AssertDialog("find stuff about cats and dogs in photo", "Searching (photo) about: cats and dogs.");
     }
   }
 }

@@ -41,6 +41,8 @@ namespace ZimmerBot.Core.Patterns
 
     protected ZToken MatchedValue = null;
 
+    protected double MatchedScore = 0.0;
+
     protected void Initialize(int myPos, List<PatternExpr> expressions)
     {
       // Initialize left/right locator words first time
@@ -65,6 +67,7 @@ namespace ZimmerBot.Core.Patterns
         Words_Right[key] = false;
 
       MatchedValue = null;
+      MatchedScore = 0.0;
     }
 
 
@@ -74,8 +77,7 @@ namespace ZimmerBot.Core.Patterns
         matchValues[ParameterName] = MatchedValue;
     }
 
-
-    public override double CalculateMatch(ZTokenSequence input, int myPos, List<PatternExpr> expressions)
+    public override ZTokenSequence ReduceInput(ZTokenSequence input, int myPos, List<PatternExpr> expressions)
     {
       Initialize(myPos, expressions);
 
@@ -86,7 +88,7 @@ namespace ZimmerBot.Core.Patterns
       for (int i = 0; i < input.Count; ++i)
       {
         int l = i;
-        if (l < myPos && input[l].Type == ZToken.TokenType.Word 
+        if (l < myPos && input[l].Type == ZToken.TokenType.Word
             && Words_Left.ContainsKey(input[l].OriginalText) && !Words_Left[input[l].OriginalText])
         {
           Words_Left[input[l].OriginalText] = true;
@@ -107,14 +109,26 @@ namespace ZimmerBot.Core.Patterns
       if (left < right)
       {
         string result = "";
-        for (int i = left+1; i < right; ++i)
-          result += (i > left+1 ? " " : "") + input[i].OriginalText;
-        MatchedValue = new ZToken(result);
+        for (int i = left + 1; i < right; ++i)
+          result += (i > left + 1 ? " " : "") + input[i].OriginalText;
+        
+        MatchedValue = new ZToken(result, ZToken.TokenType.Wildcard);
+        MatchedScore = (double)((Words_Left.Count > 0 ? (double)left_count / Words_Left.Count : 1.0)
+         + (Words_Right.Count > 0 ? (double)right_count / Words_Right.Count : 1.0)) / 2.0;
+
+        ZTokenSequence output = new ZTokenSequence(input.Take(left+1));
+        output.Add(MatchedValue);
+        output.AddRange(input.Skip(right));
+        return output;
       }
 
-      return
-        (double)((Words_Left.Count > 0 ? (double)left_count / Words_Left.Count : 1.0)
-         + (Words_Right.Count > 0 ? (double)right_count / Words_Right.Count : 1.0)) / 2.0;
+      return input;
+    }
+
+
+    public override double CalculateMatch(ZTokenSequence input, int myPos, List<PatternExpr> expressions)
+    {
+      return MatchedScore;
     }
   }
 }

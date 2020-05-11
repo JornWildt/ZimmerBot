@@ -203,16 +203,13 @@ namespace ZimmerBot.Core.Patterns
       double score = 0.0;
       explanation = new List<string>();
 
+      // Let wildcard expressions reduce the input, going from multiple wildcard-matched tokens to a single large token.
+      for (int i = 0; i < Expressions.Count; ++i)
+        input = Expressions[i].ReduceInput(input, i, Expressions);
+
       for (int i=0; i<Expressions.Count; ++i)
       {
         PatternExpr expr = Expressions[i];
-        //string key = (token.Type == ZToken.TokenType.Entity
-        //  ? EntityPatternExpr.GetIdentifier(token.EntityClass, token.EntityNumber)
-        //  : token.OriginalText);
-
-        //string wildcardKey = (token.Type == ZToken.TokenType.Entity
-        //  ? EntityPatternExpr.GetIdentifier("", token.EntityNumber)
-        //  : token.OriginalText);
 
         double exprScore = expr.CalculateMatch(input, i, Expressions);
         score += exprScore;
