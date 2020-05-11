@@ -88,17 +88,7 @@ Fortæl mig noget mere om din <2> ...
 : Hvilke følelser mærker du når du siger det?
 
 >
-& (session.responseCount = 0)
+! when (session.responseCount = 0)
 : Hej. Mit navn er Eliza.\
 Jeg er en chatbot med speciale i psykiatri. Hvad kan jeg hjælpe dig med?
-
-
-# It would be better if we could monitor activity instead: after 15 seconds of inactivity do ...
-
-> 
-! every 30
-& (session.responseCount = 1)
-: Nåh... ?
-: Hmmm ...
-: Er du der?
 
