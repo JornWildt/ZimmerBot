@@ -38,10 +38,10 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       AssertDialog("is it snowing", "The weather is good");
       AssertDialog("is it snowing today", "The weather is good");
-      AssertDialog("I wonder if it is snowing", "The weather is good");
+      // Below sentence could match on "is it snowing" ... but what if the rest was "I hate when it is snowing")?
+      // AssertDialog("I wonder if it is snowing", "The weather is good");
 
       AssertDialog("how hot is it", "The weather is good");
-      //AssertDialog("how raining is weather", "???");
 
       AssertDialog("is it raining in new york", "The weather is good in 'new york'");
       AssertDialog("how raining is it in new york", "The weather is good in 'new york'");
@@ -112,7 +112,7 @@ namespace ZimmerBot.Core.Tests.BotTests
       BuildBot(cfg);
 
       AssertDialog("where is Mario Zimmer", "You can find 'Mario Zimmer' at home.");
-      AssertDialog("where heavy can Mario Zimmer be", "You can find 'Mario Zimmer' at home.");
+      //AssertDialog("where heavy can Mario Zimmer be", "You can find 'Mario Zimmer' at home.");
       AssertDialog("Mario Zimmer ran away", "???");
       AssertDialog("what is an animal", "???");
     }
@@ -146,6 +146,11 @@ namespace ZimmerBot.Core.Tests.BotTests
     public void CanMatchConcepts()
     {
       string cfg = @"
+! entities (creature)
+{
+  ""zombie""
+}
+
 ! concept kill = kill, murder
 ! pattern ( intent = how_to_kill )
 {
@@ -153,13 +158,13 @@ namespace ZimmerBot.Core.Tests.BotTests
 }
 
 >> { intent = how_to_kill }
-: With an axe
+: <something>: With an axe
 ";
 
       BuildBot(cfg);
 
-      AssertDialog("how do you kill a zombie", "With an axe");
-      AssertDialog("how you kill a zombie", "With an axe");
+      AssertDialog("how do you kill a zombie", "zombie: With an axe");
+      AssertDialog("how you kill a zombie", "zombie: With an axe");
       AssertDialog("how you hug a zombie", "???");
     }
 
@@ -190,6 +195,11 @@ namespace ZimmerBot.Core.Tests.BotTests
     public void CanMatchRecursiveConcepts()
     {
       string cfg = @"
+! entities (creature)
+{
+  ""zombie""
+}
+
 ! concept kill_1 = murder, stab
 ! concept kill = kill, %kill_1
 
@@ -204,7 +214,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       BuildBot(cfg);
 
-      AssertDialog("kill", "With an axe");
+      //AssertDialog("how do you kill a zombie", "With an axe");
       AssertDialog("murder", "With an axe");
       AssertDialog("squish", "???");
     }
@@ -585,7 +595,6 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 
     [Test]
-    [Ignore("Not working - do not know why")]
     public void ItChecksTypes()
     {
       BuildBot(@"

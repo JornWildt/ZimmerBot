@@ -108,5 +108,25 @@ namespace ZimmerBot.Core.Patterns
     {
       p.Add(ParameterName);
     }
+
+
+    public override double CalculateMatch(ZTokenSequence input, int myPos, List<PatternExpr> expressions)
+    {
+      // FIXME: Handle "star" entity class
+
+
+      for (int i = 0; i < input.Count; ++i)
+      {
+        if (input[i].Type == ZToken.TokenType.Entity
+            && input[i].EntityNumber == EntityNumber
+            && (EntityClass == null || input[i].EntityClass == EntityClass))
+        {
+          int dist = i - myPos;
+          return (double)(expressions.Count - Math.Abs(dist)) / (double)expressions.Count;
+        }
+      }
+
+      return -0.5;
+    }
   }
 }

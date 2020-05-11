@@ -55,5 +55,10 @@ namespace ZimmerBot.Core.Patterns
     {
       // Do nothing
     }
+
+    public override double CalculateMatch(ZTokenSequence input, int i, List<PatternExpr> expressions)
+    {
+      throw new NotImplementedException("Concepts should be expanded before evaluation.");
+    }
   }
 }

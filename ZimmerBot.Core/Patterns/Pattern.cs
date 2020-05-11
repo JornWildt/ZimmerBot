@@ -58,7 +58,7 @@ namespace ZimmerBot.Core.Patterns
     public override string ToString()
     {
       if (_toString == null)
-        _toString = Expressions.Select(e => $"{e}").Aggregate((a,b) => a + ", " + b);
+        _toString = Expressions.Select(e => $"{e}").Aggregate((a, b) => a + ", " + b);
       return _toString;
     }
 
@@ -141,7 +141,7 @@ namespace ZimmerBot.Core.Patterns
       // Normalize
       foreach (string key in WordInPatternProbability.Keys.ToArray())
       {
-        WordInPatternProbability[key] 
+        WordInPatternProbability[key]
           = Math.Log(PatternProbability * (WordInPatternProbability[key] + 1) / (NumberOfWords + totalNumberOfWords));
       }
 
@@ -150,6 +150,7 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
+    // Original way of calculating probability - or score - for a single pattern.
     public double CalculateProbability(ZTokenSequence input, out List<string> explanation)
     {
       // Probability is logarithmic! This means more negative values indicates smaller values between 0 and 1.
@@ -189,10 +190,34 @@ namespace ZimmerBot.Core.Patterns
 
       // Unmatched words in pattern counts negative
       if (Expressions.Count > input.Count)
-        prob += (UnknownWordProbability/10) * (Expressions.Count - input.Count);
+        prob += (UnknownWordProbability / 10) * (Expressions.Count - input.Count);
 
 
       return prob;
+    }
+
+
+    // Later way of calculating score for a pattern
+    public double CalculateScore(ZTokenSequence input, out List<string> explanation)
+    {
+      double score = 0.0;
+      explanation = new List<string>();
+
+      // Let wildcard expressions reduce the input, going from multiple wildcard-matched tokens to a single large token.
+      for (int i = 0; i < Expressions.Count; ++i)
+        input = Expressions[i].ReduceInput(input, i, Expressions);
+
+      for (int i=0; i<Expressions.Count; ++i)
+      {
+        PatternExpr expr = Expressions[i];
+
+        double exprScore = expr.CalculateMatch(input, i, Expressions);
+        score += exprScore;
+
+        explanation.Add("FIXME");
+      }
+
+      return score;
     }
   }
 }

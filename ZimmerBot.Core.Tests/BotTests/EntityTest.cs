@@ -25,10 +25,10 @@ namespace ZimmerBot.Core.Tests.BotTests
 ";
       BuildBot(z);
 
-      //AssertDialog("what is zimmerbot", "'zimmerbot' is an entity");
+      AssertDialog("what is zimmerbot", "'zimmerbot' is an entity");
       AssertDialog("what is Acme Inc.", "'Acme Inc' is an entity");
       AssertDialog("what is Acme Inc", "'Acme Inc' is an entity");
-      AssertDialog("Where is Blue-Whale located", "'Blue Whale' is not here");
+      AssertDialog("Where is Blue-Whale located", "'Blue-Whale' is not here");
       AssertDialog("Where is blue whale located", "'blue whale' is not here");
       AssertDialog("Where is \"blue whale\" located", "'blue whale' is not here");
       AssertDialog("what is randomword", "'randomword' is an entity");

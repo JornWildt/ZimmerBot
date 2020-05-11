@@ -1,32 +1,24 @@
-﻿using System;
+﻿using CuttingEdge.Conditions;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CuttingEdge.Conditions;
 using ZimmerBot.Core.Parser;
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Patterns
 {
   public class NegationPatternExpr : PatternExpr
   {
-    public PatternExpr SubExpr { get; protected set; }
+    public string Word { get; protected set; }
 
 
-    public NegationPatternExpr(PatternExpr expr)
+    public NegationPatternExpr(string word)
     {
-      Condition.Requires(expr, nameof(expr)).IsNotNull();
-      SubExpr = expr;
+      Condition.Requires(word, nameof(word)).IsNotNull();
+      Word = word;
     }
 
 
-    public override string Identifier
-    {
-      get
-      {
-        return SubExpr.ToString();
-      }
-    }
+    public override string Identifier => Word;
 
 
     public override double Weight
@@ -49,13 +41,27 @@ namespace ZimmerBot.Core.Patterns
 
     public override void ExtractWordsForSpellChecker()
     {
-      SubExpr.ExtractWordsForSpellChecker();
+      SpellChecker.AddWord(Word);
     }
 
 
     public override string ToString()
     {
-      return "~" + SubExpr.ToString();
+      return "~" + Word;
+    }
+
+    public override double CalculateMatch(ZTokenSequence input, int myPos, List<PatternExpr> expressions)
+    {
+      for (int i = 0; i < input.Count; ++i)
+      {
+        if (input[i].Type == ZToken.TokenType.Word && input[i].Matches(Word))
+        {
+          return -input.Count;
+        }
+      }
+
+      // No match found - that is good
+      return 1;
     }
   }
 }

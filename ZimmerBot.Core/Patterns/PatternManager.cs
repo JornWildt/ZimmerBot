@@ -63,6 +63,66 @@ namespace ZimmerBot.Core.Patterns
 
       int inputTokenCount = inputs.Min(inp => inp.Count);
 
+      // This value represents the best score found so far.
+      // A perfect match is number-of-input-tokens * 1.0
+      // - Start half way
+      double maxScore = (double)inputTokenCount / (double)2;
+
+      // Try all possible variations/reductions of the input
+      foreach (ZTokenSequence input in inputs)
+      {
+        BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}.");
+
+        foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
+        {
+          double score = pt.CalculateScore(input, out List<string> reason);
+
+          if (score > maxScore)
+          {
+            maxScore = score;
+            result.Clear();
+            // Add possible combinations of pattern identifiers as result
+            foreach (var identifiers in pt.ParentPatternSet.UnfoldedIdentifiers)
+            {
+              PatternMatchResult r = new PatternMatchResult(pt, input, identifiers);
+              result.Add(r);
+              BotUtility.EvaluationLogger.Debug($"Better match: {r.ToString()} ({score})");
+            }
+
+            BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
+          }
+          else
+          {
+            double difference = Math.Abs(score / 1000000);
+            // Are the values equal with respect to a small margin?
+            if (Math.Abs(score - maxScore) <= difference)
+            {
+              // Add possible combinations of pattern identifiers as result
+              foreach (var identifiers in pt.ParentPatternSet.UnfoldedIdentifiers)
+              {
+                PatternMatchResult r = new PatternMatchResult(pt, input, identifiers);
+                result.Add(r);
+                BotUtility.EvaluationLogger.Debug($"Similar match: {r.ToString()} ({score})");
+              }
+              BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
+            }
+          }
+        }
+      }
+
+      return result;
+    }
+
+
+    public PatternMatchResultList CalculateMostLikelyPattern_V1(ZTokenSequenceList inputs)
+    {
+      if (PatternSets.Count == 0)
+        return null;
+
+      PatternMatchResultList result = new PatternMatchResultList();
+
+      int inputTokenCount = inputs.Min(inp => inp.Count);
+
       // This value approximates the smallest probability for a match 
       // (namely P(u)^N where N = number of un-matched words "u")
       double minimalAllowedProb = inputTokenCount *
