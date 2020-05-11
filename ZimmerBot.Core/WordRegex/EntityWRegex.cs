@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZimmerBot.Core.Knowledge;
-
-namespace ZimmerBot.Core.WordRegex
+﻿namespace ZimmerBot.Core.WordRegex
 {
   public class EntityWRegex : WRegexBase
   {

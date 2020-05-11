@@ -146,6 +146,11 @@ namespace ZimmerBot.Core.Tests.BotTests
     public void CanMatchConcepts()
     {
       string cfg = @"
+! entities (creature)
+{
+  ""zombie""
+}
+
 ! concept kill = kill, murder
 ! pattern ( intent = how_to_kill )
 {
@@ -153,13 +158,13 @@ namespace ZimmerBot.Core.Tests.BotTests
 }
 
 >> { intent = how_to_kill }
-: With an axe
+: <something>: With an axe
 ";
 
       BuildBot(cfg);
 
-      AssertDialog("how do you kill a zombie", "With an axe");
-      AssertDialog("how you kill a zombie", "With an axe");
+      AssertDialog("how do you kill a zombie", "zombie: With an axe");
+      AssertDialog("how you kill a zombie", "zombie: With an axe");
       AssertDialog("how you hug a zombie", "???");
     }
 

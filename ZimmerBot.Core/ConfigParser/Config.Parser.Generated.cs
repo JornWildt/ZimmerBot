@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  JORN-PC2
-// DateTime: 11-05-2020 00:10:00
+// DateTime: 11-05-2020 14:35:38
 // UserName: jorn
-// Input file <ConfigParser\Config.Language.grammar.y - 11-05-2020 00:09:59>
+// Input file <ConfigParser\Config.Language.grammar.y - 11-05-2020 14:35:37>
 
 // options: conflicts no-lines gplex conflicts
 
@@ -116,7 +116,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       "definitionData", "definitionKey", "definitionDataValueSeq", "definitionDataValue", 
       "stringSeq", "cword", "simpleOpKeyValue", "value", "keyValueSeq", "keyValue", 
       "keyListValue", "listValue", "opKeyValue", "pattern", "patternExprSeq", 
-      "patternExpr", "entityPatternExpr", "patternWildcardExpr", };
+      "patternExpr", "entityPatternExpr", "wildcardPatternExpr", };
 
   static ConfigParser() {
     states[0] = new State(-4,new int[]{-1,1,-3,3});
@@ -1183,7 +1183,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 178: // patternExpr -> entityPatternExpr
 { CurrentSemanticValue.patternExpr = ValueStack[ValueStack.Depth-1].patternExpr; }
         break;
-      case 179: // patternExpr -> patternWildcardExpr
+      case 179: // patternExpr -> wildcardPatternExpr
 { CurrentSemanticValue.patternExpr = ValueStack[ValueStack.Depth-1].patternExpr; }
         break;
       case 180: // patternExpr -> T_WORD
@@ -1204,7 +1204,7 @@ internal partial class ConfigParser: ShiftReduceParser<ValueType, LexLocation>
       case 185: // entityPatternExpr -> T_LBRACE, T_WORD, T_RBRACE
 { CurrentSemanticValue.patternExpr = new EntityPatternExpr(ValueStack[ValueStack.Depth-2].s, null); }
         break;
-      case 186: // patternWildcardExpr -> T_LT, T_WORD, T_GT
+      case 186: // wildcardPatternExpr -> T_LT, T_WORD, T_GT
 { CurrentSemanticValue.patternExpr = new WildcardPatternExpr(ValueStack[ValueStack.Depth-2].s); }
         break;
     }

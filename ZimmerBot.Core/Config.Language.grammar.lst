@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 11-05-2020 00:09:59>
+//  GPPG error listing for yacc source file <ConfigParser\Config.Language.grammar.y - 11-05-2020 14:35:37>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  JORN-PC2
-//  DateTime: 11-05-2020 00:10:01
+//  DateTime: 11-05-2020 14:35:38
 //  UserName: jorn
 // ==========================================================================
 
@@ -590,7 +590,7 @@ patternExprSeq
 
 patternExpr
   : entityPatternExpr   { $$.patternExpr = $1.patternExpr; }
-  | patternWildcardExpr { $$.patternExpr = $1.patternExpr; }
+  | wildcardPatternExpr { $$.patternExpr = $1.patternExpr; }
   | T_WORD              { $$.patternExpr = new WordPatternExpr($1.s); }
   | T_CWORD             { $$.patternExpr = new ConceptPatternExpr($1.s); }
   | T_STRING            { $$.patternExpr = new WordPatternExpr($1.s); }
@@ -602,7 +602,7 @@ entityPatternExpr
   | T_LBRACE T_WORD T_RBRACE { $$.patternExpr = new EntityPatternExpr($2.s, null); }
   ;
 
-patternWildcardExpr
+wildcardPatternExpr
   : T_LT T_WORD T_GT { $$.patternExpr = new WildcardPatternExpr($2.s); }
   ;
 
