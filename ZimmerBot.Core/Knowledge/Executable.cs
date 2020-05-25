@@ -163,7 +163,7 @@ namespace ZimmerBot.Core.Knowledge
     protected string AddMoreNotificationText(string text, bool hasMore)
     {
       if (hasMore)
-        return text + AppSettings.MessageSequenceNotoficationText;
+        return text + AppSettings.MessageSequenceNotificationText;
       else
         return text;
     }

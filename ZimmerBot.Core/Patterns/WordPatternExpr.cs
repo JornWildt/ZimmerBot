@@ -59,7 +59,7 @@ namespace ZimmerBot.Core.Patterns
     {
       for (int i = 0; i < input.Count; ++i)
       {
-        if (input[i].Type == ZToken.TokenType.Word && input[i].Matches(Word))
+        if (input[i] is ZTokenWord && input[i].Matches(Word))
         {
           double maxSize = Math.Max(expressions.Count, input.Count);
           int dist = i - myPos;

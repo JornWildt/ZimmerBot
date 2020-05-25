@@ -27,15 +27,14 @@ Other      .
 
 \"          { StringInput = new StringBuilder(); BEGIN(str); }
 
-{Word}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.Word); return (int)Token.T_WORD; }
+{Word}		  { yylval.t = new ZTokenWord(yytext); return (int)Token.T_WORD; }
 
-{Number}		{ yylval.t = new ZToken(yytext, ZToken.TokenType.Number); return (int)Token.T_NUMBER; }
+// Not really used
+// {Number}		{ yylval.t = new ZToken(yytext, ZToken.TokenType.Number); return (int)Token.T_NUMBER; }
+// {EMail}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_EMAIL; }
+// {URL}		    { yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_URL; }
 
-{EMail}		  { yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_EMAIL; }
-
-{URL}		    { yylval.t = new ZToken(yytext, ZToken.TokenType.EMail); return (int)Token.T_URL; }
-
-{Delimiter}	{ yylval.t = new ZToken(yytext); return (int)Token.T_DELIMITER; }
+{Delimiter}	{ yylval.t = new ZTokenWord(yytext); return (int)Token.T_DELIMITER; }
 
 {Space}+		/* skip */
 
@@ -44,7 +43,7 @@ Other      .
 <str>[^\n\"]* { StringInput.Append(yytext); }
 <str>\"       { 
                 BEGIN(INITIAL); 
-                yylval.t = new ZToken(StringInput.ToString(), ZToken.TokenType.Word); 
+                yylval.t = new ZTokenWord(StringInput.ToString()); 
                 return (int)Token.T_STRING; 
               }
 

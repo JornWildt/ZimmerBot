@@ -18,6 +18,8 @@ namespace ZimmerBot.Core.Patterns
 
     public List<Pattern> Patterns { get; protected set; }
 
+    public Dictionary<string, double> WordInPatternSetProbability { get; set; }
+
 
     private double? _numberOfWords;
     public double NumberOfWords
@@ -112,6 +114,21 @@ namespace ZimmerBot.Core.Patterns
 
     public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {
+      WordInPatternSetProbability = new Dictionary<string, double>();
+
+      foreach (var pattern in Patterns)
+        pattern.InitializeStatistics(totalNumberOfPatterns, totalNumberOfWords);
+
+      // All patterns have equal probability since this system have no apriori knowledge of actual usage patterns
+      double patternProbability = 1.0 / totalNumberOfPatterns;
+
+      // Normalize
+      foreach (string key in WordInPatternSetProbability.Keys.ToArray())
+      {
+        WordInPatternSetProbability[key]
+          = Math.Log(patternProbability * (WordInPatternSetProbability[key] + 1) / (NumberOfWords + totalNumberOfWords));
+      }
+
       foreach (var pattern in Patterns)
         pattern.UpdateStatistics(totalNumberOfPatterns, totalNumberOfWords);
     }

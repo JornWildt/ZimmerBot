@@ -20,7 +20,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
             string word = input[i].OriginalText;
             string checkedWord = SpellChecker.SpellCheck(word);
             BotUtility.EvaluationLogger.Debug($"Spell checking {word} => {checkedWord}");
-            input[i] = new ZToken(checkedWord, input[i]);
+            input[i] = input[i].CorrectWord(checkedWord);
           }
         }
       }

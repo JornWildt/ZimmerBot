@@ -76,7 +76,7 @@ namespace ZimmerBot.Core.Knowledge
               (
                 pair.Value == Constants.StarValue
                 || (pair.Operator == "=" && value.OriginalText.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
-                || (pair.Operator == ":" && value.Type == ZToken.TokenType.Entity && value.EntityClass.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
+                || (pair.Operator == ":" && (value is ZTokenEntity te) && te.EntityClass.Equals(pair.Value, StringComparison.CurrentCultureIgnoreCase))
               ))
             {
               pairOk = true;

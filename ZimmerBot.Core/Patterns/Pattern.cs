@@ -119,7 +119,7 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
+    public void InitializeStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {
       TotalNumberOfWords = totalNumberOfWords;
       WordInPatternProbability = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
@@ -132,9 +132,17 @@ namespace ZimmerBot.Core.Patterns
           WordInPatternProbability[key] = 0;
         WordInPatternProbability[key] += 1;
 
+        if (!ParentPatternSet.WordInPatternSetProbability.ContainsKey(key))
+          ParentPatternSet.WordInPatternSetProbability[key] = 0;
+        ParentPatternSet.WordInPatternSetProbability[key] += 1;
+
         RelatedExpression[key] = expr;
       }
+    }
 
+
+    public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
+    {
       // All patterns have equal probability since this system have no apriori knowledge of actual usage patterns
       PatternProbability = 1.0 / totalNumberOfPatterns;
 
@@ -158,28 +166,31 @@ namespace ZimmerBot.Core.Patterns
       double prob = 0.0;
       explanation = new List<string>();
 
+      // Let wildcard expressions reduce the input, going from multiple wildcard-matched tokens to a single large token.
+      double reductionWeight = 1.0;
+      for (int i = 0; i < Expressions.Count; ++i)
+        input = Expressions[i].ReduceInput(input, i, Expressions, ref reductionWeight);
+
       foreach (var token in input)
       {
-        string key = (token.Type == ZToken.TokenType.Entity
-          ? EntityPatternExpr.GetIdentifier(token.EntityClass, token.EntityNumber)
-          : token.OriginalText);
+        string key = token.GetKey();
+        string untypedKey = token.GetUntypedKey();
 
-        string wildcardKey = (token.Type == ZToken.TokenType.Entity
-          ? EntityPatternExpr.GetIdentifier("", token.EntityNumber)
-          : token.OriginalText);
+        //IDictionary<string, double> probs = ParentPatternSet.WordInPatternSetProbability;
+        IDictionary<string, double> probs = WordInPatternProbability;
 
-        if (WordInPatternProbability.ContainsKey(key))
+        if (probs.ContainsKey(key))
         {
-          prob += WordInPatternProbability[key];
+          prob += probs[key];
           explanation.Add($"+'{key}'");
 
           if (RelatedExpression.ContainsKey(key))
             prob *= RelatedExpression[key].ProbabilityFactor;
         }
-        else if (WordInPatternProbability.ContainsKey(wildcardKey))
+        else if (probs.ContainsKey(untypedKey))
         {
-          prob += WordInPatternProbability[wildcardKey];
-          explanation.Add($"+'{wildcardKey}'");
+          prob += probs[untypedKey];
+          explanation.Add($"+'{untypedKey}'");
         }
         else
         {
@@ -192,6 +203,9 @@ namespace ZimmerBot.Core.Patterns
       if (Expressions.Count > input.Count)
         prob += (UnknownWordProbability / 10) * (Expressions.Count - input.Count);
 
+      //prob += reductionWeight > 0 ? Math.Log(reductionWeight) : UnknownWordProbability * 10;
+      if (reductionWeight < 1.0)
+        prob -= 10000;
 
       return prob;
     }
@@ -204,8 +218,9 @@ namespace ZimmerBot.Core.Patterns
       explanation = new List<string>();
 
       // Let wildcard expressions reduce the input, going from multiple wildcard-matched tokens to a single large token.
+      double reductionWeight = 1.0;
       for (int i = 0; i < Expressions.Count; ++i)
-        input = Expressions[i].ReduceInput(input, i, Expressions);
+        input = Expressions[i].ReduceInput(input, i, Expressions, ref reductionWeight);
 
       for (int i=0; i<Expressions.Count; ++i)
       {

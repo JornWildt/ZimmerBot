@@ -20,6 +20,7 @@ namespace ZimmerBot.Core.Patterns
       {
         _entityClass = value;
         _identifier = GetIdentifier(value, EntityNumber);
+        _toString = "{" + EntityClass + ":" + ParameterName + "}";
       }
     }
 
@@ -38,8 +39,11 @@ namespace ZimmerBot.Core.Patterns
       {
         _entityNumber = value;
         _identifier = GetIdentifier(EntityClass, value);
+        _toString = "{" + EntityClass + ":" + ParameterName + "}";
       }
     }
+
+    private string _toString;
 
 
     public EntityPatternExpr(string parameterName, string entityClass)
@@ -82,10 +86,7 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public override string ToString()
-    {
-      return "{" + EntityClass + ":" + ParameterName + "}";
-    }
+    public override string ToString() => _toString;
 
 
     public override void ExtractWordsForSpellChecker()
@@ -114,12 +115,11 @@ namespace ZimmerBot.Core.Patterns
     {
       // FIXME: Handle "star" entity class
 
-
       for (int i = 0; i < input.Count; ++i)
       {
-        if (input[i].Type == ZToken.TokenType.Entity
-            && input[i].EntityNumber == EntityNumber
-            && (EntityClass == null || input[i].EntityClass == EntityClass))
+        if (input[i] is ZTokenEntity te
+            && te.EntityNumber == EntityNumber
+            && (EntityClass == null || te.EntityClass == EntityClass))
         {
           int dist = i - myPos;
           return (double)(expressions.Count - Math.Abs(dist)) / (double)expressions.Count;

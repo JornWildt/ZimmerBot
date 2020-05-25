@@ -10,22 +10,40 @@ namespace ZimmerBot.Core.Patterns
   {
     public string ParameterName { get; protected set; }
 
-    public override string Identifier => ParameterName;
+    public int WildcardNumber { get; protected set; }
 
     public override double Weight => 1.0;
 
     public override double ProbabilityFactor => 1.0;
 
+    private string _toString;
+
+
     public WildcardPatternExpr(string name)
     {
       Condition.Requires(name, nameof(name)).IsNotNullOrWhiteSpace();
       ParameterName = name;
+      _identifier = GetIdentifier(WildcardNumber);
+      _toString = "<" + name + ">";
     }
+
+
+    public override void UpdateEntityNumber(ref int entityNumber)
+    {
+      WildcardNumber = entityNumber++;
+      _identifier = GetIdentifier(WildcardNumber);
+    }
+
+
+    private string _identifier;
+
+    public override string Identifier => _identifier;
+
 
 
     public override string ToString()
     {
-      return ParameterName;
+      return _toString;
     }
 
 
@@ -33,6 +51,9 @@ namespace ZimmerBot.Core.Patterns
     {
       // Do nothing
     }
+
+
+    public static string GetIdentifier(int number) => "Wildcard-" + number;
 
 
     protected Dictionary<string, bool> Words_Left = null;
@@ -77,7 +98,7 @@ namespace ZimmerBot.Core.Patterns
         matchValues[ParameterName] = MatchedValue;
     }
 
-    public override ZTokenSequence ReduceInput(ZTokenSequence input, int myPos, List<PatternExpr> expressions)
+    public override ZTokenSequence ReduceInput(ZTokenSequence input, int myPos, List<PatternExpr> expressions, ref double reductionWeight)
     {
       Initialize(myPos, expressions);
 
@@ -88,7 +109,7 @@ namespace ZimmerBot.Core.Patterns
       for (int i = 0; i < input.Count; ++i)
       {
         int l = i;
-        if (l < myPos && input[l].Type == ZToken.TokenType.Word
+        if (l < myPos && input[l] is ZTokenWord
             && Words_Left.ContainsKey(input[l].OriginalText) && !Words_Left[input[l].OriginalText])
         {
           Words_Left[input[l].OriginalText] = true;
@@ -97,7 +118,7 @@ namespace ZimmerBot.Core.Patterns
         }
 
         int r = input.Count - i - 1;
-        if (r > myPos && input[r].Type == ZToken.TokenType.Word
+        if (r > myPos && input[r] is ZTokenWord
             && Words_Right.ContainsKey(input[r].OriginalText) && !Words_Right[input[r].OriginalText])
         {
           Words_Right[input[r].OriginalText] = true;
@@ -112,9 +133,11 @@ namespace ZimmerBot.Core.Patterns
         for (int i = left + 1; i < right; ++i)
           result += (i > left + 1 ? " " : "") + input[i].OriginalText;
         
-        MatchedValue = new ZToken(result, ZToken.TokenType.Wildcard);
+        MatchedValue = new ZTokenWildcard(result, WildcardNumber);
         MatchedScore = (double)((Words_Left.Count > 0 ? (double)left_count / Words_Left.Count : 1.0)
          + (Words_Right.Count > 0 ? (double)right_count / Words_Right.Count : 1.0)) / 2.0;
+
+        reductionWeight *= (Words_Left.Count > 0 ? (double)left_count / Words_Left.Count : 1.0) * (Words_Right.Count > 0 ? (double)right_count / Words_Right.Count : 1.0);
 
         ZTokenSequence output = new ZTokenSequence(input.Take(left+1));
         output.Add(MatchedValue);

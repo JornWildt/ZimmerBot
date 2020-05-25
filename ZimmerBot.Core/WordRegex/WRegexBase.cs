@@ -103,11 +103,11 @@ namespace ZimmerBot.Core.WordRegex
 
       // Make sure all match groups exists
       for (int i = 1; i < context.CurrentRepetitionIndex; ++i)
-        result.Matches[i.ToString()] = new ZToken("");
+        result.Matches[i.ToString()] = new ZTokenWord("");
 
       if (matchNode != null)
         foreach (var m in matchNode.Matches)
-          result.Matches[m.Key] = new ZToken(m.Value);
+          result.Matches[m.Key] = new ZTokenWord(m.Value);
 
       return result;
     }
@@ -138,7 +138,7 @@ namespace ZimmerBot.Core.WordRegex
 
         bool entityOk = 
           c.Node.Type == NFANode.TypeEnum.EntityLiteral
-            && inp.Type == ZToken.TokenType.Entity;
+            && inp is ZTokenEntity;
 
         if (literalOk || entityOk)
         {

@@ -9,7 +9,7 @@ namespace ZimmerBot.Core.Patterns
     {
       if (Count == 0)
         return "<empty>";
-      return this.Select(item => item.ToString()).Aggregate((a, b) => a + " / " + b);
+      return this.Select(item => item.ToString()).Aggregate((a, b) => a + " \n " + b);
     }
   }
 }

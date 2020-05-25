@@ -25,12 +25,12 @@ namespace ZimmerBot.Core.Patterns
       foreach (var id in identifiers)
       {
         if (id.Value != null)
-          MatchValues.Add(id.Key, new ZToken(id.Value));
+          MatchValues.Add(id.Key, new ZTokenWord(id.Value));
         else
           MatchValues.Add(id.Key, null);
       }
 
-      Queue<ZToken> entityTokens = new Queue<ZToken>(input.Where(t => t.Type == ZToken.TokenType.Entity));
+      Queue<ZToken> entityTokens = new Queue<ZToken>(input.Where(t => t is ZTokenEntity));
       foreach (PatternExpr expr in MatchPattern.Expressions)
       {
         expr.ExtractMatchValues(MatchValues, entityTokens);

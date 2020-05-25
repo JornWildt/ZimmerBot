@@ -23,7 +23,7 @@ namespace ZimmerBot.Core.Pipeline.InputStages
             string word = input[i].OriginalText;
             string stem = SpellChecker.Stem(word);
             BotUtility.EvaluationLogger.Debug($"Stemming {word} => {stem}");
-            input[i] = new ZToken(stem, input[i]);
+            input[i] = input[i].CorrectWord(stem);
           }
         }
       }

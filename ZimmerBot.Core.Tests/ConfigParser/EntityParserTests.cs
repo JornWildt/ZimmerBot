@@ -16,29 +16,29 @@ namespace ZimmerBot.Core.Tests.ConfigParser
       // Arrange
       var x = new Tuple<string, ZTokenSequence, int, int>[]
       {
-        new Tuple<string, ZTokenSequence, int, int>("zimmers", new ZTokenSequence { new ZToken("zimmers", "organization") }, 1, 0),
-        new Tuple<string, ZTokenSequence, int, int>("acme INC", new ZTokenSequence { new ZToken("acme INC", "organization") }, 1, 0),
+        new Tuple<string, ZTokenSequence, int, int>("zimmers", new ZTokenSequence { new ZTokenEntity("zimmers", "organization") }, 1, 0),
+        new Tuple<string, ZTokenSequence, int, int>("acme INC", new ZTokenSequence { new ZTokenEntity("acme INC", "organization") }, 1, 0),
         new Tuple<string, ZTokenSequence, int, int>(
           "where is Blue whale located",
-          new ZTokenSequence { new ZToken("where"), new ZToken("is"), new ZToken("Blue whale", "organization"), new ZToken("located") },
+          new ZTokenSequence { new ZTokenWord("where"), new ZTokenWord("is"), new ZTokenEntity("Blue whale", "organization"), new ZTokenWord("located") },
           1, 0),
         new Tuple<string, ZTokenSequence, int, int>(
           "Here is national health insurance",
-          new ZTokenSequence { new ZToken("Here"), new ZToken("is"), new ZToken("national health insurance", "organization") },
+          new ZTokenSequence { new ZTokenWord("Here"), new ZTokenWord("is"), new ZTokenEntity("national health insurance", "organization") },
           1, 0),
         new Tuple<string, ZTokenSequence, int, int>(
           "Here is national health insurance and national health and acme inc and some more",
           new ZTokenSequence {
-            new ZToken("Here"),
-            new ZToken("is"),
-            new ZToken("national health insurance", "organization"),
-            new ZToken("and"),
-            new ZToken("national health", "organization"),
-            new ZToken("and"),
-            new ZToken("acme inc", "organization"),
-            new ZToken("and"),
-            new ZToken("some"),
-            new ZToken("more")},
+            new ZTokenWord("Here"),
+            new ZTokenWord("is"),
+            new ZTokenEntity("national health insurance", "organization"),
+            new ZTokenWord("and"),
+            new ZTokenEntity("national health", "organization"),
+            new ZTokenWord("and"),
+            new ZTokenEntity("acme inc", "organization"),
+            new ZTokenWord("and"),
+            new ZTokenWord("some"),
+            new ZTokenWord("more")},
           7, 2),
       };
 
@@ -58,7 +58,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
 
       foreach (var src in x)
       {
-        ZTokenSequence zinput = new ZTokenSequence(src.Item1.Split(' ').Select(i => new ZToken(i)));
+        ZTokenSequence zinput = new ZTokenSequence(src.Item1.Split(' ').Select(i => new ZTokenWord(i)));
         ZTokenSequenceList result = new ZTokenSequenceList();
         kb.EntityManager.FindEntities(zinput, result);
 
@@ -72,7 +72,7 @@ namespace ZimmerBot.Core.Tests.ConfigParser
         for (int i = 0; i < expectedOutput.Count; ++i)
         {
           Assert.AreEqual(expectedOutput[i].OriginalText, res[i].OriginalText, $"Testing: {src.Item1}");
-          Assert.AreEqual(expectedOutput[i].EntityClass, res[i].EntityClass, $"Testing: {src.Item1}");
+          Assert.AreEqual((expectedOutput[i] as ZTokenEntity)?.EntityClass, (res[i] as ZTokenEntity)?.EntityClass, $"Testing: {src.Item1}");
         }
       }
     }

@@ -20,7 +20,7 @@ namespace ZimmerBot.Core.Patterns
 
     public virtual void RegisterReferencedParameter(HashSet<string> p) { }
 
-    public virtual ZTokenSequence ReduceInput(ZTokenSequence input, int myPos, List<PatternExpr> expressions) => input;
+    public virtual ZTokenSequence ReduceInput(ZTokenSequence input, int myPos, List<PatternExpr> expressions, ref double reductionWeight) => input;
 
     public abstract double CalculateMatch(ZTokenSequence input, int myPos, List<PatternExpr> expressions);
   }
