@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CuttingEdge.Conditions;
 using ZimmerBot.Core.Knowledge;
 
@@ -20,9 +18,11 @@ namespace ZimmerBot.Core.Patterns
 
     public Dictionary<string, double> WordInPatternSetProbability { get; set; }
 
+    public double UnknownWordProbability { get; set; }
+
 
     private double? _numberOfWords;
-    public double NumberOfWords
+    public double NumberOfWordsInPatternSet
     {
       get
       {
@@ -114,7 +114,7 @@ namespace ZimmerBot.Core.Patterns
 
     public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {
-      WordInPatternSetProbability = new Dictionary<string, double>();
+      WordInPatternSetProbability = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
       foreach (var pattern in Patterns)
         pattern.InitializeStatistics(totalNumberOfPatterns, totalNumberOfWords);
@@ -122,12 +122,15 @@ namespace ZimmerBot.Core.Patterns
       // All patterns have equal probability since this system have no apriori knowledge of actual usage patterns
       double patternProbability = 1.0 / totalNumberOfPatterns;
 
-      // Normalize
+      // Normalize (at this point WordInPatternSetProbability[key] holds the count of "key").
       foreach (string key in WordInPatternSetProbability.Keys.ToArray())
       {
         WordInPatternSetProbability[key]
-          = Math.Log(patternProbability * (WordInPatternSetProbability[key] + 1) / (NumberOfWords + totalNumberOfWords));
+          = Math.Log(patternProbability * (WordInPatternSetProbability[key] + 1) / (NumberOfWordsInPatternSet + totalNumberOfWords));
       }
+
+      // Probability for completely unknown words
+      UnknownWordProbability = Math.Log(patternProbability * 1 / (NumberOfWordsInPatternSet + totalNumberOfWords));
 
       foreach (var pattern in Patterns)
         pattern.UpdateStatistics(totalNumberOfPatterns, totalNumberOfWords);

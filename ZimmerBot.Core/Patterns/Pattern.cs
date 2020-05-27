@@ -23,8 +23,6 @@ namespace ZimmerBot.Core.Patterns
 
     protected double TotalNumberOfWords { get; set; }
 
-    protected double PatternProbability { get; set; }
-
     protected double UnknownWordProbability { get; set; }
 
 
@@ -144,17 +142,17 @@ namespace ZimmerBot.Core.Patterns
     public void UpdateStatistics(double totalNumberOfPatterns, double totalNumberOfWords)
     {
       // All patterns have equal probability since this system have no apriori knowledge of actual usage patterns
-      PatternProbability = 1.0 / totalNumberOfPatterns;
+      double patternProbability = 1.0 / totalNumberOfPatterns;
 
       // Normalize
       foreach (string key in WordInPatternProbability.Keys.ToArray())
       {
         WordInPatternProbability[key]
-          = Math.Log(PatternProbability * (WordInPatternProbability[key] + 1) / (NumberOfWords + totalNumberOfWords));
+          = Math.Log(patternProbability * (WordInPatternProbability[key] + 1) / (NumberOfWords + totalNumberOfWords));
       }
 
       // Probability for completely unknown words
-      UnknownWordProbability = Math.Log(PatternProbability * 1 / (NumberOfWords + TotalNumberOfWords));
+      UnknownWordProbability = Math.Log(patternProbability * 1 / (NumberOfWords + TotalNumberOfWords));
     }
 
 
@@ -171,20 +169,23 @@ namespace ZimmerBot.Core.Patterns
       for (int i = 0; i < Expressions.Count; ++i)
         input = Expressions[i].ReduceInput(input, i, Expressions, ref reductionWeight);
 
+      IDictionary<string, double> probs = ParentPatternSet.WordInPatternSetProbability;
+      //IDictionary<string, double> probs = WordInPatternProbability;
+
+      double unknownWordProp = ParentPatternSet.UnknownWordProbability;
+      //double unknownWordProp = UnknownWordProbability;
+
       foreach (var token in input)
       {
         string key = token.GetKey();
         string untypedKey = token.GetUntypedKey();
-
-        //IDictionary<string, double> probs = ParentPatternSet.WordInPatternSetProbability;
-        IDictionary<string, double> probs = WordInPatternProbability;
 
         if (probs.ContainsKey(key))
         {
           prob += probs[key];
           explanation.Add($"+'{key}'");
 
-          prob += (double)(token.Size - 1) * (probs[key] + UnknownWordProbability) / 2.0;
+          prob += (double)(token.Size - 1) * (probs[key] + unknownWordProp) / 2.0;
 
           if (RelatedExpression.ContainsKey(key))
             prob *= RelatedExpression[key].ProbabilityFactor;
@@ -196,17 +197,17 @@ namespace ZimmerBot.Core.Patterns
         }
         else
         {
-          prob += UnknownWordProbability;
+          prob += unknownWordProp;
           explanation.Add($"('{key}')");
         }
       }
 
       // Unmatched words in pattern counts negative
       if (Expressions.Count > input.Count)
-        prob += (UnknownWordProbability / 10) * (Expressions.Count - input.Count);
+        prob += (unknownWordProp / 10) * (Expressions.Count - input.Count);
 
-      //prob += reductionWeight > 0 ? Math.Log(reductionWeight) : UnknownWordProbability * 10;
-      //prob += reductionWeight * UnknownWordProbability;
+      //prob += reductionWeight > 0 ? Math.Log(reductionWeight) : unknownWordProp * 10;
+      //prob += reductionWeight * unknownWordProp;
 
       return prob;
     }

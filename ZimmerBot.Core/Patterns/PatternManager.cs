@@ -42,7 +42,7 @@ namespace ZimmerBot.Core.Patterns
         entry.SetupComplete(KnowledgeBase);
 
       TotalNumberOfPatterns = PatternSets.Sum(p => p.Patterns.Count); ;
-      TotalNumberOfWords = PatternSets.Sum(p => p.NumberOfWords);
+      TotalNumberOfWords = PatternSets.Sum(p => p.NumberOfWordsInPatternSet);
 
       foreach (var entry in PatternSets)
       {
@@ -126,9 +126,9 @@ namespace ZimmerBot.Core.Patterns
       // This value approximates the smallest probability for a match 
       // (namely P(u)^N where N = number of un-matched words "u")
       double minimalAllowedProb = inputTokenCount *
-        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords + inputTokenCount));
+        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords));
 
-      minimalAllowedProb += Math.Log(inputTokenCount + 1);
+      //minimalAllowedProb += Math.Log(inputTokenCount + 1);
 
       // This value represents the best probability found so far - might as well start with the minimal allowed probability
       double maxProb = minimalAllowedProb;
