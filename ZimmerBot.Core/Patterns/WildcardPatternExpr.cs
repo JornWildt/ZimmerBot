@@ -132,14 +132,14 @@ namespace ZimmerBot.Core.Patterns
         string result = "";
         for (int i = left + 1; i < right; ++i)
           result += (i > left + 1 ? " " : "") + input[i].OriginalText;
-        
-        MatchedValue = new ZTokenWildcard(result, WildcardNumber);
+
+        MatchedValue = new ZTokenWildcard(result, WildcardNumber, right - left - 1);
         MatchedScore = (double)((Words_Left.Count > 0 ? (double)left_count / Words_Left.Count : 1.0)
          + (Words_Right.Count > 0 ? (double)right_count / Words_Right.Count : 1.0)) / 2.0;
 
         reductionWeight *= (Words_Left.Count > 0 ? (double)left_count / Words_Left.Count : 1.0) * (Words_Right.Count > 0 ? (double)right_count / Words_Right.Count : 1.0);
 
-        ZTokenSequence output = new ZTokenSequence(input.Take(left+1));
+        ZTokenSequence output = new ZTokenSequence(input.Take(left + 1));
         output.Add(MatchedValue);
         output.AddRange(input.Skip(right));
         return output;

@@ -24,6 +24,8 @@ namespace ZimmerBot.Core.Parser
 
     public abstract string GetUntypedKey();
 
+    public virtual int Size => 1;
+
 
     public bool Matches(string v)
     {

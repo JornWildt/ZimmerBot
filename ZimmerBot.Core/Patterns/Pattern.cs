@@ -167,7 +167,7 @@ namespace ZimmerBot.Core.Patterns
       explanation = new List<string>();
 
       // Let wildcard expressions reduce the input, going from multiple wildcard-matched tokens to a single large token.
-      double reductionWeight = 1.0;
+      double reductionWeight = 0.0;
       for (int i = 0; i < Expressions.Count; ++i)
         input = Expressions[i].ReduceInput(input, i, Expressions, ref reductionWeight);
 
@@ -183,6 +183,8 @@ namespace ZimmerBot.Core.Patterns
         {
           prob += probs[key];
           explanation.Add($"+'{key}'");
+
+          prob += (double)(token.Size - 1) * (probs[key] + UnknownWordProbability) / 2.0;
 
           if (RelatedExpression.ContainsKey(key))
             prob *= RelatedExpression[key].ProbabilityFactor;
@@ -204,8 +206,7 @@ namespace ZimmerBot.Core.Patterns
         prob += (UnknownWordProbability / 10) * (Expressions.Count - input.Count);
 
       //prob += reductionWeight > 0 ? Math.Log(reductionWeight) : UnknownWordProbability * 10;
-      if (reductionWeight < 1.0)
-        prob -= 10000;
+      //prob += reductionWeight * UnknownWordProbability;
 
       return prob;
     }

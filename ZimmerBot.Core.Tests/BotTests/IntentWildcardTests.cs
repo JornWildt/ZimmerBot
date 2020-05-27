@@ -34,12 +34,14 @@ namespace ZimmerBot.Core.Tests.BotTests
 ";
       BuildBot(cfg);
 
-      //AssertDialog("find all film about dogs and cats", "Searching (film) about: dogs and cats.");
-      //AssertDialog("find nonsense about the usual stuff", "???");
+      AssertDialog("find all film about dogs and cats", "Searching (film) about: dogs and cats.");
+      AssertDialog("find nonsense about the usual stuff", "???");
       AssertDialog("find all about cats and dogs in photo", "Searching (photo) about: cats and dogs.");
-      //AssertDialog("what photo related to white water rafting are you able to find", "Searching (photo) about: white water rafting.");
-      //AssertDialog("find dungeons and dragons in photo", "Searching (photo) about: dungeons and dragons.");
-      //AssertDialog("find stuff about cats and dogs in photo", "Searching (photo) about: cats and dogs.");
+      AssertDialog("what photo related to white water rafting are you able to find", "Searching (photo) about: white water rafting.");
+      AssertDialog("find dungeons and dragons in photo", "Searching (photo) about: dungeons and dragons.");
+
+      // "stuff about" does not match any pattern, so it gets included in "> find <query> in {t}"
+      // AssertDialog("find stuff about cats and dogs in photo", "Searching (photo) about: cats and dogs.");
     }
   }
 }

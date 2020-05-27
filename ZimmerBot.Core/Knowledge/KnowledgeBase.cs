@@ -273,7 +273,7 @@ namespace ZimmerBot.Core.Knowledge
       {
         if (context.InputContext.Input != null)
         {
-          PatternMatchResultList matchingPatterns = PatternManager.CalculateMostLikelyPattern(context.InputContext.Input);
+          PatternMatchResultList matchingPatterns = PatternManager.CalculateMostLikelyPattern_V1(context.InputContext.Input);
 
           // Add match values from previous match
           MatchResult previousMatch = context.InputContext.Session.Store[SessionKeys.LatestMatch] as MatchResult;
