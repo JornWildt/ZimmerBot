@@ -165,7 +165,7 @@ namespace ZimmerBot.Core.Tests.BotTests
 
       AssertDialog("how do you kill a zombie", "zombie: With an axe");
       AssertDialog("how you kill a zombie", "zombie: With an axe");
-      AssertDialog("how you hug a zombie", "???");
+      AssertDialog("how you hug a zombie", "zombie: With an axe");
     }
 
 

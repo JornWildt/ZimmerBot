@@ -123,15 +123,20 @@ namespace ZimmerBot.Core.Patterns
 
       int inputTokenCount = inputs.Min(inp => inp.Count);
 
+      double worstCaseUnknownWordProb = PatternSets.Min(ps => ps.UnknownWordProbability);
+      double bestCaseUnknownWordProb = PatternSets.Max(ps => ps.WordInPatternSetProbability.Max(p => p.Value));
+      double mediumUnknownWordProb = (worstCaseUnknownWordProb + bestCaseUnknownWordProb) / 2.0;
+
       // This value approximates the smallest probability for a match 
       // (namely P(u)^N where N = number of un-matched words "u")
-      double minimalAllowedProb = inputTokenCount *
-        Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords));
+      double minimalAllowedProb = inputTokenCount * mediumUnknownWordProb;
+        //Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords));
 
       //minimalAllowedProb += Math.Log(inputTokenCount + 1);
 
       // This value represents the best probability found so far - might as well start with the minimal allowed probability
       double maxProb = minimalAllowedProb;
+      double nearestProb = maxProb;
 
       // Try all possible variations/reductions of the input
       foreach (ZTokenSequence input in inputs)
@@ -144,6 +149,7 @@ namespace ZimmerBot.Core.Patterns
 
           if (pb > maxProb)
           {
+            nearestProb = maxProb;
             maxProb = pb;
             result.Clear();
             // Add possible combinations of pattern identifiers as result
