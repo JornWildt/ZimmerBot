@@ -50,27 +50,7 @@ namespace ZimmerBot.Core.Patterns
 
     public void SetupComplete(KnowledgeBase kb)
     {
-      ExpandPatterns(kb);
       UnfoldIdentifiers();
-    }
-
-
-    public void ExpandPatterns(KnowledgeBase kb)
-    {
-      Pattern[] existingPatterns = Patterns.ToArray();
-      Patterns.Clear();
-
-      foreach (Pattern p in existingPatterns)
-      {
-        p.ExpandExpressions(kb, Patterns);
-      }
-
-      //ReferencedIdentifiers = new HashSet<string>();
-      //foreach (Pattern p in Patterns)
-      //{
-      //  foreach (string id in p.ReferencedParameters)
-      //    ReferencedIdentifiers.Add(id);
-      //}
     }
 
 

@@ -129,6 +129,7 @@
     <Compile Include="Knowledge\WeightRuleModifier.cs" />
     <Compile Include="Knowledge\WordDefinition.cs" />
     <Compile Include="Knowledge\WordDefinitionManager.cs" />
+    <Compile Include="Parser\ZTokenConcept.cs" />
     <Compile Include="Parser\ZTokenEntity.cs" />
     <Compile Include="Parser\ZTokenSequenceList.cs" />
     <Compile Include="Parser\ZTokenWildcard.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Patterns\WildcardPatternExpr.cs" />
     <Compile Include="Patterns\WordPatternExpr.cs" />
     <Compile Include="Pipeline\InputStages\ChatLoggerStage.cs" />
+    <Compile Include="Pipeline\InputStages\ConceptTaggingStage.cs" />
     <Compile Include="Pipeline\InputStages\OutputGeneratorStage.cs" />
     <Compile Include="Pipeline\InputStages\PipelineActionStage.cs" />
     <Compile Include="Pipeline\InputStages\SpellCheckerStage.cs" />

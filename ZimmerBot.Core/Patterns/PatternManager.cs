@@ -22,6 +22,8 @@ namespace ZimmerBot.Core.Patterns
 
     protected double BestCaseUnknownWordProb { get; set; }
 
+    protected double BestCaseKnownWordProb { get; set; }
+
     protected double MediumUnknownWordProb { get; set; }
 
 
@@ -61,8 +63,9 @@ namespace ZimmerBot.Core.Patterns
       if (PatternSets.Any())
       {
         WorstCaseUnknownWordProb = PatternSets.Min(ps => ps.UnknownWordProbability);
-        BestCaseUnknownWordProb = PatternSets.Max(ps => ps.WordInPatternSetProbability.Max(p => p.Value));
-        MediumUnknownWordProb = (WorstCaseUnknownWordProb + BestCaseUnknownWordProb) / 2.0;
+        BestCaseUnknownWordProb = PatternSets.Max(ps => ps.UnknownWordProbability);
+        BestCaseKnownWordProb = PatternSets.Max(ps => ps.WordInPatternSetProbability.Max(p => p.Value));
+        MediumUnknownWordProb = (WorstCaseUnknownWordProb);
       }
     }
 
@@ -136,7 +139,7 @@ namespace ZimmerBot.Core.Patterns
 
       int inputTokenCount = inputs.Min(inp => inp.Count);
 
-      double minimalAllowedProb = inputTokenCount * MediumUnknownWordProb * 2;
+      double minimalAllowedProb = inputTokenCount * MediumUnknownWordProb;
 
       // This value represents the best probability found so far - might as well start with the minimal allowed probability
       double maxProb = minimalAllowedProb;
@@ -147,7 +150,7 @@ namespace ZimmerBot.Core.Patterns
       {
         BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}. MinP = {minimalAllowedProb}.");
 
-        foreach (Pattern pt in PatternSets.SelectMany(ps => ps.RelevantPatternsForMatching))
+        foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))//RelevantPatternsForMatching))
         {
           double pb = pt.CalculateProbability(input, out List<string> reason);
 
@@ -180,6 +183,15 @@ namespace ZimmerBot.Core.Patterns
                 BotUtility.EvaluationLogger.Debug($"Similar match: {r.ToString()} ({pb})");
               }
               BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
+            }
+            else
+            {
+              // Debug stuff
+              //if (pt.Expressions[0].Identifier == "er")
+              //{
+              //  BotUtility.EvaluationLogger.Debug($"No match for {pt} => {pb}");
+              //  BotUtility.EvaluationLogger.Debug("  " + reason.Aggregate((a, b) => a + " | " + b));
+              //}
             }
           }
         }

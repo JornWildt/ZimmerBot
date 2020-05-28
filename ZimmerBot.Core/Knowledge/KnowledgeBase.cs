@@ -85,6 +85,7 @@ namespace ZimmerBot.Core.Knowledge
       InputPipeline.AddHandler(new WordStemmerStage());
       InputPipeline.AddHandler(new WordTaggingStage());
       InputPipeline.AddHandler(new EntityTaggingStage());
+      InputPipeline.AddHandler(new ConceptTaggingStage());
       InputPipeline.AddHandler(new TopicAssigningStage());
       InputPipeline.AddHandler(new ReactionGeneratorStage());
       InputPipeline.AddHandler(new OutputGeneratorStage());
@@ -119,7 +120,7 @@ namespace ZimmerBot.Core.Knowledge
         r.SetupComplete();
 
       EntityManager.SetupComplete();
-      PatternManager.SetupComplete();      
+      PatternManager.SetupComplete();
     }
 
 

@@ -72,47 +72,6 @@ namespace ZimmerBot.Core.Patterns
     }
 
 
-    public void ExpandExpressions(KnowledgeBase kb, List<Pattern> output)
-    {
-      Stack<PatternExpr> prefix = new Stack<PatternExpr>();
-      ExpandExpressions(kb, output, prefix, 0);
-    }
-
-
-    protected void ExpandExpressions(KnowledgeBase kb, List<Pattern> output, Stack<PatternExpr> prefix, int pos)
-    {
-      if (pos >= Expressions.Count)
-      {
-        Pattern newPattern = new Pattern(prefix.Reverse().ToList());
-        newPattern.RegisterParent(ParentPatternSet);
-        output.Add(newPattern);
-        return;
-      }
-
-      if (Expressions[pos] is ConceptPatternExpr cexpr)
-      {
-        if (!kb.Concepts.TryGetValue(cexpr.Word, out Concept c))
-          throw new InvalidOperationException($"Could not find concept '{cexpr.Word}' for pattern '{this.ToString()}'");
-
-        foreach (string word in c.ExpandPatterns())
-        {
-          string[] whitespace_expanded = word.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-          foreach (string subw in whitespace_expanded)
-            prefix.Push(new WordPatternExpr(subw));
-          ExpandExpressions(kb, output, prefix, pos + 1);
-          foreach (string subw in whitespace_expanded)
-            prefix.Pop();
-        }
-      }
-      else
-      {
-        prefix.Push(Expressions[pos]);
-        ExpandExpressions(kb, output, prefix, pos + 1);
-        prefix.Pop();
-      }
-    }
-
-
     public void ExtractWordsForSpellChecker()
     {
       foreach (var expr in Expressions)
@@ -174,8 +133,10 @@ namespace ZimmerBot.Core.Patterns
       for (int i = 0; i < Expressions.Count; ++i)
         input = Expressions[i].ReduceInput(input, i, Expressions, ref reductionWeight);
 
-      IDictionary<string, double> probs = ParentPatternSet.WordInPatternSetProbability;
-      //IDictionary<string, double> probs = WordInPatternProbability;
+      //IDictionary<string, double> probs = ParentPatternSet.WordInPatternSetProbability;
+      IDictionary<string, double> probs = WordInPatternProbability;
+      
+      IDictionary<string, double> parentProbs = ParentPatternSet.WordInPatternSetProbability;
 
       double unknownWordProp = ParentPatternSet.UnknownWordProbability;
       //double unknownWordProp = UnknownWordProbability;
@@ -188,7 +149,7 @@ namespace ZimmerBot.Core.Patterns
         if (probs.ContainsKey(key))
         {
           prob += probs[key];
-          explanation.Add($"+'{key}'");
+          explanation.Add($"+'{key}'({probs[key]})");
 
           prob += (double)(token.Size - 1) * (probs[key] + unknownWordProp) / 2.0;
 
@@ -198,12 +159,18 @@ namespace ZimmerBot.Core.Patterns
         else if (probs.ContainsKey(untypedKey))
         {
           prob += probs[untypedKey];
-          explanation.Add($"+'{untypedKey}'");
+          explanation.Add($"+'{untypedKey}'({probs[untypedKey]})");
+        }
+        else if (parentProbs.ContainsKey(key))
+        {
+          // If another pattern in this pattern contains the word, then it is still an unknown word - but with a slightly better chance of matching
+          prob += unknownWordProp * 0.95;
+          explanation.Add($"('{key}'({unknownWordProp * 0.95}))");
         }
         else
         {
           prob += unknownWordProp;
-          explanation.Add($"('{key}')");
+          explanation.Add($"('{key}'({unknownWordProp}))");
         }
       }
 

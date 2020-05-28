@@ -76,6 +76,18 @@ namespace ZimmerBot.Core.Knowledge
     }
 
 
+    public bool IsConceptMatch(ZTokenSequence input, int i, int j)
+    {
+      WRegexBase.EvaluationContext context = new WRegexBase.EvaluationContext(input, i, j);
+
+      MatchResult result = Choices.CalculateNFAMatch(context);
+      if (result.Score > 0)
+        return true;
+
+      return false;
+    }
+
+
     public void ExtractWordsForSpellChecker()
     {
       foreach (string word in ExpandPatterns())

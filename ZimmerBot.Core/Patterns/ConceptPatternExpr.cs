@@ -23,7 +23,7 @@ namespace ZimmerBot.Core.Patterns
 
     public override string Identifier
     {
-      get { return Word; }
+      get { return "%" + Word; }
     }
 
 
