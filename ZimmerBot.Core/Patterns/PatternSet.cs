@@ -142,5 +142,22 @@ namespace ZimmerBot.Core.Patterns
       foreach (var pattern in Patterns)
         pattern.ExtractWordsForSpellChecker();
     }
+
+
+    protected List<Pattern> _relevantPatternsForMatching;
+
+    public IEnumerable<Pattern> RelevantPatternsForMatching
+    {
+      get
+      {
+        if (_relevantPatternsForMatching == null)
+        {
+          _relevantPatternsForMatching = Patterns.Where(p => p.HasWildcardExpression).ToList();
+          if (_relevantPatternsForMatching.Count == 0)
+            _relevantPatternsForMatching.Add(Patterns.First(p => !p.HasWildcardExpression));
+        }
+        return _relevantPatternsForMatching;
+      }
+    }
   }
 }

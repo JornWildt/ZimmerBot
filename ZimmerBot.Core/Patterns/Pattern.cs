@@ -21,6 +21,8 @@ namespace ZimmerBot.Core.Patterns
 
     protected Dictionary<string, PatternExpr> RelatedExpression { get; set; }
 
+    public bool HasWildcardExpression { get; protected set; }
+
     protected double TotalNumberOfWords { get; set; }
 
     protected double UnknownWordProbability { get; set; }
@@ -39,6 +41,9 @@ namespace ZimmerBot.Core.Patterns
       {
         expr.UpdateEntityNumber(ref entityNum);
         expr.RegisterReferencedParameter(ReferencedParameters);
+
+        if (expr is WildcardPatternExpr)
+          HasWildcardExpression = true;
       }
 
       RelatedExpression = new Dictionary<string, PatternExpr>(StringComparer.OrdinalIgnoreCase);

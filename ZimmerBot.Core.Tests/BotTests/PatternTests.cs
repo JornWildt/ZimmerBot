@@ -19,10 +19,14 @@ namespace ZimmerBot.Core.Tests.BotTests
 
 ! pattern (intent = current_weather, type = question)
 {
-  > is it snowing
-  > how hot is it
   > is it raining in {loc:location}
   > how is the weather in {loc:location} today
+}
+
+! pattern (intent = current_weather, type = question)
+{
+  > is it snowing
+  > how hot is it
 }
 
 >> { intent = current_weather, type = question }

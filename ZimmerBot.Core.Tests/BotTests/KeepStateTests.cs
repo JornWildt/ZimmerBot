@@ -16,9 +16,13 @@ namespace ZimmerBot.Core.Tests.BotTests
   Toyota:.
 }
 
-! pattern (intent = do_you_like_x, topic ?)
+! pattern (intent = do_you_like_x)
 {
   > do you like {topic}
+}
+
+! pattern (intent = do_you_like_x, topic ?)
+{
   > do you like it
 }
 

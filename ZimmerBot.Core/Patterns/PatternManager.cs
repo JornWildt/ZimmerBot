@@ -18,6 +18,12 @@ namespace ZimmerBot.Core.Patterns
 
     protected KnowledgeBase KnowledgeBase { get; set; }
 
+    protected double WorstCaseUnknownWordProb { get; set; }
+
+    protected double BestCaseUnknownWordProb { get; set; }
+
+    protected double MediumUnknownWordProb { get; set; }
+
 
     public PatternManager(KnowledgeBase kb)
     {
@@ -50,6 +56,13 @@ namespace ZimmerBot.Core.Patterns
 
         if (SpellChecker.IsInitialized)
           entry.ExtractWordsForSpellChecker();
+      }
+
+      if (PatternSets.Any())
+      {
+        WorstCaseUnknownWordProb = PatternSets.Min(ps => ps.UnknownWordProbability);
+        BestCaseUnknownWordProb = PatternSets.Max(ps => ps.WordInPatternSetProbability.Max(p => p.Value));
+        MediumUnknownWordProb = (WorstCaseUnknownWordProb + BestCaseUnknownWordProb) / 2.0;
       }
     }
 
@@ -123,16 +136,7 @@ namespace ZimmerBot.Core.Patterns
 
       int inputTokenCount = inputs.Min(inp => inp.Count);
 
-      double worstCaseUnknownWordProb = PatternSets.Min(ps => ps.UnknownWordProbability);
-      double bestCaseUnknownWordProb = PatternSets.Max(ps => ps.WordInPatternSetProbability.Max(p => p.Value));
-      double mediumUnknownWordProb = (worstCaseUnknownWordProb + bestCaseUnknownWordProb) / 2.0;
-
-      // This value approximates the smallest probability for a match 
-      // (namely P(u)^N where N = number of un-matched words "u")
-      double minimalAllowedProb = inputTokenCount * mediumUnknownWordProb;
-        //Math.Log((1 / TotalNumberOfPatterns) * 1 / (TotalNumberOfWords));
-
-      //minimalAllowedProb += Math.Log(inputTokenCount + 1);
+      double minimalAllowedProb = inputTokenCount * MediumUnknownWordProb * 2;
 
       // This value represents the best probability found so far - might as well start with the minimal allowed probability
       double maxProb = minimalAllowedProb;
@@ -143,7 +147,7 @@ namespace ZimmerBot.Core.Patterns
       {
         BotUtility.EvaluationLogger.Debug($"Trying to match input: {input}. MinP = {minimalAllowedProb}.");
 
-        foreach (Pattern pt in PatternSets.SelectMany(ps => ps.Patterns))
+        foreach (Pattern pt in PatternSets.SelectMany(ps => ps.RelevantPatternsForMatching))
         {
           double pb = pt.CalculateProbability(input, out List<string> reason);
 
