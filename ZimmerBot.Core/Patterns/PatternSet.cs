@@ -106,11 +106,11 @@ namespace ZimmerBot.Core.Patterns
       foreach (string key in WordInPatternSetProbability.Keys.ToArray())
       {
         WordInPatternSetProbability[key]
-          = Math.Log(patternProbability * (WordInPatternSetProbability[key] + 1) / (NumberOfWordsInPatternSet + totalNumberOfWords));
+          = Math.Log(patternProbability * (WordInPatternSetProbability[key] + 1) / (totalNumberOfWords));
       }
 
       // Probability for completely unknown words
-      UnknownWordProbability = Math.Log(patternProbability * 1 / (NumberOfWordsInPatternSet + totalNumberOfWords));
+      UnknownWordProbability = Math.Log(patternProbability * 1 / (totalNumberOfWords * 3));
 
       foreach (var pattern in Patterns)
         pattern.UpdateStatistics(totalNumberOfPatterns, totalNumberOfWords);

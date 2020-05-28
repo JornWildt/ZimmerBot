@@ -65,7 +65,7 @@ namespace ZimmerBot.Core.Patterns
         WorstCaseUnknownWordProb = PatternSets.Min(ps => ps.UnknownWordProbability);
         BestCaseUnknownWordProb = PatternSets.Max(ps => ps.UnknownWordProbability);
         BestCaseKnownWordProb = PatternSets.Max(ps => ps.WordInPatternSetProbability.Max(p => p.Value));
-        MediumUnknownWordProb = (WorstCaseUnknownWordProb);
+        MediumUnknownWordProb = (BestCaseKnownWordProb + 3 * WorstCaseUnknownWordProb) / 4.0;
       }
     }
 
