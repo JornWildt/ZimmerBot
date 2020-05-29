@@ -10,11 +10,15 @@ namespace ZimmerBot.Core.Knowledge
 {
   public class WordDefinition
   {
+    private static int Counter = 0;
+
     // Null word means "no word" = anonymous definition
     public string Word { get; protected set; }
 
     /* Optional ID */
     public string Id { get; protected set; }
+
+    public int RowIndex { get; protected set; }
 
     public List<string> Alternatives { get; protected set; }
 
@@ -30,6 +34,7 @@ namespace ZimmerBot.Core.Knowledge
 
       Word = word;
       Id = id ?? word;
+      RowIndex = Counter++;
       Alternatives = alternatives;
       RdfDefinitions = rdf;
     }

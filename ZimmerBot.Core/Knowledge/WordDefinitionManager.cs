@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using CuttingEdge.Conditions;
 using VDS.RDF;
 using ZimmerBot.Core.Utilities;
@@ -62,6 +58,8 @@ namespace ZimmerBot.Core.Knowledge
     static readonly Uri RdfsClass = UrlConstants.Rdfs("Class");
 
     static readonly Uri KnownBy = UrlConstants.PropertyUrl("knownby");
+
+    static readonly Uri RowIndex = UrlConstants.PropertyUrl("rowIndex");
 
 
     private void DefineRdfsClass(WordDefinition word, RDFStore store)
@@ -136,6 +134,13 @@ namespace ZimmerBot.Core.Knowledge
             RDFStore.StaticStoreName);
         }
       }
+
+      // Add a counter index, usefull for sorting in some situations
+      store.Insert(
+        NodeFactory.CreateUriNode(subject),
+        NodeFactory.CreateUriNode(RowIndex),
+        word.RowIndex.ToLiteral(NodeFactory),
+        RDFStore.StaticStoreName);
     }
 
     private void RegisterSpellChecker(WordDefinition word)
