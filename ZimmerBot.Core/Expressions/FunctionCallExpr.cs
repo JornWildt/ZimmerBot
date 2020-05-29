@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CuttingEdge.Conditions;
-
+using ZimmerBot.Core.Utilities;
 
 namespace ZimmerBot.Core.Expressions
 {
@@ -28,8 +28,10 @@ namespace ZimmerBot.Core.Expressions
       // FIXME: handle through some sort of registration system or maybe even reflection
       if (FunctionName == "probability")
         return Invoke<double>(context, new Type[] { typeof(double) }, p => Probability(p), "probability");
-      if (FunctionName == "silent")
+      else if (FunctionName == "silent")
         return Invoke<TimeSpan>(context, new Type[] { typeof(TimeSpan) }, p => Silent(context, p), "silent");
+      else if (FunctionName == "merge")
+        return Invoke<string>(context, new Type[] { typeof(string) }, p => MergeString(context, p), "merge");
       else
         throw new InvalidOperationException(string.Format("Unknown function name '{0}'", FunctionName));
     }
@@ -83,6 +85,12 @@ namespace ZimmerBot.Core.Expressions
     private bool Probability(double p)
     {
       return Randomizer.NextDouble() < (double)p;
+    }
+
+
+    private string MergeString(ExpressionEvaluationContext context, string s)
+    {
+      return TextMerge.MergeTemplate(s, context.Variables);
     }
 
 
