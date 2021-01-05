@@ -78,9 +78,11 @@ namespace ZimmerBot.Core
         try
         {
           Request request = WorkQueue.Dequeue(TimeSpan.FromDays(1));
-          request.BotId = Id;
-
-          Invoke(request, callbackToEnvironment: true);
+          if (request != null)
+          {
+            request.BotId = Id;
+            Invoke(request, callbackToEnvironment: true);
+          }
         }
         catch (ThreadAbortException)
         {
